@@ -1,9 +1,16 @@
 "use client";
 
 import { useTransition } from "react";
-import { deleteArticle } from "@/app/admin/actions";
 
-export function DeleteArticleButton({ id }: { id: number }) {
+export function DeleteEntityButton({
+  id,
+  action,
+  confirmMessage = "Eliminare?",
+}: {
+  id: number;
+  action: (id: number) => void;
+  confirmMessage?: string;
+}) {
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -11,8 +18,8 @@ export function DeleteArticleButton({ id }: { id: number }) {
       type="button"
       disabled={isPending}
       onClick={() => {
-        if (confirm("Eliminare questo articolo?")) {
-          startTransition(() => deleteArticle(id));
+        if (confirm(confirmMessage)) {
+          startTransition(() => action(id));
         }
       }}
       className="text-red-400 hover:underline disabled:opacity-50"

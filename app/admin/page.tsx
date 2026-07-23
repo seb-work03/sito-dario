@@ -3,14 +3,17 @@ import { desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 import { formatDate } from "@/lib/utils";
-import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { deleteArticle } from "@/app/admin/actions/articles";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 
 export default async function AdminDashboardPage() {
-  const allArticles = await db.select().from(articles).orderBy(desc(articles.updatedAt));
+  const allArticles = await db.query.articles.findMany({
+    orderBy: desc(articles.updatedAt),
+    with: { author: true },
+  });
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-medium">Articoli del blog</h1>
         <Link
@@ -30,7 +33,8 @@ export default async function AdminDashboardPage() {
             <div>
               <p className="font-medium text-paper-50">{article.title}</p>
               <p className="text-xs text-paper-400">
-                {article.published ? "Pubblicato" : "Bozza"} · Aggiornato il{" "}
+                {article.status === "published" ? "Pubblicato" : "Bozza"}
+                {article.author && ` · ${article.author.name}`} · Aggiornato il{" "}
                 {formatDate(article.updatedAt)}
               </p>
             </div>
@@ -38,17 +42,14 @@ export default async function AdminDashboardPage() {
               <Link href={`/admin/articles/${article.id}/edit`} className="text-celeste-400 hover:underline">
                 Modifica
               </Link>
-              <DeleteArticleButton id={article.id} />
+              <DeleteEntityButton
+                id={article.id}
+                action={deleteArticle}
+                confirmMessage="Eliminare questo articolo?"
+              />
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="rounded-lg border border-ink-700 p-4">
-        <h2 className="mb-3 text-sm font-medium text-paper-200">
-          Carica un&apos;immagine (per usarla nel testo di un articolo)
-        </h2>
-        <ImageUploader label="Immagine" />
       </div>
     </div>
   );

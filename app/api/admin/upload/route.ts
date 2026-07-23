@@ -1,6 +1,9 @@
 import { put } from "@vercel/blob";
+import { imageSize } from "image-size";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { media } from "@/lib/db/schema";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -19,10 +22,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Il file deve essere un'immagine" }, { status: 400 });
   }
 
-  const blob = await put(`articoli/${file.name}`, file, {
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  let dimensions: { width?: number; height?: number } = {};
+  try {
+    const size = imageSize(buffer);
+    dimensions = { width: size.width, height: size.height };
+  } catch {
+    // SVG or unrecognized format: skip dimensions
+  }
+
+  const blob = await put(`media/${file.name}`, buffer, {
     access: "public",
     addRandomSuffix: true,
+    contentType: file.type,
   });
 
-  return NextResponse.json({ url: blob.url });
+  const [row] = await db
+    .insert(media)
+    .values({
+      url: blob.url,
+      pathname: blob.pathname,
+      filename: file.name,
+      mimeType: file.type,
+      size: file.size,
+      width: dimensions.width ?? null,
+      height: dimensions.height ?? null,
+    })
+    .returning();
+
+  return NextResponse.json(row);
 }
