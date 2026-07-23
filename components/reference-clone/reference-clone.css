@@ -1,0 +1,5 @@
+/* Styles isolated to the temporary adviest.framer.ai fidelity clone (app/page.tsx). */
+@keyframes refmarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
