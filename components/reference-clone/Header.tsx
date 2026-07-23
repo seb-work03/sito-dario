@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -11,42 +12,20 @@ const navLinks = [
   { label: "Testimonianze", href: "#testimon" },
 ];
 
-/** Dario Tana wordmark — teal "D" accent, clean geometric letterforms */
+const LOGO_URL =
+  "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/articoli/Marchio-Dario-Tana-eCommerce-DJJ83TmbpH4zhP3TO7culMfqCSbEPU.png";
+
 function DarioTanaLogo() {
   return (
-    <svg
-      width="148"
-      height="32"
-      viewBox="0 0 148 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Dario Tana"
-    >
-      {/* D */}
-      <text
-        x="0"
-        y="25"
-        fontFamily="Georgia, 'Times New Roman', serif"
-        fontSize="28"
-        fontWeight="400"
-        fill="#77C0CF"
-        letterSpacing="-0.5"
-      >
-        D
-      </text>
-      {/* ario Tana */}
-      <text
-        x="19"
-        y="25"
-        fontFamily="Georgia, 'Times New Roman', serif"
-        fontSize="28"
-        fontWeight="400"
-        fill="#EDF2F7"
-        letterSpacing="-0.5"
-      >
-        ario Tana
-      </text>
-    </svg>
+    <Image
+      src={LOGO_URL}
+      alt="Dario Tana"
+      width={199}
+      height={106}
+      className="h-10 w-auto"
+      unoptimized
+      priority
+    />
   );
 }
 
