@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+import { LoginForm } from "@/components/admin/LoginForm";
 
 export default async function LoginPage({
   searchParams,
@@ -15,27 +15,7 @@ export default async function LoginPage({
           Inserisci la tua email: ti invieremo un link per accedere.
         </p>
 
-        <form
-          action={async (formData) => {
-            "use server";
-            await signIn("resend", formData);
-          }}
-          className="flex flex-col gap-3"
-        >
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="tu@esempio.it"
-            className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 placeholder:text-paper-500 focus:border-celeste-500 focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="rounded-md bg-celeste-500 px-3 py-2 font-medium text-ink-950 hover:bg-celeste-400"
-          >
-            Invia link di accesso
-          </button>
-        </form>
+        <LoginForm />
 
         {error && (
           <p className="mt-4 text-sm text-red-400">

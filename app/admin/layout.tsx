@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { SignOutButton } from "@/components/admin/SignOutButton";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -11,16 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className="font-medium">
             Dario Tana — Admin
           </Link>
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/admin/login" });
-            }}
-          >
-            <button type="submit" className="text-sm text-paper-400 hover:text-paper-200">
-              Esci
-            </button>
-          </form>
+          <SignOutButton />
         </header>
       )}
       <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>
