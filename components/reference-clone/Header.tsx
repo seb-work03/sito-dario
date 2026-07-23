@@ -22,7 +22,7 @@ function DarioTanaLogo() {
       alt="Dario Tana"
       width={199}
       height={106}
-      className="h-10 w-auto"
+      className="h-14 w-auto"
       unoptimized
       priority
     />
@@ -115,35 +115,67 @@ export function Header() {
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-[#0D1218] lg:hidden pt-[80px]"
-          >
-            <nav className="flex flex-col px-6 py-8 gap-2">
-              {navLinks.map((l, i) => (
-                <motion.a
-                  key={l.href}
-                  href={l.href}
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
+              className="fixed right-0 top-0 z-50 flex h-full w-[82%] max-w-[360px] flex-col bg-[#0D1218] shadow-2xl lg:hidden"
+            >
+              <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
+                <DarioTanaLogo />
+                <button
                   onClick={() => setMenuOpen(false)}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="text-2xl font-medium text-[#EDF2F7] py-3 border-b border-white/10"
+                  aria-label="Chiudi menu"
+                  className="p-2 text-[#EDF2F7] transition-colors hover:text-[#77C0CF]"
                 >
-                  {l.label}
+                  <X size={22} />
+                </button>
+              </div>
+              <nav className="flex flex-col px-6 py-6 gap-1">
+                {navLinks.map((l, i) => (
+                  <motion.a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setMenuOpen(false)}
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.12 + i * 0.05,
+                      duration: 0.35,
+                      ease: [0.19, 1, 0.22, 1],
+                    }}
+                    className="text-lg font-medium text-[#EDF2F7] py-3 border-b border-white/10"
+                  >
+                    {l.label}
+                  </motion.a>
+                ))}
+                <motion.a
+                  href="/contatti"
+                  onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: 0.12 + navLinks.length * 0.05,
+                    duration: 0.35,
+                    ease: [0.19, 1, 0.22, 1],
+                  }}
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium py-4"
+                >
+                  Parliamone
                 </motion.a>
-              ))}
-              <a
-                href="/contatti"
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium py-4"
-              >
-                Parliamone
-              </a>
-            </nav>
-          </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
