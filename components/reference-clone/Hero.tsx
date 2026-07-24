@@ -15,16 +15,16 @@ export function Hero() {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.15]);
 
   return (
-    <section ref={ref} className="relative bg-[#0D1218] pt-[110px] pb-6 px-5">
+    <section ref={ref} className="relative bg-[#0D1218] pt-[92px] pb-3 px-5">
       <div className="mx-auto max-w-[1240px] relative">
         <motion.h1
           style={{ y: titleY, opacity: titleOpacity }}
-          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-[10%]"
+          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-[8%]"
         >
           <span
             className="inline-block"
             style={{
-              fontSize: "clamp(3rem, 14.5vw, 14rem)",
+              fontSize: "clamp(3rem, min(14.5vw, 20vh), 14rem)",
               lineHeight: 1.2,
               letterSpacing: "-0.07em",
             }}
@@ -64,14 +64,14 @@ export function Hero() {
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,55vw,521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
+            <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,min(55vw,62vh),521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
                 className="text-white md:text-[#EDF2F7] font-normal text-[18px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
               >
-                Consulenza e formazione e-commerce indipendente.
+                Consulenza e formazione e‑commerce indipendente.
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
@@ -83,7 +83,7 @@ export function Hero() {
                 transition={{ duration: 0.9, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
                 className="hidden md:block text-[#C1CEDF] text-[15px] md:text-[18px] leading-relaxed max-w-[320px] justify-self-end text-right"
               >
-                Aiuto aziende, imprenditori e responsabili e-commerce ad analizzare
+                Aiuto aziende, imprenditori e responsabili e‑commerce ad analizzare
                 i problemi, definire le priorità e prendere decisioni più
                 consapevoli.
               </motion.p>

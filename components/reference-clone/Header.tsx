@@ -80,9 +80,18 @@ export function Header() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-[#0D1218] transition-shadow duration-300"
-        style={{ height: 80, boxShadow: scrolled ? "0 1px 0 rgba(255,255,255,0.06)" : "none" }}
+        className="fixed top-0 left-0 right-0 z-50 bg-[#0D1218]"
+        style={{ height: 80 }}
       >
+        {/* Soft gradient shadow instead of a hard line, fades in once the page scrolls */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 right-0 top-full h-8 transition-opacity duration-500"
+          style={{
+            opacity: scrolled ? 1 : 0,
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.28), rgba(0,0,0,0))",
+          }}
+        />
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">
           <a href="#" className="py-3 md:py-0 transition-opacity hover:opacity-80">
             <DarioTanaLogo />
