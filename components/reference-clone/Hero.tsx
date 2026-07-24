@@ -35,7 +35,7 @@ export function Hero() {
               transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
               className="inline-block"
             >
-              Decisioni.
+              Dario Tana
             </motion.span>
           </span>
         </motion.h1>
@@ -64,18 +64,18 @@ export function Hero() {
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            <div className="relative grid grid-cols-[1fr_auto_1fr] items-end md:items-center gap-2 md:gap-4 min-h-[clamp(320px,55vw,521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
+            <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,55vw,521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                className="text-[#EDF2F7] font-normal text-[13px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
+                className="text-white md:text-[#EDF2F7] font-normal text-[13px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
               >
                 Consulenza e formazione e-commerce indipendente.
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
-              <div className="w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
+              <div className="w-[clamp(230px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
+            className="absolute z-20 left-[56%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(230px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
           >
             <Image
               src={PORTRAIT_URL}
@@ -104,7 +104,7 @@ export function Hero() {
               fill
               priority
               className="object-cover object-top"
-              sizes="(max-width: 768px) 266px, 460px"
+              sizes="(max-width: 768px) 300px, 460px"
             />
           </motion.div>
         </motion.div>
