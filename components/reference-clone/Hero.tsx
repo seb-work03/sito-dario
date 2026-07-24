@@ -75,7 +75,7 @@ export function Hero() {
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
-              <div className="w-[clamp(252px,38vw,400px)] md:w-[clamp(240px,38vw,400px)] shrink-0" aria-hidden="true" />
+              <div className="w-[clamp(252px,38vw,400px)] md:w-[clamp(260px,24vw,560px)] shrink-0" aria-hidden="true" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="absolute z-20 left-[67%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(252px,38vw,400px)] md:w-[clamp(240px,38vw,400px)] aspect-[650/1080] pointer-events-none"
+            className="absolute z-20 left-[67%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(252px,38vw,400px)] md:w-[clamp(260px,24vw,560px)] aspect-[650/1080] pointer-events-none"
           >
             <Image
               src={PORTRAIT_URL}
@@ -104,7 +104,7 @@ export function Hero() {
               fill
               priority
               className="object-cover object-top"
-              sizes="(max-width: 768px) 300px, 400px"
+              sizes="(max-width: 768px) 300px, 560px"
             />
           </motion.div>
         </motion.div>
