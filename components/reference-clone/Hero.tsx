@@ -4,7 +4,10 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-export function Hero() {
+const FALLBACK_PORTRAIT = "/reference-assets/adviest/i3hyvUzl7FhrcIR6gR2nigcrK0.png";
+
+export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
+  const portrait = portraitUrl ?? FALLBACK_PORTRAIT;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const photoY = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
@@ -96,10 +99,11 @@ export function Hero() {
           className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(200px,34vw,410px)] aspect-[410/689] pointer-events-none"
         >
           <Image
-            src="/reference-assets/adviest/i3hyvUzl7FhrcIR6gR2nigcrK0.png"
-            alt="[RITRATTO DARIO TANA DA INSERIRE] — ritratto ambientato, luce laterale morbida"
+            src={portrait}
+            alt="Dario Tana"
             fill
             priority
+            unoptimized
             className="object-cover object-top"
             sizes="(max-width: 768px) 260px, 410px"
           />

@@ -34,7 +34,7 @@ function PillCta({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="group hidden md:inline-flex items-center gap-2 rounded-full bg-[#77C0CF] pl-5 pr-1.5 py-1.5 text-[#0D1218] text-[15px] font-medium transition-all duration-500 hover:bg-[#5BAAB9] hover:pl-7"
+      className="group hidden md:inline-flex items-center gap-2 rounded-full bg-[#77C0CF] pl-5 pr-1.5 py-1.5 text-[#0D1218] text-[15px] font-medium transition-colors duration-300 hover:bg-[#A5E1EC] shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
     >
       <span>{label}</span>
       <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] w-9 h-9 overflow-hidden shrink-0">

@@ -65,7 +65,7 @@ export function Faq() {
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.2 }}
             href="/contatti"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm hover:bg-[#5BAAB9] transition-all duration-500 hover:pl-7"
+            className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm hover:bg-[#A5E1EC] transition-colors duration-300 shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
           >
             Parliamone
             <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-8 h-8 overflow-hidden shrink-0">
