@@ -57,19 +57,23 @@ function PinnedFillTitle() {
   const text =
     "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo.";
   const words = text.split(" ");
+  // Words finish filling at 80% of the scroll travel, leaving a short tail
+  // where everything is full before the section releases — avoids the abrupt
+  // "jump" at the end of the pin.
+  const FILL_END = 0.8;
 
   return (
-    <div ref={ref} className="relative md:h-[160vh]">
-      <div className="md:sticky md:top-0 md:h-screen md:flex md:items-center">
+    <div ref={ref} className="relative md:h-[170vh]">
+      <div className="md:sticky md:top-0 md:h-screen md:flex md:items-end md:pb-[14vh]">
         <div className="mx-auto w-full max-w-[1180px] px-5 py-16 md:py-0">
-          <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
+          <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
             <div className="md:col-start-1 md:row-start-1">
               <AnimatedLabel>CHI SONO</AnimatedLabel>
             </div>
-            <p className="md:col-start-2 md:col-end-4 md:row-start-1 text-left leading-[1.02] tracking-[-0.04em] font-normal max-w-[760px] text-[clamp(32px,4vw,58px)]">
+            <p className="md:col-start-2 md:col-end-4 md:row-start-1 text-left leading-[1.3] tracking-[-0.01em] font-normal max-w-[560px] text-[clamp(18px,1.9vw,26px)]">
               {words.map((word, i) => {
-                const start = i / words.length;
-                const end = start + 1 / words.length;
+                const start = (i / words.length) * FILL_END;
+                const end = ((i + 1) / words.length) * FILL_END;
                 return (
                   <Fragment key={i}>
                     <FillWord progress={scrollYProgress} range={[start, end]}>
@@ -93,37 +97,52 @@ export function About() {
       <PinnedFillTitle />
 
       <div className="mx-auto max-w-[1180px] px-5 pt-4 pb-16 md:pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] grid-rows-[auto] md:grid-rows-[auto_auto] gap-y-6 md:gap-x-8">
-          {/* --- Row 1 col 1 : portrait (top of row) -------------------- */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="group relative overflow-hidden rounded-[18px] bg-[#17222F] md:col-start-1 md:row-start-1 md:self-start"
-            style={{ aspectRatio: "0.72" }}
-          >
-            <Image
-              src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
-              alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
-              fill
-              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
-            <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
-              &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
-              recensione Google reale]&rdquo;
-            </p>
-          </motion.div>
+        {/* items-end: the three columns share a common bottom line, so the
+            rating (bottom of col 1) lines up with the bottom edge of the two
+            images/cards, while the taller portrait pushes further up. */}
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
+          {/* --- Col 1 : portrait (pushed up) + rating (bottom) --------- */}
+          <div className="md:col-start-1 flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+              className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
+              style={{ aspectRatio: "0.72" }}
+            >
+              <Image
+                src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
+                alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
+                fill
+                className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
+              <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
+                &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
+                recensione Google reale]&rdquo;
+              </p>
+            </motion.div>
 
-          {/* --- Row 1 col 2 : buildings photo (bottom-aligned) --------- */}
+            <div className="mt-8 flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
+                <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
+              </div>
+              <span className="text-[#94A9BE] text-[13px]">
+                media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
+              </span>
+            </div>
+          </div>
+
+          {/* --- Col 2 : buildings photo (bottom-aligned) -------------- */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="md:col-start-2 md:row-start-1 md:self-end relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
+            className="md:col-start-2 relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
             style={{ aspectRatio: "0.85" }}
           >
             <Image
@@ -135,8 +154,8 @@ export function About() {
             />
           </motion.div>
 
-          {/* --- Row 1 col 3 : CTA + chart card (bottom-aligned) -------- */}
-          <div className="md:col-start-3 md:row-start-1 md:self-end flex flex-col gap-[18px]">
+          {/* --- Col 3 : CTA + chart card (bottom-aligned) ------------- */}
+          <div className="md:col-start-3 flex flex-col gap-[18px]">
             <div className="flex md:justify-end">
               <motion.a
                 initial={{ opacity: 0, y: 20 }}
@@ -159,17 +178,6 @@ export function About() {
             </div>
 
             <ChartCard />
-          </div>
-
-          {/* --- Row 2 col 1 : rating below portrait -------------------- */}
-          <div className="md:col-start-1 md:row-start-2 md:mt-[40px] flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
-              <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
-            </div>
-            <span className="text-[#94A9BE] text-[13px]">
-              media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
-            </span>
           </div>
         </div>
       </div>
