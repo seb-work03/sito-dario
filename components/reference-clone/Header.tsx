@@ -22,7 +22,7 @@ function DarioTanaLogo() {
       alt="Dario Tana"
       width={199}
       height={106}
-      className="h-14 w-auto"
+      className="h-11 md:h-14 w-auto"
       unoptimized
       priority
     />
@@ -84,7 +84,7 @@ export function Header() {
         style={{ height: 80, boxShadow: scrolled ? "0 1px 0 rgba(255,255,255,0.06)" : "none" }}
       >
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">
-          <a href="#" className="transition-opacity hover:opacity-80">
+          <a href="#" className="py-3 md:py-0 transition-opacity hover:opacity-80">
             <DarioTanaLogo />
           </a>
 
@@ -108,7 +108,7 @@ export function Header() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Chiudi menu" : "Apri menu"}
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
       </header>
