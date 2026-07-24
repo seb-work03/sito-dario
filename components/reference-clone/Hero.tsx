@@ -4,6 +4,9 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
+const PORTRAIT_URL =
+  "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/Dario%20tana-VPnb7FSkCeuXKwy4rdEsImphyzlhbs.png";
+
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -93,13 +96,14 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(200px,34vw,410px)] aspect-[410/689] pointer-events-none"
+          className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(200px,34vw,410px)] aspect-[650/1080] pointer-events-none"
         >
           <Image
-            src="/reference-assets/adviest/i3hyvUzl7FhrcIR6gR2nigcrK0.png"
-            alt="[RITRATTO DARIO TANA DA INSERIRE] — ritratto ambientato, luce laterale morbida"
+            src={PORTRAIT_URL}
+            alt="Ritratto di Dario Tana"
             fill
             priority
+            unoptimized
             className="object-cover object-top"
             sizes="(max-width: 768px) 260px, 410px"
           />

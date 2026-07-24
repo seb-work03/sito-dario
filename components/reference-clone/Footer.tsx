@@ -47,7 +47,7 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
               href="/contatti"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-6 pr-2 py-2 hover:bg-[#5BAAB9] transition-all duration-500 hover:pl-8 mb-10"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#9BD8E4] hover:shadow-[0_0_32px_rgba(119,192,207,0.55)] mb-10"
             >
               Parliamone
               <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-10 h-10 overflow-hidden shrink-0">
