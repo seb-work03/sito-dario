@@ -75,7 +75,7 @@ export function Hero() {
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
-              <div className="w-[clamp(266px,45vw,546px)] shrink-0" aria-hidden="true" />
+              <div className="w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -96,16 +96,15 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(266px,45vw,546px)] aspect-[650/1080] pointer-events-none"
+            className="absolute z-20 left-1/2 -translate-x-1/2 bottom-0 w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
           >
             <Image
               src={PORTRAIT_URL}
               alt="Ritratto di Dario Tana"
               fill
               priority
-              unoptimized
               className="object-cover object-top"
-              sizes="(max-width: 768px) 266px, 546px"
+              sizes="(max-width: 768px) 266px, 460px"
             />
           </motion.div>
         </motion.div>
