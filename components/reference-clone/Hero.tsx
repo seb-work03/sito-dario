@@ -24,7 +24,7 @@ export function Hero() {
           <span
             className="inline-block"
             style={{
-              fontSize: "clamp(2.75rem, 12.8vw, 12.25rem)",
+              fontSize: "clamp(3rem, 14.5vw, 14rem)",
               lineHeight: 1.2,
               letterSpacing: "-0.07em",
             }}
@@ -75,7 +75,7 @@ export function Hero() {
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
-              <div className="w-[clamp(230px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
+              <div className="w-[clamp(252px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="absolute z-20 left-[56%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(230px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
+            className="absolute z-20 left-[67%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(252px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
           >
             <Image
               src={PORTRAIT_URL}
