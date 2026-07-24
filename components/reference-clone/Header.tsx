@@ -122,14 +122,14 @@ export function Header() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
               onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[51] bg-black/50 backdrop-blur-sm lg:hidden"
             />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
-              className="fixed right-0 top-0 z-50 flex h-full w-[82%] max-w-[360px] flex-col bg-[#0D1218] shadow-2xl lg:hidden"
+              className="fixed right-0 top-0 z-[60] flex h-full w-[82%] max-w-[360px] flex-col bg-[#0D1218] shadow-2xl lg:hidden"
             >
               <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
                 <DarioTanaLogo />
