@@ -28,32 +28,38 @@ function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number;
 
 export function About() {
   return (
-    <section id="about-us" className="bg-[#0D1218] px-5 py-16 md:py-28">
-      <div className="mx-auto max-w-[1240px]">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <AnimatedLabel>CHI SONO</AnimatedLabel>
-          <motion.p
+    <section id="about-us" className="bg-[#0D1218] py-16 md:py-24">
+      <div className="mx-auto max-w-[1180px] px-5">
+        {/* Grid: 3 desktop columns, 2 tablet, 1 mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
+          {/* --- Row 1 : label (col 1) + title (col 2-3) ---------------- */}
+          <div className="md:col-start-1 md:row-start-1">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
+          </div>
+
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] text-lg md:text-2xl max-w-2xl md:text-right leading-snug tracking-tight"
+            className="md:col-start-2 md:col-end-4 md:row-start-1 text-[#EDF2F7] text-left leading-[1.02] tracking-[-0.04em] font-normal max-w-[760px]"
+            style={{ fontSize: "clamp(32px, 4vw, 58px)" }}
           >
             Lavoro nell&apos;e-commerce da oltre vent&apos;anni. Aiuto aziende e
             professionisti a leggere il proprio contesto e a scegliere con
             metodo.
-          </motion.p>
-        </div>
+          </motion.h2>
 
-        <div className="grid md:grid-cols-3 gap-5">
-          {/* Left card — photo + review pill */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          >
-            <div className="group relative rounded-3xl overflow-hidden aspect-[400/552] bg-[#17222F]">
+          {/* --- Row 2 col 1 : portrait + rating ------------------------ */}
+          <div className="md:col-start-1 md:row-start-2 flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+              className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
+              style={{ aspectRatio: "0.72" }}
+            >
               <Image
                 src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
                 alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
@@ -61,77 +67,89 @@ export function About() {
                 className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/60 to-transparent p-6 pt-20">
-                <p className="text-[#EDF2F7] text-[15px] leading-snug italic">
-                  &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
-                  recensione Google reale]&rdquo;
-                </p>
+              {/* Bottom gradient to make text readable, no separate box */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
+              <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
+                &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
+                recensione Google reale]&rdquo;
+              </p>
+            </motion.div>
+
+            {/* Rating, sits far below the photo */}
+            <div className="mt-[54px] flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
+                <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
               </div>
-            </div>
-            <div className="flex items-center gap-2 mt-4">
-              <Star size={18} className="fill-[#77C0CF] text-[#77C0CF]" />
-              <span className="text-[#EDF2F7] font-medium">4.9</span>
-              <span className="text-[#94A9BE] text-sm">
+              <span className="text-[#94A9BE] text-[13px]">
                 media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
               </span>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Center — big photo of Dario */}
+          {/* --- Row 2 col 2 : buildings photo, pushed down ------------- */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="group relative rounded-3xl overflow-hidden aspect-[300/363] md:aspect-auto bg-[#17222F]"
+            className="md:col-start-2 md:row-start-2 md:mt-[80px] relative overflow-hidden rounded-[18px] bg-[#17222F] self-start w-full"
+            style={{ aspectRatio: "0.85" }}
           >
             <Image
               src="/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg"
               alt="[FOTO DARIO AL LAVORO DA INSERIRE]"
               fill
-              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
+              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
-            {/* Floating annotation card */}
+          </motion.div>
+
+          {/* --- Row 2 col 3 : CTA + chart card ------------------------- */}
+          <div className="md:col-start-3 md:row-start-2 md:mt-[80px] flex flex-col gap-[18px]">
+            <div className="flex md:justify-end">
+              <motion.a
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                href="#service"
+                className="group inline-flex items-stretch overflow-hidden rounded-[10px] bg-[#77C0CF] text-[#0D1218] font-medium transition-colors duration-300 hover:bg-[#A5E1EC] shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
+                style={{ height: 50 }}
+              >
+                <span className="flex items-center px-5 text-[15px]">
+                  Scopri di più
+                </span>
+                <span className="flex items-center justify-center w-[50px] bg-[#5BAAB9] group-hover:bg-[#77C0CF] transition-colors duration-300">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#0D1218]">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </motion.a>
+            </div>
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.4 }}
-              className="absolute left-4 bottom-4 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 px-4 py-3 max-w-[220px]"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+              className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[26px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#77C0CF]/40"
+              style={{ minHeight: 270 }}
             >
-              <p className="font-mono text-[10px] tracking-widest text-[#77C0CF]/70 uppercase mb-1">
-                Cofondatore
-              </p>
-              <p className="text-[#EDF2F7] text-sm leading-snug">
-                DT E-commerce Consulting, insieme a Tiziana Tana.
-              </p>
+              <div className="flex flex-col gap-3">
+                <p className="font-mono text-[11px] tracking-[0.18em] text-[#77C0CF]/80 uppercase">
+                  Vent&apos;anni di e-commerce
+                </p>
+                <ExperienceChart />
+              </div>
+
+              <div className="mt-auto grid grid-cols-3 gap-5 pt-4 border-t border-white/8">
+                <StatBlock value={20} suffix="+" label="anni di attività" />
+                <StatBlock value={50} suffix="+" label="corsi tenuti" />
+                <StatBlock value={200} suffix="+" label="recensioni" />
+              </div>
             </motion.div>
-          </motion.div>
-
-          {/* Right — animated SVG chart card */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
-            className="group rounded-3xl border border-white/8 bg-[#17222F] p-6 flex flex-col justify-between gap-6 hover:border-[#77C0CF]/40 transition-colors duration-500"
-          >
-            <div>
-              <p className="font-mono text-xs tracking-widest text-[#77C0CF]/70 uppercase mb-4">
-                Vent&apos;anni di e-commerce
-              </p>
-
-              {/* SVG timeline chart */}
-              <ExperienceChart />
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/8">
-              <StatBlock value={20} suffix="+" label="anni di attività" />
-              <StatBlock value={50} suffix="+" label="corsi tenuti" />
-              <StatBlock value={200} suffix="+" label="recensioni" />
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -140,7 +158,7 @@ export function About() {
 
 function StatBlock({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 text-left">
       <span className="text-[#EDF2F7] text-2xl md:text-3xl font-medium tracking-tight tabular-nums">
         <AnimatedNumber value={value} suffix={suffix} />
       </span>
@@ -171,7 +189,7 @@ function ExperienceChart() {
     <svg
       ref={ref}
       viewBox="0 0 320 100"
-      className="w-full h-24 md:h-32"
+      className="w-full h-24 md:h-28"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
@@ -182,12 +200,10 @@ function ExperienceChart() {
         </linearGradient>
       </defs>
 
-      {/* Grid lines */}
       {[25, 50, 75].map((y) => (
         <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
-      {/* Filled area */}
       <motion.path
         d={areaPath}
         fill="url(#expArea)"
@@ -196,7 +212,6 @@ function ExperienceChart() {
         transition={{ duration: 1.4, delay: 0.6 }}
       />
 
-      {/* Curve */}
       <motion.path
         d={path}
         fill="none"
@@ -208,7 +223,6 @@ function ExperienceChart() {
         transition={{ duration: 2, ease: [0.19, 1, 0.22, 1] }}
       />
 
-      {/* Dots */}
       {points.map((p, i) => (
         <motion.circle
           key={i}
@@ -219,11 +233,9 @@ function ExperienceChart() {
           initial={{ scale: 0, opacity: 0 }}
           animate={inView ? { scale: 1, opacity: 1 } : {}}
           transition={{ duration: 0.3, delay: 0.8 + i * 0.08 }}
-          className="transition-all duration-300 group-hover:r-[3.5]"
         />
       ))}
 
-      {/* Highlight last dot with pulse */}
       <motion.circle
         cx={points[points.length - 1].x}
         cy={points[points.length - 1].y}
