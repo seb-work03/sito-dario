@@ -69,7 +69,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                className="text-white md:text-[#EDF2F7] font-normal text-[13px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
+                className="text-white md:text-[#EDF2F7] font-normal text-[18px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
               >
                 Consulenza e formazione e-commerce indipendente.
               </motion.p>
