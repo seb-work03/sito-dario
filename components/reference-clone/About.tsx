@@ -5,14 +5,13 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useScroll,
   useSpring,
   useTransform,
-  type MotionValue,
 } from "framer-motion";
 import { Star } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatedLabel } from "./AnimatedLabel";
+import { ScrollFillText } from "./ScrollFillText";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -34,73 +33,27 @@ function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number;
   return <span ref={ref}>0{suffix}</span>;
 }
 
-function FillWord({
-  children,
-  progress,
-  range,
-}: {
-  children: string;
-  progress: MotionValue<number>;
-  range: [number, number];
-}) {
-  const opacity = useTransform(progress, range, [0.15, 1]);
-  const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
-  return <motion.span style={{ opacity, color }}>{children}</motion.span>;
-}
-
-function PinnedFillTitle() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-  const text =
-    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo.";
-  const words = text.split(" ");
-  // Words finish filling at 80% of the scroll travel, leaving a short tail
-  // where everything is full before the section releases — avoids the abrupt
-  // "jump" at the end of the pin.
-  const FILL_END = 0.8;
-
-  return (
-    <div ref={ref} className="relative md:h-[170vh]">
-      <div className="md:sticky md:top-0 md:h-screen md:flex md:items-end md:pb-[14vh]">
-        <div className="mx-auto w-full max-w-[1180px] px-5 py-16 md:py-0">
-          <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
-            <div className="md:col-start-1 md:row-start-1">
-              <AnimatedLabel>CHI SONO</AnimatedLabel>
-            </div>
-            <p className="md:col-start-2 md:col-end-4 md:row-start-1 text-left leading-[1.3] tracking-[-0.01em] font-normal max-w-[560px] text-[clamp(18px,1.9vw,26px)]">
-              {words.map((word, i) => {
-                const start = (i / words.length) * FILL_END;
-                const end = ((i + 1) / words.length) * FILL_END;
-                return (
-                  <Fragment key={i}>
-                    <FillWord progress={scrollYProgress} range={[start, end]}>
-                      {word}
-                    </FillWord>
-                    {i < words.length - 1 ? " " : ""}
-                  </Fragment>
-                );
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function About() {
   return (
     <section id="about-us" className="bg-[#0D1218]">
-      <PinnedFillTitle />
+      <div className="mx-auto max-w-[1180px] px-5 pt-16 md:pt-20 pb-16 md:pb-24">
+        {/* Header: label top-left, intro title dropped lower into the right
+            columns. The title fills word-by-word as you scroll (simple Framer
+            scroll-fill, no pin). */}
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
+          <div className="md:col-start-1 md:row-start-1">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
+          </div>
+          <ScrollFillText
+            text="Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo."
+            className="md:col-start-2 md:col-end-4 md:row-start-1 md:mt-[100px] text-left leading-[1.3] tracking-[-0.01em] font-normal max-w-[560px] text-[clamp(18px,1.9vw,26px)]"
+          />
+        </div>
 
-      <div className="mx-auto max-w-[1180px] px-5 pt-4 pb-16 md:pb-24">
         {/* items-end: the three columns share a common bottom line, so the
             rating (bottom of col 1) lines up with the bottom edge of the two
             images/cards, while the taller portrait pushes further up. */}
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
+        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
           {/* --- Col 1 : portrait (pushed up) + rating (bottom) --------- */}
           <div className="md:col-start-1 flex flex-col">
             <motion.div

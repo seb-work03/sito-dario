@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -68,27 +68,22 @@ function PillCta({ href, label }: { href: string; label: string }) {
 }
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-[#0D1218] h-20 md:h-24"
+        className="fixed top-0 left-0 right-0 z-50 h-20 md:h-24"
       >
-        {/* Soft gradient shadow instead of a hard line, fades in once the page scrolls */}
+        {/* Fully faded backdrop: solid at the very top, dissolving to nothing
+            below — no hard bottom edge. Extends past the header height so the
+            fade is gradual and page content melts through it. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-0 right-0 top-full h-8 transition-opacity duration-500"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[190%] transition-opacity duration-500"
           style={{
-            opacity: scrolled ? 1 : 0,
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.28), rgba(0,0,0,0))",
+            background:
+              "linear-gradient(to bottom, #0D1218 0%, #0D1218 42%, rgba(13,18,24,0.72) 64%, rgba(13,18,24,0.32) 82%, rgba(13,18,24,0) 100%)",
           }}
         />
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">

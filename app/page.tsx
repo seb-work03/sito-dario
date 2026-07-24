@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { desc, ilike } from "drizzle-orm";
 import "@/components/reference-clone/reference-clone.css";
+import { db } from "@/lib/db";
+import { media } from "@/lib/db/schema";
 import { Header } from "@/components/reference-clone/Header";
 import { Hero } from "@/components/reference-clone/Hero";
 import { TrustBar } from "@/components/reference-clone/TrustBar";
@@ -22,7 +25,24 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function HomePage() {
+// Pull the hero portrait from the media library (newest file whose name
+// contains "dario tana"), so re-uploading a same-named file swaps it in.
+async function getHeroPortraitUrl(): Promise<string | null> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, "%dario%tana%"))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const portraitUrl = await getHeroPortraitUrl();
   return (
     <div
       className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased"
@@ -30,7 +50,7 @@ export default function HomePage() {
     >
       <Header />
       <main>
-        <Hero />
+        <Hero portraitUrl={portraitUrl} />
         <TrustBar />
         <About />
         <Services />
