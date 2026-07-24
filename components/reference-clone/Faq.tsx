@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight } from "lucide-react";
 import { AnimatedLabel } from "./AnimatedLabel";
+import { ScrollFillText } from "./ScrollFillText";
 
 const faqs = [
   {
@@ -49,16 +50,10 @@ export function Faq() {
           >
             Domande frequenti.
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-[#94A9BE] text-sm md:text-base leading-relaxed mb-8 max-w-xs"
-          >
-            Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo
-            personalmente in uno o due giorni lavorativi.
-          </motion.p>
+          <ScrollFillText
+            text="Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi."
+            className="text-sm md:text-base leading-relaxed mb-8 max-w-xs"
+          />
           <motion.a
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -69,8 +64,8 @@ export function Faq() {
           >
             Parliamone
             <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-8 h-8 overflow-hidden shrink-0">
-              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8" />
-              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0" />
+              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8 group-hover:-rotate-12" />
+              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:-rotate-12" />
             </span>
           </motion.a>
         </div>

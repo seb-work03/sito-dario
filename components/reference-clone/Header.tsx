@@ -46,7 +46,7 @@ function PillCta({ href, label }: { href: string; label: string }) {
           fill="none"
           stroke="#77C0CF"
           strokeWidth="2.2"
-          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8"
+          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8 group-hover:-rotate-12"
         >
           <path d="M5 12h14M13 5l7 7-7 7" />
         </svg>
@@ -58,7 +58,7 @@ function PillCta({ href, label }: { href: string; label: string }) {
           fill="none"
           stroke="#77C0CF"
           strokeWidth="2.2"
-          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0"
+          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:-rotate-12"
         >
           <path d="M5 12h14M13 5l7 7-7 7" />
         </svg>

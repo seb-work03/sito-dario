@@ -5,6 +5,7 @@ import { motion, useInView, useMotionValue, useSpring, useTransform } from "fram
 import { Star } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { AnimatedLabel } from "./AnimatedLabel";
+import { ScrollFillText } from "./ScrollFillText";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -32,17 +33,10 @@ export function About() {
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <AnimatedLabel>CHI SONO</AnimatedLabel>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] text-lg md:text-2xl max-w-2xl md:text-right leading-snug tracking-tight"
-          >
-            Lavoro nell&apos;e-commerce da oltre vent&apos;anni. Aiuto aziende e
-            professionisti a leggere il proprio contesto e a scegliere con
-            metodo.
-          </motion.p>
+          <ScrollFillText
+            text="Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo."
+            className="text-lg md:text-2xl max-w-2xl md:text-right leading-snug tracking-tight"
+          />
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">

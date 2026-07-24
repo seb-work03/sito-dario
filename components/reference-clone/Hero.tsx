@@ -19,7 +19,7 @@ export function Hero() {
       <div className="mx-auto max-w-[1240px] relative">
         <motion.h1
           style={{ y: titleY, opacity: titleOpacity }}
-          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-[8%]"
+          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-[11%]"
         >
           <span
             className="inline-block"
@@ -64,7 +64,7 @@ export function Hero() {
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,min(55vw,62vh),521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
+            <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,min(55vw,56vh),521px)] px-5 sm:px-6 md:px-10 py-6 md:py-0">
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -75,13 +75,13 @@ export function Hero() {
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
-              <div className="w-[clamp(252px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] shrink-0" aria-hidden="true" />
+              <div className="w-[clamp(252px,38vw,400px)] md:w-[clamp(240px,38vw,400px)] shrink-0" aria-hidden="true" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
-                className="hidden md:block text-[#C1CEDF] text-[15px] md:text-[18px] leading-relaxed max-w-[320px] justify-self-end text-right"
+                className="hidden md:block text-[#EDF2F7] text-[15px] md:text-[18px] leading-relaxed max-w-[320px] justify-self-end text-right"
               >
                 Aiuto aziende, imprenditori e responsabili e‑commerce ad analizzare
                 i problemi, definire le priorità e prendere decisioni più
@@ -96,7 +96,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="absolute z-20 left-[67%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(252px,38vw,400px)] md:w-[clamp(266px,45vw,460px)] aspect-[650/1080] pointer-events-none"
+            className="absolute z-20 left-[67%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(252px,38vw,400px)] md:w-[clamp(240px,38vw,400px)] aspect-[650/1080] pointer-events-none"
           >
             <Image
               src={PORTRAIT_URL}
@@ -104,7 +104,7 @@ export function Hero() {
               fill
               priority
               className="object-cover object-top"
-              sizes="(max-width: 768px) 300px, 460px"
+              sizes="(max-width: 768px) 300px, 400px"
             />
           </motion.div>
         </motion.div>
