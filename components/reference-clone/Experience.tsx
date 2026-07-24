@@ -86,7 +86,7 @@ export function Experience() {
                 viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
               >
-                <span className="font-mono text-sm text-[#77C0CF] tabular-nums">
+                <span className="text-sm text-[#77C0CF] tabular-nums">
                   {`0${i + 1}`.slice(-2)}
                 </span>
                 <h3

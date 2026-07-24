@@ -78,7 +78,7 @@ export function Footer() {
 
           <div className="flex gap-16 shrink-0">
             <ul className="flex flex-col gap-3">
-              <li className="font-mono text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Menu</li>
+              <li className="text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Menu</li>
               {columnA.map((l) => (
                 <li key={l.label}>
                   <a href={l.href} className="text-[#C1CEDF] hover:text-[#77C0CF] transition-colors duration-300 text-sm">
@@ -88,7 +88,7 @@ export function Footer() {
               ))}
             </ul>
             <ul className="flex flex-col gap-3">
-              <li className="font-mono text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Contatti</li>
+              <li className="text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Contatti</li>
               {columnB.map((l) => (
                 <li key={l.label}>
                   <a
@@ -120,7 +120,7 @@ export function Footer() {
           </motion.p>
         </div>
 
-        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#4F6577] text-xs font-mono">
+        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#4F6577] text-xs">
           <span>© {year} Dario Tana &nbsp;·&nbsp; P.IVA [DA INSERIRE]</span>
           <span>Cofondatore DT E-commerce Consulting</span>
           <div className="flex items-center gap-6">

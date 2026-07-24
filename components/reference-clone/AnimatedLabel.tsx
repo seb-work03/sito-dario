@@ -14,7 +14,7 @@ export function AnimatedLabel({ children }: { children: string }) {
   return (
     <span
       ref={ref}
-      className="inline-flex items-center gap-0 font-mono text-sm tracking-widest text-[#77C0CF]/70 overflow-hidden"
+      className="inline-flex items-center gap-0 text-sm tracking-widest text-[#77C0CF]/70 overflow-hidden"
     >
       {/* Left bracket */}
       <motion.span

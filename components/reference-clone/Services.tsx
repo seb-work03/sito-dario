@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { AnimatedLabel } from "./AnimatedLabel";
 
 const services = [
@@ -83,7 +82,7 @@ export function Services() {
             <div className="absolute inset-0 bg-gradient-to-tr from-[#0D1218]/60 via-transparent to-transparent" />
             <div className="absolute left-6 bottom-6 flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-[#77C0CF] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#EDF2F7]">
+              <span className="text-xs uppercase tracking-widest text-[#EDF2F7]">
                 Consulente indipendente
               </span>
             </div>
@@ -100,9 +99,9 @@ export function Services() {
               >
                 <Link
                   href={s.href}
-                  className="group grid grid-cols-[auto_1fr_auto] gap-6 py-10 md:py-12 first:pt-0 items-center"
+                  className="group grid grid-cols-[auto_1fr] gap-6 py-12 md:py-16 first:pt-0 items-center"
                 >
-                  <span className="font-mono text-sm text-[#77C0CF]/60 tabular-nums transition-colors duration-300 group-hover:text-[#77C0CF]">
+                  <span className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 text-sm text-[#77C0CF]/70 tabular-nums shrink-0 transition-colors duration-300 group-hover:border-[#77C0CF] group-hover:text-[#77C0CF]">
                     {s.number}
                   </span>
                   <div>
@@ -112,17 +111,6 @@ export function Services() {
                     </h3>
                     <p className="text-[#94A9BE] leading-relaxed">{s.description}</p>
                   </div>
-                  {/* Arrow container needs relative so the absolute twin is scoped here */}
-                  <span className="relative w-10 h-10 rounded-full border border-white/10 flex items-center justify-center shrink-0 overflow-hidden text-[#94A9BE] group-hover:border-[#77C0CF] group-hover:text-[#77C0CF] transition-colors duration-500">
-                    <ArrowUpRight
-                      size={16}
-                      className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-5 group-hover:-translate-y-5"
-                    />
-                    <ArrowUpRight
-                      size={16}
-                      className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-5 translate-y-5 group-hover:translate-x-0 group-hover:translate-y-0"
-                    />
-                  </span>
                 </Link>
               </motion.div>
             ))}

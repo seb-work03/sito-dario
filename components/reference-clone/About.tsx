@@ -100,7 +100,7 @@ export function About() {
               transition={{ duration: 0.9, delay: 0.4 }}
               className="absolute left-4 bottom-4 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 px-4 py-3 max-w-[220px]"
             >
-              <p className="font-mono text-[10px] tracking-widest text-[#77C0CF]/70 uppercase mb-1">
+              <p className="text-[10px] tracking-widest text-[#77C0CF]/70 uppercase mb-1">
                 Cofondatore
               </p>
               <p className="text-[#EDF2F7] text-sm leading-snug">
@@ -118,7 +118,7 @@ export function About() {
             className="group rounded-3xl border border-white/8 bg-[#17222F] p-6 flex flex-col justify-between gap-6 hover:border-[#77C0CF]/40 transition-colors duration-500"
           >
             <div>
-              <p className="font-mono text-xs tracking-widest text-[#77C0CF]/70 uppercase mb-4">
+              <p className="text-xs tracking-widest text-[#77C0CF]/70 uppercase mb-4">
                 Vent&apos;anni di e-commerce
               </p>
 
