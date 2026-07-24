@@ -25,7 +25,7 @@ export function ScrollFillText({ text, className }: { text: string; className?: 
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.85", "start 0.35"],
+    offset: ["start 0.95", "start 0.1"],
   });
   const words = text.split(" ");
 

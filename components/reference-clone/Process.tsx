@@ -80,9 +80,9 @@ function ProcessCard({ step, index, scrollProgress }: {
         translateX: "-50%",
         translateY: "-50%",
       }}
-      className="w-[clamp(220px,28vw,320px)] aspect-square bg-[#17222F] border border-[#253444] rounded-3xl p-7 md:p-8 flex flex-col justify-between"
+      className="relative w-[clamp(220px,28vw,320px)] aspect-[4/5] bg-[#17222F] border border-[#253444] rounded-3xl p-7 md:p-8 flex flex-col justify-end"
     >
-      <div className="inline-flex items-center justify-center bg-[#77C0CF] rounded-xl w-11 h-11 shrink-0">
+      <div className="absolute top-7 right-7 inline-flex items-center justify-center bg-[#77C0CF] rounded-xl w-11 h-11 shrink-0">
         <span className="text-[#0D1218] text-sm font-semibold tabular-nums">{step.number}</span>
       </div>
       <div>
@@ -156,12 +156,12 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: i * 0.09, ease: [0.19, 1, 0.22, 1] }}
-            className="bg-[#17222F] border border-[#253444] rounded-2xl p-6"
+            className="relative bg-[#17222F] border border-[#253444] rounded-2xl p-6"
           >
-            <div className="inline-flex items-center justify-center bg-[#77C0CF] rounded-lg w-9 h-9 mb-5">
+            <div className="absolute top-5 right-5 inline-flex items-center justify-center bg-[#77C0CF] rounded-lg w-9 h-9">
               <span className="text-[#0D1218] text-xs font-semibold">{s.number}</span>
             </div>
-            <h3 className="text-[#EDF2F7] text-xl font-medium mb-2 tracking-tight">{s.title}</h3>
+            <h3 className="text-[#EDF2F7] text-xl font-medium mb-2 tracking-tight pr-14">{s.title}</h3>
             <p className="text-[#94A9BE] text-sm leading-relaxed">{s.description}</p>
           </motion.div>
         ))}

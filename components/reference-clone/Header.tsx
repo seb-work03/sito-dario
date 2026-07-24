@@ -80,8 +80,7 @@ export function Header() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-[#0D1218]"
-        style={{ height: 80 }}
+        className="fixed top-0 left-0 right-0 z-50 bg-[#0D1218] h-20 md:h-24"
       >
         {/* Soft gradient shadow instead of a hard line, fades in once the page scrolls */}
         <div

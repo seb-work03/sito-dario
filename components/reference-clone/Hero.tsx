@@ -15,7 +15,7 @@ export function Hero() {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.15]);
 
   return (
-    <section ref={ref} className="relative bg-[#0D1218] pt-[92px] pb-3 px-5">
+    <section ref={ref} className="relative bg-[#0D1218] pt-[92px] md:pt-[108px] pb-3 px-5">
       <div className="mx-auto max-w-[1240px] relative">
         <motion.h1
           style={{ y: titleY, opacity: titleOpacity }}
