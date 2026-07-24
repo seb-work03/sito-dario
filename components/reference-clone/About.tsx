@@ -1,11 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { Star } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { AnimatedLabel } from "./AnimatedLabel";
-import { ScrollFillText } from "./ScrollFillText";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -27,65 +34,96 @@ function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number;
   return <span ref={ref}>0{suffix}</span>;
 }
 
+function FillWord({
+  children,
+  progress,
+  range,
+}: {
+  children: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+}) {
+  const opacity = useTransform(progress, range, [0.15, 1]);
+  const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+  return <motion.span style={{ opacity, color }}>{children}</motion.span>;
+}
+
+function PinnedFillTitle() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  const text =
+    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo.";
+  const words = text.split(" ");
+
+  return (
+    <div ref={ref} className="relative md:h-[160vh]">
+      <div className="md:sticky md:top-0 md:h-screen md:flex md:items-center">
+        <div className="mx-auto w-full max-w-[1180px] px-5 py-16 md:py-0">
+          <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
+            <div className="md:col-start-1 md:row-start-1">
+              <AnimatedLabel>CHI SONO</AnimatedLabel>
+            </div>
+            <p className="md:col-start-2 md:col-end-4 md:row-start-1 text-left leading-[1.02] tracking-[-0.04em] font-normal max-w-[760px] text-[clamp(32px,4vw,58px)]">
+              {words.map((word, i) => {
+                const start = i / words.length;
+                const end = start + 1 / words.length;
+                return (
+                  <Fragment key={i}>
+                    <FillWord progress={scrollYProgress} range={[start, end]}>
+                      {word}
+                    </FillWord>
+                    {i < words.length - 1 ? " " : ""}
+                  </Fragment>
+                );
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function About() {
   return (
-    <section id="about-us" className="bg-[#0D1218] py-16 md:py-24">
-      <div className="mx-auto max-w-[1180px] px-5">
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
-          {/* --- Row 1 : label (col 1) + title (col 2-3) ---------------- */}
-          <div className="md:col-start-1 md:row-start-1">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
-          </div>
+    <section id="about-us" className="bg-[#0D1218]">
+      <PinnedFillTitle />
 
-          <div className="md:col-start-2 md:col-end-4 md:row-start-1">
-            <ScrollFillText
-              text="Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo."
-              className="text-left leading-[1.02] tracking-[-0.04em] font-normal max-w-[760px] text-[clamp(32px,4vw,58px)]"
+      <div className="mx-auto max-w-[1180px] px-5 pt-4 pb-16 md:pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] grid-rows-[auto] md:grid-rows-[auto_auto] gap-y-6 md:gap-x-8">
+          {/* --- Row 1 col 1 : portrait (top of row) -------------------- */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+            className="group relative overflow-hidden rounded-[18px] bg-[#17222F] md:col-start-1 md:row-start-1 md:self-start"
+            style={{ aspectRatio: "0.72" }}
+          >
+            <Image
+              src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
+              alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
+              fill
+              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
-          </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
+            <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
+              &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
+              recensione Google reale]&rdquo;
+            </p>
+          </motion.div>
 
-          {/* --- Row 2 col 1 : portrait + rating ------------------------ */}
-          <div className="md:col-start-1 md:row-start-2 flex flex-col">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-              className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
-              style={{ aspectRatio: "0.72" }}
-            >
-              <Image
-                src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
-                alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
-                fill
-                className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
-              <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
-                &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
-                recensione Google reale]&rdquo;
-              </p>
-            </motion.div>
-
-            <div className="mt-[54px] flex flex-col gap-1">
-              <div className="flex items-center gap-2">
-                <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
-                <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
-              </div>
-              <span className="text-[#94A9BE] text-[13px]">
-                media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
-              </span>
-            </div>
-          </div>
-
-          {/* --- Row 2 col 2 : buildings photo, pushed down ------------- */}
+          {/* --- Row 1 col 2 : buildings photo (bottom-aligned) --------- */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="md:col-start-2 md:row-start-2 md:mt-[80px] relative overflow-hidden rounded-[18px] bg-[#17222F] self-start w-full"
+            className="md:col-start-2 md:row-start-1 md:self-end relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
             style={{ aspectRatio: "0.85" }}
           >
             <Image
@@ -97,8 +135,8 @@ export function About() {
             />
           </motion.div>
 
-          {/* --- Row 2 col 3 : CTA + chart card ------------------------- */}
-          <div className="md:col-start-3 md:row-start-2 md:mt-[80px] flex flex-col gap-[18px]">
+          {/* --- Row 1 col 3 : CTA + chart card (bottom-aligned) -------- */}
+          <div className="md:col-start-3 md:row-start-1 md:self-end flex flex-col gap-[18px]">
             <div className="flex md:justify-end">
               <motion.a
                 initial={{ opacity: 0, y: 20 }}
@@ -120,31 +158,51 @@ export function About() {
               </motion.a>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
-              className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[26px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#77C0CF]/40"
-              style={{ minHeight: 270 }}
-            >
-              <div className="flex flex-col gap-3">
-                <p className="text-[11px] tracking-[0.18em] text-[#77C0CF]/80 uppercase">
-                  Vent&apos;anni di e-commerce
-                </p>
-                <ExperienceChart />
-              </div>
+            <ChartCard />
+          </div>
 
-              <div className="mt-auto grid grid-cols-3 gap-5 pt-4 border-t border-white/8">
-                <StatBlock value={20} suffix="+" label="anni di attività" />
-                <StatBlock value={50} suffix="+" label="corsi tenuti" />
-                <StatBlock value={200} suffix="+" label="recensioni" />
-              </div>
-            </motion.div>
+          {/* --- Row 2 col 1 : rating below portrait -------------------- */}
+          <div className="md:col-start-1 md:row-start-2 md:mt-[40px] flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
+              <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
+            </div>
+            <span className="text-[#94A9BE] text-[13px]">
+              media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
+            </span>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ChartCard() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#77C0CF]/40"
+      style={{ minHeight: 270 }}
+    >
+      <div className="flex flex-col gap-3">
+        <p className="text-[9.5px] tracking-[0.14em] text-[#77C0CF]/80 uppercase">
+          Vent&apos;anni di e-commerce
+        </p>
+        <ExperienceChart hovered={hovered} />
+      </div>
+
+      <div className="mt-auto grid grid-cols-3 gap-5 pt-4 border-t border-white/8">
+        <StatBlock value={20} suffix="+" label="anni di attività" />
+        <StatBlock value={50} suffix="+" label="corsi tenuti" />
+        <StatBlock value={200} suffix="+" label="recensioni" />
+      </div>
+    </motion.div>
   );
 }
 
@@ -159,7 +217,7 @@ function StatBlock({ value, suffix, label }: { value: number; suffix: string; la
   );
 }
 
-function ExperienceChart() {
+function ExperienceChart({ hovered }: { hovered: boolean }) {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
@@ -177,6 +235,16 @@ function ExperienceChart() {
     }).join(" ");
   const areaPath = `${path} L 320,100 L 0,100 Z`;
 
+  const midIndex = 4;
+  const endIndex = points.length - 1;
+  const midPoint = points[midIndex];
+  const endPoint = points[endIndex];
+
+  // 0 → not in view, 0.5 → mid (default), 1 → end (on hover)
+  const target = inView ? (hovered ? 1 : 0.5) : 0;
+  // clip rect width in viewBox units (320) — same for line & area
+  const revealWidth = 320 * target;
+
   return (
     <svg
       ref={ref}
@@ -190,54 +258,66 @@ function ExperienceChart() {
           <stop offset="0%" stopColor="#77C0CF" stopOpacity="0.35" />
           <stop offset="100%" stopColor="#77C0CF" stopOpacity="0" />
         </linearGradient>
+        <clipPath id="expReveal">
+          <motion.rect
+            x="0"
+            y="0"
+            height="100"
+            initial={{ width: 0 }}
+            animate={{ width: revealWidth }}
+            transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
+          />
+        </clipPath>
       </defs>
 
       {[25, 50, 75].map((y) => (
         <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
-      <motion.path
-        d={areaPath}
-        fill="url(#expArea)"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: inView ? 1 : 0 }}
-        transition={{ duration: 1.4, delay: 0.6 }}
-      />
-
-      <motion.path
-        d={path}
-        fill="none"
-        stroke="#77C0CF"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: inView ? 1 : 0 }}
-        transition={{ duration: 2, ease: [0.19, 1, 0.22, 1] }}
-      />
-
-      {points.map((p, i) => (
-        <motion.circle
-          key={i}
-          cx={p.x}
-          cy={p.y}
-          r="2"
-          fill="#77C0CF"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={inView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.3, delay: 0.8 + i * 0.08 }}
+      <g clipPath="url(#expReveal)">
+        <path d={areaPath} fill="url(#expArea)" />
+        <path
+          d={path}
+          fill="none"
+          stroke="#77C0CF"
+          strokeWidth="1.6"
+          strokeLinecap="round"
         />
-      ))}
+      </g>
 
+      {/* Leading dot: sits at midpoint by default, moves to end on hover */}
       <motion.circle
-        cx={points[points.length - 1].x}
-        cy={points[points.length - 1].y}
+        r="3.5"
+        fill="#77C0CF"
+        initial={{ cx: midPoint.x, cy: midPoint.y, scale: 0, opacity: 0 }}
+        animate={{
+          cx: hovered ? endPoint.x : midPoint.x,
+          cy: hovered ? endPoint.y : midPoint.y,
+          scale: inView ? 1 : 0,
+          opacity: inView ? 1 : 0,
+        }}
+        transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
+      />
+
+      {/* Pulse ring around the leading dot */}
+      <motion.circle
         r="6"
         fill="none"
         stroke="#77C0CF"
         strokeWidth="1"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={inView ? { scale: [0, 1.5, 1], opacity: [0, 0.6, 0.3] } : {}}
-        transition={{ duration: 2, delay: 1.6, repeat: Infinity, repeatDelay: 1.5 }}
+        initial={{ cx: midPoint.x, cy: midPoint.y, opacity: 0 }}
+        animate={inView ? {
+          cx: hovered ? endPoint.x : midPoint.x,
+          cy: hovered ? endPoint.y : midPoint.y,
+          scale: [1, 1.6, 1],
+          opacity: [0.5, 0.15, 0.5],
+        } : {}}
+        transition={{
+          cx: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
+          cy: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
+          scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+          opacity: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+        }}
       />
     </svg>
   );
