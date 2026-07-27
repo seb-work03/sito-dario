@@ -5,6 +5,7 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useScroll,
   useSpring,
   useTransform,
@@ -43,8 +44,17 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
+  const [filled, setFilled] = useState(false);
   const opacity = useTransform(progress, range, [0.18, 1]);
   const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+
+  useMotionValueEvent(progress, "change", (latest) => {
+    if (latest >= range[1]) setFilled(true);
+  });
+
+  if (filled) {
+    return <span style={{ color: "#EDF2F7", opacity: 1 }}>{children}</span>;
+  }
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
@@ -73,7 +83,7 @@ function PinnedFillTitle() {
           <div className="absolute left-0 top-[110px] md:top-[150px]">
             <AnimatedLabel>CHI SONO</AnimatedLabel>
           </div>
-          <p className="absolute left-0 md:left-[42%] right-0 top-[42%] md:top-[46%] max-w-[600px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
+          <p className="absolute left-0 md:left-[42%] right-0 bottom-[10%] md:bottom-[8%] max-w-[600px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
             {words.map((word, i) => {
               const start = (i / words.length) * FILL_END;
               const end = ((i + 1) / words.length) * FILL_END;
