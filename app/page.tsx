@@ -25,6 +25,15 @@ export const metadata: Metadata = {
 
 async function getHeroPortraitUrl(): Promise<string | null> {
   try {
+    // Prefer the webp version
+    const webp = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, "%dario%tana%.webp"))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    if (webp[0]?.url) return webp[0].url;
+    // Fallback to any dario tana image
     const rows = await db
       .select({ url: media.url })
       .from(media)

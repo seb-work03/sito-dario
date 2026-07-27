@@ -315,15 +315,14 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
         />
       </g>
 
-      {/* Leading dot: sits at midpoint by default, moves to end on hover */}
+      {/* Leading dot: animates r instead of scale to avoid SVG transform-origin issues */}
       <motion.circle
-        r="3.5"
         fill="#00e5ff"
-        initial={{ cx: midPoint.x, cy: midPoint.y, scale: 0, opacity: 0 }}
+        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
         animate={{
           cx: hovered ? endPoint.x : midPoint.x,
           cy: hovered ? endPoint.y : midPoint.y,
-          scale: inView ? 1 : 0,
+          r: inView ? 3.5 : 0,
           opacity: inView ? 1 : 0,
         }}
         transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
@@ -331,21 +330,20 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
 
       {/* Pulse ring around the leading dot */}
       <motion.circle
-        r="6"
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1"
-        initial={{ cx: midPoint.x, cy: midPoint.y, opacity: 0 }}
+        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
         animate={inView ? {
           cx: hovered ? endPoint.x : midPoint.x,
           cy: hovered ? endPoint.y : midPoint.y,
-          scale: [1, 1.6, 1],
-          opacity: [0.5, 0.15, 0.5],
-        } : {}}
+          r: [6, 9.6, 6],
+          opacity: [0.5, 0.1, 0.5],
+        } : { r: 0, opacity: 0 }}
         transition={{
           cx: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
           cy: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
-          scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+          r: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
           opacity: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
         }}
       />

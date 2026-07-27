@@ -16,7 +16,7 @@ export function TrustBar() {
     <section className="bg-[#0D1218] px-5 py-14">
       <div className="mx-auto max-w-[1240px] flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
         <p className="text-[#94A9BE] text-[15px] shrink-0 max-w-[240px] mx-auto md:mx-0 text-center md:text-left leading-snug uppercase tracking-[0.15em]">
-          Ho collaborato con
+          Collaboro con
         </p>
 
         <div className="flex-1 overflow-hidden relative">

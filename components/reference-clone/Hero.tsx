@@ -50,7 +50,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          className="relative z-10 rounded-2xl md:rounded-3xl overflow-hidden"
+          className="relative z-10 rounded-2xl md:rounded-3xl overflow-hidden min-h-[clamp(200px,min(36vw,38vh),360px)]"
         >
           <div
             className="absolute inset-0"
@@ -78,7 +78,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
               className="flex flex-col gap-2 md:gap-3"
             >
               <p className="text-white font-bold text-[18px] sm:text-[22px] md:text-[36px] leading-[1.15] tracking-tight">
-                Consulente e-commerce
+                Consulente <span className="whitespace-nowrap">e&#8209;commerce</span>
               </p>
               <p className="text-white/80 text-[12px] sm:text-[14px] md:text-[16px] leading-[1.45] max-w-[140px] sm:max-w-[200px] md:max-w-[300px]">
                 Consulenza strategica per PMI che rifiutano la mediocrità, formazione avanzata per corporate ed eventi di settore.
@@ -95,7 +95,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
               transition={{ duration: 0.9, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
               className="hidden md:block text-[#EDF2F7] text-[15px] md:text-[20px] leading-[1.3] max-w-[320px] justify-self-end text-right font-medium"
             >
-              Non costruisco siti. Guido la crescita di E‑commerce che fanno la differenza.
+              Non costruisco siti. Guido la crescita di <span className="whitespace-nowrap">e&#8209;commerce</span> che fanno la differenza.
             </motion.p>
           </div>
         </motion.div>
