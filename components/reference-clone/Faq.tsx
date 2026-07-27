@@ -82,7 +82,7 @@ export function Faq() {
               >
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full py-6 md:py-7 flex items-start justify-between gap-4 text-left group"
+                  className="w-full py-6 md:py-7 flex items-start justify-between gap-4 text-left group cursor-pointer"
                 >
                   <span className="text-[#EDF2F7] text-lg md:text-xl font-medium leading-snug tracking-tight pr-4 transition-colors duration-300 group-hover:text-[#00e5ff]">
                     {f.q}

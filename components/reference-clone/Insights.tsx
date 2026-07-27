@@ -48,7 +48,7 @@ export function Insights() {
   const current = audiences[active];
 
   return (
-    <section id="insights" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
         <AnimatedLabel>CON CHI LAVORO</AnimatedLabel>
         <motion.h2
@@ -80,8 +80,8 @@ export function Insights() {
                 className={cn(
                   "group flex-1 md:flex-none text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
                   active === i
-                    ? "bg-[#00e5ff] text-[#0D1218]"
-                    : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444]"
+                    ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
+                    : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444] cursor-pointer"
                 )}
               >
                 <span className="tracking-tight">{t.label}</span>

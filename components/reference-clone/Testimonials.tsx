@@ -63,7 +63,7 @@ export function Testimonials() {
             <button
               onClick={prev}
               aria-label="Testimonianza precedente"
-              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
+              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
             >
               <ArrowLeft
                 size={16}
@@ -77,7 +77,7 @@ export function Testimonials() {
             <button
               onClick={next}
               aria-label="Testimonianza successiva"
-              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
+              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
             >
               <ArrowRight
                 size={16}
@@ -142,7 +142,7 @@ export function Testimonials() {
                   key={i}
                   onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
                   aria-label={`Vai a testimonianza ${i + 1}`}
-                  className="h-1 rounded-full transition-all duration-500"
+                  className="h-1 rounded-full transition-all duration-500 cursor-pointer"
                   style={{
                     width: i === index ? 24 : 8,
                     background: i === index ? "#00e5ff" : "rgba(148,169,190,0.3)",

@@ -12,13 +12,13 @@ const navLinks = [
   { label: "Testimonianze", href: "#testimon" },
 ];
 
-const LOGO_URL =
+const FALLBACK_LOGO_URL =
   "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/articoli/Marchio-Dario-Tana-eCommerce-DJJ83TmbpH4zhP3TO7culMfqCSbEPU.png";
 
-function DarioTanaLogo() {
+function DarioTanaLogo({ url }: { url: string }) {
   return (
     <Image
-      src={LOGO_URL}
+      src={url}
       alt="Dario Tana"
       width={199}
       height={106}
@@ -54,8 +54,9 @@ function PillCta({ href, label }: { href: string; label: string }) {
   );
 }
 
-export function Header() {
+export function Header({ logoUrl }: { logoUrl?: string | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const logo = logoUrl ?? FALLBACK_LOGO_URL;
 
   return (
     <>
@@ -64,7 +65,7 @@ export function Header() {
       >
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">
           <a href="#" className="py-3 md:py-0 transition-opacity hover:opacity-80">
-            <DarioTanaLogo />
+            <DarioTanaLogo url={logo} />
           </a>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -111,7 +112,7 @@ export function Header() {
               className="fixed right-0 top-0 z-[60] flex h-full w-[82%] max-w-[360px] flex-col bg-[#0D1218] shadow-2xl lg:hidden"
             >
               <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
-                <DarioTanaLogo />
+                <DarioTanaLogo url={logo} />
                 <button
                   onClick={() => setMenuOpen(false)}
                   aria-label="Chiudi menu"

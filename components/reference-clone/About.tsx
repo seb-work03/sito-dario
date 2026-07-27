@@ -62,10 +62,10 @@ function FillWord({
 
 function FillHeadline({ words, progress }: { words: string[]; progress: MotionValue<number> }) {
   return (
-    <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)] max-w-[560px]">
+    <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)] max-w-[560px] mb-[70px]">
       {words.map((word, i) => {
-        const start = (i / words.length) * 0.85;
-        const end = ((i + 1) / words.length) * 0.85;
+        const start = (i / words.length) * 1.0;
+        const end = ((i + 1) / words.length) * 1.0;
         return (
           <Fragment key={i}>
             <FillWord progress={progress} range={[start, end]}>
@@ -171,7 +171,7 @@ export function About() {
 
                   {/* CTA + chart card */}
                   <div className="flex flex-col gap-[18px]">
-                    <div className="flex md:justify-end">
+                    <div className="flex md:justify-end mb-[40px]">
                       <motion.a
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -215,15 +215,15 @@ function ChartCard() {
       style={{ minHeight: 270 }}
     >
       <div className="flex flex-col gap-3">
-        <p className="text-[9.5px] tracking-[0.14em] text-[#00e5ff]/80 uppercase">
-          +€2M fatturato guidato per i clienti
+        <p className="text-[14px] font-bold tracking-tight text-[#00e5ff]">
+          +€2M fatturato guidato
         </p>
         <ExperienceChart hovered={hovered} />
       </div>
 
       <div className="mt-auto grid grid-cols-3 gap-5 pt-4 border-t border-white/8">
         <StatBlock value={20} suffix="+" label="anni di attività" />
-        <StatBlock value={50} suffix="+" label="corsi tenuti" />
+        <StatBlock value={30} suffix="+" label="e-commerce seguiti" />
         <StatBlock value={200} suffix="+" label="recensioni" />
       </div>
     </motion.div>
@@ -245,11 +245,11 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
-  // endPoint y raised to 32 so the pulsing dot (r=6) doesn't clip against the SVG top edge
+  // Steeper growth curve; endpoint at x=290 (slightly before right edge) so dot isn't clipped
   const points = [
-    { x: 0,   y: 78 }, { x: 40,  y: 72 }, { x: 80,  y: 65 },
-    { x: 120, y: 68 }, { x: 160, y: 55 }, { x: 200, y: 48 },
-    { x: 240, y: 42 }, { x: 280, y: 36 }, { x: 320, y: 32 },
+    { x: 0,   y: 82 }, { x: 40,  y: 75 }, { x: 80,  y: 70 },
+    { x: 120, y: 72 }, { x: 160, y: 60 }, { x: 200, y: 48 },
+    { x: 240, y: 38 }, { x: 270, y: 26 }, { x: 290, y: 16 },
   ];
   const path = `M ${points[0].x},${points[0].y} ` +
     points.slice(1).map((p, i) => {
@@ -258,7 +258,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       const cx2 = prev.x + (p.x - prev.x) * 0.5;
       return `C ${cx1},${prev.y} ${cx2},${p.y} ${p.x},${p.y}`;
     }).join(" ");
-  const areaPath = `${path} L 320,100 L 0,100 Z`;
+  const areaPath = `${path} L 290,100 L 0,100 Z`;
 
   const midIndex = 4;
   const endIndex = points.length - 1;
@@ -267,13 +267,13 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
 
   // 0 → not in view, 0.5 → mid (default), 1 → end (on hover)
   const target = inView ? (hovered ? 1 : 0.5) : 0;
-  // clip rect width in viewBox units (320) — same for line & area
-  const revealWidth = 320 * target;
+  // clip rect width in viewBox units; endpoint is at x=290
+  const revealWidth = 290 * target;
 
   return (
     <svg
       ref={ref}
-      viewBox="0 0 320 100"
+      viewBox="0 0 290 100"
       className="w-full h-24 md:h-28"
       preserveAspectRatio="none"
       aria-hidden="true"
@@ -286,8 +286,8 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
         <clipPath id="expReveal">
           <motion.rect
             x="0"
-            y="0"
-            height="100"
+            y="-10"
+            height="120"
             initial={{ width: 0 }}
             animate={{ width: revealWidth }}
             transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
@@ -296,7 +296,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       </defs>
 
       {[25, 50, 75].map((y) => (
-        <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
+        <line key={y} x1="0" y1={y} x2="290" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
       <g clipPath="url(#expReveal)">
