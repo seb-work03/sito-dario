@@ -80,10 +80,10 @@ function PinnedFillTitle() {
 
   return (
     <div ref={ref} className="relative h-[130vh] md:h-[160vh]">
-      <div className="sticky top-0 h-screen overflow-hidden flex items-end">
-        <div className="mx-auto w-full max-w-[1180px] px-5 pt-10 pb-24 md:pt-16 md:pb-32">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="mx-auto w-full max-w-[1180px] px-5 pt-16 md:pt-20">
           <AnimatedLabel>CHI SONO</AnimatedLabel>
-          <div className="mt-8 md:mt-12 md:pl-[42%]">
+          <div className="mt-16 md:mt-24 md:pl-[42%]">
             <p className="max-w-[640px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
               {words.map((word, i) => {
                 const start = (i / words.length) * FILL_END;
