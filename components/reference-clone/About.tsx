@@ -5,6 +5,7 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useScroll,
   useSpring,
   useTransform,
@@ -43,8 +44,19 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
+  const [filled, setFilled] = useState(false);
   const opacity = useTransform(progress, range, [0.18, 1]);
   const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+
+  // Once a word is filled it stays filled forever, regardless of scroll
+  // direction — no fade-out when scrolling back up.
+  useMotionValueEvent(progress, "change", (latest) => {
+    if (latest >= range[1] && !filled) setFilled(true);
+  });
+
+  if (filled) {
+    return <span style={{ color: "#EDF2F7", opacity: 1 }}>{children}</span>;
+  }
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
