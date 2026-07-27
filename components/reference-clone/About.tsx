@@ -60,57 +60,51 @@ function FillWord({
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
-/**
- * Pinned intro title: while the words are filling in, the section stays put on
- * screen (the page doesn't scroll) and each word turns white one after another.
- * Once every word is filled, the pin releases and the page scrolls on.
- */
-function PinnedFillTitle() {
+function FillHeadline() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end end"],
+    offset: ["start 85%", "end 60%"],
   });
   const text =
-    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo.";
+    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a scegliere con metodo.";
   const words = text.split(" ");
-  // Fill finishes at 85% of the travel, so the last stretch of scroll keeps
-  // the fully-white text on screen before the pin releases.
-  const FILL_END = 0.85;
 
   return (
-    <div ref={ref} className="relative h-[130vh] md:h-[160vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="mx-auto w-full max-w-[1180px] px-5 pt-16 md:pt-20">
-          <AnimatedLabel>CHI SONO</AnimatedLabel>
-          <div className="mt-16 md:mt-24 md:pl-[42%]">
-            <p className="max-w-[640px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
-              {words.map((word, i) => {
-                const start = (i / words.length) * FILL_END;
-                const end = ((i + 1) / words.length) * FILL_END;
-                return (
-                  <Fragment key={i}>
-                    <FillWord progress={scrollYProgress} range={[start, end]}>
-                      {word}
-                    </FillWord>
-                    {i < words.length - 1 ? " " : ""}
-                  </Fragment>
-                );
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h2
+      ref={ref}
+      className="text-left leading-[1.15] tracking-[-0.02em] font-medium text-[clamp(28px,3.6vw,52px)]"
+    >
+      {words.map((word, i) => {
+        const start = i / words.length;
+        const end = (i + 1) / words.length;
+        return (
+          <Fragment key={i}>
+            <FillWord progress={scrollYProgress} range={[start, end]}>
+              {word}
+            </FillWord>
+            {i < words.length - 1 ? " " : ""}
+          </Fragment>
+        );
+      })}
+    </h2>
   );
 }
 
 export function About() {
   return (
-    <section id="about-us" className="bg-[#0D1218]">
-      <PinnedFillTitle />
+    <section id="about-us" className="bg-[#0D1218] pt-14 md:pt-20 pb-16 md:pb-24">
+      <div className="mx-auto max-w-[1180px] px-5">
+        {/* Top row: label (col 1) + big scroll-fill headline (cols 2-3) */}
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-6 md:gap-x-8 mb-12 md:mb-16">
+          <div className="md:col-start-1 md:pt-2">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
+          </div>
+          <div className="md:col-start-2">
+            <FillHeadline />
+          </div>
+        </div>
 
-      <div className="mx-auto max-w-[1180px] px-5 pt-4 pb-16 md:pb-24">
         {/* items-end: the three columns share a common bottom line, so the
             rating (bottom of col 1) lines up with the bottom edge of the two
             images/cards, while the taller portrait pushes further up. */}
