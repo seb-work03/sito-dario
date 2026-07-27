@@ -1,32 +1,54 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export function MediaUploadWidget() {
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
 
     setUploading(true);
+    setProgress({ done: 0, total: files.length });
+
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      await fetch("/api/admin/upload", { method: "POST", body: formData });
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
+        formData.append("file", files[i]);
+        await fetch("/api/admin/upload", { method: "POST", body: formData });
+        setProgress({ done: i + 1, total: files.length });
+      }
       router.refresh();
     } finally {
       setUploading(false);
-      e.target.value = "";
+      setProgress(null);
+      if (inputRef.current) inputRef.current.value = "";
     }
   }
 
+  const label = progress
+    ? `${progress.done}/${progress.total} caricati…`
+    : uploading
+    ? "Caricamento…"
+    : "Carica immagini";
+
   return (
-    <label className="cursor-pointer rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400">
-      {uploading ? "Caricamento…" : "Carica immagine"}
-      <input type="file" accept="image/*" onChange={handleChange} disabled={uploading} className="hidden" />
+    <label className="cursor-pointer rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400 select-none">
+      {label}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleChange}
+        disabled={uploading}
+        className="hidden"
+      />
     </label>
   );
 }

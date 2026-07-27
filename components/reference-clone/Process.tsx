@@ -95,21 +95,24 @@ function ProcessCard({ step, index, scrollProgress }: {
         translateX: "-50%",
         translateY: "-50%",
       }}
-      className="group relative w-[clamp(220px,28vw,320px)] aspect-[6/5] bg-[#0D1218] border border-[#253444]/80 rounded-3xl p-7 md:p-8 flex flex-col justify-end transition-shadow duration-500 hover:shadow-[0_24px_64px_rgba(0,0,0,0.55)] hover:border-[#00e5ff]/20"
+      className="group relative w-[clamp(220px,28vw,320px)] aspect-[6/5] bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 md:p-8 flex flex-col gap-3 transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
-      {/* Subtle glow on hover */}
-      <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ boxShadow: "inset 0 0 40px rgba(0,229,255,0.04)" }} />
+      {/* Subtle inner glow on hover */}
+      <div
+        className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ boxShadow: "inset 0 0 32px rgba(255,255,255,0.04)" }}
+      />
 
-      {/* Icon badge */}
-      <div className="absolute top-7 right-7 inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-xl w-11 h-11 shrink-0 transition-transform duration-500 group-hover:scale-110">
-        {step.icon}
+      {/* Top row: title left + icon right, vertically centered */}
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-tight">{step.title}</h3>
+        <div className="inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-xl w-11 h-11 shrink-0 transition-transform duration-500 group-hover:scale-110">
+          {step.icon}
+        </div>
       </div>
 
-      <div>
-        <h3 className="text-[#EDF2F7] text-2xl font-medium mb-2 tracking-tight">{step.title}</h3>
-        <p className="text-[#94A9BE] text-sm leading-relaxed">{step.description}</p>
-      </div>
+      {/* Description */}
+      <p className="text-[#6A84A0] text-sm leading-relaxed">{step.description}</p>
     </motion.div>
   );
 }
@@ -153,12 +156,14 @@ export function Process() {
         </div>
       </div>
 
-      {/* Scroll-driven fan-out — desktop only. Dark background for card area */}
+      {/* Scroll-driven fan-out — desktop only. Accent background for card area */}
       <div className="hidden md:block" ref={sectionRef} style={{ minHeight: "380vh" }}>
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden bg-[#0D1218]">
-          {/* Subtle radial glow behind cards */}
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,229,255,0.06), transparent 70%)" }} />
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden bg-[#00e5ff]">
+          {/* Subtle radial glow */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,0,0,0.08), transparent 70%)" }}
+          />
           <div className="relative w-[clamp(480px,60vw,720px)] aspect-square">
             {steps.map((step, i) => (
               <ProcessCard
@@ -172,8 +177,8 @@ export function Process() {
         </div>
       </div>
 
-      {/* Mobile: simple reveal stack, on dark bg */}
-      <div className="md:hidden flex flex-col gap-4 px-5 pb-16 bg-[#0D1218]">
+      {/* Mobile: simple reveal stack, on accent bg */}
+      <div className="md:hidden flex flex-col gap-4 px-5 pb-16 bg-[#00e5ff]">
         {steps.map((s, i) => (
           <motion.div
             key={s.number}
@@ -181,13 +186,15 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: i * 0.09, ease: [0.19, 1, 0.22, 1] }}
-            className="relative bg-[#17222F] border border-[#253444] rounded-2xl p-6"
+            className="relative bg-[#0D1218] border border-[#253444]/60 rounded-2xl p-6 flex flex-col gap-3"
           >
-            <div className="absolute top-5 right-5 inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-lg w-9 h-9">
-              {s.icon}
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-[#EDF2F7] text-xl font-medium tracking-tight">{s.title}</h3>
+              <div className="inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-lg w-9 h-9 shrink-0">
+                {s.icon}
+              </div>
             </div>
-            <h3 className="text-[#EDF2F7] text-xl font-medium mb-2 tracking-tight pr-14">{s.title}</h3>
-            <p className="text-[#94A9BE] text-sm leading-relaxed">{s.description}</p>
+            <p className="text-[#6A84A0] text-sm leading-relaxed">{s.description}</p>
           </motion.div>
         ))}
       </div>

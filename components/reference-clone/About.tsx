@@ -212,7 +212,12 @@ function ChartCard() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
-      style={{ minHeight: 270 }}
+      style={{
+        minHeight: 270,
+        backgroundImage: "linear-gradient(rgba(37,52,68,0.45) 1px, transparent 1px), linear-gradient(90deg, rgba(37,52,68,0.45) 1px, transparent 1px)",
+        backgroundSize: "20px 20px",
+        backgroundPositionY: "22px",
+      }}
     >
       <div className="flex flex-col gap-3">
         <p className="text-[14px] font-bold tracking-tight text-[#00e5ff]">
@@ -273,7 +278,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
   return (
     <svg
       ref={ref}
-      viewBox="0 0 290 100"
+      viewBox="0 0 320 100"
       className="w-full h-24 md:h-28"
       preserveAspectRatio="none"
       aria-hidden="true"
@@ -296,7 +301,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       </defs>
 
       {[25, 50, 75].map((y) => (
-        <line key={y} x1="0" y1={y} x2="290" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
+        <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
       <g clipPath="url(#expReveal)">
