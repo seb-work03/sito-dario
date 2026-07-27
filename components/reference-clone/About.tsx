@@ -5,7 +5,6 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useMotionValueEvent,
   useScroll,
   useSpring,
   useTransform,
@@ -44,19 +43,8 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
-  const [filled, setFilled] = useState(false);
   const opacity = useTransform(progress, range, [0.18, 1]);
   const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
-
-  // Once a word has been reached going forward, keep it filled — scrolling
-  // back up must not un-fill words that already lit up.
-  useMotionValueEvent(progress, "change", (latest) => {
-    if (latest >= range[1] && !filled) setFilled(true);
-  });
-
-  if (filled) {
-    return <span style={{ color: "#EDF2F7", opacity: 1 }}>{children}</span>;
-  }
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
@@ -102,12 +90,14 @@ export function About() {
 
   return (
     <div id="about-us" ref={pinRef} className="relative md:h-[160vh] bg-[#0D1218]">
-      <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-start">
-        <section className="w-full pt-10 md:pt-14 pb-14 md:pb-8">
+      <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-center">
+        <section className="w-full pt-10 md:pt-8 pb-14 md:pb-8">
           <div className="mx-auto max-w-[1180px] px-5">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
+            <div className="mb-[60px] md:mb-[90px]">
+              <AnimatedLabel>CHI SONO</AnimatedLabel>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10 mt-6 md:mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10">
               {/* Left column: portrait + rating */}
               <div className="md:col-start-1 flex flex-col">
                 <motion.div
