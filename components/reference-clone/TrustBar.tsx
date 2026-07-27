@@ -26,7 +26,7 @@ export function TrustBar() {
             {doubled.map((label, i) => (
               <span
                 key={i}
-                className="shrink-0 text-[#6A84A0] hover:text-[#77C0CF] transition-colors duration-500 text-lg md:text-xl font-medium tracking-tight whitespace-nowrap"
+                className="shrink-0 text-[#6A84A0] hover:text-[#00e5ff] transition-colors duration-500 text-lg md:text-xl font-medium tracking-tight whitespace-nowrap"
               >
                 {label}
               </span>

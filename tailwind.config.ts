@@ -18,17 +18,17 @@ const config: Config = {
           700: "#1D2B3A",  // hover states
           600: "#253444",  // borders, dividers
         },
-        // Accent — teal-steel #77C0CF
+        // Accent — electric cyan #00e5ff
         celeste: {
-          50:  "#EEF9FB",
-          100: "#D4EFF5",
-          200: "#AEDCE8",
-          300: "#8DCEDD",
-          400: "#82C6D4",
-          500: "#77C0CF",  // MAIN
-          600: "#5BAAB9",
-          700: "#3F90A4",
-          800: "#2C7384",
+          50:  "#E5FDFF",
+          100: "#B3FAFF",
+          200: "#80F5FF",
+          300: "#4deeff",
+          400: "#33ecff",
+          500: "#00e5ff",  // MAIN
+          600: "#00b8cc",
+          700: "#008a99",
+          800: "#005c66",
         },
         // Text — cool off-white, never pure white
         paper: {
@@ -70,7 +70,7 @@ const config: Config = {
       boxShadow: {
         "soft": "0 2px 20px rgba(0, 0, 0, 0.4)",
         "lift": "0 12px 40px rgba(0, 0, 0, 0.5)",
-        "celeste": "0 8px 40px rgba(119, 192, 207, 0.18)",
+        "celeste": "0 8px 40px rgba(0, 229, 255, 0.18)",
       },
       transitionTimingFunction: {
         "smooth": "cubic-bezier(0.25, 0.1, 0.25, 1)",

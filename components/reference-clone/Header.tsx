@@ -29,36 +29,23 @@ function DarioTanaLogo() {
   );
 }
 
-/** Pill CTA button — teal background, dark arrow circle, arrow slides on hover */
+/** Pill CTA button — electric cyan, glow + upward arrow rotation on hover */
 function PillCta({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
-      className="group hidden md:inline-flex items-center gap-2 rounded-full bg-[#77C0CF] pl-5 pr-1.5 py-1.5 text-[#0D1218] text-[15px] font-medium transition-all duration-500 hover:bg-[#9BD8E4] hover:shadow-[0_0_24px_rgba(119,192,207,0.55)]"
+      className="group hidden md:inline-flex items-center gap-2 rounded-full bg-[#00e5ff] pl-5 pr-1.5 py-1.5 text-[#0D1218] text-[15px] font-medium transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
     >
       <span>{label}</span>
-      <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] w-9 h-9 overflow-hidden shrink-0">
-        {/* Arrow exits top-right on hover */}
+      <span className="flex items-center justify-center rounded-full bg-[#0D1218] w-9 h-9 shrink-0">
         <svg
           width="15"
           height="15"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#77C0CF"
+          stroke="#00e5ff"
           strokeWidth="2.2"
-          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8 group-hover:-rotate-12"
-        >
-          <path d="M5 12h14M13 5l7 7-7 7" />
-        </svg>
-        {/* Arrow enters from bottom-left on hover */}
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#77C0CF"
-          strokeWidth="2.2"
-          className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:-rotate-12"
+          className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45"
         >
           <path d="M5 12h14M13 5l7 7-7 7" />
         </svg>
@@ -85,10 +72,10 @@ export function Header() {
               <a
                 key={l.href}
                 href={l.href}
-                className="relative text-[15px] text-[#EDF2F7] transition-colors duration-300 hover:text-[#77C0CF] group"
+                className="relative text-[15px] text-[#EDF2F7] transition-colors duration-300 hover:text-[#00e5ff] group"
               >
                 {l.label}
-                <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#77C0CF] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
+                <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
               </a>
             ))}
           </nav>
@@ -128,7 +115,7 @@ export function Header() {
                 <button
                   onClick={() => setMenuOpen(false)}
                   aria-label="Chiudi menu"
-                  className="p-2 text-[#EDF2F7] transition-colors hover:text-[#77C0CF]"
+                  className="p-2 text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
                 >
                   <X size={22} />
                 </button>
@@ -161,7 +148,7 @@ export function Header() {
                     duration: 0.35,
                     ease: [0.19, 1, 0.22, 1],
                   }}
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium py-4"
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium py-4 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Parliamone
                 </motion.a>

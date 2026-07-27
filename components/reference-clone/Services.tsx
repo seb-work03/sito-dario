@@ -42,7 +42,7 @@ export function Services() {
             transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
             className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-xl tracking-tight"
           >
-            Tre ambiti. Un&apos;unica regia.
+            3 ambiti. Un&apos;unica regia.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -74,7 +74,7 @@ export function Services() {
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-[#0D1218]/60 via-transparent to-transparent" />
             <div className="absolute left-6 bottom-6 flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-[#77C0CF] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#00e5ff] animate-pulse" />
               <span className="text-xs uppercase tracking-widest text-[#EDF2F7]">
                 Consulente indipendente
               </span>
@@ -94,13 +94,13 @@ export function Services() {
                   href={s.href}
                   className="group grid grid-cols-[auto_1fr] gap-6 py-[32px] first:pt-0 items-center"
                 >
-                  <span className="flex items-center justify-center w-12 h-12 rounded-full border border-white/10 text-sm text-[#77C0CF]/70 tabular-nums shrink-0 transition-colors duration-300 group-hover:border-[#77C0CF] group-hover:text-[#77C0CF]">
+                  <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00e5ff]/10 border border-[#00e5ff]/30 text-sm text-[#00e5ff] tabular-nums shrink-0 transition-colors duration-300 group-hover:bg-[#00e5ff] group-hover:border-[#00e5ff] group-hover:text-[#0D1218]">
                     {s.number}
                   </span>
                   <div>
                     <h3 className="text-[#EDF2F7] text-2xl md:text-3xl font-medium mb-2 tracking-tight relative inline-block">
                       {s.title}
-                      <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#77C0CF] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
+                      <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
                     </h3>
                     <p className="text-[#94A9BE] leading-relaxed">{s.description}</p>
                   </div>

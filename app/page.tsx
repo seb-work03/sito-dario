@@ -13,6 +13,8 @@ import { Experience } from "@/components/reference-clone/Experience";
 import { Testimonials } from "@/components/reference-clone/Testimonials";
 import { Insights } from "@/components/reference-clone/Insights";
 import { Faq } from "@/components/reference-clone/Faq";
+import { AccentBanner } from "@/components/reference-clone/AccentBanner";
+import { AccentCta } from "@/components/reference-clone/AccentCta";
 import { Footer } from "@/components/reference-clone/Footer";
 
 // Nota: contenuti ancora in fase di verifica — testimonianze, foto ed enti
@@ -54,11 +56,13 @@ export default async function HomePage() {
         <TrustBar />
         <About />
         <Services />
+        <AccentBanner />
         <Process />
         <Experience />
         <Testimonials />
         <Insights />
         <Faq />
+        <AccentCta />
       </main>
       <Footer />
     </div>

@@ -137,7 +137,7 @@ export function About() {
 
                 <div className="mt-6 flex flex-col gap-1">
                   <div className="flex items-center gap-2">
-                    <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
+                    <Star size={20} className="fill-[#00e5ff] text-[#00e5ff]" />
                     <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
                   </div>
                   <span className="text-[#94A9BE] text-[13px]">
@@ -178,14 +178,11 @@ export function About() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                         href="#service"
-                        className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#A5E1EC] transition-colors duration-300 shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
+                        className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#33ecff] transition-all duration-300 hover:shadow-[0_0_24px_2px_rgba(0,229,255,0.45)]"
                       >
                         <span>Scopri di più</span>
-                        <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-9 h-9 overflow-hidden shrink-0">
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8">
-                            <path d="M5 12h14M13 5l7 7-7 7" />
-                          </svg>
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0">
+                        <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-9 h-9 shrink-0">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
                             <path d="M5 12h14M13 5l7 7-7 7" />
                           </svg>
                         </span>
@@ -214,12 +211,12 @@ function ChartCard() {
       transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#77C0CF]/40"
+      className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
       style={{ minHeight: 270 }}
     >
       <div className="flex flex-col gap-3">
-        <p className="text-[9.5px] tracking-[0.14em] text-[#77C0CF]/80 uppercase">
-          Vent&apos;anni di e-commerce
+        <p className="text-[9.5px] tracking-[0.14em] text-[#00e5ff]/80 uppercase">
+          +€2M fatturato guidato per i clienti
         </p>
         <ExperienceChart hovered={hovered} />
       </div>
@@ -248,10 +245,11 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
+  // endPoint y raised to 32 so the pulsing dot (r=6) doesn't clip against the SVG top edge
   const points = [
     { x: 0,   y: 78 }, { x: 40,  y: 72 }, { x: 80,  y: 65 },
     { x: 120, y: 68 }, { x: 160, y: 55 }, { x: 200, y: 48 },
-    { x: 240, y: 42 }, { x: 280, y: 30 }, { x: 320, y: 22 },
+    { x: 240, y: 42 }, { x: 280, y: 36 }, { x: 320, y: 32 },
   ];
   const path = `M ${points[0].x},${points[0].y} ` +
     points.slice(1).map((p, i) => {
@@ -282,8 +280,8 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
     >
       <defs>
         <linearGradient id="expArea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#77C0CF" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#77C0CF" stopOpacity="0" />
+          <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
         </linearGradient>
         <clipPath id="expReveal">
           <motion.rect
@@ -306,7 +304,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
         <path
           d={path}
           fill="none"
-          stroke="#77C0CF"
+          stroke="#00e5ff"
           strokeWidth="1.6"
           strokeLinecap="round"
         />
@@ -315,7 +313,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       {/* Leading dot: sits at midpoint by default, moves to end on hover */}
       <motion.circle
         r="3.5"
-        fill="#77C0CF"
+        fill="#00e5ff"
         initial={{ cx: midPoint.x, cy: midPoint.y, scale: 0, opacity: 0 }}
         animate={{
           cx: hovered ? endPoint.x : midPoint.x,
@@ -330,7 +328,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       <motion.circle
         r="6"
         fill="none"
-        stroke="#77C0CF"
+        stroke="#00e5ff"
         strokeWidth="1"
         initial={{ cx: midPoint.x, cy: midPoint.y, opacity: 0 }}
         animate={inView ? {

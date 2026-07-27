@@ -60,12 +60,11 @@ export function Faq() {
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.2 }}
             href="/contatti"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#9BD8E4] hover:shadow-[0_0_28px_rgba(119,192,207,0.55)]"
+            className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
           >
             Parliamone
-            <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-8 h-8 overflow-hidden shrink-0">
-              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8 group-hover:-rotate-12" />
-              <ArrowRight size={13} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:-rotate-12" />
+            <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
+              <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
             </span>
           </motion.a>
         </div>
@@ -85,7 +84,7 @@ export function Faq() {
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="w-full py-6 md:py-7 flex items-start justify-between gap-4 text-left group"
                 >
-                  <span className="text-[#EDF2F7] text-lg md:text-xl font-medium leading-snug tracking-tight pr-4 transition-colors duration-300 group-hover:text-[#77C0CF]">
+                  <span className="text-[#EDF2F7] text-lg md:text-xl font-medium leading-snug tracking-tight pr-4 transition-colors duration-300 group-hover:text-[#00e5ff]">
                     {f.q}
                   </span>
                   <motion.span
@@ -93,8 +92,8 @@ export function Faq() {
                     transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                     className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-500 ${
                       isOpen
-                        ? "bg-[#77C0CF] border-[#77C0CF] text-[#0D1218]"
-                        : "border-white/15 text-[#EDF2F7] group-hover:border-[#77C0CF]/40"
+                        ? "bg-[#00e5ff] border-[#00e5ff] text-[#0D1218]"
+                        : "border-white/15 text-[#EDF2F7] group-hover:border-[#00e5ff]/40"
                     }`}
                   >
                     <Plus size={16} />

@@ -47,14 +47,11 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
               href="/contatti"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#9BD8E4] hover:shadow-[0_0_32px_rgba(119,192,207,0.55)] mb-10"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)] mb-10"
             >
               Parliamone
-              <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-10 h-10 overflow-hidden shrink-0">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8 group-hover:-rotate-12">
-                  <path d="M5 12h14M13 5l7 7-7 7" />
-                </svg>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:-rotate-12">
+              <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-10 h-10 shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
                   <path d="M5 12h14M13 5l7 7-7 7" />
                 </svg>
               </span>
@@ -68,7 +65,7 @@ export function Footer() {
                   target={s.href.startsWith("http") ? "_blank" : undefined}
                   rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#77C0CF]/15 border border-white/10 hover:border-[#77C0CF]/40 flex items-center justify-center text-[#94A9BE] hover:text-[#77C0CF] transition-all duration-300"
+                  className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#94A9BE] hover:text-[#00e5ff] transition-all duration-300"
                 >
                   {s.icon}
                 </a>
@@ -81,7 +78,7 @@ export function Footer() {
               <li className="text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Menu</li>
               {columnA.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="text-[#C1CEDF] hover:text-[#77C0CF] transition-colors duration-300 text-sm">
+                  <a href={l.href} className="text-[#C1CEDF] hover:text-[#00e5ff] transition-colors duration-300 text-sm">
                     {l.label}
                   </a>
                 </li>
@@ -95,7 +92,7 @@ export function Footer() {
                     href={l.href}
                     target={l.href.startsWith("http") ? "_blank" : undefined}
                     rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="text-[#C1CEDF] hover:text-[#77C0CF] transition-colors duration-300 inline-flex items-center gap-1.5 text-sm"
+                    className="text-[#C1CEDF] hover:text-[#00e5ff] transition-colors duration-300 inline-flex items-center gap-1.5 text-sm"
                   >
                     {l.label} <span aria-hidden className="text-[#4F6577]">↗</span>
                   </a>
@@ -116,7 +113,7 @@ export function Footer() {
             style={{ fontSize: "clamp(3.5rem, 15vw, 15rem)" }}
             aria-hidden="true"
           >
-            DARIO<span className="text-[#77C0CF]">.</span>TANA
+            DARIO<span className="text-[#00e5ff]">.</span>TANA
           </motion.p>
         </div>
 

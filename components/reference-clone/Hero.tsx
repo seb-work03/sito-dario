@@ -53,14 +53,14 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
             <div
               className="absolute inset-0"
               style={{
-                background: "linear-gradient(256deg, rgba(119, 192, 207, 0.92) 0%, rgba(44, 130, 150, 0.88) 35%, rgba(13, 18, 24, 0.96) 100%)",
+                background: "linear-gradient(256deg, rgba(0, 229, 255, 0.92) 0%, rgba(0, 138, 153, 0.88) 35%, rgba(13, 18, 24, 0.96) 100%)",
               }}
             />
             {/* Animated ambient glow */}
             <motion.div
               aria-hidden
               className="absolute -top-1/2 -right-1/4 w-[60%] h-[200%] rounded-full pointer-events-none"
-              style={{ background: "radial-gradient(closest-side, rgba(119,192,207,0.35), transparent 70%)" }}
+              style={{ background: "radial-gradient(closest-side, rgba(0,229,255,0.35), transparent 70%)" }}
               animate={{ scale: [1, 1.15, 1], opacity: [0.55, 0.85, 0.55] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />

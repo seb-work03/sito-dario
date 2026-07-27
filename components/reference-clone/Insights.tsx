@@ -80,7 +80,7 @@ export function Insights() {
                 className={cn(
                   "group flex-1 md:flex-none text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
                   active === i
-                    ? "bg-[#77C0CF] text-[#0D1218]"
+                    ? "bg-[#00e5ff] text-[#0D1218]"
                     : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444]"
                 )}
               >
@@ -90,7 +90,7 @@ export function Insights() {
                   transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                   className={cn(
                     "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                    active === i ? "bg-[#0D1218] text-[#77C0CF]" : "bg-[#1D2B3A] text-[#94A9BE]"
+                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#94A9BE]"
                   )}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -141,7 +141,7 @@ export function Insights() {
                       transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }}
                       className="flex items-start gap-2.5 text-[#DDE5EF] text-sm"
                     >
-                      <ArrowUpRight size={14} className="text-[#77C0CF] mt-0.5 shrink-0" />
+                      <ArrowUpRight size={14} className="text-[#00e5ff] mt-0.5 shrink-0" />
                       {b}
                     </motion.li>
                   ))}

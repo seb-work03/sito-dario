@@ -63,7 +63,7 @@ export function Testimonials() {
             <button
               onClick={prev}
               aria-label="Testimonianza precedente"
-              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#77C0CF] border border-[#253444] hover:border-[#77C0CF] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
+              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
             >
               <ArrowLeft
                 size={16}
@@ -77,7 +77,7 @@ export function Testimonials() {
             <button
               onClick={next}
               aria-label="Testimonianza successiva"
-              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#77C0CF] border border-[#253444] hover:border-[#77C0CF] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
+              className="group w-12 h-12 rounded-full bg-[#17222F] hover:bg-[#00e5ff] border border-[#253444] hover:border-[#00e5ff] text-[#EDF2F7] hover:text-[#0D1218] flex items-center justify-center transition-all duration-500 overflow-hidden relative"
             >
               <ArrowRight
                 size={16}
@@ -114,7 +114,7 @@ export function Testimonials() {
           </div>
 
           <div className="bg-[#17222F] border border-[#253444] rounded-2xl p-8 md:p-12 min-h-[280px] flex flex-col justify-between overflow-hidden relative">
-            <Quote size={40} className="text-[#77C0CF] mb-4 shrink-0" strokeWidth={1.25} />
+            <Quote size={40} className="text-[#00e5ff] mb-4 shrink-0" strokeWidth={1.25} />
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={index}
@@ -145,7 +145,7 @@ export function Testimonials() {
                   className="h-1 rounded-full transition-all duration-500"
                   style={{
                     width: i === index ? 24 : 8,
-                    background: i === index ? "#77C0CF" : "rgba(148,169,190,0.3)",
+                    background: i === index ? "#00e5ff" : "rgba(148,169,190,0.3)",
                   }}
                 />
               ))}

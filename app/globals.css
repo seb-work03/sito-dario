@@ -7,15 +7,15 @@
   --color-ink-800: #17222F;
   --color-ink-700: #1D2B3A;
   --color-ink-600: #253444;
-  --color-celeste-50:  #EEF9FB;
-  --color-celeste-100: #D4EFF5;
-  --color-celeste-200: #AEDCE8;
-  --color-celeste-300: #8DCEDD;
-  --color-celeste-400: #82C6D4;
-  --color-celeste-500: #77C0CF;
-  --color-celeste-600: #5BAAB9;
-  --color-celeste-700: #3F90A4;
-  --color-celeste-800: #2C7384;
+  --color-celeste-50:  #E5FDFF;
+  --color-celeste-100: #B3FAFF;
+  --color-celeste-200: #80F5FF;
+  --color-celeste-300: #4deeff;
+  --color-celeste-400: #33ecff;
+  --color-celeste-500: #00e5ff;
+  --color-celeste-600: #00b8cc;
+  --color-celeste-700: #008a99;
+  --color-celeste-800: #005c66;
   --color-paper-50:  #EDF2F7;
   --color-paper-100: #DDE5EF;
   --color-paper-200: #C1CEDF;
@@ -45,20 +45,20 @@
   }
 
   ::selection {
-    background-color: rgba(119, 192, 207, 0.28);
+    background-color: rgba(0, 229, 255, 0.25);
     color: #EDF2F7;
   }
 
   :focus-visible {
-    outline: 2px solid #77C0CF;
+    outline: 2px solid #00e5ff;
     outline-offset: 3px;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: #0D1218; }
-  ::-webkit-scrollbar-thumb { background: rgba(119,192,207,0.2); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(119,192,207,0.4); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.4); }
 }
 
 @layer utilities {
@@ -69,7 +69,7 @@
   .text-pretty { text-wrap: pretty; }
 
   .bg-celeste-panel {
-    background: linear-gradient(135deg, #77C0CF 0%, #3F90A4 100%);
+    background: linear-gradient(135deg, #00e5ff 0%, #008a99 100%);
   }
 
   .bg-ink-gradient {
@@ -102,7 +102,7 @@
 .rich-text h1 { font-size: 1.75rem; }
 .rich-text h2 { font-size: 1.5rem; }
 .rich-text h3 { font-size: 1.25rem; }
-.rich-text a { color: var(--color-celeste-400); text-underline-offset: 3px; }
+.rich-text a { color: var(--color-celeste-500); text-underline-offset: 3px; }
 .rich-text a:hover { text-decoration: underline; }
 .rich-text ul, .rich-text ol { padding-left: 1.25em; display: flex; flex-direction: column; gap: 0.5em; }
 .rich-text ul { list-style: disc; }
