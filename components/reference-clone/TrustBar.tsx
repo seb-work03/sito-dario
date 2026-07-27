@@ -20,7 +20,7 @@ export function TrustBar({ logos = [] }: { logos?: Logo[] }) {
             {doubled.map((logo, i) => (
               <div
                 key={i}
-                className="shrink-0 relative h-14 md:h-16 w-[140px] md:w-[180px] grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-500"
+                className="shrink-0 relative h-14 md:h-16 w-[140px] md:w-[180px] transition-transform duration-500 hover:scale-105"
               >
                 <Image
                   src={logo.url}

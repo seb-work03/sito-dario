@@ -226,7 +226,7 @@ function ChartCard() {
         <ExperienceChart hovered={hovered} />
       </div>
 
-      <div className="mt-auto grid grid-cols-3 gap-5 pt-4 border-t border-white/8">
+      <div className="mt-auto flex justify-evenly gap-5 pt-4 border-t border-white/8">
         <StatBlock value={20} suffix="+" label="anni di attività" />
         <StatBlock value={30} suffix="+" label="e-commerce seguiti" />
         <StatBlock value={200} suffix="+" label="recensioni" />
