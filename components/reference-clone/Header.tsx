@@ -73,19 +73,8 @@ export function Header() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 h-20 md:h-24"
+        className="fixed top-0 left-0 right-0 z-50 h-20 md:h-24 bg-[#0D1218] border-b border-white/10"
       >
-        {/* Fully faded backdrop: solid at the very top, dissolving to nothing
-            below — no hard bottom edge. Extends past the header height so the
-            fade is gradual and page content melts through it. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[190%] transition-opacity duration-500"
-          style={{
-            background:
-              "linear-gradient(to bottom, #0D1218 0%, #0D1218 42%, rgba(13,18,24,0.72) 64%, rgba(13,18,24,0.32) 82%, rgba(13,18,24,0) 100%)",
-          }}
-        />
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">
           <a href="#" className="py-3 md:py-0 transition-opacity hover:opacity-80">
             <DarioTanaLogo />

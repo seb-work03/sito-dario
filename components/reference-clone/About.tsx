@@ -5,13 +5,14 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useScroll,
   useSpring,
   useTransform,
+  type MotionValue,
 } from "framer-motion";
 import { Star } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { AnimatedLabel } from "./AnimatedLabel";
-import { ScrollFillText } from "./ScrollFillText";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -33,27 +34,75 @@ function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number;
   return <span ref={ref}>0{suffix}</span>;
 }
 
+function FillWord({
+  children,
+  progress,
+  range,
+}: {
+  children: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+}) {
+  const opacity = useTransform(progress, range, [0.18, 1]);
+  const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+  return <motion.span style={{ opacity, color }}>{children}</motion.span>;
+}
+
+/**
+ * Pinned intro title: while the words are filling in, the section stays put on
+ * screen (the page doesn't scroll) and each word turns white one after another.
+ * Once every word is filled, the pin releases and the page scrolls on.
+ */
+function PinnedFillTitle() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  const text =
+    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo.";
+  const words = text.split(" ");
+  // Fill finishes at 85% of the travel, so the last stretch of scroll keeps
+  // the fully-white text on screen before the pin releases.
+  const FILL_END = 0.85;
+
+  return (
+    <div ref={ref} className="relative h-[170vh] md:h-[210vh]">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="mx-auto h-full w-full max-w-[1180px] px-5 relative">
+          <div className="absolute left-0 top-[110px] md:top-[150px]">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
+          </div>
+          <p className="absolute left-0 md:left-[42%] right-0 top-[42%] md:top-[46%] max-w-[600px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
+            {words.map((word, i) => {
+              const start = (i / words.length) * FILL_END;
+              const end = ((i + 1) / words.length) * FILL_END;
+              return (
+                <Fragment key={i}>
+                  <FillWord progress={scrollYProgress} range={[start, end]}>
+                    {word}
+                  </FillWord>
+                  {i < words.length - 1 ? " " : ""}
+                </Fragment>
+              );
+            })}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function About() {
   return (
     <section id="about-us" className="bg-[#0D1218]">
-      <div className="mx-auto max-w-[1180px] px-5 pt-16 md:pt-20 pb-16 md:pb-24">
-        {/* Header: label top-left, intro title dropped lower into the right
-            columns. The title fills word-by-word as you scroll (simple Framer
-            scroll-fill, no pin). */}
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8">
-          <div className="md:col-start-1 md:row-start-1">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
-          </div>
-          <ScrollFillText
-            text="Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a leggere il proprio contesto e a scegliere con metodo."
-            className="md:col-start-2 md:col-end-4 md:row-start-1 md:mt-[100px] text-left leading-[1.3] tracking-[-0.01em] font-normal max-w-[560px] text-[clamp(18px,1.9vw,26px)]"
-          />
-        </div>
+      <PinnedFillTitle />
 
+      <div className="mx-auto max-w-[1180px] px-5 pt-4 pb-16 md:pb-24">
         {/* items-end: the three columns share a common bottom line, so the
             rating (bottom of col 1) lines up with the bottom edge of the two
             images/cards, while the taller portrait pushes further up. */}
-        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
+        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
           {/* --- Col 1 : portrait (pushed up) + rating (bottom) --------- */}
           <div className="md:col-start-1 flex flex-col">
             <motion.div
@@ -116,14 +165,14 @@ export function About() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
                 href="#service"
-                className="group inline-flex items-stretch overflow-hidden rounded-[10px] bg-[#77C0CF] text-[#0D1218] font-medium transition-colors duration-300 hover:bg-[#A5E1EC] shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
-                style={{ height: 50 }}
+                className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#A5E1EC] transition-colors duration-300 shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
               >
-                <span className="flex items-center px-5 text-[15px]">
-                  Scopri di più
-                </span>
-                <span className="flex items-center justify-center w-[50px] bg-[#5BAAB9] group-hover:bg-[#77C0CF] transition-colors duration-300">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#0D1218]">
+                <span>Scopri di più</span>
+                <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-9 h-9 overflow-hidden shrink-0">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0">
                     <path d="M5 12h14M13 5l7 7-7 7" />
                   </svg>
                 </span>
