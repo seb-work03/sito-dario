@@ -8,31 +8,24 @@ import { AnimatedLabel } from "./AnimatedLabel";
 const services = [
   {
     number: "01",
-    title: "Consulenza",
+    title: "Advisory",
     description:
-      "Analisi indipendente del contesto e-commerce, definizione delle priorità, supporto nelle decisioni difficili.",
-    href: "/servizi#consulenza",
+      "Consulenza diretta per PMI strutturate: audit strategico e tecnologico, scalabilità e migrazioni di piattaforma, CRO, dati, advertising e redditività.",
+    href: "/servizi#advisory",
   },
   {
     number: "02",
-    title: "Formazione aziendale",
+    title: "Academy",
     description:
-      "Percorsi su misura per team interni: dai fondamenti operativi alle scelte strategiche di canale.",
+      "Trasferimento tecnologico e strategico. Formazione in-house su misura, docenze avanzate per ITS e academy, workshop operativi su casi reali.",
     href: "/formazione",
   },
   {
     number: "03",
-    title: "Docenza",
+    title: "Keynote & Events",
     description:
-      "Interventi in master, executive program e business school. E-commerce spiegato con casi reali.",
-    href: "/formazione#docenza",
-  },
-  {
-    number: "04",
-    title: "Corsi & workshop",
-    description:
-      "Sessioni verticali per approfondire un tema — piattaforme, marketplace, dati, organizzazione.",
-    href: "/formazione#corsi",
+      "Contenuti concreti, zero fuffa. Keynote e interventi verticali, panel e moderazioni, format custom per eventi corporate e fiere di settore.",
+    href: "/eventi",
   },
 ];
 
@@ -49,7 +42,7 @@ export function Services() {
             transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
             className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-xl tracking-tight"
           >
-            Quattro modi per lavorare insieme.
+            Tre ambiti. Un&apos;unica regia.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -58,8 +51,8 @@ export function Services() {
             transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
             className="text-[#94A9BE] max-w-sm md:text-right leading-relaxed"
           >
-            Ogni attività parte da un ascolto reale del contesto. Nessun format
-            preconfezionato.
+            Strategia, trasferimento di competenze e divulgazione. Ogni intervento
+            parte dal contesto reale e arriva a decisioni misurabili.
           </motion.p>
         </div>
 

@@ -72,7 +72,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
                 transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
                 className="text-white md:text-[#EDF2F7] font-normal text-[18px] sm:text-[20px] md:text-[40px] leading-[1.25] md:leading-[1.2] max-w-[140px] sm:max-w-[220px] md:max-w-[360px]"
               >
-                Consulenza e formazione e‑commerce indipendente.
+                Non costruisco siti. Guido la crescita di E‑commerce che fanno la differenza.
               </motion.p>
 
               {/* Spacer per la foto che sborda */}
@@ -84,9 +84,9 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
                 transition={{ duration: 0.9, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
                 className="hidden md:block text-[#EDF2F7] text-[15px] md:text-[18px] leading-relaxed max-w-[320px] justify-self-end text-right"
               >
-                Aiuto aziende, imprenditori e responsabili e‑commerce ad analizzare
-                i problemi, definire le priorità e prendere decisioni più
-                consapevoli.
+                Consulenza strategica per PMI che rifiutano la mediocrità,
+                formazione avanzata per corporate ed eventi di settore.
+                Dal codice all&apos;ottimizzazione del ROI.
               </motion.p>
             </div>
           </motion.div>

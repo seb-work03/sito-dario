@@ -7,30 +7,30 @@ import { AnimatedLabel } from "./AnimatedLabel";
 const steps = [
   {
     number: "01",
-    title: "Ascolto",
+    title: "Diagnosi",
     description:
-      "Prima capire, poi proporre. Ricostruisco insieme al cliente il contesto: obiettivi, vincoli, dati disponibili, punti dolenti.",
+      "Analisi di numeri, tecnologia, processi, persone e posizionamento competitivo. Prima capire davvero, poi decidere.",
     corner: { x: "-52%", y: "-54%" }, // top-left
   },
   {
     number: "02",
-    title: "Analisi",
+    title: "Priorità",
     description:
-      "Metto ordine tra le informazioni. Identifico le domande importanti, escludo il rumore, evidenzio ciò che serve davvero decidere.",
+      "Separazione netta tra ciò che genera impatto e ciò che consuma tempo e budget. Nessuna soluzione preconfezionata.",
     corner: { x: "52%", y: "-54%" }, // top-right
   },
   {
     number: "03",
-    title: "Priorità",
+    title: "Esecuzione",
     description:
-      "Definisco insieme al cliente cosa affrontare per primo, con quali risorse e con che criteri di verifica.",
+      "Roadmap pragmatica, responsabilità definite, affiancamento ai team interni o ai fornitori esterni fino al risultato.",
     corner: { x: "-52%", y: "54%" }, // bottom-left
   },
   {
     number: "04",
-    title: "Azione",
+    title: "Controllo",
     description:
-      "Restituisco un piano operativo comprensibile, con passaggi realistici. Se serve, resto a disposizione durante l'esecuzione.",
+      "KPI leggibili, apprendimento continuo, correzioni basate su evidenze — non sulle sensazioni.",
     corner: { x: "52%", y: "54%" }, // bottom-right
   },
 ];
@@ -116,7 +116,7 @@ export function Process() {
             transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
             className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight"
           >
-            Un processo lineare, ma non rigido.
+            Non una formula. Un sistema di decisioni.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -125,8 +125,8 @@ export function Process() {
             transition={{ duration: 0.9, delay: 0.15 }}
             className="text-[#94A9BE] max-w-sm md:text-right leading-relaxed"
           >
-            Ogni progetto è diverso. Il metodo rimane, i tempi e la profondità
-            si adattano al contesto.
+            Ogni progetto viene affrontato con una sequenza chiara: capire,
+            scegliere, costruire, misurare. Adattata al contesto.
           </motion.p>
         </div>
       </div>

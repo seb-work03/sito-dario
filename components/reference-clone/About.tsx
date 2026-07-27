@@ -128,8 +128,9 @@ export function About() {
               />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
               <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
-                &ldquo;[TESTIMONIANZA DA SELEZIONARE — breve estratto da una
-                recensione Google reale]&rdquo;
+                &ldquo;L&apos;e-commerce non è un software da installare.
+                È un modello di business da governare attraverso dati e
+                competenze.&rdquo;
               </p>
             </motion.div>
 

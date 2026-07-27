@@ -8,21 +8,21 @@ import { AnimatedLabel } from "./AnimatedLabel";
 
 const testimonials = [
   {
-    text: "[TESTIMONIANZA DA SELEZIONARE — recensione Google reale, testo integrale con contesto del progetto.]",
-    author: "[NOME AUTORE DA CONFERMARE]",
-    role: "[RUOLO E AZIENDA DA CONFERMARE]",
+    text: "Argomenti attuali e metodo molto pratico. La didattica di Dario è eccellente, chiara e precisa, con grande disponibilità nel confronto.",
+    author: "Eva Vanucci",
+    role: "Partecipante a un corso E-commerce",
     photo: "6KOKZ6o9umNtbSW8DNXdQdttgbU.png",
   },
   {
-    text: "[TESTIMONIANZA DA SELEZIONARE — seconda recensione con focus differente: consulenza / formazione / docenza.]",
-    author: "[NOME AUTORE DA CONFERMARE]",
-    role: "[RUOLO E AZIENDA DA CONFERMARE]",
+    text: "Un professionista con la P maiuscola: esperienza, capacità strategica e attenzione a quei dettagli che fanno una grande differenza nei risultati.",
+    author: "Fabio Berardi",
+    role: "Esperienza presso DT E-commerce Consulting",
     photo: "pWdflF1Kk7imAbImoSDBfTT3JsE.png",
   },
   {
-    text: "[TESTIMONIANZA DA SELEZIONARE — terza recensione da un partecipante di corso o intervento.]",
-    author: "[NOME AUTORE DA CONFERMARE]",
-    role: "[RUOLO E AZIENDA DA CONFERMARE]",
+    text: "Preciso e diretto. Sa spiegare concetti complessi anche a chi non è del mestiere e mantenere alta l'attenzione dell'intera classe.",
+    author: "Parafarma Group",
+    role: "Formazione E-commerce",
     photo: "8nmd4a4Fuz2gP25iKfTc5Obrs.png",
   },
 ];
@@ -47,7 +47,7 @@ export function Testimonials() {
               transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
               className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mt-4 tracking-tight"
             >
-              Le persone con cui ho lavorato.
+              La competenza si riconosce da ciò che lascia agli altri.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
