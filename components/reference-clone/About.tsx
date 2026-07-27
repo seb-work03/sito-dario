@@ -60,38 +60,36 @@ function FillWord({
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
-/**
- * Pinned scroll-fill intro: the section stays fixed at top while the user
- * scrolls, and each word turns white one after another. When the fill
- * finishes, the pin releases and normal scrolling continues into the
- * images grid immediately below.
- */
-function PinnedIntro({ words, progress }: { words: string[]; progress: MotionValue<number> }) {
+function FillHeadline({ words, progress }: { words: string[]; progress: MotionValue<number> }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-5 md:gap-x-8">
-      <div className="md:col-start-1 md:pt-2">
-        <AnimatedLabel>CHI SONO</AnimatedLabel>
-      </div>
-      <div className="md:col-start-2">
-        <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)]">
-          {words.map((word, i) => {
-            const start = (i / words.length) * 0.85;
-            const end = ((i + 1) / words.length) * 0.85;
-            return (
-              <Fragment key={i}>
-                <FillWord progress={progress} range={[start, end]}>
-                  {word}
-                </FillWord>
-                {i < words.length - 1 ? " " : ""}
-              </Fragment>
-            );
-          })}
-        </h2>
-      </div>
-    </div>
+    <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)] max-w-[560px]">
+      {words.map((word, i) => {
+        const start = (i / words.length) * 0.85;
+        const end = ((i + 1) / words.length) * 0.85;
+        return (
+          <Fragment key={i}>
+            <FillWord progress={progress} range={[start, end]}>
+              {word}
+            </FillWord>
+            {i < words.length - 1 ? " " : ""}
+          </Fragment>
+        );
+      })}
+    </h2>
   );
 }
 
+/**
+ * Layout matches the Framer reference: [CHI SONO] label at the top-left,
+ * then a nested 2-column grid where col 1 holds the portrait + rating and
+ * col 2 stacks the fill-in headline (top) above a smaller grid of the
+ * buildings photo and the CTA + chart card.
+ *
+ * The whole block is wrapped in a sticky pin: as the user reaches the
+ * section, vertical scroll stays fixed while the headline fills word by
+ * word. Once the fill completes, the pin releases and normal scrolling
+ * continues.
+ */
 export function About() {
   const pinRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -103,106 +101,104 @@ export function About() {
   const words = introText.split(" ");
 
   return (
-    <section id="about-us" className="bg-[#0D1218]">
-      {/* Pinned scroll-fill: parent taller than viewport gives the sticky
-          child room to stay fixed while the user scrolls through it. The
-          intro sits at the BOTTOM of the pinned viewport so when the pin
-          releases, the images grid slides in directly beneath it. */}
-      <div ref={pinRef} className="relative h-[180vh]">
-        <div className="sticky top-0 h-screen overflow-hidden flex items-end">
-          <div className="mx-auto w-full max-w-[1180px] px-5 pb-8 md:pb-10">
-            <PinnedIntro words={words} progress={scrollYProgress} />
-          </div>
-        </div>
-      </div>
+    <div id="about-us" ref={pinRef} className="relative md:h-[160vh] bg-[#0D1218]">
+      <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-start">
+        <section className="w-full pt-10 md:pt-14 pb-14 md:pb-8">
+          <div className="mx-auto max-w-[1180px] px-5">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
 
-      <div className="mx-auto max-w-[1180px] px-5 pb-16 md:pb-24">
-        {/* items-end: the three columns share a common bottom line, so the
-            rating (bottom of col 1) lines up with the bottom edge of the two
-            images/cards, while the taller portrait pushes further up. */}
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_0.82fr_1.18fr] gap-y-6 md:gap-x-8 md:items-end">
-          {/* --- Col 1 : portrait (pushed up) + rating (bottom) --------- */}
-          <div className="md:col-start-1 flex flex-col">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-              className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
-              style={{ aspectRatio: "0.72" }}
-            >
-              <Image
-                src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
-                alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
-                fill
-                className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
-              <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
-                &ldquo;L&apos;e-commerce non è un software da installare.
-                È un modello di business da governare attraverso dati e
-                competenze.&rdquo;
-              </p>
-            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10 mt-6 md:mt-8">
+              {/* Left column: portrait + rating */}
+              <div className="md:col-start-1 flex flex-col">
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+                  className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
+                  style={{ aspectRatio: "0.72" }}
+                >
+                  <Image
+                    src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
+                    alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
+                    fill
+                    className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#0D1218]/95 via-[#0D1218]/55 to-transparent" />
+                  <p className="absolute left-[22px] right-[22px] bottom-[22px] text-[#EDF2F7] italic leading-[1.4] text-[14px]">
+                    &ldquo;L&apos;e-commerce non è un software da installare.
+                    È un modello di business da governare attraverso dati e
+                    competenze.&rdquo;
+                  </p>
+                </motion.div>
 
-            <div className="mt-8 flex flex-col gap-1">
-              <div className="flex items-center gap-2">
-                <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
-                <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
+                <div className="mt-6 flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <Star size={20} className="fill-[#77C0CF] text-[#77C0CF]" />
+                    <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
+                  </div>
+                  <span className="text-[#94A9BE] text-[13px]">
+                    media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
+                  </span>
+                </div>
               </div>
-              <span className="text-[#94A9BE] text-[13px]">
-                media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
-              </span>
+
+              {/* Right column: headline on top + [buildings | cta+chart] below */}
+              <div className="md:col-start-2 flex flex-col gap-6 md:gap-8">
+                <FillHeadline words={words} progress={scrollYProgress} />
+
+                <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 md:items-end">
+                  {/* Buildings photo */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
+                    className="relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
+                    style={{ aspectRatio: "0.85" }}
+                  >
+                    <Image
+                      src="/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg"
+                      alt="[FOTO DARIO AL LAVORO DA INSERIRE]"
+                      fill
+                      className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </motion.div>
+
+                  {/* CTA + chart card */}
+                  <div className="flex flex-col gap-[18px]">
+                    <div className="flex md:justify-end">
+                      <motion.a
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        href="#service"
+                        className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#A5E1EC] transition-colors duration-300 shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
+                      >
+                        <span>Scopri di più</span>
+                        <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-9 h-9 overflow-hidden shrink-0">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8">
+                            <path d="M5 12h14M13 5l7 7-7 7" />
+                          </svg>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0">
+                            <path d="M5 12h14M13 5l7 7-7 7" />
+                          </svg>
+                        </span>
+                      </motion.a>
+                    </div>
+
+                    <ChartCard />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* --- Col 2 : buildings photo (bottom-aligned) -------------- */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="md:col-start-2 relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
-            style={{ aspectRatio: "0.85" }}
-          >
-            <Image
-              src="/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg"
-              alt="[FOTO DARIO AL LAVORO DA INSERIRE]"
-              fill
-              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          </motion.div>
-
-          {/* --- Col 3 : CTA + chart card (bottom-aligned) ------------- */}
-          <div className="md:col-start-3 flex flex-col gap-[18px]">
-            <div className="flex md:justify-end">
-              <motion.a
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                href="#service"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#A5E1EC] transition-colors duration-300 shadow-[0_0_0_0_rgba(165,225,236,0)] hover:shadow-[0_0_24px_2px_rgba(165,225,236,0.45)]"
-              >
-                <span>Scopri di più</span>
-                <span className="relative flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-9 h-9 overflow-hidden shrink-0">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8 group-hover:-translate-y-8">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 translate-y-8 group-hover:translate-x-0 group-hover:translate-y-0">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </motion.a>
-            </div>
-
-            <ChartCard />
-          </div>
-        </div>
+        </section>
       </div>
-    </section>
+    </div>
   );
 }
 
