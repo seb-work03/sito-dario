@@ -64,7 +64,7 @@ function FillHeadline() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 85%", "end 60%"],
+    offset: ["start 90%", "end 30%"],
   });
   const text =
     "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a scegliere con metodo.";
@@ -73,7 +73,7 @@ function FillHeadline() {
   return (
     <h2
       ref={ref}
-      className="text-left leading-[1.15] tracking-[-0.02em] font-medium text-[clamp(28px,3.6vw,52px)]"
+      className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(22px,2.6vw,38px)]"
     >
       {words.map((word, i) => {
         const start = i / words.length;
@@ -93,14 +93,14 @@ function FillHeadline() {
 
 export function About() {
   return (
-    <section id="about-us" className="bg-[#0D1218] pt-14 md:pt-20 pb-16 md:pb-24">
+    <section id="about-us" className="bg-[#0D1218] pt-24 md:pt-36 pb-16 md:pb-24">
       <div className="mx-auto max-w-[1180px] px-5">
-        {/* Top row: label (col 1) + big scroll-fill headline (cols 2-3) */}
+        {/* Top row: label (col 1) + scroll-fill headline (cols 2-3) */}
         <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-6 md:gap-x-8 mb-12 md:mb-16">
-          <div className="md:col-start-1 md:pt-2">
+          <div className="md:col-start-1 md:pt-3">
             <AnimatedLabel>CHI SONO</AnimatedLabel>
           </div>
-          <div className="md:col-start-2">
+          <div className="md:col-start-2 md:pt-2">
             <FillHeadline />
           </div>
         </div>
