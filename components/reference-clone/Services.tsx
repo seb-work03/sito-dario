@@ -92,7 +92,7 @@ export function Services() {
               >
                 <Link
                   href={s.href}
-                  className="group grid grid-cols-[auto_1fr] gap-6 py-[32px] first:pt-0 items-center"
+                  className="group grid grid-cols-[auto_1fr] gap-6 pt-[56px] pb-[40px] first:pt-0 items-center"
                 >
                   <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00e5ff] text-sm text-[#0D1218] font-semibold tabular-nums shrink-0 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(0,229,255,0.6)]">
                     {s.number}

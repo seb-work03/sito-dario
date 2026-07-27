@@ -61,10 +61,10 @@ const steps = [
 ];
 
 const stackOffsets = [
-  { x: 0, y: 0, scale: 1, opacity: 1, rotate: 0, z: 40 },
-  { x: 10, y: 8, scale: 0.96, opacity: 0.78, rotate: 2, z: 30 },
-  { x: -8, y: 14, scale: 0.92, opacity: 0.58, rotate: -1.5, z: 20 },
-  { x: 14, y: 20, scale: 0.88, opacity: 0.38, rotate: 3, z: 10 },
+  { x: 0, y: 0, scale: 1, rotate: 0, z: 40 },
+  { x: 10, y: 8, scale: 0.96, rotate: 2, z: 30 },
+  { x: -8, y: 14, scale: 0.92, rotate: -1.5, z: 20 },
+  { x: 14, y: 20, scale: 0.88, rotate: 3, z: 10 },
 ];
 
 function ProcessCard({ step, index, scrollProgress }: {
@@ -77,7 +77,6 @@ function ProcessCard({ step, index, scrollProgress }: {
   const x = useTransform(scrollProgress, [0, 0.6], [`${off.x}px`, step.corner.x]);
   const y = useTransform(scrollProgress, [0, 0.6], [`${off.y}px`, step.corner.y]);
   const scale = useTransform(scrollProgress, [0, 0.6], [off.scale, 1]);
-  const opacity = useTransform(scrollProgress, [0, 0.2, 0.6], [off.opacity, 1, 1]);
   const rotate = useTransform(scrollProgress, [0, 0.45], [off.rotate, 0]);
 
   return (
@@ -86,8 +85,8 @@ function ProcessCard({ step, index, scrollProgress }: {
         x,
         y,
         scale,
-        opacity,
         rotate,
+        opacity: 1,
         zIndex: off.z,
         position: "absolute",
         top: "50%",
@@ -159,10 +158,39 @@ export function Process() {
       {/* Scroll-driven fan-out — desktop only. Accent background for card area */}
       <div className="hidden md:block" ref={sectionRef} style={{ minHeight: "380vh" }}>
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden bg-[#00e5ff]">
-          {/* Subtle radial glow */}
+          {/* Grid lines */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(13,18,24,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(13,18,24,0.08) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+          {/* Dot pattern overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-30"
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(13,18,24,0.25) 1px, transparent 1px)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+          {/* Radial spotlight — darker corners */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,0,0,0.08), transparent 70%)" }}
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 55% at 50% 50%, transparent 40%, rgba(13,18,24,0.18) 100%)",
+            }}
+          />
+          {/* Off-center accent blob for depth */}
+          <div
+            className="absolute -top-1/3 -left-1/4 w-[80%] h-[100%] rounded-full pointer-events-none opacity-40"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(255,255,255,0.5), transparent 70%)",
+            }}
           />
           <div className="relative w-[clamp(480px,60vw,720px)] aspect-square">
             {steps.map((step, i) => (

@@ -17,11 +17,11 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
 
   return (
     <section ref={ref} className="relative bg-[#0D1218] pt-[92px] md:pt-[108px]">
-      {/* Big name title */}
+      {/* Big name title — sits slightly above the card */}
       <div className="mx-auto max-w-[1240px] px-5 relative">
         <motion.h1
           style={{ y: titleY, opacity: titleOpacity }}
-          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-24 md:mb-32"
+          className="relative z-0 text-center font-bold text-[#EDF2F7] whitespace-nowrap select-none overflow-hidden mb-6 md:mb-8"
         >
           <span
             className="inline-block"
@@ -43,14 +43,13 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
         </motion.h1>
       </div>
 
-      {/* Card: minimal lateral margin + rounded corners, fixed px overlap so title stays visible */}
-      <motion.div style={{ y: cardY }} className="relative -mt-14 md:-mt-20 mx-2 md:mx-4">
-        {/* Card with gradient bg and rounded corners */}
+      {/* Card: max 350px tall, text vertically centered */}
+      <motion.div style={{ y: cardY }} className="relative mx-2 md:mx-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          className="relative z-10 rounded-2xl md:rounded-3xl overflow-hidden min-h-[clamp(200px,min(36vw,38vh),360px)]"
+          className="relative z-10 rounded-2xl md:rounded-3xl overflow-hidden h-[350px] max-h-[350px]"
         >
           <div
             className="absolute inset-0"
@@ -68,8 +67,8 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Text grid */}
-          <div className="relative mx-auto max-w-[1240px] grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 min-h-[clamp(320px,min(55vw,56vh),521px)] px-5 sm:px-6 md:px-10 py-8 md:py-0">
+          {/* Text grid — fills card height, centered vertically */}
+          <div className="relative mx-auto max-w-[1240px] grid grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-4 h-full px-5 sm:px-6 md:px-10">
             {/* Left: "Consulente e-commerce" + subtitle */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -86,7 +85,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
             </motion.div>
 
             {/* Spacer for portrait */}
-            <div className="w-[clamp(200px,34vw,380px)] md:w-[clamp(240px,22vw,520px)] shrink-0" aria-hidden="true" />
+            <div className="w-[clamp(150px,26vw,220px)] md:w-[clamp(180px,18vw,280px)] shrink-0" aria-hidden="true" />
 
             {/* Right: punchy headline */}
             <motion.p
@@ -105,7 +104,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(200px,34vw,380px)] md:w-[clamp(240px,22vw,520px)] aspect-[650/1080] pointer-events-none"
+          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(150px,26vw,220px)] md:w-[clamp(180px,18vw,280px)] aspect-[650/1080] pointer-events-none"
         >
           <Image
             src={portrait}

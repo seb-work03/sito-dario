@@ -60,8 +60,43 @@ async function getLogoUrl(): Promise<string | null> {
   }
 }
 
+type PartnerLogo = { url: string; alt: string };
+
+const partners: { pattern: string; alt: string }[] = [
+  { pattern: "%its%turismo%marche%", alt: "ITS Turismo Marche" },
+  { pattern: "%formart%", alt: "Formart" },
+  { pattern: "%fondazione%aldini%valeriani%", alt: "Fondazione Aldini Valeriani" },
+  { pattern: "%digital%coach%", alt: "Digital Coach" },
+  { pattern: "%cescot%emilia%romagna%", alt: "Cescot Emilia Romagna" },
+  { pattern: "%centro%zavatta%", alt: "Centro Zavatta" },
+  { pattern: "%banca%malatestiana%", alt: "Banca Malatestiana" },
+];
+
+async function getPartnerLogos(): Promise<PartnerLogo[]> {
+  try {
+    const results = await Promise.all(
+      partners.map(async ({ pattern, alt }) => {
+        const rows = await db
+          .select({ url: media.url })
+          .from(media)
+          .where(ilike(media.filename, pattern))
+          .orderBy(desc(media.createdAt))
+          .limit(1);
+        return rows[0]?.url ? { url: rows[0].url, alt } : null;
+      }),
+    );
+    return results.filter((r): r is PartnerLogo => r !== null);
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const [portraitUrl, logoUrl] = await Promise.all([getHeroPortraitUrl(), getLogoUrl()]);
+  const [portraitUrl, logoUrl, partnerLogos] = await Promise.all([
+    getHeroPortraitUrl(),
+    getLogoUrl(),
+    getPartnerLogos(),
+  ]);
   return (
     <div
       className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased"
@@ -70,7 +105,7 @@ export default async function HomePage() {
       <Header logoUrl={logoUrl} />
       <main>
         <Hero portraitUrl={portraitUrl} />
-        <TrustBar />
+        <TrustBar logos={partnerLogos} />
         <About />
         <Services />
         <Process />

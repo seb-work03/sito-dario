@@ -1,16 +1,10 @@
-const entities = [
-  "DIGITAL COACH",
-  "ITS MARCHE",
-  "CESCOT",
-  "MAGENTO",
-  "SHOPIFY",
-  "BANCA MALATESTIANA",
-  "OPENMAGE",
-  "WORDPRESS",
-];
+import Image from "next/image";
 
-export function TrustBar() {
-  const doubled = [...entities, ...entities];
+type Logo = { url: string; alt: string };
+
+export function TrustBar({ logos = [] }: { logos?: Logo[] }) {
+  // Duplicate for seamless marquee loop
+  const doubled = logos.length > 0 ? [...logos, ...logos] : [];
 
   return (
     <section className="bg-[#0D1218] px-5 py-14">
@@ -22,14 +16,21 @@ export function TrustBar() {
         <div className="flex-1 overflow-hidden relative">
           <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0D1218] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0D1218] to-transparent z-10 pointer-events-none" />
-          <div className="flex items-center gap-14 w-max animate-[refmarquee_45s_linear_infinite] hover:[animation-play-state:paused]">
-            {doubled.map((label, i) => (
-              <span
+          <div className="flex items-center gap-14 md:gap-20 w-max animate-[refmarquee_45s_linear_infinite] hover:[animation-play-state:paused]">
+            {doubled.map((logo, i) => (
+              <div
                 key={i}
-                className="shrink-0 text-[#6A84A0] hover:text-[#00e5ff] transition-colors duration-500 text-lg md:text-xl font-medium tracking-tight whitespace-nowrap"
+                className="shrink-0 relative h-14 md:h-16 w-[140px] md:w-[180px] grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-500"
               >
-                {label}
-              </span>
+                <Image
+                  src={logo.url}
+                  alt={logo.alt}
+                  fill
+                  unoptimized
+                  className="object-contain object-center"
+                  sizes="180px"
+                />
+              </div>
             ))}
           </div>
         </div>
