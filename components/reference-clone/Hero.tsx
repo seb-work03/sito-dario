@@ -76,17 +76,20 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
               transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
               className="flex flex-col gap-2 md:gap-3"
             >
-              <p className="text-white font-bold text-[18px] sm:text-[22px] md:text-[36px] leading-[1.15] tracking-tight">
+              <h2 className="text-white font-bold text-[18px] sm:text-[22px] md:text-[36px] leading-[1.15] tracking-tight">
                 Consulente<br />
                 <span className="whitespace-nowrap">e&#8209;commerce</span>
-              </p>
-              <p className="text-white/80 text-[12px] sm:text-[14px] md:text-[16px] leading-[1.45] max-w-[140px] sm:max-w-[200px] md:max-w-[300px]">
+              </h2>
+              <p
+                className="text-white/80 text-[12px] sm:text-[14px] md:text-[16px] leading-[1.45] max-w-[180px] sm:max-w-[260px] md:max-w-[360px]"
+                style={{ textWrap: "pretty" }}
+              >
                 Consulenza strategica per PMI che rifiutano la mediocrità, formazione avanzata per corporate ed eventi di settore.
               </p>
             </motion.div>
 
             {/* Spacer for portrait */}
-            <div className="w-[clamp(220px,36vw,340px)] md:w-[clamp(280px,28vw,440px)] shrink-0" aria-hidden="true" />
+            <div className="w-[clamp(180px,30vw,270px)] md:w-[clamp(230px,22vw,350px)] shrink-0" aria-hidden="true" />
 
             {/* Right: punchy headline */}
             <motion.p
@@ -96,6 +99,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
               className="hidden md:block text-[#EDF2F7] text-[15px] md:text-[20px] leading-[1.3] max-w-[320px] justify-self-end text-right font-medium"
             >
               Non costruisco siti.<br />
+              <br />
               Guido la crescita di <span className="whitespace-nowrap">e&#8209;commerce</span> che fanno la differenza.
             </motion.p>
           </div>
@@ -106,7 +110,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(220px,36vw,340px)] md:w-[clamp(280px,28vw,440px)] aspect-[650/1080] pointer-events-none"
+          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(180px,30vw,270px)] md:w-[clamp(230px,22vw,350px)] aspect-[650/1080] pointer-events-none"
         >
           <Image
             src={portrait}

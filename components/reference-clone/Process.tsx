@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { AnimatedLabel } from "./AnimatedLabel";
 
 const steps = [
@@ -70,14 +70,15 @@ const stackOffsets = [
 function ProcessCard({ step, index, scrollProgress }: {
   step: typeof steps[0];
   index: number;
-  scrollProgress: ReturnType<typeof useSpring>;
+  scrollProgress: MotionValue<number>;
 }) {
   const off = stackOffsets[index];
 
-  const x = useTransform(scrollProgress, [0, 0.6], [`${off.x}px`, step.corner.x]);
-  const y = useTransform(scrollProgress, [0, 0.6], [`${off.y}px`, step.corner.y]);
-  const scale = useTransform(scrollProgress, [0, 0.6], [off.scale, 1]);
-  const rotate = useTransform(scrollProgress, [0, 0.45], [off.rotate, 0]);
+  // Directly and proportionally tied to scroll progress — no spring, no gates
+  const x = useTransform(scrollProgress, [0, 1], [`${off.x}px`, step.corner.x]);
+  const y = useTransform(scrollProgress, [0, 1], [`${off.y}px`, step.corner.y]);
+  const scale = useTransform(scrollProgress, [0, 1], [off.scale, 1]);
+  const rotate = useTransform(scrollProgress, [0, 1], [off.rotate, 0]);
 
   return (
     <motion.div
@@ -123,22 +124,18 @@ export function Process() {
     offset: ["start start", "end end"],
   });
 
-  const spring = useSpring(scrollYProgress, { stiffness: 60, damping: 22, restDelta: 0.001 });
-
   return (
-    <section id="process" className="bg-[#00e5ff]">
-      {/* Header on accent background */}
+    <section id="process" className="bg-[#0D1218]">
+      {/* Header on dark background — only the sticky card area below carries the accent */}
       <div className="mx-auto max-w-[1240px] px-5 pt-16 md:pt-28 pb-12">
-        <span className="inline-flex items-center gap-0 text-sm tracking-widest text-[#0D1218]/60 overflow-hidden">
-          [ IL METODO ]
-        </span>
+        <AnimatedLabel>IL METODO</AnimatedLabel>
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-4">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight"
+            className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight"
           >
             Non una formula. Un sistema di decisioni.
           </motion.h2>
@@ -147,7 +144,7 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className="text-[#0D1218]/60 max-w-sm md:text-right leading-relaxed"
+            className="text-[#94A9BE] max-w-sm md:text-right leading-relaxed"
           >
             Ogni progetto viene affrontato con una sequenza chiara: capire,
             scegliere, costruire, misurare. Adattata al contesto.
@@ -198,7 +195,7 @@ export function Process() {
                 key={step.number}
                 step={step}
                 index={i}
-                scrollProgress={spring}
+                scrollProgress={scrollYProgress}
               />
             ))}
           </div>

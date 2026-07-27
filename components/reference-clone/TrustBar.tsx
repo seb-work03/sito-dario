@@ -16,7 +16,7 @@ export function TrustBar({ logos = [] }: { logos?: Logo[] }) {
         <div className="flex-1 overflow-hidden relative">
           <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0D1218] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0D1218] to-transparent z-10 pointer-events-none" />
-          <div className="flex items-center gap-14 md:gap-20 w-max animate-[refmarquee_45s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex items-center gap-14 md:gap-20 w-max animate-[refmarquee_28s_linear_infinite] hover:[animation-play-state:paused]">
             {doubled.map((logo, i) => (
               <div
                 key={i}

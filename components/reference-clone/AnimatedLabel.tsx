@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 /**
- * Animated section label: brackets [ ] appear first, then the inner text reveals left-to-right.
+ * Animated section label: text reveals left-to-right via width animation.
  * Usage: <AnimatedLabel>IL METODO</AnimatedLabel>
  */
 export function AnimatedLabel({ children }: { children: string }) {
@@ -14,35 +14,16 @@ export function AnimatedLabel({ children }: { children: string }) {
   return (
     <span
       ref={ref}
-      className="inline-flex items-center gap-0 text-sm tracking-widest text-[#00e5ff]/70 overflow-hidden"
+      className="inline-flex items-center text-sm tracking-widest text-[#00e5ff]/70 overflow-hidden"
     >
-      {/* Left bracket */}
       <motion.span
-        initial={{ opacity: 0, x: 8 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-      >
-        [
-      </motion.span>
-
-      {/* Text reveals left-to-right using clip-path */}
-      <motion.span
-        className="overflow-hidden inline-block mx-1"
+        className="overflow-hidden inline-block"
         initial={{ width: 0, opacity: 0 }}
         animate={inView ? { width: "auto", opacity: 1 } : {}}
-        transition={{ duration: 0.55, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
         style={{ whiteSpace: "nowrap" }}
       >
         {children}
-      </motion.span>
-
-      {/* Right bracket */}
-      <motion.span
-        initial={{ opacity: 0, x: -8 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.4, delay: 0.75, ease: [0.19, 1, 0.22, 1] }}
-      >
-        ]
       </motion.span>
     </span>
   );
