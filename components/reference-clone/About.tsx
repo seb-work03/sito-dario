@@ -5,6 +5,7 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useScroll,
   useSpring,
   useTransform,
@@ -43,8 +44,19 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
+  const [filled, setFilled] = useState(false);
   const opacity = useTransform(progress, range, [0.18, 1]);
   const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+
+  // Once a word has been reached going forward, keep it filled — scrolling
+  // back up must not un-fill words that already lit up.
+  useMotionValueEvent(progress, "change", (latest) => {
+    if (latest >= range[1] && !filled) setFilled(true);
+  });
+
+  if (filled) {
+    return <span style={{ color: "#EDF2F7", opacity: 1 }}>{children}</span>;
+  }
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
@@ -67,25 +79,25 @@ function PinnedFillTitle() {
   const FILL_END = 0.85;
 
   return (
-    <div ref={ref} className="relative h-[170vh] md:h-[210vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="mx-auto h-full w-full max-w-[1180px] px-5 relative">
-          <div className="absolute left-0 md:left-[42%] right-0 bottom-[8%] md:bottom-[10%] flex flex-col gap-4 max-w-[600px]">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
-          <p className="text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
-            {words.map((word, i) => {
-              const start = (i / words.length) * FILL_END;
-              const end = ((i + 1) / words.length) * FILL_END;
-              return (
-                <Fragment key={i}>
-                  <FillWord progress={scrollYProgress} range={[start, end]}>
-                    {word}
-                  </FillWord>
-                  {i < words.length - 1 ? " " : ""}
-                </Fragment>
-              );
-            })}
-          </p>
+    <div ref={ref} className="relative h-[130vh] md:h-[160vh]">
+      <div className="sticky top-0 h-screen overflow-hidden flex items-end">
+        <div className="mx-auto w-full max-w-[1180px] px-5 pt-10 pb-24 md:pt-16 md:pb-32">
+          <AnimatedLabel>CHI SONO</AnimatedLabel>
+          <div className="mt-8 md:mt-12 md:pl-[42%]">
+            <p className="max-w-[640px] text-left leading-[1.3] tracking-[-0.01em] font-normal text-[clamp(20px,2vw,28px)]">
+              {words.map((word, i) => {
+                const start = (i / words.length) * FILL_END;
+                const end = ((i + 1) / words.length) * FILL_END;
+                return (
+                  <Fragment key={i}>
+                    <FillWord progress={scrollYProgress} range={[start, end]}>
+                      {word}
+                    </FillWord>
+                    {i < words.length - 1 ? " " : ""}
+                  </Fragment>
+                );
+              })}
+            </p>
           </div>
         </div>
       </div>
