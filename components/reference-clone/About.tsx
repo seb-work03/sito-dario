@@ -60,51 +60,63 @@ function FillWord({
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
-function FillHeadline() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 90%", "end 30%"],
-  });
-  const text =
-    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a scegliere con metodo.";
-  const words = text.split(" ");
-
+/**
+ * Pinned scroll-fill intro: the section stays fixed at top while the user
+ * scrolls, and each word turns white one after another. When the fill
+ * finishes, the pin releases and normal scrolling continues into the
+ * images grid immediately below.
+ */
+function PinnedIntro({ words, progress }: { words: string[]; progress: MotionValue<number> }) {
   return (
-    <h2
-      ref={ref}
-      className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(22px,2.6vw,38px)]"
-    >
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = (i + 1) / words.length;
-        return (
-          <Fragment key={i}>
-            <FillWord progress={scrollYProgress} range={[start, end]}>
-              {word}
-            </FillWord>
-            {i < words.length - 1 ? " " : ""}
-          </Fragment>
-        );
-      })}
-    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-5 md:gap-x-8">
+      <div className="md:col-start-1 md:pt-2">
+        <AnimatedLabel>CHI SONO</AnimatedLabel>
+      </div>
+      <div className="md:col-start-2">
+        <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)]">
+          {words.map((word, i) => {
+            const start = (i / words.length) * 0.85;
+            const end = ((i + 1) / words.length) * 0.85;
+            return (
+              <Fragment key={i}>
+                <FillWord progress={progress} range={[start, end]}>
+                  {word}
+                </FillWord>
+                {i < words.length - 1 ? " " : ""}
+              </Fragment>
+            );
+          })}
+        </h2>
+      </div>
+    </div>
   );
 }
 
 export function About() {
+  const pinRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: pinRef,
+    offset: ["start start", "end end"],
+  });
+  const introText =
+    "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a scegliere con metodo.";
+  const words = introText.split(" ");
+
   return (
-    <section id="about-us" className="bg-[#0D1218] pt-24 md:pt-36 pb-16 md:pb-24">
-      <div className="mx-auto max-w-[1180px] px-5">
-        {/* Top row: label (col 1) + scroll-fill headline (cols 2-3) */}
-        <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-6 md:gap-x-8 mb-12 md:mb-16">
-          <div className="md:col-start-1 md:pt-3">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
-          </div>
-          <div className="md:col-start-2 md:pt-2">
-            <FillHeadline />
+    <section id="about-us" className="bg-[#0D1218]">
+      {/* Pinned scroll-fill: parent taller than viewport gives the sticky
+          child room to stay fixed while the user scrolls through it. The
+          intro sits at the BOTTOM of the pinned viewport so when the pin
+          releases, the images grid slides in directly beneath it. */}
+      <div ref={pinRef} className="relative h-[180vh]">
+        <div className="sticky top-0 h-screen overflow-hidden flex items-end">
+          <div className="mx-auto w-full max-w-[1180px] px-5 pb-8 md:pb-10">
+            <PinnedIntro words={words} progress={scrollYProgress} />
           </div>
         </div>
+      </div>
 
+      <div className="mx-auto max-w-[1180px] px-5 pb-16 md:pb-24">
         {/* items-end: the three columns share a common bottom line, so the
             rating (bottom of col 1) lines up with the bottom edge of the two
             images/cards, while the taller portrait pushes further up. */}
