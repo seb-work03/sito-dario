@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const services = [
   {
@@ -33,17 +33,10 @@ export function Services() {
   return (
     <section id="service" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
-        <AnimatedLabel>COSA FACCIO</AnimatedLabel>
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-4 mb-14">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-xl tracking-tight"
-          >
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-xl tracking-tight">
             3 ambiti. Un&apos;unica regia.
-          </motion.h2>
+          </AnimatedHeadline>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

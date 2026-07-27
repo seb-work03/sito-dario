@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const audiences = [
   {
@@ -50,16 +50,9 @@ export function Insights() {
   return (
     <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
-        <AnimatedLabel>CON CHI LAVORO</AnimatedLabel>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mt-4 mb-4 tracking-tight"
-        >
+        <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
           Progetti diversi, un metodo condiviso.
-        </motion.h2>
+        </AnimatedHeadline>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

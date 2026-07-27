@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const engagements = [
   {
@@ -50,18 +50,10 @@ export function Experience() {
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
-        <AnimatedLabel>AMBITI DI LAVORO</AnimatedLabel>
-
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mt-4 mb-14">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl"
-          >
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
             Cinque ambiti, un unico metodo.
-          </motion.h2>
+          </AnimatedHeadline>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -124,16 +116,12 @@ export function Experience() {
 
         {/* Note */}
         <div className="mt-16 md:mt-24 border-t border-white/8 pt-12 md:pt-14">
-          <AnimatedLabel>NOTA</AnimatedLabel>
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium text-[26px] md:text-[38px] mt-4 tracking-tight max-w-2xl leading-[1.2]"
+          <AnimatedHeadline
+            as="h3"
+            className="text-[#EDF2F7] font-medium text-[26px] md:text-[38px] tracking-tight max-w-2xl leading-[1.2]"
           >
             Il lavoro di consulenza e quello di docenza si alimentano a vicenda.
-          </motion.h3>
+          </AnimatedHeadline>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

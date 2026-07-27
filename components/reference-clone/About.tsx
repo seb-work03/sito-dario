@@ -13,7 +13,6 @@ import {
 } from "framer-motion";
 import { Star } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { AnimatedLabel } from "./AnimatedLabel";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -105,10 +104,6 @@ export function About() {
       <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-center">
         <section className="w-full pt-10 md:pt-8 pb-14 md:pb-8">
           <div className="mx-auto max-w-[1180px] px-5">
-            <div className="mb-[60px] md:mb-[90px]">
-              <AnimatedLabel>CHI SONO</AnimatedLabel>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10">
               {/* Left column: portrait + rating */}
               <div className="md:col-start-1 flex flex-col">
@@ -135,15 +130,7 @@ export function About() {
                   </p>
                 </motion.div>
 
-                <div className="mt-6 flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <Star size={20} className="fill-[#00e5ff] text-[#00e5ff]" />
-                    <span className="text-[#EDF2F7] text-2xl font-medium tabular-nums">4.9</span>
-                  </div>
-                  <span className="text-[#94A9BE] text-[13px]">
-                    media su <AnimatedNumber value={200} suffix="+" /> recensioni Google
-                  </span>
-                </div>
+                <GoogleReviewsCard />
               </div>
 
               {/* Right column: headline on top + [buildings | cta+chart] below */}
@@ -198,6 +185,64 @@ export function About() {
         </section>
       </div>
     </div>
+  );
+}
+
+function GoogleReviewsCard() {
+  const avatars = [
+    // Radial gradient avatars — no external requests, feel like real photos
+    { bg: "radial-gradient(circle at 35% 30%, #f3d9c3 0%, #b88968 45%, #6d4a2f 100%)", initials: "MR" },
+    { bg: "radial-gradient(circle at 35% 30%, #fce4dc 0%, #d99787 45%, #7c4a3d 100%)", initials: "LG" },
+    { bg: "radial-gradient(circle at 35% 30%, #d8e2ec 0%, #7d95ab 45%, #35485e 100%)", initials: "AT" },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+      className="mt-6 rounded-2xl bg-[#17222F] border border-white/8 px-4 py-4 flex items-center gap-4"
+    >
+      {/* Overlapping avatars */}
+      <div className="flex -space-x-3 shrink-0">
+        {avatars.map((a, i) => (
+          <div
+            key={i}
+            className="w-11 h-11 rounded-full ring-2 ring-[#17222F] flex items-center justify-center text-white text-xs font-semibold shadow-md"
+            style={{ background: a.bg }}
+          >
+            {a.initials}
+          </div>
+        ))}
+      </div>
+
+      {/* Right side: Google logo + rating + reviews line */}
+      <div className="flex flex-col gap-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <GoogleGLogo />
+          <span className="text-[#EDF2F7] text-lg font-semibold tabular-nums leading-none">4.9</span>
+          <div className="flex items-center gap-0.5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star key={i} size={14} className="fill-[#FFC107] text-[#FFC107]" />
+            ))}
+          </div>
+        </div>
+        <span className="text-[#94A9BE] text-[13px] leading-tight">
+          Google · <AnimatedNumber value={200} suffix="+" /> Recensioni
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
+function GoogleGLogo() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-label="Google">
+      <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.44c-.28 1.48-1.12 2.73-2.38 3.57v2.97h3.86c2.26-2.09 3.57-5.16 3.57-8.78z"/>
+      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.94l-3.86-2.97c-1.07.72-2.44 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.29v3.11C3.25 21.3 7.31 24 12 24z"/>
+      <path fill="#FBBC05" d="M5.27 14.28a7.2 7.2 0 0 1 0-4.56V6.61H1.29a12 12 0 0 0 0 10.78l3.98-3.11z"/>
+      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.29 6.61l3.98 3.11C6.22 6.86 8.87 4.75 12 4.75z"/>
+    </svg>
   );
 }
 

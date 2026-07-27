@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight } from "lucide-react";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 import { ScrollFillText } from "./ScrollFillText";
 
 const faqs = [
@@ -40,16 +40,9 @@ export function Faq() {
     <section id="faq" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[380px_1fr] gap-12 md:gap-24">
         <div className="md:sticky md:top-[130px] self-start">
-          <AnimatedLabel>FAQ</AnimatedLabel>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mt-4 mb-6 tracking-tight"
-          >
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
             Domande frequenti.
-          </motion.h2>
+          </AnimatedHeadline>
           <ScrollFillText
             text="Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi."
             className="text-sm md:text-base leading-relaxed mb-8 max-w-xs"

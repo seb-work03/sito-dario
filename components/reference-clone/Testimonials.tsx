@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const testimonials = [
   {
@@ -39,16 +39,9 @@ export function Testimonials() {
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
-            <AnimatedLabel>TESTIMONIANZE</AnimatedLabel>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-              className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mt-4 tracking-tight"
-            >
+            <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight">
               La competenza si riconosce da ciò che lascia agli altri.
-            </motion.h2>
+            </AnimatedHeadline>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

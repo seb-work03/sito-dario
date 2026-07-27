@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { AnimatedLabel } from "./AnimatedLabel";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const steps = [
   {
@@ -97,21 +97,16 @@ function ProcessCard({ step, index, scrollProgress }: {
       }}
       className="group relative w-[clamp(220px,28vw,320px)] aspect-[6/5] bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 md:p-8 flex flex-col gap-3 transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
-      {/* Subtle inner glow on hover */}
       <div
         className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{ boxShadow: "inset 0 0 32px rgba(255,255,255,0.04)" }}
       />
-
-      {/* Top row: title left + icon right, vertically centered */}
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-tight">{step.title}</h3>
         <div className="inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-xl w-11 h-11 shrink-0 transition-transform duration-500 group-hover:scale-110">
           {step.icon}
         </div>
       </div>
-
-      {/* Description */}
       <p className="text-[#6A84A0] text-sm leading-relaxed">{step.description}</p>
     </motion.div>
   );
@@ -125,70 +120,57 @@ export function Process() {
   });
 
   return (
-    <section id="process" className="bg-[#0D1218]">
-      {/* Header on dark background — only the sticky card area below carries the accent */}
-      <div className="mx-auto max-w-[1240px] px-5 pt-16 md:pt-28 pb-12">
-        <AnimatedLabel>IL METODO</AnimatedLabel>
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight"
-          >
-            Non una formula. Un sistema di decisioni.
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, delay: 0.15 }}
-            className="text-[#94A9BE] max-w-sm md:text-right leading-relaxed"
-          >
-            Ogni progetto viene affrontato con una sequenza chiara: capire,
-            scegliere, costruire, misurare. Adattata al contesto.
-          </motion.p>
-        </div>
+    <section id="process" className="relative bg-[#00e5ff] overflow-hidden">
+      {/* Shared pattern layers — cover the whole section */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(13,18,24,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(13,18,24,0.08) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: "radial-gradient(rgba(13,18,24,0.25) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 55% at 50% 50%, transparent 40%, rgba(13,18,24,0.18) 100%)",
+        }}
+      />
+      <div
+        className="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full pointer-events-none opacity-40"
+        style={{
+          background: "radial-gradient(closest-side, rgba(255,255,255,0.5), transparent 70%)",
+        }}
+      />
+
+      {/* Header — sits on top of the same pattern as the cards below */}
+      <div className="relative z-10 mx-auto max-w-[1240px] px-5 pt-16 md:pt-28 pb-12">
+        <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight">
+          Non una formula. Un sistema di decisioni.
+        </AnimatedHeadline>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.9, delay: 0.15 }}
+          className="text-[#0D1218]/70 max-w-lg mt-6 leading-relaxed"
+        >
+          Ogni progetto viene affrontato con una sequenza chiara: capire,
+          scegliere, costruire, misurare. Adattata al contesto.
+        </motion.p>
       </div>
 
-      {/* Scroll-driven fan-out — desktop only. Accent background for card area */}
-      <div className="hidden md:block" ref={sectionRef} style={{ minHeight: "380vh" }}>
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden bg-[#00e5ff]">
-          {/* Grid lines */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-40"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(13,18,24,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(13,18,24,0.08) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
-          {/* Dot pattern overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-30"
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(13,18,24,0.25) 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
-          />
-          {/* Radial spotlight — darker corners */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 55% 55% at 50% 50%, transparent 40%, rgba(13,18,24,0.18) 100%)",
-            }}
-          />
-          {/* Off-center accent blob for depth */}
-          <div
-            className="absolute -top-1/3 -left-1/4 w-[80%] h-[100%] rounded-full pointer-events-none opacity-40"
-            style={{
-              background:
-                "radial-gradient(closest-side, rgba(255,255,255,0.5), transparent 70%)",
-            }}
-          />
+      {/* Scroll-driven fan-out — desktop only */}
+      <div className="hidden md:block relative z-10" ref={sectionRef} style={{ minHeight: "380vh" }}>
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
           <div className="relative w-[clamp(480px,60vw,720px)] aspect-square">
             {steps.map((step, i) => (
               <ProcessCard
@@ -202,8 +184,8 @@ export function Process() {
         </div>
       </div>
 
-      {/* Mobile: simple reveal stack, on accent bg */}
-      <div className="md:hidden flex flex-col gap-4 px-5 pb-16 bg-[#00e5ff]">
+      {/* Mobile: simple reveal stack */}
+      <div className="md:hidden relative z-10 flex flex-col gap-4 px-5 pb-16">
         {steps.map((s, i) => (
           <motion.div
             key={s.number}
