@@ -13,6 +13,7 @@ import { Experience } from "@/components/reference-clone/Experience";
 import { Testimonials } from "@/components/reference-clone/Testimonials";
 import { Insights } from "@/components/reference-clone/Insights";
 import { Faq } from "@/components/reference-clone/Faq";
+import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefing";
 import { AccentCta } from "@/components/reference-clone/AccentCta";
 import { Footer } from "@/components/reference-clone/Footer";
 
@@ -113,6 +114,7 @@ export default async function HomePage() {
         <Testimonials />
         <Insights />
         <Faq />
+        <StrategicBriefing />
         <AccentCta />
       </main>
       <Footer />
