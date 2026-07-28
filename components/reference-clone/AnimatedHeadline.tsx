@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, type ReactNode } from "react";
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
@@ -22,19 +22,16 @@ export function AnimatedHeadline({
   delay = 0,
   duration = 1.1,
 }: Props) {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
-  const MotionTag = as === "h3" ? motion.h3 : motion.h2;
+  const commonProps = {
+    className,
+    initial: { clipPath: "inset(0 100% 0 0)" },
+    whileInView: { clipPath: "inset(0 0 0 0)" },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration, delay, ease: [0.19, 1, 0.22, 1] as const },
+  };
 
-  return (
-    <MotionTag
-      ref={ref as never}
-      className={className}
-      initial={{ clipPath: "inset(0 100% 0 0)" }}
-      animate={inView ? { clipPath: "inset(0 0 0 0)" } : {}}
-      transition={{ duration, delay, ease: [0.19, 1, 0.22, 1] }}
-    >
-      {children}
-    </MotionTag>
-  );
+  if (as === "h3") {
+    return <motion.h3 {...commonProps}>{children}</motion.h3>;
+  }
+  return <motion.h2 {...commonProps}>{children}</motion.h2>;
 }

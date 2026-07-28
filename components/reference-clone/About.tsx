@@ -216,7 +216,7 @@ function GoogleReviewsCard() {
         ))}
       </div>
 
-      {/* Right side: Google logo + rating + reviews line */}
+      {/* Right side: Google logo + rating + reviews line + text link */}
       <div className="flex flex-col gap-1 min-w-0">
         <div className="flex items-center gap-2">
           <GoogleGLogo />
@@ -230,6 +230,17 @@ function GoogleReviewsCard() {
         <span className="text-[#94A9BE] text-[13px] leading-tight">
           Google · <AnimatedNumber value={200} suffix="+" /> Recensioni
         </span>
+        <a
+          href="https://www.google.com/search?sca_esv=b5ea7be7985888f6&sxsrf=APpeQnuZOBg6W83dh4Pr_JRXkSvYWzFltQ:1785222127405&q=dario+tana&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_3pHcsvFS4IWC5hYX6m_ITQk8Tm5EKySRRmWkSOeb_tZMF753J2ho2K246GedOCCfqH2clQ%3D&uds=AJ5uw1-kGPOPznuu41q62UN0LLmJuzDY5atCBfaa0VK_OTe29jjPw2wQJJbPHFNzFVxdOu29sFM_r_kw0fmHfgVvwC8ksDWVf2cSpUWFgwyd4Zqk19KkFGY&sa=X&ved=2ahUKEwiE2P7V5vSVAxUxxQIHHYZGBKsQ3PALegQIMBAF"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 text-[#00e5ff] text-[12px] leading-tight inline-flex items-center gap-1 hover:text-[#33ecff] hover:underline underline-offset-2 transition-colors duration-300 w-fit"
+        >
+          Guarda le recensioni
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </a>
       </div>
     </motion.div>
   );
@@ -247,15 +258,12 @@ function GoogleGLogo() {
 }
 
 function ChartCard() {
-  const [hovered, setHovered] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
       style={{
         minHeight: 270,
@@ -266,9 +274,9 @@ function ChartCard() {
     >
       <div className="flex flex-col gap-3">
         <p className="text-[14px] font-bold tracking-tight text-[#00e5ff]">
-          +€2M fatturato guidato
+          +2M fatturato creato da clienti e-commerce
         </p>
-        <ExperienceChart hovered={hovered} />
+        <ExperienceChart />
       </div>
 
       <div className="mt-auto flex justify-evenly gap-5 pt-4 border-t border-white/8">
@@ -291,7 +299,7 @@ function StatBlock({ value, suffix, label }: { value: number; suffix: string; la
   );
 }
 
-function ExperienceChart({ hovered }: { hovered: boolean }) {
+function ExperienceChart() {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
@@ -310,14 +318,11 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
     }).join(" ");
   const areaPath = `${path} L 290,100 L 0,100 Z`;
 
-  const midIndex = 4;
   const endIndex = points.length - 1;
-  const midPoint = points[midIndex];
   const endPoint = points[endIndex];
 
-  // 0 → not in view, 0.5 → mid (default), 1 → end (on hover)
-  const target = inView ? (hovered ? 1 : 0.5) : 0;
-  // clip rect width in viewBox units; endpoint is at x=290
+  // Line reveals to the endpoint; dot always sits at the endpoint
+  const target = inView ? 1 : 0;
   const revealWidth = 290 * target;
 
   return (
@@ -340,7 +345,7 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
             height="120"
             initial={{ width: 0 }}
             animate={{ width: revealWidth }}
-            transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
+            transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
           />
         </clipPath>
       </defs>
@@ -360,34 +365,26 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
         />
       </g>
 
-      {/* Leading dot: animates r instead of scale to avoid SVG transform-origin issues */}
+      {/* Leading dot: parked at the endpoint */}
       <motion.circle
+        cx={endPoint.x}
+        cy={endPoint.y}
         fill="#00e5ff"
-        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
-        animate={{
-          cx: hovered ? endPoint.x : midPoint.x,
-          cy: hovered ? endPoint.y : midPoint.y,
-          r: inView ? 3.5 : 0,
-          opacity: inView ? 1 : 0,
-        }}
-        transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
+        initial={{ r: 0, opacity: 0 }}
+        animate={{ r: inView ? 3.5 : 0, opacity: inView ? 1 : 0 }}
+        transition={{ duration: 1.4, delay: 0.6, ease: [0.19, 1, 0.22, 1] }}
       />
 
       {/* Pulse ring around the leading dot */}
       <motion.circle
+        cx={endPoint.x}
+        cy={endPoint.y}
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1"
-        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
-        animate={inView ? {
-          cx: hovered ? endPoint.x : midPoint.x,
-          cy: hovered ? endPoint.y : midPoint.y,
-          r: [6, 9.6, 6],
-          opacity: [0.5, 0.1, 0.5],
-        } : { r: 0, opacity: 0 }}
+        initial={{ r: 0, opacity: 0 }}
+        animate={inView ? { r: [6, 9.6, 6], opacity: [0.5, 0.1, 0.5] } : { r: 0, opacity: 0 }}
         transition={{
-          cx: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
-          cy: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
           r: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
           opacity: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
         }}

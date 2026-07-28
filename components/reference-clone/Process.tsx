@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const steps = [
@@ -118,6 +118,12 @@ export function Process() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
+  // Light spring: smooths jitter while still tracking scroll closely
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 32,
+    restDelta: 0.001,
+  });
 
   return (
     <section id="process" className="relative bg-[#00e5ff] overflow-hidden">
@@ -169,7 +175,7 @@ export function Process() {
       </div>
 
       {/* Scroll-driven fan-out — desktop only */}
-      <div className="hidden md:block relative z-10" ref={sectionRef} style={{ minHeight: "380vh" }}>
+      <div className="hidden md:block relative z-10" ref={sectionRef} style={{ minHeight: "220vh" }}>
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
           <div className="relative w-[clamp(480px,60vw,720px)] aspect-square">
             {steps.map((step, i) => (
@@ -177,7 +183,7 @@ export function Process() {
                 key={step.number}
                 step={step}
                 index={i}
-                scrollProgress={scrollYProgress}
+                scrollProgress={smoothProgress}
               />
             ))}
           </div>
