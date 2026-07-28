@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 
 const steps = [
@@ -10,7 +10,6 @@ const steps = [
     title: "Diagnosi",
     description:
       "Analisi di numeri, tecnologia, processi, persone e posizionamento competitivo. Prima capire davvero, poi decidere.",
-    corner: { x: "-52%", y: "-54%" },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <circle cx="11" cy="11" r="7" />
@@ -24,7 +23,6 @@ const steps = [
     title: "Priorità",
     description:
       "Separazione netta tra ciò che genera impatto e ciò che consuma tempo e budget. Nessuna soluzione preconfezionata.",
-    corner: { x: "52%", y: "-54%" },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M3 6h18M3 12h12M3 18h7" />
@@ -38,7 +36,6 @@ const steps = [
     title: "Esecuzione",
     description:
       "Roadmap pragmatica, responsabilità definite, affiancamento ai team interni o ai fornitori esterni fino al risultato.",
-    corner: { x: "-52%", y: "54%" },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
@@ -50,7 +47,6 @@ const steps = [
     title: "Controllo",
     description:
       "KPI leggibili, apprendimento continuo, correzioni basate su evidenze — non sulle sensazioni.",
-    corner: { x: "52%", y: "54%" },
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M3 3v18h18" />
@@ -60,47 +56,54 @@ const steps = [
   },
 ];
 
-const stackOffsets = [
-  { x: 0, y: 0, scale: 1, rotate: 0, z: 40 },
-  { x: 10, y: 8, scale: 0.96, rotate: 2, z: 30 },
-  { x: -8, y: 14, scale: 0.92, rotate: -1.5, z: 20 },
-  { x: 14, y: 20, scale: 0.88, rotate: 3, z: 10 },
+// Final positions when scroll progress = 1. Simple 2x2 grid in pixels.
+const finalOffsets: { x: number; y: number }[] = [
+  { x: -180, y: -140 }, // top-left
+  { x: 180, y: -140 },  // top-right
+  { x: -180, y: 140 },  // bottom-left
+  { x: 180, y: 140 },   // bottom-right
 ];
 
-function ProcessCard({ step, index, scrollProgress }: {
+// Small offsets while stacked (progress = 0)
+const stackOffsets: { x: number; y: number; rotate: number; z: number }[] = [
+  { x: 0, y: 0, rotate: 0, z: 40 },
+  { x: 12, y: 10, rotate: 2, z: 30 },
+  { x: -10, y: 16, rotate: -2, z: 20 },
+  { x: 16, y: 22, rotate: 3, z: 10 },
+];
+
+function ProcessCard({
+  step,
+  index,
+  progress,
+}: {
   step: typeof steps[0];
   index: number;
-  scrollProgress: MotionValue<number>;
+  progress: MotionValue<number>;
 }) {
-  const off = stackOffsets[index];
+  const start = stackOffsets[index];
+  const end = finalOffsets[index];
 
-  // Directly and proportionally tied to scroll progress — no spring, no gates
-  const x = useTransform(scrollProgress, [0, 1], [`${off.x}px`, step.corner.x]);
-  const y = useTransform(scrollProgress, [0, 1], [`${off.y}px`, step.corner.y]);
-  const scale = useTransform(scrollProgress, [0, 1], [off.scale, 1]);
-  const rotate = useTransform(scrollProgress, [0, 1], [off.rotate, 0]);
+  // 1:1 with scroll progress — no spring, no gating
+  const x = useTransform(progress, [0, 1], [start.x, end.x]);
+  const y = useTransform(progress, [0, 1], [start.y, end.y]);
+  const rotate = useTransform(progress, [0, 1], [start.rotate, 0]);
 
   return (
     <motion.div
       style={{
         x,
         y,
-        scale,
         rotate,
-        opacity: 1,
-        zIndex: off.z,
+        zIndex: start.z,
         position: "absolute",
         top: "50%",
         left: "50%",
         translateX: "-50%",
         translateY: "-50%",
       }}
-      className="group relative w-[clamp(220px,28vw,320px)] aspect-[6/5] bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 md:p-8 flex flex-col gap-3 transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="group w-[300px] h-[240px] bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 flex flex-col gap-3 transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
-      <div
-        className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ boxShadow: "inset 0 0 32px rgba(255,255,255,0.04)" }}
-      />
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-tight">{step.title}</h3>
         <div className="inline-flex items-center justify-center bg-[#00e5ff] text-[#0D1218] rounded-xl w-11 h-11 shrink-0 transition-transform duration-500 group-hover:scale-110">
@@ -113,16 +116,11 @@ function ProcessCard({ step, index, scrollProgress }: {
 }
 
 export function Process() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // Track only the scroll distance where the pin is active (0 → 1 while pinned)
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: scrollRef,
     offset: ["start start", "end end"],
-  });
-  // Light spring: smooths jitter while still tracking scroll closely
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 32,
-    restDelta: 0.001,
   });
 
   return (
@@ -157,7 +155,7 @@ export function Process() {
         }}
       />
 
-      {/* Header — sits on top of the same pattern as the cards below */}
+      {/* Header */}
       <div className="relative z-10 mx-auto max-w-[1240px] px-5 pt-16 md:pt-28 pb-12">
         <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight">
           Non una formula. Un sistema di decisioni.
@@ -174,23 +172,21 @@ export function Process() {
         </motion.p>
       </div>
 
-      {/* Scroll-driven fan-out — desktop only */}
-      <div className="hidden md:block relative z-10" ref={sectionRef} style={{ minHeight: "220vh" }}>
+      {/* Scroll-driven fan-out — desktop only.
+          Track wrapper is 160vh tall → 60vh of scroll drives the animation
+          (viewport 100vh; pin releases when track's bottom hits viewport bottom).
+          Cards move a fixed pixel distance per scroll unit — no spring. */}
+      <div className="hidden md:block relative z-10" ref={scrollRef} style={{ height: "160vh" }}>
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-          <div className="relative w-[clamp(480px,60vw,720px)] aspect-square">
+          <div className="relative w-[600px] h-[500px]">
             {steps.map((step, i) => (
-              <ProcessCard
-                key={step.number}
-                step={step}
-                index={i}
-                scrollProgress={smoothProgress}
-              />
+              <ProcessCard key={step.number} step={step} index={i} progress={scrollYProgress} />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Mobile: simple reveal stack */}
+      {/* Mobile: static stack */}
       <div className="md:hidden relative z-10 flex flex-col gap-4 px-5 pb-16">
         {steps.map((s, i) => (
           <motion.div

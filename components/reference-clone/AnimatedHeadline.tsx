@@ -12,26 +12,34 @@ type Props = {
 };
 
 /**
- * Section headline with a left-to-right clip-path reveal.
- * Works for wrapping multi-line text (unlike a width animation).
+ * Section headline reveal: slides up from below into an overflow-hidden
+ * wrapper. Works reliably for multi-line text and never leaves the text
+ * stuck at the initial (hidden) state.
  */
 export function AnimatedHeadline({
   children,
   className,
   as = "h2",
   delay = 0,
-  duration = 1.1,
+  duration = 0.95,
 }: Props) {
-  const commonProps = {
-    className,
-    initial: { clipPath: "inset(0 100% 0 0)" },
-    whileInView: { clipPath: "inset(0 0 0 0)" },
-    viewport: { once: true, amount: 0.2 },
-    transition: { duration, delay, ease: [0.19, 1, 0.22, 1] as const },
-  };
+  const inner = (
+    <motion.span
+      className="inline-block"
+      style={{ willChange: "transform, opacity" }}
+      initial={{ y: "115%", opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration, delay, ease: [0.19, 1, 0.22, 1] as const }}
+    >
+      {children}
+    </motion.span>
+  );
+
+  const wrapperClass = `${className ?? ""} block overflow-hidden`;
 
   if (as === "h3") {
-    return <motion.h3 {...commonProps}>{children}</motion.h3>;
+    return <h3 className={wrapperClass}>{inner}</h3>;
   }
-  return <motion.h2 {...commonProps}>{children}</motion.h2>;
+  return <h2 className={wrapperClass}>{inner}</h2>;
 }

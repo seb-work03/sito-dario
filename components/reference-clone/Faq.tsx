@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
-import { ScrollFillText } from "./ScrollFillText";
 
 const faqs = [
   {
@@ -43,10 +42,15 @@ export function Faq() {
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
             Domande frequenti.
           </AnimatedHeadline>
-          <ScrollFillText
-            text="Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi."
-            className="text-sm md:text-base leading-relaxed mb-8 max-w-xs"
-          />
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9, delay: 0.15 }}
+            className="text-[#94A9BE] text-sm md:text-base leading-relaxed mb-8 max-w-xs"
+          >
+            Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi.
+          </motion.p>
           <motion.a
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

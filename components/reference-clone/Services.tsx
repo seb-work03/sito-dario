@@ -82,10 +82,11 @@ export function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: i * 0.08, ease: [0.19, 1, 0.22, 1] }}
+                className="pt-[80px] pb-[40px] first:pt-0"
               >
                 <Link
                   href={s.href}
-                  className="group grid grid-cols-[auto_1fr] gap-6 pt-[80px] pb-[40px] first:pt-0 items-center"
+                  className="group grid grid-cols-[auto_1fr] gap-6 items-center"
                 >
                   <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00e5ff] text-sm text-[#0D1218] font-semibold tabular-nums shrink-0 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(0,229,255,0.6)]">
                     {s.number}
