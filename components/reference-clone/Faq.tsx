@@ -47,7 +47,7 @@ export function Faq() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className="text-[#94A9BE] text-sm md:text-base leading-relaxed mb-8 max-w-xs"
+            className="text-[#EDF2F7] text-sm md:text-base leading-relaxed mb-8 max-w-xs"
           >
             Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi.
           </motion.p>

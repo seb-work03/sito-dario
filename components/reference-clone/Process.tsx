@@ -56,20 +56,20 @@ const steps = [
   },
 ];
 
-// Final positions when scroll progress = 1. Simple 2x2 grid in pixels.
-const finalOffsets: { x: number; y: number }[] = [
-  { x: -180, y: -140 }, // top-left
-  { x: 180, y: -140 },  // top-right
-  { x: -180, y: 140 },  // bottom-left
-  { x: 180, y: 140 },   // bottom-right
-];
+const CARD_W = 300;
+const CARD_H = 230;
+const GAP = 28;
 
-// Small offsets while stacked (progress = 0)
-const stackOffsets: { x: number; y: number; rotate: number; z: number }[] = [
-  { x: 0, y: 0, rotate: 0, z: 40 },
-  { x: 12, y: 10, rotate: 2, z: 30 },
-  { x: -10, y: 16, rotate: -2, z: 20 },
-  { x: 16, y: 22, rotate: 3, z: 10 },
+// Start: cards stacked in the middle with a small offset.
+// End: exact 2x2 grid, in pixels.
+const SPREAD_X = (CARD_W + GAP) / 2; // 164
+const SPREAD_Y = (CARD_H + GAP) / 2; // 129
+
+const layout = [
+  { from: { x: 0, y: 0, r: 0 }, to: { x: -SPREAD_X, y: -SPREAD_Y }, z: 40 },
+  { from: { x: 14, y: 10, r: 2.5 }, to: { x: SPREAD_X, y: -SPREAD_Y }, z: 30 },
+  { from: { x: -12, y: 18, r: -2 }, to: { x: -SPREAD_X, y: SPREAD_Y }, z: 20 },
+  { from: { x: 18, y: 26, r: 3.5 }, to: { x: SPREAD_X, y: SPREAD_Y }, z: 10 },
 ];
 
 function ProcessCard({
@@ -81,13 +81,13 @@ function ProcessCard({
   index: number;
   progress: MotionValue<number>;
 }) {
-  const start = stackOffsets[index];
-  const end = finalOffsets[index];
+  const { from, to, z } = layout[index];
 
-  // 1:1 with scroll progress — no spring, no gating
-  const x = useTransform(progress, [0, 1], [start.x, end.x]);
-  const y = useTransform(progress, [0, 1], [start.y, end.y]);
-  const rotate = useTransform(progress, [0, 1], [start.rotate, 0]);
+  // Straight linear px mapping: every unit of scroll moves the card a fixed
+  // number of pixels. No spring, no easing, no gating.
+  const x = useTransform(progress, [0, 1], [from.x, to.x]);
+  const y = useTransform(progress, [0, 1], [from.y, to.y]);
+  const rotate = useTransform(progress, [0, 1], [from.r, 0]);
 
   return (
     <motion.div
@@ -95,14 +95,14 @@ function ProcessCard({
         x,
         y,
         rotate,
-        zIndex: start.z,
+        zIndex: z,
+        width: CARD_W,
+        height: CARD_H,
         position: "absolute",
-        top: "50%",
-        left: "50%",
-        translateX: "-50%",
-        translateY: "-50%",
+        left: `calc(50% - ${CARD_W / 2}px)`,
+        top: `calc(50% - ${CARD_H / 2}px)`,
       }}
-      className="group w-[300px] h-[240px] bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 flex flex-col gap-3 transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="group bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 flex flex-col gap-3 transition-[border-color,box-shadow] duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-tight">{step.title}</h3>
@@ -116,16 +116,17 @@ function ProcessCard({
 }
 
 export function Process() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  // Track only the scroll distance where the pin is active (0 → 1 while pinned)
+  const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: scrollRef,
+    target: trackRef,
     offset: ["start start", "end end"],
   });
 
   return (
-    <section id="process" className="relative bg-[#00e5ff] overflow-hidden">
-      {/* Shared pattern layers — cover the whole section */}
+    // NOTE: no overflow-hidden here. An ancestor with overflow:hidden becomes a
+    // scroll container and breaks position:sticky on the pinned child below.
+    <section id="process" className="relative bg-[#00e5ff]">
+      {/* Pattern layers — all inset-0 so nothing overflows the section */}
       <div
         className="absolute inset-0 pointer-events-none opacity-40"
         style={{
@@ -145,13 +146,7 @@ export function Process() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 55% 55% at 50% 50%, transparent 40%, rgba(13,18,24,0.18) 100%)",
-        }}
-      />
-      <div
-        className="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full pointer-events-none opacity-40"
-        style={{
-          background: "radial-gradient(closest-side, rgba(255,255,255,0.5), transparent 70%)",
+            "radial-gradient(ellipse 60% 45% at 18% 12%, rgba(255,255,255,0.45), transparent 60%), radial-gradient(ellipse 55% 55% at 50% 50%, transparent 40%, rgba(13,18,24,0.18) 100%)",
         }}
       />
 
@@ -172,13 +167,15 @@ export function Process() {
         </motion.p>
       </div>
 
-      {/* Scroll-driven fan-out — desktop only.
-          Track wrapper is 160vh tall → 60vh of scroll drives the animation
-          (viewport 100vh; pin releases when track's bottom hits viewport bottom).
-          Cards move a fixed pixel distance per scroll unit — no spring. */}
-      <div className="hidden md:block relative z-10" ref={scrollRef} style={{ height: "160vh" }}>
+      {/* Desktop fan-out.
+          Track is 180vh, pinned child is 100vh → the animation runs over
+          exactly 80vh of scrolling, mapped linearly to pixel offsets. */}
+      <div className="hidden md:block relative z-10" ref={trackRef} style={{ height: "180vh" }}>
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-          <div className="relative w-[600px] h-[500px]">
+          <div
+            className="relative"
+            style={{ width: CARD_W * 2 + GAP, height: CARD_H * 2 + GAP }}
+          >
             {steps.map((step, i) => (
               <ProcessCard key={step.number} step={step} index={i} progress={scrollYProgress} />
             ))}
@@ -195,7 +192,7 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: i * 0.09, ease: [0.19, 1, 0.22, 1] }}
-            className="relative bg-[#0D1218] border border-[#253444]/60 rounded-2xl p-6 flex flex-col gap-3"
+            className="bg-[#0D1218] border border-[#253444]/60 rounded-2xl p-6 flex flex-col gap-3"
           >
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-[#EDF2F7] text-xl font-medium tracking-tight">{s.title}</h3>

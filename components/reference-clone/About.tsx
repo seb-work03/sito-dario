@@ -321,14 +321,13 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
     }).join(" ");
   const areaPath = `${path} L 290,100 L 0,100 Z`;
 
-  const midIndex = 4;
-  const endIndex = points.length - 1;
-  const midPoint = points[midIndex];
-  const endPoint = points[endIndex];
+  // Resting position of the dot. y=61.9 is the curve's value at x=148 on the
+  // bezier segment between (120,72) and (160,60), so the dot sits on the line.
+  const midPoint = { x: 148, y: 61.9 };
+  const endPoint = points[points.length - 1];
 
-  // 0 → not in view, 0.5 → mid (default), 1 → end (on hover)
-  const target = inView ? (hovered ? 1 : 0.5) : 0;
-  const revealWidth = 290 * target;
+  // Line reveals to wherever the dot currently is
+  const revealWidth = inView ? (hovered ? endPoint.x : midPoint.x) : 0;
 
   return (
     <svg

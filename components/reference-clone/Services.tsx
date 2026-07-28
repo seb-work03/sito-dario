@@ -82,7 +82,7 @@ export function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: i * 0.08, ease: [0.19, 1, 0.22, 1] }}
-                className="pt-[80px] pb-[40px] first:pt-0"
+                className="py-[44px] first:pt-0"
               >
                 <Link
                   href={s.href}
