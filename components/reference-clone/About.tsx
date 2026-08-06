@@ -33,6 +33,10 @@ function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number;
   return <span ref={ref}>0{suffix}</span>;
 }
 
+// Empty color: rgb(79,101,119) = #4F6577 · Full color: rgb(237,242,247) = #EDF2F7
+const EMPTY_RGB = [79, 101, 119] as const;
+const FULL_RGB = [237, 242, 247] as const;
+
 function FillWord({
   children,
   progress,
@@ -42,10 +46,25 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
-  // Purely driven by scroll progress (useTransform clamps at the edges), so
-  // the effect reverses — words empty out again — when scrolling back up.
-  const opacity = useTransform(progress, range, [0.18, 1]);
-  const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
+  // Fill amount for this word — clamped explicitly to [0, 1].
+  //   t = 0 → empty (dim)         opacity 0.18, color #4F6577
+  //   t = 1 → filled (bright)     opacity 1,    color #EDF2F7
+  //
+  // Because t is always clamped, going past the word's `end` cannot make it
+  // fade out — it stays filled while the user keeps scrolling down. When the
+  // user scrolls back up past `end` again, t drops below 1 and the word
+  // empties out. Simple, symmetric, and impossible to break at the edges.
+  const opacity = useTransform(progress, (v) => {
+    const t = Math.max(0, Math.min(1, (v - range[0]) / (range[1] - range[0])));
+    return 0.18 + 0.82 * t;
+  });
+  const color = useTransform(progress, (v) => {
+    const t = Math.max(0, Math.min(1, (v - range[0]) / (range[1] - range[0])));
+    const r = Math.round(EMPTY_RGB[0] + (FULL_RGB[0] - EMPTY_RGB[0]) * t);
+    const g = Math.round(EMPTY_RGB[1] + (FULL_RGB[1] - EMPTY_RGB[1]) * t);
+    const b = Math.round(EMPTY_RGB[2] + (FULL_RGB[2] - EMPTY_RGB[2]) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  });
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
