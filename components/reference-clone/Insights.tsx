@@ -1,17 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 const audiences = [
   {
-    id: "imprenditori",
+    number: "01",
     label: "Imprenditori",
-    photo: "U2BCGakYtmoTeb2cJuHIw7BiCWA.jpg",
+    intro: "Chi guida un'azienda e deve decidere in autonomia strategica.",
     bullets: [
       "Scelte di piattaforma e stack",
       "Priorità di investimento",
@@ -20,9 +18,9 @@ const audiences = [
     ],
   },
   {
-    id: "responsabili",
+    number: "02",
     label: "Responsabili e-commerce",
-    photo: "JjUw52EussY8kwoSstWgrw6glNA.jpg",
+    intro: "Chi gestisce operativamente il canale e cerca un confronto senior.",
     bullets: [
       "Audit indipendente del progetto",
       "Supporto nelle decisioni difficili",
@@ -31,9 +29,9 @@ const audiences = [
     ],
   },
   {
-    id: "enti",
+    number: "03",
     label: "Enti formativi e docenti",
-    photo: "U2BCGakYtmoTeb2cJuHIw7BiCWA.jpg",
+    intro: "Chi progetta percorsi e cerca contenuti verticali con casi reali.",
     bullets: [
       "Docenza in master e executive",
       "Interventi in eventi",
@@ -44,104 +42,64 @@ const audiences = [
 ];
 
 export function Insights() {
-  const [active, setActive] = useState(0);
-  const current = audiences[active];
-
   return (
     <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
         <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
           Progetti diversi, un metodo condiviso.
         </AnimatedHeadline>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.9, delay: 0.1 }}
-          className="text-[#94A9BE] max-w-lg mb-10 leading-relaxed"
-        >
+        <AnimatedText className="text-[#94A9BE] max-w-lg mb-12 md:mb-16 leading-relaxed" delay={0.1}>
           Ogni contesto richiede uno sguardo dedicato, ma il modo di leggere i
           problemi resta lo stesso.
-        </motion.p>
+        </AnimatedText>
 
-        <div className="grid md:grid-cols-[320px_1fr] gap-4 items-stretch">
-          <div className="flex md:flex-col gap-2">
-            {audiences.map((t, i) => (
-              <button
-                key={t.id}
-                onClick={() => setActive(i)}
-                className={cn(
-                  "group flex-1 md:flex-none text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
-                  active === i
-                    ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
-                    : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444] cursor-pointer"
-                )}
-              >
-                <span className="tracking-tight">{t.label}</span>
-                <motion.span
-                  animate={{ rotate: active === i ? 45 : 0 }}
-                  transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                  className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#94A9BE]"
-                  )}
-                >
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M3 6h6M6 3v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                </motion.span>
-              </button>
-            ))}
-          </div>
-
-          <div className="relative rounded-2xl overflow-hidden bg-[#17222F] border border-[#253444] min-h-[380px] md:min-h-[440px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, scale: 1.03 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={`/reference-assets/adviest/${current.photo}`}
-                  alt={`[FOTO CONTESTO ${current.label}]`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 60vw"
+        {/* 3 vertical persona cards */}
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+          {audiences.map((a, i) => (
+            <motion.article
+              key={a.number}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.19, 1, 0.22, 1] }}
+              className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
+            >
+              {/* Number badge */}
+              <div className="flex items-start justify-between">
+                <span className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#00e5ff] text-[#0D1218] text-sm font-semibold tabular-nums transition-shadow duration-500 group-hover:shadow-[0_0_16px_rgba(0,229,255,0.55)]">
+                  {a.number}
+                </span>
+                <ArrowUpRight
+                  size={20}
+                  className="text-[#4F6577] group-hover:text-[#00e5ff] transition-all duration-500 group-hover:-rotate-45"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/40 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
+              </div>
 
-            {/* Bullet card */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`bullets-${active}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="absolute left-6 md:left-8 bottom-6 md:bottom-8 right-6 md:right-8 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 p-5 md:p-6"
-              >
-                <ul className="grid sm:grid-cols-2 gap-3">
-                  {current.bullets.map((b, i) => (
-                    <motion.li
-                      key={b}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }}
-                      className="flex items-start gap-2.5 text-[#DDE5EF] text-sm"
-                    >
-                      <ArrowUpRight size={14} className="text-[#00e5ff] mt-0.5 shrink-0" />
-                      {b}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+              {/* Label + intro */}
+              <div>
+                <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-[1.15] mb-2">
+                  {a.label}
+                </h3>
+                <p className="text-[#94A9BE] text-sm leading-relaxed">{a.intro}</p>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-white/8" />
+
+              {/* Bullet list */}
+              <ul className="flex flex-col gap-2.5">
+                {a.bullets.map((b) => (
+                  <li key={b} className="flex items-start gap-2.5 text-[#DDE5EF] text-sm leading-snug">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#00e5ff] shrink-0"
+                    />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>

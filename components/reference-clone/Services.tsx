@@ -1,106 +1,154 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 const services = [
   {
-    number: "01",
-    title: "Advisory",
-    description:
-      "Consulenza diretta per PMI strutturate: audit strategico e tecnologico, scalabilità e migrazioni di piattaforma, CRO, dati, advertising e redditività.",
+    id: "advisory",
+    label: "Advisory",
     href: "/servizi#advisory",
+    photo: "orECDk1yHAceniWXq7yKvfvv7Y.jpg",
+    bullets: [
+      "Audit strategico e tecnologico",
+      "Scalabilità e migrazioni di piattaforma",
+      "CRO, dati e advertising",
+      "Redditività e KPI",
+    ],
   },
   {
-    number: "02",
-    title: "Formazione",
-    description:
-      "Trasferimento tecnologico e strategico. Formazione in-house su misura, docenze avanzate per ITS e academy, workshop operativi su casi reali.",
+    id: "formazione",
+    label: "Formazione",
     href: "/formazione",
+    photo: "pK0MgeT7XpWRNeefyNQiRiZz7nQ.jpg",
+    bullets: [
+      "Formazione in-house su misura",
+      "Docenze per ITS e academy",
+      "Workshop operativi su casi reali",
+      "Percorsi post-diploma e master",
+    ],
   },
   {
-    number: "03",
-    title: "Interventi ed Eventi",
-    description:
-      "Contenuti concreti, zero fuffa. Keynote e interventi verticali, panel e moderazioni, format custom per eventi corporate e fiere di settore.",
+    id: "eventi",
+    label: "Interventi ed Eventi",
     href: "/eventi",
+    photo: "2HY57myX3y7mgS1UFfrGVyN2yPw.jpg",
+    bullets: [
+      "Keynote e interventi verticali",
+      "Panel e moderazioni",
+      "Format custom per eventi corporate",
+      "Interventi in fiere di settore",
+    ],
   },
 ];
 
 export function Services() {
+  const [active, setActive] = useState(0);
+  const current = services[active];
+
   return (
     <section id="service" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-xl tracking-tight">
-            3 ambiti. Un&apos;unica regia.
-          </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#94A9BE] max-w-sm md:text-right leading-relaxed"
-          >
-            Strategia, trasferimento di competenze e divulgazione. Ogni intervento
-            parte dal contesto reale e arriva a decisioni misurabili.
-          </motion.p>
-        </div>
+        <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
+          3 ambiti. Un&apos;unica regia.
+        </AnimatedHeadline>
+        <AnimatedText className="text-[#94A9BE] max-w-lg mb-10 leading-relaxed" delay={0.1}>
+          Strategia, trasferimento di competenze e divulgazione. Ogni intervento
+          parte dal contesto reale e arriva a decisioni misurabili.
+        </AnimatedText>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          {/* Sticky photo — with subtle idle animation */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
-            className="relative md:sticky md:top-[130px] rounded-3xl overflow-hidden aspect-[4/3] bg-[#17222F] group"
-          >
-            <Image
-              src="/reference-assets/adviest/orECDk1yHAceniWXq7yKvfvv7Y.jpg"
-              alt="[FOTO DARIO IN CONSULENZA DA INSERIRE]"
-              fill
-              className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#0D1218]/60 via-transparent to-transparent" />
-            <div className="absolute left-6 bottom-6 flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-[#00e5ff] animate-pulse" />
-              <span className="text-xs uppercase tracking-widest text-[#EDF2F7]">
-                Consulente indipendente
-              </span>
-            </div>
-          </motion.div>
-
-          <div className="flex flex-col divide-y divide-white/8">
+        <div className="grid md:grid-cols-[320px_1fr] gap-4 items-stretch">
+          {/* Left column: tabs */}
+          <div className="flex md:flex-col gap-2">
             {services.map((s, i) => (
-              <motion.div
-                key={s.number}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: i * 0.08, ease: [0.19, 1, 0.22, 1] }}
-                className="py-[44px] first:pt-0"
+              <button
+                key={s.id}
+                onClick={() => setActive(i)}
+                className={cn(
+                  "group flex-1 md:flex-none text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
+                  active === i
+                    ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
+                    : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444] cursor-pointer",
+                )}
               >
-                <Link
-                  href={s.href}
-                  className="group grid grid-cols-[auto_1fr] gap-6 items-center"
+                <span className="tracking-tight">{s.label}</span>
+                <motion.span
+                  animate={{ rotate: active === i ? 45 : 0 }}
+                  transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                  className={cn(
+                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
+                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#94A9BE]",
+                  )}
                 >
-                  <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[#00e5ff] text-sm text-[#0D1218] font-semibold tabular-nums shrink-0 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(0,229,255,0.6)]">
-                    {s.number}
-                  </span>
-                  <div>
-                    <h3 className="text-[#EDF2F7] text-2xl md:text-3xl font-medium mb-2 tracking-tight relative inline-block">
-                      {s.title}
-                      <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
-                    </h3>
-                    <p className="text-[#94A9BE] leading-relaxed">{s.description}</p>
-                  </div>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3 6h6M6 3v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </motion.span>
+              </button>
+            ))}
+          </div>
+
+          {/* Right column: image + bullet card overlay */}
+          <div className="relative rounded-2xl overflow-hidden bg-[#17222F] border border-[#253444] min-h-[380px] md:min-h-[440px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, scale: 1.03 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={`/reference-assets/adviest/${current.photo}`}
+                  alt={current.label}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/40 to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Bullet card */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`bullets-${active}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="absolute left-6 md:left-8 bottom-6 md:bottom-8 right-6 md:right-8 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 p-5 md:p-6"
+              >
+                <ul className="grid sm:grid-cols-2 gap-3 mb-4">
+                  {current.bullets.map((b, i) => (
+                    <motion.li
+                      key={b}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }}
+                      className="flex items-start gap-2.5 text-[#DDE5EF] text-sm"
+                    >
+                      <ArrowUpRight size={14} className="text-[#00e5ff] mt-0.5 shrink-0" />
+                      {b}
+                    </motion.li>
+                  ))}
+                </ul>
+                <Link
+                  href={current.href}
+                  className="group inline-flex items-center gap-2 text-[#00e5ff] text-sm font-medium hover:text-[#33ecff] transition-colors"
+                >
+                  Scopri {current.label}
+                  <ArrowUpRight size={14} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
                 </Link>
               </motion.div>
-            ))}
+            </AnimatePresence>
           </div>
         </div>
       </div>

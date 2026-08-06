@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { X, Plus } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 export function Fit() {
   return (
@@ -13,16 +14,13 @@ export function Fit() {
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-3xl mx-auto">
             Se cerchi un semplice esecutore, sei nel posto sbagliato.
           </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, delay: 0.15 }}
+          <AnimatedText
+            delay={0.15}
             className="text-[#94A9BE] text-base md:text-lg leading-relaxed max-w-xl mx-auto mt-6"
           >
             Lavoro con chi cerca un metodo, non un fornitore. Ecco quando ha senso
             parlarsi, e quando no.
-          </motion.p>
+          </AnimatedText>
         </div>
 
         {/* Two-card comparison */}

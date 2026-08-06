@@ -1,57 +1,77 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
+import type { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
   className?: string;
   as?: "h2" | "h3";
   delay?: number;
-  duration?: number;
 };
 
 /**
- * Section headline reveal: slides up from below into an overflow-hidden
- * wrapper.
- *
- * A timeout fallback forces the visible state after 1.2s no matter what.
- * Without it, a missed IntersectionObserver callback (sticky ancestors and
- * transformed parents can swallow it) would leave the text parked at
- * y:115% inside the clipping wrapper — invisible, permanently.
+ * Section headline reveal. Splits the text into words, then staggers each
+ * one from top with a blur that clears, giving a left-to-right sweep with
+ * a single consistent "blur from above" style across the whole site.
  */
-export function AnimatedHeadline({
-  children,
-  className,
-  as = "h2",
-  delay = 0,
-  duration = 0.9,
-}: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
-  const [fallback, setFallback] = useState(false);
+export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: Props) {
+  const text = typeof children === "string" ? children : null;
 
-  useEffect(() => {
-    const t = setTimeout(() => setFallback(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
+  const container: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.055, delayChildren: delay },
+    },
+  };
 
-  const show = inView || fallback;
+  const word: Variants = {
+    hidden: { opacity: 0, y: -18, filter: "blur(10px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] },
+    },
+  };
 
-  const inner = (
-    // pb/-mb pair keeps descenders (g, p, q) from being clipped by the wrapper
-    <span ref={ref} className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-      <motion.span
-        className="inline-block"
-        initial={{ y: "115%", opacity: 0 }}
-        animate={show ? { y: 0, opacity: 1 } : { y: "115%", opacity: 0 }}
-        transition={{ duration, delay, ease: [0.19, 1, 0.22, 1] }}
+  // Non-string children (with inline JSX): animate the whole node.
+  if (!text) {
+    const Tag = as === "h3" ? motion.h3 : motion.h2;
+    return (
+      <Tag
+        className={className}
+        initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, delay, ease: [0.19, 1, 0.22, 1] }}
       >
         {children}
-      </motion.span>
-    </span>
-  );
+      </Tag>
+    );
+  }
 
-  if (as === "h3") return <h3 className={className}>{inner}</h3>;
-  return <h2 className={className}>{inner}</h2>;
+  const words = text.split(" ");
+  const Tag = as === "h3" ? motion.h3 : motion.h2;
+
+  return (
+    <Tag
+      className={className}
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      {words.map((w, i) => (
+        <motion.span
+          key={i}
+          variants={word}
+          style={{ display: "inline-block", whiteSpace: "pre" }}
+        >
+          {w}
+          {i < words.length - 1 ? " " : ""}
+        </motion.span>
+      ))}
+    </Tag>
+  );
 }

@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 const steps = [
   {
@@ -189,16 +190,13 @@ export function Process() {
               <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
                 Non una formula. Un sistema di decisioni.
               </AnimatedHeadline>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.9, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
+              <AnimatedText
+                delay={0.25}
                 className="text-[#0D1218]/70 max-w-xl mx-auto mt-5 leading-relaxed"
               >
                 Ogni progetto viene affrontato con una sequenza chiara: capire,
                 scegliere, costruire, misurare. Adattata al contesto.
-              </motion.p>
+              </AnimatedText>
             </div>
           </motion.div>
 
@@ -226,16 +224,13 @@ export function Process() {
           <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] leading-[1.05] tracking-tight">
             Non una formula. Un sistema di decisioni.
           </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
+          <AnimatedText
+            delay={0.2}
             className="text-[#0D1218]/70 mt-5 leading-relaxed"
           >
             Ogni progetto viene affrontato con una sequenza chiara: capire,
             scegliere, costruire, misurare. Adattata al contesto.
-          </motion.p>
+          </AnimatedText>
         </div>
         <div className="flex flex-col gap-4">
           {steps.map((s, i) => (

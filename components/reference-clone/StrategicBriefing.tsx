@@ -4,6 +4,7 @@ import { useState, useMemo, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 type Intent = "ecommerce" | "formazione" | "speech";
 
@@ -118,15 +119,12 @@ export function StrategicBriefing() {
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
             Partiamo solo se c&apos;è materia per generare valore.
           </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, delay: 0.1 }}
+          <AnimatedText
+            delay={0.1}
             className="text-[#94A9BE] text-sm md:text-base leading-relaxed max-w-md mb-8"
           >
             Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto. Rispondo personalmente alle richieste coerenti con il perimetro di intervento.
-          </motion.p>
+          </AnimatedText>
 
           <div className="flex flex-col gap-1.5 text-sm">
             <span className="text-[#6A84A0] text-[11px] uppercase tracking-[0.12em]">Preferisci un contatto diretto?</span>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
+import { AnimatedText } from "./AnimatedText";
 
 const engagements = [
   {
@@ -54,15 +55,12 @@ export function Experience() {
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
             Cinque ambiti, un unico metodo.
           </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.9, delay: 0.12 }}
+          <AnimatedText
+            delay={0.12}
             className="text-[#94A9BE] max-w-xs md:text-right leading-relaxed shrink-0"
           >
             Consulenza, formazione, eventi: ogni contesto con il suo approccio, ogni decisione basata sui dati.
-          </motion.p>
+          </AnimatedText>
         </div>
 
         {/* Numbered rows */}
@@ -122,16 +120,13 @@ export function Experience() {
           >
             Il lavoro di consulenza e quello di docenza si alimentano a vicenda.
           </AnimatedHeadline>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
+          <AnimatedText
+            delay={0.2}
             className="text-[#94A9BE] mt-4 max-w-lg leading-relaxed"
           >
             Ogni caso reale diventa esempio per l&apos;aula. Ogni domanda in
             aula affina il modo di leggere i problemi in consulenza.
-          </motion.p>
+          </AnimatedText>
         </div>
       </div>
     </section>
