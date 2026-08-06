@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
 const audiences = [
   {
-    number: "01",
     label: "Imprenditori",
     intro: "Chi guida un'azienda e deve decidere in autonomia strategica.",
     bullets: [
@@ -18,7 +18,6 @@ const audiences = [
     ],
   },
   {
-    number: "02",
     label: "Responsabili e-commerce",
     intro: "Chi gestisce operativamente il canale e cerca un confronto senior.",
     bullets: [
@@ -29,7 +28,6 @@ const audiences = [
     ],
   },
   {
-    number: "03",
     label: "Enti formativi e docenti",
     intro: "Chi progetta percorsi e cerca contenuti verticali con casi reali.",
     bullets: [
@@ -42,40 +40,52 @@ const audiences = [
 ];
 
 export function Insights() {
+  // A ref on the grid triggers the sequential card animation only once the
+  // grid enters view, so all three cards enter one at a time with a stagger.
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridInView = useInView(gridRef, { once: true, amount: 0.2 });
+
   return (
     <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5">
       <div className="mx-auto max-w-[1240px]">
-        <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
-          Progetti diversi, un metodo condiviso.
-        </AnimatedHeadline>
-        <AnimatedText className="text-[#94A9BE] max-w-lg mb-12 md:mb-16 leading-relaxed" delay={0.1}>
-          Ogni contesto richiede uno sguardo dedicato, ma il modo di leggere i
-          problemi resta lo stesso.
-        </AnimatedText>
+        {/* Centered header */}
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
+            A chi mi rivolgo.
+          </AnimatedHeadline>
+          <AnimatedText
+            className="text-[#94A9BE] mt-5 leading-relaxed text-base md:text-lg mx-auto max-w-xl"
+            delay={0.1}
+          >
+            Tre profili ricorrenti nel mio lavoro. Se ti riconosci in uno di questi, probabilmente possiamo parlarci.
+          </AnimatedText>
+        </div>
 
-        {/* 3 vertical persona cards */}
-        <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+        {/* 3 vertical persona cards — enter one at a time */}
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-5 md:gap-6">
           {audiences.map((a, i) => (
             <motion.article
-              key={a.number}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.19, 1, 0.22, 1] }}
+              key={a.label}
+              initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+              animate={
+                gridInView
+                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                  : { opacity: 0, y: 30, filter: "blur(8px)" }
+              }
+              transition={{
+                duration: 0.85,
+                delay: i * 0.35,
+                ease: [0.19, 1, 0.22, 1],
+              }}
               className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
             >
-              {/* Number badge */}
-              <div className="flex items-start justify-between">
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#00e5ff] text-[#0D1218] text-sm font-semibold tabular-nums transition-shadow duration-500 group-hover:shadow-[0_0_16px_rgba(0,229,255,0.55)]">
-                  {a.number}
-                </span>
+              <div className="flex items-start justify-end">
                 <ArrowUpRight
                   size={20}
                   className="text-[#4F6577] group-hover:text-[#00e5ff] transition-all duration-500 group-hover:-rotate-45"
                 />
               </div>
 
-              {/* Label + intro */}
               <div>
                 <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-[1.15] mb-2">
                   {a.label}
@@ -83,10 +93,8 @@ export function Insights() {
                 <p className="text-[#94A9BE] text-sm leading-relaxed">{a.intro}</p>
               </div>
 
-              {/* Divider */}
               <div className="h-px bg-white/8" />
 
-              {/* Bullet list */}
               <ul className="flex flex-col gap-2.5">
                 {a.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2.5 text-[#DDE5EF] text-sm leading-snug">

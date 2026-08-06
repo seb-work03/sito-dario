@@ -11,9 +11,9 @@ import { AnimatedText } from "./AnimatedText";
 
 const services = [
   {
-    id: "advisory",
-    label: "Advisory",
-    href: "/servizi#advisory",
+    id: "consulente",
+    label: "Consulente",
+    href: "/servizi#consulente",
     photo: "orECDk1yHAceniWXq7yKvfvv7Y.jpg",
     bullets: [
       "Audit strategico e tecnologico",
@@ -64,14 +64,14 @@ export function Services() {
         </AnimatedText>
 
         <div className="grid md:grid-cols-[320px_1fr] gap-4 items-stretch">
-          {/* Left column: tabs */}
-          <div className="flex md:flex-col gap-2">
+          {/* Left column: tabs — evenly split to match the image height on md+ */}
+          <div className="flex md:flex-col gap-2 md:h-full">
             {services.map((s, i) => (
               <button
                 key={s.id}
                 onClick={() => setActive(i)}
                 className={cn(
-                  "group flex-1 md:flex-none text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
+                  "group flex-1 text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4 md:min-h-0",
                   active === i
                     ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
                     : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444] cursor-pointer",

@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
@@ -14,6 +15,10 @@ type Props = {
  * Section headline reveal. Splits the text into words, then staggers each
  * one from top with a blur that clears, giving a left-to-right sweep with
  * a single consistent "blur from above" style across the whole site.
+ *
+ * Also auto-inserts a <br/> after any word that ends in a period (except
+ * the very last word), so multi-sentence titles like "3 ambiti. Un'unica
+ * regia." break onto a new line after each period.
  */
 export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: Props) {
   const text = typeof children === "string" ? children : null;
@@ -62,16 +67,23 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
-      {words.map((w, i) => (
-        <motion.span
-          key={i}
-          variants={word}
-          style={{ display: "inline-block", whiteSpace: "pre" }}
-        >
-          {w}
-          {i < words.length - 1 ? " " : ""}
-        </motion.span>
-      ))}
+      {words.map((w, i) => {
+        const isLast = i === words.length - 1;
+        const endsSentence = /\.$/.test(w) && !isLast;
+        const trailingSpace = !isLast && !endsSentence ? " " : "";
+        return (
+          <Fragment key={i}>
+            <motion.span
+              variants={word}
+              style={{ display: "inline-block", whiteSpace: "pre" }}
+            >
+              {w}
+              {trailingSpace}
+            </motion.span>
+            {endsSentence && <br />}
+          </Fragment>
+        );
+      })}
     </Tag>
   );
 }

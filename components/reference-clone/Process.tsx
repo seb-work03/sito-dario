@@ -111,6 +111,64 @@ function ProcessCard({
   );
 }
 
+function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
+  // Card centres inside the play area (width = 2*CARD_W + GAP, height = 2*CARD_H + GAP).
+  //  card 0 → (CARD_W/2,                     CARD_H/2)
+  //  card 1 → (CARD_W + GAP + CARD_W/2,      CARD_H/2)
+  //  card 3 → (CARD_W + GAP + CARD_W/2,      CARD_H + GAP + CARD_H/2)
+  //  card 2 → (CARD_W/2,                     CARD_H + GAP + CARD_H/2)
+  const w = CARD_W * 2 + GAP;
+  const h = CARD_H * 2 + GAP;
+  const cx = { l: CARD_W / 2, r: CARD_W + GAP + CARD_W / 2 };
+  const cy = { t: CARD_H / 2, b: CARD_H + GAP + CARD_H / 2 };
+  const perimeter = `M ${cx.l} ${cy.t} L ${cx.r} ${cy.t} L ${cx.r} ${cy.b} L ${cx.l} ${cy.b} Z`;
+
+  return (
+    <motion.svg
+      className="absolute inset-0 pointer-events-none"
+      viewBox={`0 0 ${w} ${h}`}
+      style={{ opacity: progress }}
+      aria-hidden
+    >
+      {/* Perimeter line */}
+      <motion.path
+        d={perimeter}
+        fill="none"
+        stroke="#0D1218"
+        strokeOpacity="0.28"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeDasharray="6 10"
+        animate={{ strokeDashoffset: [0, -32] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+      />
+      {/* Corner glows at each card centre */}
+      {[
+        [cx.l, cy.t],
+        [cx.r, cy.t],
+        [cx.l, cy.b],
+        [cx.r, cy.b],
+      ].map(([x, y], i) => (
+        <motion.circle
+          key={i}
+          cx={x}
+          cy={y}
+          r="5"
+          fill="#0D1218"
+          animate={{ opacity: [0.4, 0.9, 0.4], scale: [1, 1.15, 1] }}
+          transition={{
+            duration: 2.4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.35,
+          }}
+          style={{ transformOrigin: `${x}px ${y}px` }}
+        />
+      ))}
+    </motion.svg>
+  );
+}
+
 export function Process() {
   const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -118,35 +176,37 @@ export function Process() {
     offset: ["start start", "end end"],
   });
 
-  // Sequential timeline (each phase happens after the previous one ends):
-  //   0.00 to 0.15  title + subtitle visible
-  //   0.15 to 0.25  title + subtitle fade out
-  //   0.25 to 0.35  cards fade in (still stacked in the centre)
-  //   0.35 to 0.75  cards fan out from stack to their final grid position
-  //   0.75 to 1.00  linger, everything holds before the pin releases
+  // Sequential timeline, all with explicit clamping so the values are
+  // pinned at the endpoints (including when scrollYProgress overshoots 1
+  // after the pin releases):
+  //   0.00 to 0.08  title + subtitle visible (short hold)
+  //   0.08 to 0.38  title + subtitle fade out slowly (30% of scroll, ease-in-out)
+  //   0.42 to 0.52  cards fade in
+  //   0.52 to 0.82  cards fan out from stack to grid
+  //   0.82 to 1.00  linger before the pin releases
   //
-  // Function-form useTransform with explicit clamping — once the fade
-  // completes, opacity is pinned to 0 no matter what scrollYProgress does
-  // (including going past 1 when the pin releases). Belt-and-suspenders
-  // with a `visibility: hidden` toggle so the header can never render
-  // pixels after it fades out.
+  // Ease-in-out for the header fade so it's not a linear ramp — the fade
+  // is gentlest at start and end, steepest in the middle, which reads much
+  // softer than a straight linear opacity drop.
+  const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
   const headerOpacity = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.15) return 1;
-    if (v >= 0.25) return 0;
-    return 1 - (v - 0.15) / 0.10;
+    if (v <= 0.08) return 1;
+    if (v >= 0.38) return 0;
+    const t = (v - 0.08) / 0.30;
+    return 1 - easeInOut(t);
   });
   const headerVisibility = useTransform(scrollYProgress, (v) =>
-    v >= 0.26 ? "hidden" : "visible",
+    v >= 0.40 ? "hidden" : "visible",
   );
   const cardsOpacity = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.25) return 0;
-    if (v >= 0.35) return 1;
-    return (v - 0.25) / 0.10;
+    if (v <= 0.42) return 0;
+    if (v >= 0.52) return 1;
+    return (v - 0.42) / 0.10;
   });
   const cardsProgress = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.35) return 0;
-    if (v >= 0.75) return 1;
-    return (v - 0.35) / 0.40;
+    if (v <= 0.52) return 0;
+    if (v >= 0.82) return 1;
+    return (v - 0.52) / 0.30;
   });
 
   return (
@@ -210,6 +270,11 @@ export function Process() {
               className="relative"
               style={{ width: CARD_W * 2 + GAP, height: CARD_H * 2 + GAP }}
             >
+              {/* Circuit line connecting the four card centres — sits behind
+                  the cards and shows through the gaps between them. Loops
+                  a moving dash pattern around the perimeter. */}
+              <ProcessCircuit progress={cardsProgress} />
+
               {steps.map((step, i) => (
                 <ProcessCard key={step.number} step={step} index={i} progress={cardsProgress} />
               ))}
