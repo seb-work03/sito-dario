@@ -8,6 +8,7 @@ import { Hero } from "@/components/reference-clone/Hero";
 import { TrustBar } from "@/components/reference-clone/TrustBar";
 import { About } from "@/components/reference-clone/About";
 import { Services } from "@/components/reference-clone/Services";
+import { Fit } from "@/components/reference-clone/Fit";
 import { Process } from "@/components/reference-clone/Process";
 import { Experience } from "@/components/reference-clone/Experience";
 import { Testimonials } from "@/components/reference-clone/Testimonials";
@@ -109,6 +110,7 @@ export default async function HomePage() {
         <TrustBar logos={partnerLogos} />
         <About />
         <Services />
+        <Fit />
         <Process />
         <Experience />
         <Testimonials />
