@@ -26,14 +26,14 @@ const intentOptions: { id: Intent; letter: string; title: string; sub: string; v
 
 const dimensionEcommerce = [
   { title: "Fino a 250k", sub: "Fatturato e-commerce annuo", value: "Fino a 250.000 €" },
-  { title: "250k — 1M", sub: "Fatturato e-commerce annuo", value: "Da 250.000 € a 1 milione" },
+  { title: "Da 250k a 1M", sub: "Fatturato e-commerce annuo", value: "Da 250.000 € a 1 milione" },
   { title: "Oltre 1M", sub: "Fatturato e-commerce annuo", value: "Oltre 1 milione" },
   { title: "In validazione", sub: "Business case già strutturato", value: "Progetto in fase di validazione" },
 ];
 
 const dimensionOther = [
   { title: "Intervento breve", sub: "Talk, keynote o workshop fino a 4 ore", value: "Intervento fino a 4 ore" },
-  { title: "Percorso 8—24 ore", sub: "Formazione verticale e operativa", value: "Percorso da 8 a 24 ore" },
+  { title: "Percorso da 8 a 24 ore", sub: "Formazione verticale e operativa", value: "Percorso da 8 a 24 ore" },
   { title: "Academy estesa", sub: "Programma oltre 24 ore", value: "Academy oltre 24 ore" },
   { title: "Da progettare", sub: "Serve una proposta su misura", value: "Da definire insieme" },
 ];

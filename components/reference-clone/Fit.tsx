@@ -21,7 +21,7 @@ export function Fit() {
             className="text-[#94A9BE] text-base md:text-lg leading-relaxed max-w-xl mx-auto mt-6"
           >
             Lavoro con chi cerca un metodo, non un fornitore. Ecco quando ha senso
-            parlarsi — e quando no.
+            parlarsi, e quando no.
           </motion.p>
         </div>
 

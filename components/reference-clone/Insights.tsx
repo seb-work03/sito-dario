@@ -60,7 +60,7 @@ export function Insights() {
           transition={{ duration: 0.9, delay: 0.1 }}
           className="text-[#94A9BE] max-w-lg mb-10 leading-relaxed"
         >
-          Ogni contesto richiede uno sguardo dedicato — ma il modo di leggere i
+          Ogni contesto richiede uno sguardo dedicato, ma il modo di leggere i
           problemi resta lo stesso.
         </motion.p>
 

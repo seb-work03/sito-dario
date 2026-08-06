@@ -8,7 +8,7 @@ import { AnimatedHeadline } from "./AnimatedHeadline";
 const faqs = [
   {
     q: "Come si svolge una consulenza tipo?",
-    a: "Parte da un primo confronto per capire il contesto. Poi si definisce l'attività — un audit, un affiancamento, una consulenza continuativa — con obiettivi chiari e tempi realistici. Ogni consulenza è personalizzata: non esistono format standard.",
+    a: "Parte da un primo confronto per capire il contesto. Poi si definisce l'attività, che può essere un audit, un affiancamento o una consulenza continuativa, con obiettivi chiari e tempi realistici. Ogni consulenza è personalizzata: non esistono format standard.",
   },
   {
     q: "Quanto costa una consulenza?",
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Qual è la differenza tra la tua consulenza e DT E-commerce Consulting?",
-    a: "Come consulente indipendente offro analisi, strategia, formazione e affiancamento. DT E-commerce Consulting — di cui sono cofondatore con Tiziana Tana — è la struttura operativa che sviluppa e gestisce i progetti e-commerce. Due ruoli complementari con obiettivi diversi.",
+    a: "Come consulente indipendente offro analisi, strategia, formazione e affiancamento. DT E-commerce Consulting, di cui sono cofondatore con Tiziana Tana, è la struttura operativa che sviluppa e gestisce i progetti e-commerce. Due ruoli complementari con obiettivi diversi.",
   },
   {
     q: "Lavori solo in italiano o anche all'estero?",
