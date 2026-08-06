@@ -123,9 +123,30 @@ export function Process() {
   //   0.25 to 0.35  cards fade in (still stacked in the centre)
   //   0.35 to 0.75  cards fan out from stack to their final grid position
   //   0.75 to 1.00  linger, everything holds before the pin releases
-  const headerOpacity = useTransform(scrollYProgress, [0.15, 0.25], [1, 0]);
-  const cardsOpacity = useTransform(scrollYProgress, [0.25, 0.35], [0, 1]);
-  const cardsProgress = useTransform(scrollYProgress, [0.35, 0.75], [0, 1]);
+  //
+  // Function-form useTransform with explicit clamping — once the fade
+  // completes, opacity is pinned to 0 no matter what scrollYProgress does
+  // (including going past 1 when the pin releases). Belt-and-suspenders
+  // with a `visibility: hidden` toggle so the header can never render
+  // pixels after it fades out.
+  const headerOpacity = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.15) return 1;
+    if (v >= 0.25) return 0;
+    return 1 - (v - 0.15) / 0.10;
+  });
+  const headerVisibility = useTransform(scrollYProgress, (v) =>
+    v >= 0.26 ? "hidden" : "visible",
+  );
+  const cardsOpacity = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.25) return 0;
+    if (v >= 0.35) return 1;
+    return (v - 0.25) / 0.10;
+  });
+  const cardsProgress = useTransform(scrollYProgress, (v) => {
+    if (v <= 0.35) return 0;
+    if (v >= 0.75) return 1;
+    return (v - 0.35) / 0.40;
+  });
 
   return (
     <section id="process" className="relative bg-[#00e5ff]">
@@ -161,8 +182,8 @@ export function Process() {
         <div className="sticky top-0 h-screen">
           {/* Centered header — visible first, fades out when cards enter */}
           <motion.div
-            style={{ opacity: headerOpacity }}
-            className="absolute inset-0 flex items-center justify-center px-5"
+            style={{ opacity: headerOpacity, visibility: headerVisibility }}
+            className="absolute inset-0 flex items-center justify-center px-5 pointer-events-none"
           >
             <div className="text-center max-w-3xl">
               <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
