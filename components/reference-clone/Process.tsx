@@ -118,10 +118,13 @@ export function Process() {
   });
 
   // Scroll timeline (clamped) inside the pin:
-  //   0.00 → 0.15  header appears (smooth reveal via AnimatedHeadline)
-  //   0.15 → 0.72  cards fan out from stack to spread
-  //   0.72 → 1.00  linger — everything holds before the pin releases
-  const cardsProgress = useTransform(scrollYProgress, [0.15, 0.72], [0, 1]);
+  //   0.00 to 0.12  header visible, cards hidden
+  //   0.12 to 0.22  header fades out, cards fade in (crossfade)
+  //   0.22 to 0.75  cards fan out from stack to spread
+  //   0.75 to 1.00  linger, everything holds before the pin releases
+  const headerOpacity = useTransform(scrollYProgress, [0.12, 0.22], [1, 0]);
+  const cardsOpacity = useTransform(scrollYProgress, [0.12, 0.22], [0, 1]);
+  const cardsProgress = useTransform(scrollYProgress, [0.22, 0.75], [0, 1]);
 
   return (
     <section id="process" className="relative bg-[#00e5ff]">
@@ -149,30 +152,40 @@ export function Process() {
         }}
       />
 
-      {/* Desktop pin: header + cards live inside the sticky area
-          Track 240vh, sticky 100vh → 140vh of scroll to spend on header
-          entry, card fan-out, and the closing linger. */}
+      {/* Desktop pin: header and cards are both absolutely centered inside
+          the sticky area and cross-fade — first the header shows, then it
+          fades out as the cards fade in and fan out.
+          Track 240vh, sticky 100vh → 140vh of scroll for the whole story. */}
       <div className="hidden md:block relative z-10" ref={trackRef} style={{ height: "240vh" }}>
-        <div className="sticky top-0 h-screen flex flex-col items-center px-5 pt-16 md:pt-20">
-          {/* Centered header — appears smoothly when the pin starts */}
-          <div className="text-center max-w-3xl mx-auto">
-            <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
-              Non una formula. Un sistema di decisioni.
-            </AnimatedHeadline>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.9, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
-              className="text-[#0D1218]/70 max-w-xl mx-auto mt-5 leading-relaxed"
-            >
-              Ogni progetto viene affrontato con una sequenza chiara: capire,
-              scegliere, costruire, misurare. Adattata al contesto.
-            </motion.p>
-          </div>
+        <div className="sticky top-0 h-screen">
+          {/* Centered header — visible first, fades out when cards enter */}
+          <motion.div
+            style={{ opacity: headerOpacity }}
+            className="absolute inset-0 flex items-center justify-center px-5"
+          >
+            <div className="text-center max-w-3xl">
+              <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
+                Non una formula. Un sistema di decisioni.
+              </AnimatedHeadline>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.9, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
+                className="text-[#0D1218]/70 max-w-xl mx-auto mt-5 leading-relaxed"
+              >
+                Ogni progetto viene affrontato con una sequenza chiara: capire,
+                scegliere, costruire, misurare. Adattata al contesto.
+              </motion.p>
+            </div>
+          </motion.div>
 
-          {/* Cards play area — fills remaining space, cards fan out here */}
-          <div className="flex-1 w-full flex items-center justify-center min-h-0">
+          {/* Cards play area — absolutely centered, cross-fades in as the
+              header fades out, then fans out from the centre. */}
+          <motion.div
+            style={{ opacity: cardsOpacity }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
             <div
               className="relative"
               style={{ width: CARD_W * 2 + GAP, height: CARD_H * 2 + GAP }}
@@ -181,7 +194,7 @@ export function Process() {
                 <ProcessCard key={step.number} step={step} index={i} progress={cardsProgress} />
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
