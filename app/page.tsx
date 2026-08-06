@@ -12,7 +12,7 @@ import { Fit } from "@/components/reference-clone/Fit";
 import { Process } from "@/components/reference-clone/Process";
 import { Experience } from "@/components/reference-clone/Experience";
 import { Testimonials } from "@/components/reference-clone/Testimonials";
-import { Insights } from "@/components/reference-clone/Insights";
+import { LatestArticles } from "@/components/reference-clone/LatestArticles";
 import { Faq } from "@/components/reference-clone/Faq";
 import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefing";
 import { AccentCta } from "@/components/reference-clone/AccentCta";
@@ -114,7 +114,7 @@ export default async function HomePage() {
         <Process />
         <Experience />
         <Testimonials />
-        <Insights />
+        <LatestArticles />
         <Faq />
         <StrategicBriefing />
         <AccentCta />
