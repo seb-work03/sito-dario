@@ -117,14 +117,15 @@ export function Process() {
     offset: ["start start", "end end"],
   });
 
-  // Scroll timeline (clamped) inside the pin:
-  //   0.00 to 0.12  header visible, cards hidden
-  //   0.12 to 0.22  header fades out, cards fade in (crossfade)
-  //   0.22 to 0.75  cards fan out from stack to spread
+  // Sequential timeline (each phase happens after the previous one ends):
+  //   0.00 to 0.15  title + subtitle visible
+  //   0.15 to 0.25  title + subtitle fade out
+  //   0.25 to 0.35  cards fade in (still stacked in the centre)
+  //   0.35 to 0.75  cards fan out from stack to their final grid position
   //   0.75 to 1.00  linger, everything holds before the pin releases
-  const headerOpacity = useTransform(scrollYProgress, [0.12, 0.22], [1, 0]);
-  const cardsOpacity = useTransform(scrollYProgress, [0.12, 0.22], [0, 1]);
-  const cardsProgress = useTransform(scrollYProgress, [0.22, 0.75], [0, 1]);
+  const headerOpacity = useTransform(scrollYProgress, [0.15, 0.25], [1, 0]);
+  const cardsOpacity = useTransform(scrollYProgress, [0.25, 0.35], [0, 1]);
+  const cardsProgress = useTransform(scrollYProgress, [0.35, 0.75], [0, 1]);
 
   return (
     <section id="process" className="relative bg-[#00e5ff]">
