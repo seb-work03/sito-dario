@@ -74,7 +74,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-              className="flex flex-col gap-2 md:gap-3"
+              className="flex flex-col gap-2 md:gap-3 w-[120px] md:w-auto"
             >
               <h2 className="text-white font-bold text-[18px] sm:text-[22px] md:text-[36px] leading-[1.15] tracking-tight">
                 Consulente<br />
@@ -89,7 +89,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
             </motion.div>
 
             {/* Spacer for portrait */}
-            <div className="w-[clamp(180px,30vw,270px)] md:w-[clamp(230px,22vw,350px)] shrink-0" aria-hidden="true" />
+            <div className="w-[270px] md:w-[clamp(230px,22vw,350px)] shrink-0" aria-hidden="true" />
 
             {/* Right: punchy headline */}
             <motion.p
@@ -110,7 +110,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[clamp(180px,30vw,270px)] md:w-[clamp(230px,22vw,350px)] aspect-[650/1080] pointer-events-none"
+          className="absolute z-20 left-[65%] -translate-x-1/2 md:left-1/2 bottom-0 w-[270px] md:w-[clamp(230px,22vw,350px)] aspect-[650/1080] pointer-events-none"
         >
           <Image
             src={portrait}

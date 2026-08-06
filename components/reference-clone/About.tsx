@@ -5,7 +5,6 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useMotionValueEvent,
   useScroll,
   useSpring,
   useTransform,
@@ -43,28 +42,32 @@ function FillWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
-  const [filled, setFilled] = useState(false);
+  // Purely driven by scroll progress (useTransform clamps at the edges), so
+  // the effect reverses — words empty out again — when scrolling back up.
   const opacity = useTransform(progress, range, [0.18, 1]);
   const color = useTransform(progress, range, ["#4F6577", "#EDF2F7"]);
-
-  // Once a word is filled it stays filled forever, regardless of scroll
-  // direction — no fade-out when scrolling back up.
-  useMotionValueEvent(progress, "change", (latest) => {
-    if (latest >= range[1] && !filled) setFilled(true);
-  });
-
-  if (filled) {
-    return <span style={{ color: "#EDF2F7", opacity: 1 }}>{children}</span>;
-  }
   return <motion.span style={{ opacity, color }}>{children}</motion.span>;
 }
 
-function FillHeadline({ words, progress }: { words: string[]; progress: MotionValue<number> }) {
+function FillHeadline({
+  words,
+  progress,
+  fillEnd = 1,
+  className = "",
+}: {
+  words: string[];
+  progress: MotionValue<number>;
+  fillEnd?: number;
+  className?: string;
+}) {
   return (
-    <h2 className="text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(18px,2.1vw,30px)] max-w-[560px] mb-[70px]">
+    <h2 className={`text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(20px,5.5vw,30px)] max-w-[560px] ${className}`}>
       {words.map((word, i) => {
-        const start = (i / words.length) * 1.0;
-        const end = ((i + 1) / words.length) * 1.0;
+        // Words finish filling by `fillEnd` of the scroll; the rest of the
+        // scroll (fillEnd → 1) is a hold, so the headline lingers before
+        // the pin releases.
+        const start = (i / words.length) * fillEnd;
+        const end = ((i + 1) / words.length) * fillEnd;
         return (
           <Fragment key={i}>
             <FillWord progress={progress} range={[start, end]}>
@@ -75,6 +78,27 @@ function FillHeadline({ words, progress }: { words: string[]; progress: MotionVa
         );
       })}
     </h2>
+  );
+}
+
+/**
+ * Mobile-only self-contained pin for the fill headline. Mirrors the desktop
+ * behaviour (fill on scroll down, empty on scroll up, linger at the end)
+ * using its own tall track + sticky, since the whole About block can't be
+ * pinned on small screens.
+ */
+function MobileFillHeadline({ words }: { words: string[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  return (
+    <div ref={ref} className="relative h-[170vh]">
+      <div className="sticky top-[32vh]">
+        <FillHeadline words={words} progress={scrollYProgress} fillEnd={0.62} />
+      </div>
+    </div>
   );
 }
 
@@ -100,7 +124,7 @@ export function About() {
   const words = introText.split(" ");
 
   return (
-    <div id="about-us" ref={pinRef} className="relative md:h-[160vh] bg-[#0D1218]">
+    <div id="about-us" ref={pinRef} className="relative md:h-[200vh] bg-[#0D1218]">
       <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-center">
         <section className="w-full pt-10 md:pt-8 pb-14 md:pb-8">
           <div className="mx-auto max-w-[1180px] px-5">
@@ -135,7 +159,19 @@ export function About() {
 
               {/* Right column: headline on top + [buildings | cta+chart] below */}
               <div className="md:col-start-2 flex flex-col gap-6 md:gap-8">
-                <FillHeadline words={words} progress={scrollYProgress} />
+                {/* Desktop: fill driven by the big About pin */}
+                <div className="hidden md:block">
+                  <FillHeadline
+                    words={words}
+                    progress={scrollYProgress}
+                    fillEnd={0.62}
+                    className="mb-[70px]"
+                  />
+                </div>
+                {/* Mobile: self-contained pin so the effect matches desktop */}
+                <div className="md:hidden">
+                  <MobileFillHeadline words={words} />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 md:items-end">
                   {/* Buildings photo */}
