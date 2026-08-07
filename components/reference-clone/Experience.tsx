@@ -45,7 +45,7 @@ const engagements = [
 export function Experience() {
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
-      <div className="mx-auto max-w-[1240px]">
+      <div className="mx-auto max-w-[1240px] md:w-4/5">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
             Dove posso esserti utile.
@@ -54,7 +54,7 @@ export function Experience() {
             delay={0.12}
             className="text-[#dddddd] max-w-xs md:text-right leading-relaxed shrink-0"
           >
-            Cinque modi in cui lavoro con aziende, team ed enti formativi. Ogni contesto ha il suo approccio.
+            5 modi in cui lavoro con aziende, team ed enti formativi.
           </AnimatedText>
         </div>
 
