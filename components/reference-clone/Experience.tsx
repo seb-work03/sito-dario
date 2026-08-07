@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
@@ -37,122 +38,18 @@ const engagements = [
   },
 ];
 
-/** One entry: alternating left/right editorial spread, with a giant cyan
- *  number that breaks the horizontal separator line above the row. */
-function Entry({
-  number,
-  title,
-  description,
-  align,
-  isLast,
-}: {
-  number: string;
-  title: string;
-  description: string;
-  align: "left" | "right";
-  isLast: boolean;
-}) {
-  const contentLeft = align === "left";
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-      className="relative"
-    >
-      {/* Vertical timeline segment that connects to the next row (desktop only) */}
-      {!isLast && (
-        <div
-          aria-hidden
-          className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full h-14 w-px bg-gradient-to-b from-[#00e5ff]/40 via-[#00e5ff]/15 to-transparent"
-        />
-      )}
-
-      {/* Desktop: 2-column editorial layout */}
-      <div className="hidden md:grid md:grid-cols-2 md:items-center md:gap-16 md:py-14 relative">
-        {/* Content side */}
-        <div className={contentLeft ? "md:order-1 md:pr-12" : "md:order-2 md:pl-12"}>
-          <div className="flex items-baseline gap-4 mb-4">
-            <span
-              aria-hidden
-              className="h-px w-10 bg-[#00e5ff]/60 shrink-0 translate-y-[-6px]"
-            />
-            <span className="text-[#00e5ff] text-[11px] uppercase tracking-[0.2em] font-medium">
-              {`Ambito ${parseInt(number, 10)}`}
-            </span>
-          </div>
-          <h3 className="text-[#EDF2F7] text-[28px] lg:text-[36px] font-medium tracking-tight leading-[1.15] mb-4">
-            {title}
-          </h3>
-          <p className="text-[#dddddd] text-[15px] lg:text-base leading-relaxed max-w-[92%]">
-            {description}
-          </p>
-        </div>
-
-        {/* Giant number side */}
-        <div className={contentLeft ? "md:order-2" : "md:order-1"}>
-          <div
-            className={
-              "relative flex items-center " +
-              (contentLeft ? "justify-start md:justify-end" : "justify-end md:justify-start")
-            }
-          >
-            <span
-              className="font-bold tabular-nums leading-none tracking-[-0.08em] select-none"
-              style={{
-                fontSize: "clamp(9rem, 15vw, 15rem)",
-                background:
-                  "linear-gradient(180deg, #00e5ff 0%, rgba(0,229,255,0.35) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {number}
-            </span>
-            {/* Soft cyan bloom behind the number */}
-            <div
-              aria-hidden
-              className="absolute inset-0 -z-10 pointer-events-none opacity-70 blur-3xl"
-              style={{
-                background:
-                  "radial-gradient(closest-side, rgba(0,229,255,0.22), transparent 70%)",
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile: compact stacked layout */}
-      <div className="md:hidden flex items-start gap-5 py-8">
-        <span
-          className="font-bold tabular-nums leading-none tracking-[-0.06em] text-[64px] shrink-0"
-          style={{
-            background: "linear-gradient(180deg, #00e5ff 0%, rgba(0,229,255,0.4) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          {number}
-        </span>
-        <div>
-          <h3 className="text-[#EDF2F7] text-lg font-medium tracking-tight leading-[1.25] mb-2">
-            {title}
-          </h3>
-          <p className="text-[#dddddd] text-[15px] leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export function Experience() {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  // The line fills while the timeline block is between center-viewport and
+  // its end passes center-viewport: reads naturally as "scroll = fill".
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 70%", "end 40%"],
+  });
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
-    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25 overflow-hidden">
+    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] md:w-4/5">
         {/* Centered header */}
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
@@ -167,18 +64,58 @@ export function Experience() {
           </AnimatedText>
         </div>
 
-        {/* Editorial rows — alternating sides, timeline connector between them */}
-        <div className="divide-y divide-white/[0.06] md:divide-y-0">
-          {engagements.map((e, i) => (
-            <Entry
-              key={e.number}
-              number={e.number}
-              title={e.title}
-              description={e.description}
-              align={i % 2 === 0 ? "left" : "right"}
-              isLast={i === engagements.length - 1}
-            />
-          ))}
+        {/* Timeline rail */}
+        <div ref={timelineRef} className="relative">
+          {/* Base rail (dim) — sits behind the fill */}
+          <div
+            aria-hidden
+            className="absolute top-0 bottom-0 left-[28px] md:left-[70px] w-px bg-white/8"
+          />
+          {/* Fill rail — grows with scroll */}
+          <motion.div
+            aria-hidden
+            style={{ height: lineHeight }}
+            className="absolute top-0 left-[28px] md:left-[70px] w-px bg-gradient-to-b from-[#00e5ff] via-[#00e5ff] to-[#00e5ff]/70 shadow-[0_0_16px_rgba(0,229,255,0.65)]"
+          />
+
+          {/* Rows */}
+          <ul className="flex flex-col">
+            {engagements.map((e, i) => (
+              <motion.li
+                key={e.number}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+                className="relative grid grid-cols-[56px_1fr] md:grid-cols-[140px_1fr] gap-x-5 md:gap-x-14 pl-0 py-10 md:py-14"
+              >
+                {/* Left column: number + node dot */}
+                <div className="relative flex justify-start md:justify-end">
+                  {/* Node dot centered on the rail */}
+                  <span
+                    aria-hidden
+                    className="absolute left-[28px] md:left-[70px] top-[10px] -translate-x-1/2 w-3 h-3 rounded-full bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.65)] ring-4 ring-[#0D1218]"
+                  />
+                  {/* Number */}
+                  <span className="text-[#00e5ff] font-bold tabular-nums leading-none tracking-tight text-[40px] md:text-[80px] ml-0 md:ml-0 pl-14 md:pl-0 md:pr-6">
+                    {e.number}
+                  </span>
+                </div>
+
+                {/* Right column: title + description */}
+                <div className="pt-1 md:pt-4">
+                  <h3 className="text-[#EDF2F7] text-xl md:text-[32px] font-medium tracking-tight leading-[1.2] mb-3">
+                    {e.title}
+                  </h3>
+                  <p className="text-[#dddddd] text-[15px] md:text-base leading-relaxed max-w-[92%] md:max-w-[80%]">
+                    {e.description}
+                  </p>
+                </div>
+                {/* Suppress unused var warning */}
+                <span className="hidden" data-index={i} />
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
