@@ -61,19 +61,6 @@ export function StrategicBriefing() {
     [values.intent],
   );
 
-  function goNext() {
-    setError(null);
-    if (step === 1 && !values.intent) {
-      setError("Seleziona un'opzione per continuare.");
-      return;
-    }
-    if (step === 2 && !values.dimension) {
-      setError("Seleziona un'opzione per continuare.");
-      return;
-    }
-    setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  }
-
   function goPrev() {
     setError(null);
     setStep((s) => Math.max(s - 1, 1));
@@ -214,9 +201,10 @@ export function StrategicBriefing() {
                           sub={opt.sub}
                           checked={values.intent === opt.id}
                           onSelect={() => {
-                            // Reset dimension when intent changes
+                            // Reset dimension when intent changes, then auto-advance
                             setValues((v) => ({ ...v, intent: opt.id, dimension: "" }));
                             setError(null);
+                            setStep(2);
                           }}
                         />
                       ))}
@@ -254,6 +242,7 @@ export function StrategicBriefing() {
                           onSelect={() => {
                             setValues((v) => ({ ...v, dimension: opt.value }));
                             setError(null);
+                            setStep(3);
                           }}
                         />
                       ))}
@@ -368,16 +357,7 @@ export function StrategicBriefing() {
                 </button>
 
                 {step < TOTAL_STEPS ? (
-                  <button
-                    type="button"
-                    onClick={goNext}
-                    className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
-                  >
-                    Continua
-                    <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
-                      <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
-                    </span>
-                  </button>
+                  <span aria-hidden />
                 ) : (
                   <button
                     type="submit"
