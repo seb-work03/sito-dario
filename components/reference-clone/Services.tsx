@@ -66,15 +66,33 @@ export function Services() {
           </AnimatedText>
         </div>
 
+        {/* Mobile: compact pill tabs on top */}
+        <div className="flex md:hidden gap-2 mb-4 overflow-x-auto scrollbar-none -mx-5 px-5 pb-1">
+          {services.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => setActive(i)}
+              className={cn(
+                "shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap",
+                active === i
+                  ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
+                  : "bg-[#17222F] text-[#EDF2F7] border border-[#253444] cursor-pointer",
+              )}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
         <div className="grid md:grid-cols-[320px_1fr] gap-4 items-stretch">
-          {/* Left column: tabs — evenly split to match the image height on md+ */}
-          <div className="flex md:flex-col gap-2 md:h-full">
+          {/* Left column tabs — desktop only */}
+          <div className="hidden md:flex md:flex-col gap-2 md:h-full">
             {services.map((s, i) => (
               <button
                 key={s.id}
                 onClick={() => setActive(i)}
                 className={cn(
-                  "group flex-1 text-left px-6 py-5 rounded-xl text-lg md:text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4 md:min-h-0",
+                  "group flex-1 text-left px-6 py-5 rounded-xl text-xl font-medium transition-all duration-500 flex items-center justify-between gap-4",
                   active === i
                     ? "bg-[#00e5ff] text-[#0D1218] cursor-default"
                     : "bg-[#17222F] hover:bg-[#1D2B3A] text-[#EDF2F7] border border-[#253444] cursor-pointer",
@@ -98,7 +116,7 @@ export function Services() {
           </div>
 
           {/* Right column: image + bullet card overlay */}
-          <div className="relative rounded-2xl overflow-hidden bg-[#17222F] border border-[#253444] min-h-[380px] md:min-h-[440px]">
+          <div className="relative rounded-2xl overflow-hidden bg-[#17222F] border border-[#253444] min-h-[480px] md:min-h-[440px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}

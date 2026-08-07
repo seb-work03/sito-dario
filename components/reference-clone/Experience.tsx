@@ -46,13 +46,13 @@ export function Experience() {
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] md:w-4/5">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
-          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
+        <div className="text-center max-w-3xl mx-auto mb-14 md:mb-16">
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
             Dove posso esserti utile.
           </AnimatedHeadline>
           <AnimatedText
             delay={0.12}
-            className="text-[#dddddd] max-w-xs md:text-right leading-relaxed shrink-0"
+            className="text-[#dddddd] leading-relaxed mt-5 max-w-[80%] mx-auto"
           >
             5 modi in cui lavoro con aziende, team ed enti formativi.
           </AnimatedText>
@@ -67,31 +67,21 @@ export function Experience() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8, delay: i * 0.07, ease: [0.19, 1, 0.22, 1] }}
-              className="group grid grid-cols-[48px_1fr] md:grid-cols-[96px_1fr] gap-x-5 md:gap-x-10 py-8 md:py-10 items-start"
+              className="group grid grid-cols-[48px_1fr] md:grid-cols-[96px_1fr] gap-x-5 md:gap-x-10 py-8 md:py-10 items-center"
             >
               {/* Number */}
-              <span className="text-[#00e5ff] font-bold text-[32px] md:text-[56px] tabular-nums leading-none mt-1 transition-opacity duration-300 group-hover:opacity-70">
+              <span className="text-[#00e5ff] font-bold text-[32px] md:text-[56px] tabular-nums leading-none transition-opacity duration-300 group-hover:opacity-70">
                 {e.number}
               </span>
 
-              {/* Title + description + tags */}
+              {/* Title + description */}
               <div>
                 <h3 className="text-[#EDF2F7] text-lg md:text-[28px] font-medium tracking-tight leading-[1.25] mb-2 group-hover:text-white transition-colors duration-300">
                   {e.title}
                 </h3>
-                <p className="text-[#dddddd] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
+                <p className="text-[#dddddd] text-[15px] md:text-base leading-relaxed max-w-[80%]">
                   {e.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {e.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[10px] uppercase tracking-[0.12em] text-[#dddddd] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/40 group-hover:text-white"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
               </div>
             </motion.div>
           ))}

@@ -193,13 +193,13 @@ export function About() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 md:items-end">
-                  {/* Buildings photo */}
+                  {/* Buildings photo — desktop only */}
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-                    className="relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
+                    className="hidden md:block relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
                     style={{ aspectRatio: "0.85" }}
                   >
                     <Image
@@ -207,13 +207,14 @@ export function About() {
                       alt="[FOTO DARIO AL LAVORO DA INSERIRE]"
                       fill
                       className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
-                      sizes="(max-width: 768px) 100vw, 33vw"
+                      sizes="33vw"
                     />
                   </motion.div>
 
                   {/* CTA + chart card */}
                   <div className="flex flex-col gap-[18px]">
-                    <div className="flex md:justify-end mb-[40px]">
+                    {/* CTA — desktop only */}
+                    <div className="hidden md:flex md:justify-end mb-[40px]">
                       <motion.a
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}

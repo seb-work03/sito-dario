@@ -25,10 +25,10 @@ export function AccentCta() {
         </AnimatedHeadline>
 
         <motion.a
-          initial={{ opacity: 0, y: -14, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 0.7, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
           href="/contatti"
           className="group inline-flex items-center gap-2 rounded-full bg-[#0D1218] text-[#00e5ff] font-medium pl-6 pr-2 py-2 text-[16px] transition-all duration-500 hover:shadow-[0_0_32px_rgba(13,18,24,0.4)]"
         >

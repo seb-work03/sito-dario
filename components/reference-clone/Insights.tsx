@@ -65,15 +65,15 @@ export function Insights() {
           {audiences.map((a, i) => (
             <motion.article
               key={a.label}
-              initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+              initial={{ opacity: 0, y: 24 }}
               animate={
                 gridInView
-                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                  : { opacity: 0, y: 30, filter: "blur(8px)" }
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 24 }
               }
               transition={{
-                duration: 0.85,
-                delay: i * 0.35,
+                duration: 0.7,
+                delay: i * 0.18,
                 ease: [0.19, 1, 0.22, 1],
               }}
               className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"

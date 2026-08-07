@@ -62,10 +62,10 @@ export function Footer() {
               Hai un progetto e-commerce, un problema, o una decisione da prendere?
             </motion.h2>
             <motion.a
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
               href="/contatti"
               className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)] mb-10"
             >
