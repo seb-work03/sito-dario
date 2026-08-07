@@ -109,8 +109,6 @@ export function StrategicBriefing() {
     setError(null);
   }
 
-  const progress = done ? 100 : (step / TOTAL_STEPS) * 100;
-
   return (
     <section id="briefing" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-16 items-start">
@@ -178,24 +176,14 @@ export function StrategicBriefing() {
             style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
           />
           <div
-            className="relative rounded-[calc(1rem-1px)] bg-[#17222F]/95 backdrop-blur-md p-6 md:p-10 min-h-[560px] overflow-hidden"
+            className="relative rounded-[calc(1rem-1px)] bg-[#17222F] p-6 md:p-10 min-h-[560px] overflow-hidden"
           >
-          {/* Progress bar */}
-          <div className="absolute left-0 top-0 right-0 h-[2px] bg-white/10">
-            <motion.div
-              className="h-full bg-[#00e5ff]"
-              initial={{ width: "33.33%" }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-            />
-          </div>
-
           {/* Meta row */}
           <div className="flex justify-between items-center gap-3 mb-8 md:mb-12 pt-2">
-            <p className="text-[#93A6BB] text-[10px] md:text-[11px] uppercase tracking-[0.12em]">
+            <p className="text-[#dddddd] text-[10px] md:text-[11px] uppercase tracking-[0.12em]">
               Briefing strategico
             </p>
-            <p className="text-[#93A6BB] text-[10px] md:text-[11px] uppercase tracking-[0.12em] tabular-nums">
+            <p className="text-[#dddddd] text-[10px] md:text-[11px] uppercase tracking-[0.12em] tabular-nums">
               {done ? "Completato" : `Step ${step} / ${TOTAL_STEPS}`}
             </p>
           </div>
@@ -429,7 +417,7 @@ export function StrategicBriefing() {
             </motion.div>
           )}
 
-          <p className="text-[#4F6577] text-[11px] mt-6 border-t border-white/8 pt-4">
+          <p className="text-[#dddddd] text-[11px] mt-6 border-t border-white/8 pt-4">
             Tempo medio di compilazione: 90 secondi · Nessuna newsletter automatica.
           </p>
           </div>
