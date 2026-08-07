@@ -151,14 +151,35 @@ export function StrategicBriefing() {
           </div>
         </div>
 
-        {/* Right: form panel */}
+        {/* Right: form panel with animated rotating cyan border */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          className="relative rounded-2xl border border-white/8 bg-[#17222F]/85 backdrop-blur-md p-6 md:p-10 min-h-[560px] overflow-hidden"
+          className="relative rounded-2xl p-[1.5px] overflow-hidden isolate"
         >
+          {/* Rotating cyan sweep — sits behind the inner card, its edge
+              shows through the 1.5px padding as an animated border. */}
+          <span
+            aria-hidden
+            className="absolute -inset-[100%] -z-10 pointer-events-none"
+            style={{
+              background:
+                "conic-gradient(from 0deg, transparent 0deg, transparent 200deg, rgba(0,229,255,0.85) 300deg, #00e5ff 340deg, transparent 360deg)",
+              animation: "refborderspin 4s linear infinite",
+            }}
+          />
+          {/* Dim base ring so the border is visible even when the sweep is
+              on the far side of the card. */}
+          <span
+            aria-hidden
+            className="absolute inset-0 -z-10 rounded-2xl pointer-events-none"
+            style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
+          />
+          <div
+            className="relative rounded-[calc(1rem-1px)] bg-[#17222F]/95 backdrop-blur-md p-6 md:p-10 min-h-[560px] overflow-hidden"
+          >
           {/* Progress bar */}
           <div className="absolute left-0 top-0 right-0 h-[2px] bg-white/10">
             <motion.div
@@ -411,6 +432,7 @@ export function StrategicBriefing() {
           <p className="text-[#4F6577] text-[11px] mt-6 border-t border-white/8 pt-4">
             Tempo medio di compilazione: 90 secondi · Nessuna newsletter automatica.
           </p>
+          </div>
         </motion.div>
       </div>
     </section>
