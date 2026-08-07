@@ -106,7 +106,7 @@ function ProcessCard({
           {step.icon}
         </div>
       </div>
-      <p className="text-[#93A6BB] text-sm leading-relaxed">{step.description}</p>
+      <p className="text-[#dddddd] text-sm leading-relaxed">{step.description}</p>
     </motion.div>
   );
 }
@@ -321,7 +321,7 @@ export function Process() {
                   {s.icon}
                 </div>
               </div>
-              <p className="text-[#93A6BB] text-sm leading-relaxed">{s.description}</p>
+              <p className="text-[#dddddd] text-sm leading-relaxed">{s.description}</p>
             </motion.div>
           ))}
         </div>

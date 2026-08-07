@@ -22,10 +22,30 @@ import { Footer } from "@/components/reference-clone/Footer";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Dario Tana — Consulente e docente e-commerce",
+  title: "Dario Tana — Consulenza e-commerce a Rimini | Consulente e docente e-commerce",
   description:
-    "Consulenza e formazione e-commerce indipendenti. Aiuto aziende, imprenditori e responsabili e-commerce a prendere decisioni più consapevoli. Oltre vent'anni di esperienza diretta.",
-  robots: { index: false, follow: false },
+    "Consulenza e-commerce indipendente a Rimini per aziende, imprenditori e e-commerce manager. Oltre vent'anni di esperienza diretta in strategia, piattaforme e formazione. Consulenza e-commerce Rimini, docenza e formazione su misura.",
+  keywords: [
+    "consulenza e-commerce",
+    "consulenza e-commerce Rimini",
+    "consulente e-commerce Rimini",
+    "e-commerce manager",
+    "e-commerce Rimini",
+    "formazione e-commerce",
+    "docente e-commerce",
+    "Dario Tana",
+  ],
+  authors: [{ name: "Dario Tana", url: "https://dariotana.it" }],
+  openGraph: {
+    title: "Dario Tana — Consulenza e-commerce a Rimini",
+    description:
+      "Consulenza e-commerce indipendente per imprenditori e e-commerce manager. Rimini. Oltre vent'anni di esperienza sul campo.",
+    url: "https://dariotana.it",
+    siteName: "Dario Tana",
+    locale: "it_IT",
+    type: "website",
+  },
+  robots: { index: true, follow: true },
 };
 
 async function getHeroPortraitUrl(): Promise<string | null> {

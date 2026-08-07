@@ -112,7 +112,7 @@ export function StrategicBriefing() {
   const progress = done ? 100 : (step / TOTAL_STEPS) * 100;
 
   return (
-    <section id="briefing" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section id="briefing" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-16 items-start">
         {/* Left: intro */}
         <div className="md:sticky md:top-[130px] self-start">
@@ -121,7 +121,7 @@ export function StrategicBriefing() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.1}
-            className="text-[#B8C7D9] text-sm md:text-base leading-relaxed max-w-md mb-8"
+            className="text-[#dddddd] text-sm md:text-base leading-relaxed max-w-md mb-8"
           >
             Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto. Rispondo personalmente alle richieste coerenti con il perimetro di intervento.
           </AnimatedText>
@@ -287,7 +287,7 @@ export function StrategicBriefing() {
                         autoComplete="organization-title"
                       />
                       <label className="flex flex-col gap-1.5 sm:col-span-2">
-                        <span className="text-[#B8C7D9] text-[11px] uppercase tracking-[0.1em]">
+                        <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.1em]">
                           Contesto e obiettivo *
                         </span>
                         <textarea
@@ -316,7 +316,7 @@ export function StrategicBriefing() {
                         onChange={(e) => setValues((s) => ({ ...s, privacy: e.target.checked }))}
                         className="sr-only"
                       />
-                      <span className="text-[#B8C7D9] text-xs leading-relaxed">
+                      <span className="text-[#dddddd] text-xs leading-relaxed">
                         Ho letto l&apos;informativa privacy e autorizzo il trattamento dei dati per essere ricontattato.
                       </span>
                     </label>
@@ -336,7 +336,7 @@ export function StrategicBriefing() {
                 <button
                   type="button"
                   onClick={goPrev}
-                  className={`group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#B8C7D9] hover:text-[#EDF2F7] transition-colors ${
+                  className={`group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#dddddd] hover:text-[#EDF2F7] transition-colors ${
                     step === 1 ? "invisible" : ""
                   }`}
                 >
@@ -381,7 +381,7 @@ export function StrategicBriefing() {
               <h3 className="text-[#EDF2F7] text-2xl md:text-3xl font-medium tracking-tight">
                 Briefing ricevuto.
               </h3>
-              <p className="text-[#B8C7D9] max-w-md leading-relaxed">
+              <p className="text-[#dddddd] max-w-md leading-relaxed">
                 Grazie per il tempo che hai dedicato. Ti ricontatterò personalmente in uno o due giorni lavorativi.
               </p>
               <button
@@ -435,7 +435,7 @@ function ChoiceCard({
       {letter && (
         <span
           className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold tabular-nums transition-colors ${
-            checked ? "bg-[#00e5ff] text-[#0D1218]" : "bg-white/5 text-[#B8C7D9] group-hover:text-[#EDF2F7]"
+            checked ? "bg-[#00e5ff] text-[#0D1218]" : "bg-white/5 text-[#dddddd] group-hover:text-[#EDF2F7]"
           }`}
         >
           {letter}
@@ -447,7 +447,7 @@ function ChoiceCard({
       </span>
       <span
         className={`shrink-0 transition-colors text-lg ${
-          checked ? "text-[#00e5ff]" : "text-[#4F6577] group-hover:text-[#B8C7D9]"
+          checked ? "text-[#00e5ff]" : "text-[#4F6577] group-hover:text-[#dddddd]"
         }`}
       >
         ↗
@@ -473,7 +473,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[#B8C7D9] text-[11px] uppercase tracking-[0.1em]">{label}</span>
+      <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.1em]">{label}</span>
       <input
         type={type}
         value={value}

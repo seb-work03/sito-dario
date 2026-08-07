@@ -41,7 +41,7 @@ export async function LatestArticles() {
   return (
     <section
       id="blog"
-      className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5"
+      className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-[#00e5ff]/25"
     >
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
@@ -49,9 +49,8 @@ export async function LatestArticles() {
             <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
               Gli ultimi articoli.
             </AnimatedHeadline>
-            <AnimatedText className="text-[#B8C7D9] max-w-lg leading-relaxed" delay={0.1}>
-              Analisi, riflessioni e casi reali dal mondo dell&apos;e-commerce.
-              Aggiornati man mano che pubblico.
+            <AnimatedText className="text-[#dddddd] max-w-lg leading-relaxed" delay={0.1}>
+              Analisi, riflessioni e casi reali sulla consulenza e-commerce, aggiornati periodicamente con nuovi articoli.
             </AnimatedText>
           </div>
           <Link

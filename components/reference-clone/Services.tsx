@@ -54,15 +54,17 @@ export function Services() {
   const current = services[active];
 
   return (
-    <section id="service" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section id="service" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
-        <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
-          3 ambiti. Un&apos;unica regia.
-        </AnimatedHeadline>
-        <AnimatedText className="text-[#B8C7D9] max-w-lg mb-10 leading-relaxed" delay={0.1}>
-          Strategia, trasferimento di competenze e divulgazione. Ogni intervento
-          parte dal contesto reale e arriva a decisioni misurabili.
-        </AnimatedText>
+        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-end mb-10 md:mb-14">
+          <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
+            3 ambiti. Un&apos;unica regia.
+          </AnimatedHeadline>
+          <AnimatedText className="text-[#dddddd] leading-relaxed" delay={0.1}>
+            Strategia, trasferimento di competenze e divulgazione. Ogni intervento
+            parte dal contesto reale e arriva a decisioni misurabili.
+          </AnimatedText>
+        </div>
 
         <div className="grid md:grid-cols-[320px_1fr] gap-4 items-stretch">
           {/* Left column: tabs — evenly split to match the image height on md+ */}
@@ -84,7 +86,7 @@ export function Services() {
                   transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                   className={cn(
                     "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#B8C7D9]",
+                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#dddddd]",
                   )}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

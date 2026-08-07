@@ -282,7 +282,7 @@ function GoogleReviewsCard() {
             ))}
           </div>
         </div>
-        <span className="text-[#B8C7D9] text-[13px] leading-tight">
+        <span className="text-[#dddddd] text-[13px] leading-tight">
           Google · <AnimatedNumber value={200} suffix="+" /> Recensioni
         </span>
         <a

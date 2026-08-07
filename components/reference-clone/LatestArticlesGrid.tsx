@@ -78,7 +78,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
 
               {/* Excerpt */}
               {item.excerpt && (
-                <p className="text-[#B8C7D9] text-sm leading-relaxed flex-1">
+                <p className="text-[#dddddd] text-sm leading-relaxed flex-1">
                   {item.excerpt}
                 </p>
               )}

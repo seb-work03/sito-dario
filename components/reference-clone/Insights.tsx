@@ -4,7 +4,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
-import { HoverArrow } from "./HoverArrow";
 
 const audiences = [
   {
@@ -46,15 +45,15 @@ export function Insights() {
   const gridInView = useInView(gridRef, { once: true, amount: 0.2 });
 
   return (
-    <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-white/5">
+    <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
         {/* Centered header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
-            A chi mi rivolgo.
+            A chi mi rivolgo
           </AnimatedHeadline>
           <AnimatedText
-            className="text-[#B8C7D9] mt-5 leading-relaxed text-base md:text-lg mx-auto max-w-xl"
+            className="text-[#dddddd] mt-5 leading-relaxed text-base md:text-lg mx-auto max-w-xl"
             delay={0.1}
           >
             Tre profili ricorrenti nel mio lavoro. Se ti riconosci in uno di questi, probabilmente possiamo parlarci.
@@ -79,15 +78,11 @@ export function Insights() {
               }}
               className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
             >
-              <div className="flex items-start justify-end text-[#4F6577] group-hover:text-[#00e5ff] transition-colors duration-500">
-                <HoverArrow size={20} />
-              </div>
-
               <div>
                 <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-[1.15] mb-2">
                   {a.label}
                 </h3>
-                <p className="text-[#B8C7D9] text-sm leading-relaxed">{a.intro}</p>
+                <p className="text-[#dddddd] text-sm leading-relaxed">{a.intro}</p>
               </div>
 
               <div className="h-px bg-white/8" />

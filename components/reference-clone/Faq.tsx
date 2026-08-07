@@ -37,7 +37,7 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section id="faq" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[380px_1fr] gap-12 md:gap-24">
         <div className="md:sticky md:top-[130px] self-start">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
@@ -103,7 +103,7 @@ export function Faq() {
                       transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="pb-6 pr-12 text-[#B8C7D9] leading-relaxed">
+                      <p className="pb-6 pr-12 text-[#dddddd] leading-relaxed">
                         {f.a}
                       </p>
                     </motion.div>

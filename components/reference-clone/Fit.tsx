@@ -7,16 +7,16 @@ import { AnimatedText } from "./AnimatedText";
 
 export function Fit() {
   return (
-    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1120px]">
-        {/* Two-column intro: title left, description right */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-end mb-14 md:mb-20">
+        {/* Centered intro: title on top, description below */}
+        <div className="text-center max-w-3xl mx-auto mb-14 md:mb-20">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
             Se cerchi un semplice esecutore, sei nel posto sbagliato.
           </AnimatedHeadline>
           <AnimatedText
             delay={0.15}
-            className="text-[#B8C7D9] text-base md:text-lg leading-relaxed"
+            className="text-[#dddddd] text-base md:text-lg leading-relaxed mt-6 max-w-xl mx-auto"
           >
             Lavoro con chi cerca un metodo, non un fornitore. Ecco quando ha senso
             parlarsi, e quando no.
@@ -49,7 +49,7 @@ export function Fit() {
             <h3 className="relative text-[#EDF2F7] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
               Questo spazio non è per te se…
             </h3>
-            <p className="relative text-[#B8C7D9] text-[15px] md:text-base leading-relaxed">
+            <p className="relative text-[#dddddd] text-[15px] md:text-base leading-relaxed">
               Cerchi un esecutore per progetti amatoriali, hai un business senza
               budget di marketing, insegui formule magiche o vuoi un webmaster
               tuttofare a cui delegare problemi mai davvero analizzati.
@@ -80,7 +80,7 @@ export function Fit() {
             <h3 className="relative text-[#EDF2F7] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
               Questo spazio è per te se…
             </h3>
-            <p className="relative text-[#B8C7D9] text-[15px] md:text-base leading-relaxed">
+            <p className="relative text-[#dddddd] text-[15px] md:text-base leading-relaxed">
               Guidi una PMI con un&apos;infrastruttura da scalare, vuoi rendere
               autonomo il tuo team interno o cerchi contenuti di formazione ed
               eventi con un impatto pratico misurabile.

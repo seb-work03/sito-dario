@@ -49,7 +49,7 @@ const engagements = [
 
 export function Experience() {
   return (
-    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-white/5">
+    <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
@@ -57,7 +57,7 @@ export function Experience() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.12}
-            className="text-[#B8C7D9] max-w-xs md:text-right leading-relaxed shrink-0"
+            className="text-[#dddddd] max-w-xs md:text-right leading-relaxed shrink-0"
           >
             Consulenza, formazione, eventi: ogni contesto con il suo approccio, ogni decisione basata sui dati.
           </AnimatedText>
@@ -84,14 +84,14 @@ export function Experience() {
                 <h3 className="text-[#EDF2F7] text-xl md:text-[28px] font-medium tracking-tight leading-[1.2] mb-2 group-hover:text-white transition-colors duration-300">
                   {e.title}
                 </h3>
-                <p className="text-[#B8C7D9] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
+                <p className="text-[#dddddd] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
                   {e.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {e.tags.map((t) => (
                     <span
                       key={t}
-                      className="text-[10px] uppercase tracking-[0.12em] text-[#93A6BB] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/30 group-hover:text-[#B8C7D9]"
+                      className="text-[10px] uppercase tracking-[0.12em] text-[#93A6BB] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/30 group-hover:text-[#dddddd]"
                     >
                       {t}
                     </span>
@@ -112,22 +112,6 @@ export function Experience() {
           ))}
         </div>
 
-        {/* Note */}
-        <div className="mt-16 md:mt-24 border-t border-white/8 pt-12 md:pt-14">
-          <AnimatedHeadline
-            as="h3"
-            className="text-[#EDF2F7] font-medium text-[26px] md:text-[38px] tracking-tight max-w-2xl leading-[1.2]"
-          >
-            Il lavoro di consulenza e quello di docenza si alimentano a vicenda.
-          </AnimatedHeadline>
-          <AnimatedText
-            delay={0.2}
-            className="text-[#B8C7D9] mt-4 max-w-lg leading-relaxed"
-          >
-            Ogni caso reale diventa esempio per l&apos;aula. Ogni domanda in
-            aula affina il modo di leggere i problemi in consulenza.
-          </AnimatedText>
-        </div>
       </div>
     </section>
   );

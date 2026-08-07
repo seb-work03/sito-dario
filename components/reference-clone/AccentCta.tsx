@@ -17,12 +17,6 @@ export function AccentCta() {
       }}
     >
       <div className="mx-auto max-w-[1240px] text-center flex flex-col items-center gap-8">
-        <AnimatedText
-          className="text-[#0D1218]/60 text-xs uppercase tracking-[0.2em]"
-        >
-          Inizia da qui
-        </AnimatedText>
-
         <AnimatedHeadline
           delay={0.1}
           className="text-[#0D1218] font-medium text-[32px] md:text-[56px] leading-[1.05] tracking-tight max-w-3xl text-balance"
