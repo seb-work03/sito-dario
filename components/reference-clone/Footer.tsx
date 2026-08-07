@@ -95,17 +95,17 @@ export function Footer() {
 
           <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 shrink-0">
             <ul className="flex flex-col gap-3">
-              <li className="text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-2">Menu</li>
+              <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-2">Menu</li>
               {navLinks.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="text-[#C1CEDF] hover:text-[#00e5ff] transition-colors duration-300 text-sm">
+                  <a href={l.href} className="text-white hover:text-[#00e5ff] transition-colors duration-300 text-sm">
                     {l.label}
                   </a>
                 </li>
               ))}
             </ul>
             <ul className="flex flex-col gap-4">
-              <li className="text-xs uppercase tracking-[0.15em] text-[#4F6577] mb-1">Contatti</li>
+              <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-1">Contatti</li>
               {contacts.map((c) => (
                 <li key={c.label}>
                   <a
@@ -116,8 +116,8 @@ export function Footer() {
                   >
                     <span className="text-[#00e5ff] mt-0.5 shrink-0">{c.icon}</span>
                     <span className="flex flex-col leading-tight">
-                      <span className="text-[#4F6577] text-[11px] uppercase tracking-[0.12em]">{c.label}</span>
-                      <span className="text-[#C1CEDF] group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5">
+                      <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.12em]">{c.label}</span>
+                      <span className="text-white group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5">
                         {c.value}
                       </span>
                     </span>
@@ -143,16 +143,16 @@ export function Footer() {
           </motion.p>
         </div>
 
-        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#4F6577] text-xs">
+        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#dddddd] text-xs">
           <span>
             2026 ©{" "}
-            <a href="https://dariotana.it/" className="hover:text-[#dddddd] transition-colors">Dario Tana</a>
+            <a href="https://dariotana.it/" className="text-white hover:text-[#00e5ff] transition-colors">Dario Tana</a>
             , Tutti i diritti sono riservati. P.Iva: 04018390403
           </span>
           <div className="flex items-center gap-6">
-            <a href="/privacy" className="hover:text-[#dddddd] transition-colors">Privacy</a>
-            <a href="/cookie" className="hover:text-[#dddddd] transition-colors">Cookie</a>
-            <a href="/note-legali" className="hover:text-[#dddddd] transition-colors">Note legali</a>
+            <a href="/privacy" className="hover:text-[#00e5ff] transition-colors">Privacy</a>
+            <a href="/cookie" className="hover:text-[#00e5ff] transition-colors">Cookie</a>
+            <a href="/note-legali" className="hover:text-[#00e5ff] transition-colors">Note legali</a>
           </div>
         </div>
       </div>

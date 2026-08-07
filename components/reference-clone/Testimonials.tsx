@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
-const testimonials = [
+const allTestimonials = [
   {
     text: "Competenze vere su Magento ed e-commerce, trasmesse senza mai annoiare, tra esempi concreti e battute al momento giusto. Quello che mi ha colpito di più è la sua capacità di gestire ogni tipo di cliente, trovando sempre la soluzione innovativa che non ti aspetti. Un percorso che mi ha dato strumenti concreti e un modo diverso di pensare al lavoro.",
     author: "Laura D.",
@@ -44,7 +44,24 @@ function Stars() {
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const current = testimonials[index];
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // On mobile skip the first (longest) review so the card doesn't overflow.
+  const testimonials = isMobile ? allTestimonials.slice(1) : allTestimonials;
+
+  useEffect(() => {
+    if (index >= testimonials.length) setIndex(0);
+  }, [testimonials.length, index]);
+
+  const current = testimonials[index] ?? testimonials[0];
   const prev = () => { setDirection(-1); setIndex((i) => (i - 1 + testimonials.length) % testimonials.length); };
   const next = () => { setDirection(1); setIndex((i) => (i + 1) % testimonials.length); };
 

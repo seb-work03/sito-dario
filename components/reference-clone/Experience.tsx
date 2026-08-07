@@ -7,43 +7,38 @@ import { AnimatedText } from "./AnimatedText";
 const engagements = [
   {
     number: "01",
-    title: "Docenza in master ed executive program",
+    title: "Insegno e-commerce in aula",
     description:
-      "Interventi in percorsi universitari e post-laurea. E-commerce raccontato attraverso casi reali, dati verificabili e decisioni prese sul campo.",
-    tags: ["Master", "Executive", "Università"],
-    stat: { value: "50+", label: "edizioni" },
+      "Lezioni in master, corsi ITS e percorsi post-diploma. Porto in aula casi veri e numeri veri, non slide riciclate. Le persone escono con idee chiare su come funziona davvero un e-commerce.",
+    tags: ["Master", "ITS", "Università"],
   },
   {
     number: "02",
-    title: "Consulenza a imprenditori e founder",
+    title: "Affianco imprenditori nelle scelte importanti",
     description:
-      "Affiancamento a chi deve decidere direzioni strategiche: piattaforma, canali, priorità di investimento, valutazione di fornitori.",
+      "Quando serve decidere quale piattaforma usare, dove investire o quale fornitore scegliere, mi siedo accanto all'imprenditore e ragioniamo insieme. Nessuna soluzione preconfezionata.",
     tags: ["PMI", "Strategia", "Audit"],
-    stat: { value: "20+", label: "anni" },
   },
   {
     number: "03",
-    title: "Supporto ai responsabili e-commerce",
+    title: "Sono il consulente esterno degli e-commerce manager",
     description:
-      "Un confronto senior indipendente per e-commerce manager, marketing manager e digital manager alle prese con decisioni difficili.",
-    tags: ["Manager", "Mentoring", "Advisory"],
-    stat: { value: "30+", label: "clienti" },
+      "Chi gestisce l'e-commerce dentro un'azienda ha spesso bisogno di un confronto senior indipendente. Sono la persona con cui parlare quando le decisioni sono difficili e serve una seconda opinione onesta.",
+    tags: ["Manager", "Confronto", "Indipendenza"],
   },
   {
     number: "04",
-    title: "Formazione aziendale continuativa",
+    title: "Formo team aziendali dall'interno",
     description:
-      "Percorsi tarati sul team interno: dai fondamenti operativi alle scelte strategiche, con esercitazioni sui casi dell'azienda.",
+      "Percorsi costruiti sull'azienda che ho davanti: si parte dalle basi operative e si arriva alle scelte strategiche, con esercitazioni sui casi reali del team.",
     tags: ["Corporate", "In-house", "Workshop"],
-    stat: { value: "4.9★", label: "rating" },
   },
   {
     number: "05",
-    title: "Interventi in eventi e conferenze",
+    title: "Intervengo in eventi e conferenze",
     description:
-      "Keynote e talk per organizzatori di eventi, enti di categoria, associazioni e community verticali dell'e-commerce.",
+      "Keynote, talk e panel per eventi, associazioni di categoria e community verticali. Contenuti pratici, non teoria astratta.",
     tags: ["Keynote", "Panel", "Fiere"],
-    stat: { value: "100+", label: "talk" },
   },
 ];
 
@@ -53,18 +48,18 @@ export function Experience() {
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight max-w-2xl">
-            Cinque ambiti, un unico metodo.
+            Dove posso esserti utile.
           </AnimatedHeadline>
           <AnimatedText
             delay={0.12}
             className="text-[#dddddd] max-w-xs md:text-right leading-relaxed shrink-0"
           >
-            Consulenza, formazione, eventi: ogni contesto con il suo approccio, ogni decisione basata sui dati.
+            Cinque modi in cui lavoro con aziende, team ed enti formativi. Ogni contesto ha il suo approccio.
           </AnimatedText>
         </div>
 
         {/* Numbered rows */}
-        <div className="divide-y divide-white/[0.06]">
+        <div className="divide-y divide-white/[0.08]">
           {engagements.map((e, i) => (
             <motion.div
               key={e.number}
@@ -72,16 +67,16 @@ export function Experience() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8, delay: i * 0.07, ease: [0.19, 1, 0.22, 1] }}
-              className="group grid grid-cols-[56px_1fr] md:grid-cols-[96px_1fr_160px] gap-x-6 md:gap-x-10 py-9 md:py-10 items-start md:items-center"
+              className="group grid grid-cols-[48px_1fr] md:grid-cols-[96px_1fr] gap-x-5 md:gap-x-10 py-8 md:py-10 items-start"
             >
               {/* Number */}
-              <span className="text-[#00e5ff] font-bold text-[40px] md:text-[56px] tabular-nums leading-none mt-1 transition-opacity duration-300 group-hover:opacity-70">
+              <span className="text-[#00e5ff] font-bold text-[32px] md:text-[56px] tabular-nums leading-none mt-1 transition-opacity duration-300 group-hover:opacity-70">
                 {e.number}
               </span>
 
               {/* Title + description + tags */}
               <div>
-                <h3 className="text-[#EDF2F7] text-xl md:text-[28px] font-medium tracking-tight leading-[1.2] mb-2 group-hover:text-white transition-colors duration-300">
+                <h3 className="text-[#EDF2F7] text-lg md:text-[28px] font-medium tracking-tight leading-[1.25] mb-2 group-hover:text-white transition-colors duration-300">
                   {e.title}
                 </h3>
                 <p className="text-[#dddddd] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
@@ -91,27 +86,16 @@ export function Experience() {
                   {e.tags.map((t) => (
                     <span
                       key={t}
-                      className="text-[10px] uppercase tracking-[0.12em] text-[#93A6BB] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/30 group-hover:text-[#dddddd]"
+                      className="text-[10px] uppercase tracking-[0.12em] text-[#dddddd] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/40 group-hover:text-white"
                     >
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
-
-              {/* Stat — desktop only, right column */}
-              <div className="hidden md:flex flex-col items-end gap-0.5 shrink-0">
-                <span className="text-[#EDF2F7] text-3xl font-semibold tabular-nums tracking-tight">
-                  {e.stat.value}
-                </span>
-                <span className="text-[#93A6BB] text-xs uppercase tracking-widest">
-                  {e.stat.label}
-                </span>
-              </div>
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

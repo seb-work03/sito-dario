@@ -2,7 +2,7 @@
 
 import { useState, useMemo, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Mail, Phone } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
@@ -126,13 +126,27 @@ export function StrategicBriefing() {
             Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto. Rispondo personalmente alle richieste coerenti con il perimetro di intervento.
           </AnimatedText>
 
-          <div className="flex flex-col gap-1.5 text-sm">
-            <span className="text-[#93A6BB] text-[11px] uppercase tracking-[0.12em]">Preferisci un contatto diretto?</span>
-            <a href="mailto:info@dariotana.it" className="text-[#EDF2F7] hover:text-[#00e5ff] transition-colors">
-              info@dariotana.it ↗
+          <div className="flex flex-col gap-3 text-sm">
+            <span className="text-white text-[11px] uppercase tracking-[0.12em] font-medium">
+              Preferisci un contatto diretto?
+            </span>
+            <a
+              href="mailto:info@dariotana.it"
+              className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
+            >
+              <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
+                <Mail size={14} strokeWidth={1.75} />
+              </span>
+              info@dariotana.it
             </a>
-            <a href="tel:+393487830571" className="text-[#EDF2F7] hover:text-[#00e5ff] transition-colors">
-              +39 348 783 0571 ↗
+            <a
+              href="tel:+393487830571"
+              className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
+            >
+              <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
+                <Phone size={14} strokeWidth={1.75} />
+              </span>
+              +39 348 783 0571
             </a>
           </div>
         </div>
