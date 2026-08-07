@@ -6,6 +6,8 @@ import { ArticleListItem } from "@/components/blog/ArticleListItem";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Blog — Dario Tana",
 };

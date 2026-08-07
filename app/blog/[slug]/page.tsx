@@ -9,6 +9,8 @@ import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 async function getArticle(slug: string) {
   return db.query.articles.findFirst({
     where: and(eq(articles.slug, slug), eq(articles.status, "published")),

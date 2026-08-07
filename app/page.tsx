@@ -19,6 +19,8 @@ import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefin
 import { AccentCta } from "@/components/reference-clone/AccentCta";
 import { Footer } from "@/components/reference-clone/Footer";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Dario Tana — Consulente e docente e-commerce",
   description:

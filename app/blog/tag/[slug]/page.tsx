@@ -6,6 +6,8 @@ import { ArticleListItem } from "@/components/blog/ArticleListItem";
 import { db } from "@/lib/db";
 import { articleTags, articles, tags } from "@/lib/db/schema";
 
+export const dynamic = "force-dynamic";
+
 export default async function TagArchivePage({
   params,
 }: {

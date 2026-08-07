@@ -7,6 +7,8 @@ import { ArticleListItem } from "@/components/blog/ArticleListItem";
 import { db } from "@/lib/db";
 import { articles, authors } from "@/lib/db/schema";
 
+export const dynamic = "force-dynamic";
+
 export default async function AuthorArchivePage({
   params,
 }: {
