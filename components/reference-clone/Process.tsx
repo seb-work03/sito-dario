@@ -106,7 +106,7 @@ function ProcessCard({
           {step.icon}
         </div>
       </div>
-      <p className="text-[#6A84A0] text-sm leading-relaxed">{step.description}</p>
+      <p className="text-[#93A6BB] text-sm leading-relaxed">{step.description}</p>
     </motion.div>
   );
 }
@@ -135,11 +135,11 @@ function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
         d={perimeter}
         fill="none"
         stroke="#0D1218"
-        strokeOpacity="0.28"
-        strokeWidth="1.5"
+        strokeOpacity="0.75"
+        strokeWidth="2.5"
         strokeLinecap="round"
-        strokeDasharray="6 10"
-        animate={{ strokeDashoffset: [0, -32] }}
+        strokeDasharray="8 12"
+        animate={{ strokeDashoffset: [0, -40] }}
         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
       />
       {/* Corner glows at each card centre */}
@@ -153,9 +153,9 @@ function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
           key={i}
           cx={x}
           cy={y}
-          r="5"
+          r="6"
           fill="#0D1218"
-          animate={{ opacity: [0.4, 0.9, 0.4], scale: [1, 1.15, 1] }}
+          animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.2, 1] }}
           transition={{
             duration: 2.4,
             repeat: Infinity,
@@ -205,8 +205,8 @@ export function Process() {
   });
   const cardsProgress = useTransform(scrollYProgress, (v) => {
     if (v <= 0.52) return 0;
-    if (v >= 0.82) return 1;
-    return (v - 0.52) / 0.30;
+    if (v >= 0.70) return 1;
+    return (v - 0.52) / 0.18;
   });
 
   return (
@@ -239,7 +239,7 @@ export function Process() {
           the sticky area and cross-fade — first the header shows, then it
           fades out as the cards fade in and fan out.
           Track 240vh, sticky 100vh → 140vh of scroll for the whole story. */}
-      <div className="hidden md:block relative z-10" ref={trackRef} style={{ height: "240vh" }}>
+      <div className="hidden md:block relative z-10" ref={trackRef} style={{ height: "300vh" }}>
         <div className="sticky top-0 h-screen">
           {/* Centered header — visible first, fades out when cards enter */}
           <motion.div
@@ -252,10 +252,14 @@ export function Process() {
               </AnimatedHeadline>
               <AnimatedText
                 delay={0.25}
-                className="text-[#0D1218]/70 max-w-xl mx-auto mt-5 leading-relaxed"
+                className="text-[#0D1218]/80 mx-auto mt-5 leading-relaxed"
               >
-                Ogni progetto viene affrontato con una sequenza chiara: capire,
-                scegliere, costruire, misurare. Adattata al contesto.
+                <>
+                  Ogni progetto viene affrontato con una sequenza chiara: capire, scegliere, costruire, misurare.
+                  <br />
+                  <br />
+                  <strong className="font-semibold text-[#0D1218]">Adattata al contesto.</strong>
+                </>
               </AnimatedText>
             </div>
           </motion.div>
@@ -291,10 +295,14 @@ export function Process() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.2}
-            className="text-[#0D1218]/70 mt-5 leading-relaxed"
+            className="text-[#0D1218]/80 mt-5 leading-relaxed"
           >
-            Ogni progetto viene affrontato con una sequenza chiara: capire,
-            scegliere, costruire, misurare. Adattata al contesto.
+            <>
+              Ogni progetto viene affrontato con una sequenza chiara: capire, scegliere, costruire, misurare.
+              <br />
+              <br />
+              <strong className="font-semibold text-[#0D1218]">Adattata al contesto.</strong>
+            </>
           </AnimatedText>
         </div>
         <div className="flex flex-col gap-4">
@@ -313,7 +321,7 @@ export function Process() {
                   {s.icon}
                 </div>
               </div>
-              <p className="text-[#6A84A0] text-sm leading-relaxed">{s.description}</p>
+              <p className="text-[#93A6BB] text-sm leading-relaxed">{s.description}</p>
             </motion.div>
           ))}
         </div>

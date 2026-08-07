@@ -65,7 +65,7 @@ export function Footer() {
                   target={s.href.startsWith("http") ? "_blank" : undefined}
                   rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#94A9BE] hover:text-[#00e5ff] transition-all duration-300"
+                  className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#B8C7D9] hover:text-[#00e5ff] transition-all duration-300"
                 >
                   {s.icon}
                 </a>
@@ -121,9 +121,9 @@ export function Footer() {
           <span>© {year} Dario Tana &nbsp;·&nbsp; P.IVA [DA INSERIRE]</span>
           <span>Cofondatore DT E-commerce Consulting</span>
           <div className="flex items-center gap-6">
-            <a href="/privacy" className="hover:text-[#94A9BE] transition-colors">Privacy</a>
-            <a href="/cookie" className="hover:text-[#94A9BE] transition-colors">Cookie</a>
-            <a href="/note-legali" className="hover:text-[#94A9BE] transition-colors">Note legali</a>
+            <a href="/privacy" className="hover:text-[#B8C7D9] transition-colors">Privacy</a>
+            <a href="/cookie" className="hover:text-[#B8C7D9] transition-colors">Cookie</a>
+            <a href="/note-legali" className="hover:text-[#B8C7D9] transition-colors">Note legali</a>
           </div>
         </div>
       </div>

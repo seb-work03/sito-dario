@@ -121,13 +121,13 @@ export function StrategicBriefing() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.1}
-            className="text-[#94A9BE] text-sm md:text-base leading-relaxed max-w-md mb-8"
+            className="text-[#B8C7D9] text-sm md:text-base leading-relaxed max-w-md mb-8"
           >
             Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto. Rispondo personalmente alle richieste coerenti con il perimetro di intervento.
           </AnimatedText>
 
           <div className="flex flex-col gap-1.5 text-sm">
-            <span className="text-[#6A84A0] text-[11px] uppercase tracking-[0.12em]">Preferisci un contatto diretto?</span>
+            <span className="text-[#93A6BB] text-[11px] uppercase tracking-[0.12em]">Preferisci un contatto diretto?</span>
             <a href="mailto:info@dariotana.it" className="text-[#EDF2F7] hover:text-[#00e5ff] transition-colors">
               info@dariotana.it ↗
             </a>
@@ -157,10 +157,10 @@ export function StrategicBriefing() {
 
           {/* Meta row */}
           <div className="flex justify-between items-center gap-3 mb-8 md:mb-12 pt-2">
-            <p className="text-[#6A84A0] text-[10px] md:text-[11px] uppercase tracking-[0.12em]">
+            <p className="text-[#93A6BB] text-[10px] md:text-[11px] uppercase tracking-[0.12em]">
               Briefing strategico
             </p>
-            <p className="text-[#6A84A0] text-[10px] md:text-[11px] uppercase tracking-[0.12em] tabular-nums">
+            <p className="text-[#93A6BB] text-[10px] md:text-[11px] uppercase tracking-[0.12em] tabular-nums">
               {done ? "Completato" : `Step ${step} / ${TOTAL_STEPS}`}
             </p>
           </div>
@@ -181,7 +181,7 @@ export function StrategicBriefing() {
                     <legend className="text-[#EDF2F7] text-[24px] md:text-[32px] font-medium tracking-tight leading-[1.15] mb-3">
                       Qual è il tuo obiettivo principale?
                     </legend>
-                    <p className="text-[#6A84A0] text-sm mb-7">Scegli l&apos;area più vicina alla richiesta.</p>
+                    <p className="text-[#93A6BB] text-sm mb-7">Scegli l&apos;area più vicina alla richiesta.</p>
                     <div className="flex flex-col gap-3">
                       {intentOptions.map((opt) => (
                         <ChoiceCard
@@ -215,7 +215,7 @@ export function StrategicBriefing() {
                         ? "Qual è la dimensione attuale del progetto?"
                         : "Che tipo di intervento stai organizzando?"}
                     </legend>
-                    <p className="text-[#6A84A0] text-sm mb-7">
+                    <p className="text-[#93A6BB] text-sm mb-7">
                       {values.intent === "ecommerce"
                         ? "Dato indicativo, utile per valutare complessità e priorità."
                         : "Seleziona il formato più vicino alle tue esigenze."}
@@ -250,7 +250,7 @@ export function StrategicBriefing() {
                     <legend className="text-[#EDF2F7] text-[24px] md:text-[32px] font-medium tracking-tight leading-[1.15] mb-3">
                       Chi guiderà questo progetto?
                     </legend>
-                    <p className="text-[#6A84A0] text-sm mb-7">
+                    <p className="text-[#93A6BB] text-sm mb-7">
                       I campi aziendali aiutano a contestualizzare la richiesta.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -287,7 +287,7 @@ export function StrategicBriefing() {
                         autoComplete="organization-title"
                       />
                       <label className="flex flex-col gap-1.5 sm:col-span-2">
-                        <span className="text-[#94A9BE] text-[11px] uppercase tracking-[0.1em]">
+                        <span className="text-[#B8C7D9] text-[11px] uppercase tracking-[0.1em]">
                           Contesto e obiettivo *
                         </span>
                         <textarea
@@ -316,7 +316,7 @@ export function StrategicBriefing() {
                         onChange={(e) => setValues((s) => ({ ...s, privacy: e.target.checked }))}
                         className="sr-only"
                       />
-                      <span className="text-[#94A9BE] text-xs leading-relaxed">
+                      <span className="text-[#B8C7D9] text-xs leading-relaxed">
                         Ho letto l&apos;informativa privacy e autorizzo il trattamento dei dati per essere ricontattato.
                       </span>
                     </label>
@@ -336,7 +336,7 @@ export function StrategicBriefing() {
                 <button
                   type="button"
                   onClick={goPrev}
-                  className={`group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#94A9BE] hover:text-[#EDF2F7] transition-colors ${
+                  className={`group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#B8C7D9] hover:text-[#EDF2F7] transition-colors ${
                     step === 1 ? "invisible" : ""
                   }`}
                 >
@@ -381,7 +381,7 @@ export function StrategicBriefing() {
               <h3 className="text-[#EDF2F7] text-2xl md:text-3xl font-medium tracking-tight">
                 Briefing ricevuto.
               </h3>
-              <p className="text-[#94A9BE] max-w-md leading-relaxed">
+              <p className="text-[#B8C7D9] max-w-md leading-relaxed">
                 Grazie per il tempo che hai dedicato. Ti ricontatterò personalmente in uno o due giorni lavorativi.
               </p>
               <button
@@ -435,7 +435,7 @@ function ChoiceCard({
       {letter && (
         <span
           className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold tabular-nums transition-colors ${
-            checked ? "bg-[#00e5ff] text-[#0D1218]" : "bg-white/5 text-[#94A9BE] group-hover:text-[#EDF2F7]"
+            checked ? "bg-[#00e5ff] text-[#0D1218]" : "bg-white/5 text-[#B8C7D9] group-hover:text-[#EDF2F7]"
           }`}
         >
           {letter}
@@ -443,11 +443,11 @@ function ChoiceCard({
       )}
       <span className="flex flex-col min-w-0">
         <strong className="text-[#EDF2F7] text-base font-medium tracking-tight leading-tight">{title}</strong>
-        <small className="text-[#6A84A0] text-xs leading-tight mt-0.5">{sub}</small>
+        <small className="text-[#93A6BB] text-xs leading-tight mt-0.5">{sub}</small>
       </span>
       <span
         className={`shrink-0 transition-colors text-lg ${
-          checked ? "text-[#00e5ff]" : "text-[#4F6577] group-hover:text-[#94A9BE]"
+          checked ? "text-[#00e5ff]" : "text-[#4F6577] group-hover:text-[#B8C7D9]"
         }`}
       >
         ↗
@@ -473,7 +473,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[#94A9BE] text-[11px] uppercase tracking-[0.1em]">{label}</span>
+      <span className="text-[#B8C7D9] text-[11px] uppercase tracking-[0.1em]">{label}</span>
       <input
         type={type}
         value={value}

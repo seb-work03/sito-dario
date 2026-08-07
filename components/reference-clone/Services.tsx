@@ -8,6 +8,7 @@ import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
+import { HoverArrow } from "./HoverArrow";
 
 const services = [
   {
@@ -58,7 +59,7 @@ export function Services() {
         <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
           3 ambiti. Un&apos;unica regia.
         </AnimatedHeadline>
-        <AnimatedText className="text-[#94A9BE] max-w-lg mb-10 leading-relaxed" delay={0.1}>
+        <AnimatedText className="text-[#B8C7D9] max-w-lg mb-10 leading-relaxed" delay={0.1}>
           Strategia, trasferimento di competenze e divulgazione. Ogni intervento
           parte dal contesto reale e arriva a decisioni misurabili.
         </AnimatedText>
@@ -83,7 +84,7 @@ export function Services() {
                   transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                   className={cn(
                     "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#94A9BE]",
+                    active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#B8C7D9]",
                   )}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -145,7 +146,7 @@ export function Services() {
                   className="group inline-flex items-center gap-2 text-[#00e5ff] text-sm font-medium hover:text-[#33ecff] transition-colors"
                 >
                   Scopri {current.label}
-                  <ArrowUpRight size={14} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
+                  <HoverArrow size={14} />
                 </Link>
               </motion.div>
             </AnimatePresence>

@@ -57,7 +57,7 @@ export function Experience() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.12}
-            className="text-[#94A9BE] max-w-xs md:text-right leading-relaxed shrink-0"
+            className="text-[#B8C7D9] max-w-xs md:text-right leading-relaxed shrink-0"
           >
             Consulenza, formazione, eventi: ogni contesto con il suo approccio, ogni decisione basata sui dati.
           </AnimatedText>
@@ -84,14 +84,14 @@ export function Experience() {
                 <h3 className="text-[#EDF2F7] text-xl md:text-[28px] font-medium tracking-tight leading-[1.2] mb-2 group-hover:text-white transition-colors duration-300">
                   {e.title}
                 </h3>
-                <p className="text-[#94A9BE] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
+                <p className="text-[#B8C7D9] text-[15px] md:text-base leading-relaxed max-w-2xl mb-3">
                   {e.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {e.tags.map((t) => (
                     <span
                       key={t}
-                      className="text-[10px] uppercase tracking-[0.12em] text-[#6A84A0] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/30 group-hover:text-[#94A9BE]"
+                      className="text-[10px] uppercase tracking-[0.12em] text-[#93A6BB] border border-[#253444] rounded-full px-2.5 py-1 transition-colors duration-300 group-hover:border-[#00e5ff]/30 group-hover:text-[#B8C7D9]"
                     >
                       {t}
                     </span>
@@ -104,7 +104,7 @@ export function Experience() {
                 <span className="text-[#EDF2F7] text-3xl font-semibold tabular-nums tracking-tight">
                   {e.stat.value}
                 </span>
-                <span className="text-[#6A84A0] text-xs uppercase tracking-widest">
+                <span className="text-[#93A6BB] text-xs uppercase tracking-widest">
                   {e.stat.label}
                 </span>
               </div>
@@ -122,7 +122,7 @@ export function Experience() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.2}
-            className="text-[#94A9BE] mt-4 max-w-lg leading-relaxed"
+            className="text-[#B8C7D9] mt-4 max-w-lg leading-relaxed"
           >
             Ogni caso reale diventa esempio per l&apos;aula. Ogni domanda in
             aula affina il modo di leggere i problemi in consulenza.

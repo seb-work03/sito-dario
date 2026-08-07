@@ -2,9 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowUpRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
+import { HoverArrow } from "./HoverArrow";
 
 const audiences = [
   {
@@ -54,7 +54,7 @@ export function Insights() {
             A chi mi rivolgo.
           </AnimatedHeadline>
           <AnimatedText
-            className="text-[#94A9BE] mt-5 leading-relaxed text-base md:text-lg mx-auto max-w-xl"
+            className="text-[#B8C7D9] mt-5 leading-relaxed text-base md:text-lg mx-auto max-w-xl"
             delay={0.1}
           >
             Tre profili ricorrenti nel mio lavoro. Se ti riconosci in uno di questi, probabilmente possiamo parlarci.
@@ -79,18 +79,15 @@ export function Insights() {
               }}
               className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
             >
-              <div className="flex items-start justify-end">
-                <ArrowUpRight
-                  size={20}
-                  className="text-[#4F6577] group-hover:text-[#00e5ff] transition-all duration-500 group-hover:-rotate-45"
-                />
+              <div className="flex items-start justify-end text-[#4F6577] group-hover:text-[#00e5ff] transition-colors duration-500">
+                <HoverArrow size={20} />
               </div>
 
               <div>
                 <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-[1.15] mb-2">
                   {a.label}
                 </h3>
-                <p className="text-[#94A9BE] text-sm leading-relaxed">{a.intro}</p>
+                <p className="text-[#B8C7D9] text-sm leading-relaxed">{a.intro}</p>
               </div>
 
               <div className="h-px bg-white/8" />

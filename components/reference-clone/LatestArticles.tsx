@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
-import { ArrowUpRight } from "lucide-react";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
+import { HoverArrow } from "./HoverArrow";
 import { LatestArticlesGrid } from "./LatestArticlesGrid";
 
 async function getLatestArticles() {
@@ -49,7 +49,7 @@ export async function LatestArticles() {
             <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl mb-4 tracking-tight">
               Gli ultimi articoli.
             </AnimatedHeadline>
-            <AnimatedText className="text-[#94A9BE] max-w-lg leading-relaxed" delay={0.1}>
+            <AnimatedText className="text-[#B8C7D9] max-w-lg leading-relaxed" delay={0.1}>
               Analisi, riflessioni e casi reali dal mondo dell&apos;e-commerce.
               Aggiornati man mano che pubblico.
             </AnimatedText>
@@ -59,15 +59,12 @@ export async function LatestArticles() {
             className="group hidden md:inline-flex items-center gap-2 text-[#00e5ff] text-sm font-medium hover:text-[#33ecff] transition-colors shrink-0"
           >
             Tutti gli articoli
-            <ArrowUpRight
-              size={16}
-              className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45"
-            />
+            <HoverArrow size={16} />
           </Link>
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-2xl border border-white/8 bg-[#17222F] p-8 text-center text-[#6A84A0]">
+          <div className="rounded-2xl border border-white/8 bg-[#17222F] p-8 text-center text-[#93A6BB]">
             Nessun articolo pubblicato al momento.
           </div>
         ) : (
@@ -80,7 +77,7 @@ export async function LatestArticles() {
             className="group inline-flex items-center gap-2 text-[#00e5ff] text-sm font-medium"
           >
             Tutti gli articoli
-            <ArrowUpRight size={16} className="group-hover:-rotate-45 transition-transform duration-500" />
+            <HoverArrow size={16} />
           </Link>
         </div>
       </div>

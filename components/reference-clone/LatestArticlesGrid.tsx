@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, ArrowUpRight } from "lucide-react";
+import { Clock } from "lucide-react";
+import { HoverArrow } from "./HoverArrow";
 
 type Item = {
   slug: string;
@@ -57,7 +58,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
             {/* Content */}
             <div className="flex flex-col flex-1 p-6 md:p-7 gap-4">
               {/* Meta row */}
-              <div className="flex items-center gap-3 text-[#6A84A0] text-xs">
+              <div className="flex items-center gap-3 text-[#93A6BB] text-xs">
                 <span className="inline-flex items-center gap-1.5">
                   <Clock size={12} />
                   {item.readingTime} min di lettura
@@ -77,7 +78,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
 
               {/* Excerpt */}
               {item.excerpt && (
-                <p className="text-[#94A9BE] text-sm leading-relaxed flex-1">
+                <p className="text-[#B8C7D9] text-sm leading-relaxed flex-1">
                   {item.excerpt}
                 </p>
               )}
@@ -86,10 +87,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
               <div className="flex items-center justify-between pt-2 mt-auto border-t border-white/6">
                 <span className="text-[#00e5ff] text-sm font-medium">Leggi l&apos;articolo</span>
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0D1218] text-[#00e5ff] transition-all duration-500 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] group-hover:shadow-[0_0_16px_rgba(0,229,255,0.5)]">
-                  <ArrowUpRight
-                    size={16}
-                    className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45"
-                  />
+                  <HoverArrow size={16} />
                 </span>
               </div>
             </div>

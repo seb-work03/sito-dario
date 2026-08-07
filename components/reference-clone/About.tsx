@@ -282,7 +282,7 @@ function GoogleReviewsCard() {
             ))}
           </div>
         </div>
-        <span className="text-[#94A9BE] text-[13px] leading-tight">
+        <span className="text-[#B8C7D9] text-[13px] leading-tight">
           Google · <AnimatedNumber value={200} suffix="+" /> Recensioni
         </span>
         <a
@@ -352,7 +352,7 @@ function StatBlock({ value, suffix, label }: { value: number; suffix: string; la
       <span className="text-[#EDF2F7] text-2xl md:text-3xl font-medium tracking-tight tabular-nums">
         <AnimatedNumber value={value} suffix={suffix} />
       </span>
-      <span className="text-[#6A84A0] text-[11px] leading-tight">{label}</span>
+      <span className="text-[#93A6BB] text-[11px] leading-tight">{label}</span>
     </div>
   );
 }
