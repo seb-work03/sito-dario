@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useLayoutEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import {
   GraduationCap,
   Compass,
@@ -50,57 +50,60 @@ const engagements: {
   },
 ];
 
-/** One row. Its dot flips filled the moment its top enters the top half
- *  of the viewport — which is when the rail line growing with scroll
- *  visually reaches it. The rail fill is a CSS transform driven by the
- *  same `inView` trigger, so both stay in sync without any math. */
 function TimelineRow({
   number,
   title,
   description,
   Icon,
+  liRef,
+  fillPx,
+  threshold,
 }: {
   number: number;
   title: string;
   description: string;
   Icon: LucideIcon;
+  liRef: (el: HTMLLIElement | null) => void;
+  fillPx: MotionValue<number>;
+  threshold: number;
 }) {
-  const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, {
-    once: true,
-    margin: "0px 0px -50% 0px",
-  });
+  // Lit as soon as the line's current pixel height >= this dot's top pixel.
+  const lit = useTransform(fillPx, (v) => (v >= threshold ? 1 : 0));
+  const bg = useTransform(lit, (v) => (v ? "#00e5ff" : "#0D1218"));
+  const numberColor = useTransform(lit, (v) => (v ? "#0D1218" : "#00e5ff"));
+  const boxShadow = useTransform(lit, (v) =>
+    v ? "0 0 20px rgba(0,229,255,0.6)" : "0 0 0 rgba(0,229,255,0)",
+  );
+  const iconColor = useTransform(lit, (v) => (v ? "#00e5ff" : "#dddddd"));
+  const iconBorder = useTransform(lit, (v) =>
+    v ? "rgba(0,229,255,0.4)" : "rgba(255,255,255,0.1)",
+  );
+  const iconBg = useTransform(lit, (v) =>
+    v ? "rgba(0,229,255,0.06)" : "rgba(255,255,255,0.02)",
+  );
 
   return (
     <motion.li
-      ref={ref}
+      ref={liRef}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
       className="relative flex items-start gap-6 md:gap-10"
-      data-reached={inView ? "true" : "false"}
-      data-index={number}
     >
-      {/* Dot on the rail */}
       <span className="absolute -left-16 md:-left-24 top-1 flex justify-center w-11 md:w-14">
-        <span
-          className={
-            "relative flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full border-2 border-[#00e5ff] transition-all duration-500 " +
-            (inView
-              ? "bg-[#00e5ff] shadow-[0_0_20px_rgba(0,229,255,0.6)]"
-              : "bg-[#0D1218]")
-          }
+        <motion.span
+          data-timeline-dot
+          style={{ background: bg, boxShadow }}
+          className="relative flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full border-2 border-[#00e5ff] transition-[background,box-shadow] duration-300"
         >
-          <span
-            className={
-              "text-sm md:text-lg font-semibold tabular-nums transition-colors duration-500 " +
-              (inView ? "text-[#0D1218]" : "text-[#00e5ff]")
-            }
+          <motion.span
+            style={{ color: numberColor }}
+            className="text-sm md:text-lg font-semibold tabular-nums transition-colors duration-300"
           >
             {number}
-          </span>
-        </span>
+          </motion.span>
+        </motion.span>
       </span>
 
       <div className="flex-1 pt-1 pr-4 md:pr-6">
@@ -112,50 +115,62 @@ function TimelineRow({
         </p>
       </div>
 
-      {/* Icon on the right */}
-      <div
-        className={
-          "shrink-0 mt-1 flex items-center justify-center w-11 h-11 md:w-16 md:h-16 rounded-2xl border transition-colors duration-500 " +
-          (inView
-            ? "border-[#00e5ff]/40 bg-[#00e5ff]/[0.06] text-[#00e5ff]"
-            : "border-white/10 bg-white/[0.02] text-[#dddddd]")
-        }
+      <motion.div
+        style={{
+          color: iconColor,
+          borderColor: iconBorder,
+          background: iconBg,
+        }}
+        className="shrink-0 mt-1 flex items-center justify-center w-11 h-11 md:w-16 md:h-16 rounded-2xl border transition-colors duration-300"
       >
         <Icon size={22} strokeWidth={1.6} className="md:hidden" aria-hidden />
         <Icon size={30} strokeWidth={1.4} className="hidden md:block" aria-hidden />
-      </div>
+      </motion.div>
     </motion.li>
   );
 }
 
 export function Experience() {
-  // Track how many rows have entered — used to grow the rail fill in
-  // sync with the just-reached dot.
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
+  const liRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [thresholds, setThresholds] = useState<number[]>([]);
+  const [railTotalPx, setRailTotalPx] = useState(0);
 
-  // On every mount/layout tick, read `data-reached` on each row and set
-  // rail height to the Y of the last reached row's dot. `useInView` on
-  // each row already re-renders the whole component when a row enters.
-  if (typeof window !== "undefined") {
-    requestAnimationFrame(() => {
+  // Scroll progress mapped so the fill grows from 0 to full as the wrapper
+  // travels from having its top at 60% of viewport to having its end at 40%.
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start 60%", "end 40%"],
+  });
+  // Fill height in pixels — grows linearly with scroll, bidirectional.
+  const fillPx = useTransform(scrollYProgress, (v) => {
+    const clamped = Math.max(0, Math.min(1, v));
+    return clamped * railTotalPx;
+  });
+
+  // Measure each dot's top Y (relative to the wrapper) so a dot lights up
+  // exactly when the fill line reaches the top of its circle.
+  useLayoutEffect(() => {
+    function measure() {
       const wrap = wrapperRef.current;
-      const rail = railRef.current;
-      if (!wrap || !rail) return;
-      const reached = wrap.querySelectorAll<HTMLElement>(
-        'li[data-reached="true"]',
-      );
-      if (reached.length === 0) {
-        rail.style.height = "0px";
-        return;
-      }
-      const last = reached[reached.length - 1];
-      const wrapTop = wrap.getBoundingClientRect().top;
-      const dotRect = last.getBoundingClientRect();
-      const y = dotRect.top + 22 - wrapTop; // dot center ≈ 22px below li top
-      rail.style.height = `${Math.max(0, y)}px`;
-    });
-  }
+      if (!wrap) return;
+      const wrapTop = wrap.getBoundingClientRect().top + window.scrollY;
+      const next: number[] = [];
+      liRefs.current.forEach((li) => {
+        if (!li) return;
+        const dot = li.querySelector<HTMLElement>("[data-timeline-dot]");
+        if (!dot) return;
+        const rect = dot.getBoundingClientRect();
+        const dotTop = rect.top + window.scrollY - wrapTop;
+        next.push(dotTop);
+      });
+      setThresholds(next);
+      setRailTotalPx(wrap.getBoundingClientRect().height);
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
@@ -173,17 +188,16 @@ export function Experience() {
         </div>
 
         <div ref={wrapperRef} className="relative pl-16 md:pl-24">
-          {/* Base rail */}
+          {/* Base rail (dim) */}
           <div
             aria-hidden
             className="absolute top-0 bottom-0 left-[22px] md:left-[28px] w-px bg-white/10"
           />
-          {/* Fill rail — height driven imperatively when rows enter */}
-          <div
-            ref={railRef}
+          {/* Fill rail — height in px, driven by scroll (bidirectional) */}
+          <motion.div
             aria-hidden
-            className="absolute top-0 left-[22px] md:left-[28px] w-px bg-[#00e5ff] shadow-[0_0_16px_rgba(0,229,255,0.65)] transition-[height] duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
-            style={{ height: 0 }}
+            style={{ height: fillPx }}
+            className="absolute top-0 left-[22px] md:left-[28px] w-px bg-[#00e5ff] shadow-[0_0_16px_rgba(0,229,255,0.65)]"
           />
 
           <ul className="flex flex-col gap-10 md:gap-14">
@@ -194,9 +208,15 @@ export function Experience() {
                 title={e.title}
                 description={e.description}
                 Icon={e.icon}
+                liRef={(el) => {
+                  liRefs.current[i] = el;
+                }}
+                fillPx={fillPx}
+                threshold={thresholds[i] ?? Infinity}
               />
             ))}
           </ul>
+
         </div>
       </div>
     </section>
