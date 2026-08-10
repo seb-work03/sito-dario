@@ -74,12 +74,6 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                   {item.title}
                 </h3>
 
-                {item.excerpt && (
-                  <p className="text-[#dddddd] text-sm leading-relaxed flex-1">
-                    {item.excerpt}
-                  </p>
-                )}
-
                 <div className="flex items-center justify-between pt-2 mt-auto border-t border-white/6">
                   <span className="text-[#00e5ff] text-sm font-medium">Leggi l&apos;articolo</span>
                   <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0D1218] text-[#00e5ff] transition-all duration-500 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] group-hover:shadow-[0_0_16px_rgba(0,229,255,0.5)]">

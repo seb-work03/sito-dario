@@ -163,7 +163,7 @@ export function StrategicBriefing() {
             style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
           />
           <div
-            className="relative rounded-[calc(1rem-1px)] bg-[#17222F] p-6 md:p-10 min-h-[560px] overflow-hidden"
+            className="relative rounded-[calc(1rem-1px)] bg-[#17222F] p-6 md:p-10 overflow-hidden"
           >
           {/* Meta row */}
           <div className="flex justify-between items-center gap-3 mb-8 md:mb-12 pt-2">

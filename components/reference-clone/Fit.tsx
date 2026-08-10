@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { X, Plus } from "lucide-react";
+import { X, Check } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
@@ -10,9 +10,13 @@ export function Fit() {
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1120px]">
         {/* Centered intro: title on top, description below */}
-        <div className="text-center max-w-3xl mx-auto mb-14 md:mb-20">
+        <div className="text-center max-w-4xl mx-auto mb-14 md:mb-20">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
-            Se cerchi un semplice esecutore, sei nel posto sbagliato.
+            <>
+              Se cerchi un semplice esecutore,
+              <br />
+              sei nel posto sbagliato.
+            </>
           </AnimatedHeadline>
           <AnimatedText
             delay={0.15}
@@ -71,7 +75,7 @@ export function Fit() {
             />
             <div className="relative flex items-center gap-3">
               <span className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#22C55E]/15 text-[#22C55E] shrink-0">
-                <Plus size={22} strokeWidth={2.4} />
+                <Check size={22} strokeWidth={2.6} />
               </span>
               <span className="text-[#22C55E] text-[11px] uppercase tracking-[0.14em] font-medium">
                 È per

@@ -44,7 +44,6 @@ export function ArticleListItem({ article }: ArticleListItemProps) {
             {article.title}
           </Link>
         </h2>
-        {article.excerpt && <p className="mt-1 text-sm text-paper-300">{article.excerpt}</p>}
       </div>
     </article>
   );
