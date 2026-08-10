@@ -151,7 +151,7 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
 
   return (
     <div id="about-us" ref={pinRef} className="relative md:h-[200vh] bg-[#0D1218]">
-      <div className="md:sticky md:top-0 md:h-screen md:overflow-hidden md:flex md:items-center">
+      <div className="md:sticky md:top-24 md:h-[calc(100vh-96px)] md:overflow-hidden md:flex md:items-center">
         <section className="w-full pt-10 md:pt-8 pb-14 md:pb-8">
           <div className="mx-auto max-w-[1180px] px-5">
             <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10">
