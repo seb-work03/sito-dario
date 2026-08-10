@@ -11,7 +11,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { Star } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef } from "react";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -314,15 +314,12 @@ function GoogleGLogo() {
 }
 
 function ChartCard() {
-  const [hovered, setHovered] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
       style={{
         minHeight: 270,
@@ -333,9 +330,9 @@ function ChartCard() {
     >
       <div className="flex flex-col gap-3">
         <p className="text-[14px] font-bold tracking-tight text-[#00e5ff]">
-          +2M fatturato creato da clienti e-commerce
+          +5M fatturato creato da clienti e-commerce
         </p>
-        <ExperienceChart hovered={hovered} />
+        <ExperienceChart />
       </div>
 
       <div className="mt-auto flex justify-evenly gap-5 pt-4 border-t border-white/8">
@@ -358,10 +355,7 @@ function StatBlock({ value, suffix, label }: { value: number; suffix: string; la
   );
 }
 
-function ExperienceChart({ hovered }: { hovered: boolean }) {
-  const ref = useRef<SVGSVGElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
-
+function ExperienceChart() {
   // Steeper growth curve; endpoint at x=290 (slightly before right edge) so dot isn't clipped
   const points = [
     { x: 0,   y: 82 }, { x: 40,  y: 75 }, { x: 80,  y: 70 },
@@ -376,18 +370,10 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
       return `C ${cx1},${prev.y} ${cx2},${p.y} ${p.x},${p.y}`;
     }).join(" ");
   const areaPath = `${path} L 290,100 L 0,100 Z`;
-
-  // Resting position of the dot. y=61.9 is the curve's value at x=148 on the
-  // bezier segment between (120,72) and (160,60), so the dot sits on the line.
-  const midPoint = { x: 148, y: 61.9 };
   const endPoint = points[points.length - 1];
-
-  // Line reveals to wherever the dot currently is
-  const revealWidth = inView ? (hovered ? endPoint.x : midPoint.x) : 0;
 
   return (
     <svg
-      ref={ref}
       viewBox="0 0 320 100"
       className="w-full h-24 md:h-28"
       preserveAspectRatio="none"
@@ -398,65 +384,35 @@ function ExperienceChart({ hovered }: { hovered: boolean }) {
           <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.35" />
           <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
         </linearGradient>
-        <clipPath id="expReveal">
-          <motion.rect
-            x="0"
-            y="-10"
-            height="120"
-            initial={{ width: 0 }}
-            animate={{ width: revealWidth }}
-            transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
-          />
-        </clipPath>
       </defs>
 
       {[25, 50, 75].map((y) => (
         <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
-      <g clipPath="url(#expReveal)">
-        <path d={areaPath} fill="url(#expArea)" />
-        <path
-          d={path}
-          fill="none"
-          stroke="#00e5ff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-        />
-      </g>
-
-      {/* Leading dot: mid by default, slides to end on hover */}
-      <motion.circle
-        fill="#00e5ff"
-        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
-        animate={{
-          cx: hovered ? endPoint.x : midPoint.x,
-          cy: hovered ? endPoint.y : midPoint.y,
-          r: inView ? 3.5 : 0,
-          opacity: inView ? 1 : 0,
-        }}
-        transition={{ duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] }}
+      {/* Area + line draw upward on a loop (CSS-driven, see reference-clone.css) */}
+      <path className="exp-area" d={areaPath} fill="url(#expArea)" />
+      <path
+        className="exp-line"
+        d={path}
+        fill="none"
+        stroke="#00e5ff"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        pathLength={100}
       />
 
-      {/* Pulse ring */}
-      <motion.circle
+      {/* Pulse ring + dot pinned at the peak */}
+      <circle
+        className="exp-dot-ring"
+        cx={endPoint.x}
+        cy={endPoint.y}
+        r="6"
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1"
-        initial={{ cx: midPoint.x, cy: midPoint.y, r: 0, opacity: 0 }}
-        animate={inView ? {
-          cx: hovered ? endPoint.x : midPoint.x,
-          cy: hovered ? endPoint.y : midPoint.y,
-          r: [6, 9.6, 6],
-          opacity: [0.5, 0.1, 0.5],
-        } : { r: 0, opacity: 0 }}
-        transition={{
-          cx: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
-          cy: { duration: hovered ? 1.2 : 1.8, ease: [0.19, 1, 0.22, 1] },
-          r: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-          opacity: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-        }}
       />
+      <circle className="exp-dot" cx={endPoint.x} cy={endPoint.y} r="3.5" fill="#00e5ff" />
     </svg>
   );
 }

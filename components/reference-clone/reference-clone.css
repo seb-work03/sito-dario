@@ -18,3 +18,80 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ---------------------------------------------------------------------------
+   CSS-only scroll reveal.
+   The hidden state lives entirely in CSS, so it's applied from the very first
+   paint (SSR included) — there is no frame where the element shows up before
+   JS hides it, which is what caused the "flash then jump" with Framer's
+   whileInView. JS only adds `.is-visible` (via IntersectionObserver) to run
+   the transition.
+--------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 20px));
+  transition:
+    opacity var(--reveal-dur, 0.8s) cubic-bezier(0.19, 1, 0.22, 1) var(--reveal-delay, 0s),
+    transform var(--reveal-dur, 0.8s) cubic-bezier(0.19, 1, 0.22, 1) var(--reveal-delay, 0s);
+  will-change: transform, opacity;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Looping "growth" chart animation (About → ChartCard).
+   The line draws upward, holds, then gently fades and redraws — on a loop.
+--------------------------------------------------------------------------- */
+@keyframes expDraw {
+  0% { stroke-dashoffset: 100; opacity: 0; }
+  8% { opacity: 1; }
+  38% { stroke-dashoffset: 0; opacity: 1; }
+  88% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+.exp-line {
+  stroke-dasharray: 100;
+  animation: expDraw 4.4s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+}
+@keyframes expArea {
+  0%, 100% { opacity: 0; }
+  20%, 88% { opacity: 1; }
+}
+.exp-area {
+  animation: expArea 4.4s ease-in-out infinite;
+}
+@keyframes expDot {
+  0%, 32% { opacity: 0; }
+  40%, 88% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.exp-dot {
+  animation: expDot 4.4s ease-in-out infinite;
+}
+@keyframes expRing {
+  0%, 32% { opacity: 0; transform: scale(0.5); }
+  42% { opacity: 0.5; }
+  88% { opacity: 0.12; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+.exp-dot-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: expRing 4.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-line, .exp-area, .exp-dot, .exp-dot-ring {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}

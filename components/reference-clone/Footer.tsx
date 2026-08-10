@@ -1,8 +1,7 @@
 "use client";
 
 import { Mail, Phone, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
-import { useReveal } from "./useReveal";
+import { Reveal } from "./Reveal";
 
 function LinkedinIcon({ size = 16 }: { size?: number }) {
   return (
@@ -48,33 +47,32 @@ const contacts = [
 ];
 
 export function Footer() {
-  const heading = useReveal({ y: 30, duration: 0.9, amount: 0.3 });
-  const cta = useReveal({ y: 14, delay: 0.2, duration: 0.7 });
   return (
     <footer className="bg-[#17222F] px-5 pt-20 pb-8 overflow-hidden border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-14 mb-14">
           <div className="max-w-2xl">
-            <motion.h2
-              {...heading}
-              style={{ willChange: "transform, opacity" }}
+            <Reveal
+              as="h2"
+              y={30}
+              duration={0.9}
               className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] mb-8 tracking-tight text-balance"
             >
               Hai un progetto e-commerce, un problema, o una decisione da prendere?
-            </motion.h2>
-            <motion.a
-              {...cta}
-              style={{ willChange: "transform, opacity" }}
-              href="/contatti"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)] mb-10"
-            >
-              Parliamone
-              <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-10 h-10 shrink-0">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
-                  <path d="M5 12h14M13 5l7 7-7 7" />
-                </svg>
-              </span>
-            </motion.a>
+            </Reveal>
+            <Reveal y={14} delay={0.2} duration={0.7} className="mb-10">
+              <a
+                href="/contatti"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)]"
+              >
+                Parliamone
+                <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-10 h-10 shrink-0">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </a>
+            </Reveal>
 
             <div className="flex items-center gap-3">
               {socials.map((s) => (

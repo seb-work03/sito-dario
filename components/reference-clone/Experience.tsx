@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import {
   GraduationCap,
@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
-import { useReveal } from "./useReveal";
 
 const engagements: {
   title: string;
@@ -68,7 +67,32 @@ function TimelineRow({
   fillPx: MotionValue<number>;
   threshold: number;
 }) {
-  const reveal = useReveal({ y: 24, duration: 0.7 });
+  // CSS-only reveal: hidden state lives in the `.reveal` class, JS just flips
+  // `.is-visible` on scroll — no Framer entry animation, so no flash/jump.
+  const rowRef = useRef<HTMLLIElement | null>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    // Reduced-motion is handled in CSS (`.reveal` media query), so JS only
+    // wires the observer here.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const setRefs = (el: HTMLLIElement | null) => {
+    rowRef.current = el;
+    liRef(el);
+  };
+
   // Lit as soon as the line's current pixel height >= this dot's top pixel.
   const lit = useTransform(fillPx, (v) => (v >= threshold ? 1 : 0));
   const bg = useTransform(lit, (v) => (v ? "#00e5ff" : "#0D1218"));
@@ -85,10 +109,10 @@ function TimelineRow({
   );
 
   return (
-    <motion.li
-      ref={liRef}
-      {...reveal}
-      className="relative flex items-start gap-6 md:gap-10"
+    <li
+      ref={setRefs}
+      className={`reveal${shown ? " is-visible" : ""} relative flex items-start gap-6 md:gap-10`}
+      style={{ "--reveal-y": "24px", "--reveal-dur": "0.7s" } as CSSProperties}
     >
       <span className="absolute -left-16 md:-left-24 top-1 flex justify-center w-11 md:w-14">
         <motion.span
@@ -139,7 +163,7 @@ function TimelineRow({
       >
         <Icon size={30} strokeWidth={1.4} aria-hidden />
       </motion.div>
-    </motion.li>
+    </li>
   );
 }
 

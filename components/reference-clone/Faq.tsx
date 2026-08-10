@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
-import { useReveal } from "./useReveal";
+import { Reveal } from "./Reveal";
 
 const faqs = [
   {
@@ -36,7 +36,6 @@ const faqs = [
 
 export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
-  const cta = useReveal({ y: 20, delay: 0.2, duration: 0.9 });
 
   return (
     <section id="faq" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
@@ -51,16 +50,17 @@ export function Faq() {
           >
             Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi.
           </AnimatedText>
-          <motion.a
-            {...cta}
-            href="/contatti"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
-          >
-            Parliamone
-            <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
-              <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
-            </span>
-          </motion.a>
+          <Reveal y={20} delay={0.2} duration={0.9}>
+            <a
+              href="/contatti"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
+            >
+              Parliamone
+              <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
+                <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
+              </span>
+            </a>
+          </Reveal>
         </div>
 
         <div className="flex flex-col divide-y divide-white/8">
