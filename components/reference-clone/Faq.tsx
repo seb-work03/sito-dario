@@ -48,7 +48,7 @@ export function Faq() {
             delay={0.15}
             className="text-[#EDF2F7] text-sm md:text-base leading-relaxed mb-8 max-w-xs"
           >
-            Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in uno o due giorni lavorativi.
+            Non trovi la risposta che cerchi? Scrivimi direttamente: rispondo personalmente in base alle tue esigenze.
           </AnimatedText>
           <Reveal y={20} delay={0.2} duration={0.9}>
             <a
