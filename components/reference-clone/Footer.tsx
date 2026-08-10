@@ -55,7 +55,7 @@ export function Footer() {
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3, margin: "0px 0px 80px 0px" }}
               transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
               className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] mb-8 tracking-tight text-balance"
             >
@@ -64,7 +64,7 @@ export function Footer() {
             <motion.a
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "0px 0px 80px 0px" }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
               href="/contatti"
               className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)] mb-10"

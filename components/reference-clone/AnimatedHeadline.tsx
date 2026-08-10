@@ -48,7 +48,7 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
         className={className}
         initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.2, margin: "0px 0px 80px 0px" }}
         transition={{ duration: 0.9, delay, ease: [0.19, 1, 0.22, 1] }}
       >
         {children}
@@ -65,7 +65,7 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
       variants={container}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2, margin: "0px 0px 80px 0px" }}
     >
       {words.map((w, i) => {
         const isLast = i === words.length - 1;

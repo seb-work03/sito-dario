@@ -50,7 +50,7 @@ export function AnimatedText({
   const initial = { opacity: 0, y: -14, filter: "blur(8px)" };
   const whileInView = { opacity: 1, y: 0, filter: "blur(0px)" };
   const transition = { duration, delay, ease: [0.19, 1, 0.22, 1] as const };
-  const viewport = { once: true, amount };
+  const viewport = { once: true, amount, margin: "0px 0px 80px 0px" as const };
 
   if (as === "span") {
     return (

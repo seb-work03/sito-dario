@@ -34,9 +34,11 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   body {
+    overflow-x: clip;
     background-color: #0D1218;
     color: #EDF2F7;
     line-height: 1.55;
