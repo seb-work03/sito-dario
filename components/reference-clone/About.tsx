@@ -372,6 +372,10 @@ function ExperienceChart() {
   const areaPath = `${path} L 290,100 L 0,100 Z`;
   const endPoint = points[points.length - 1];
 
+  // Continuous "growth" loop: the line draws upward, holds, then gently fades
+  // and redraws. Same timeline (4.4s) shared across every element.
+  const loop = { duration: 4.4, repeat: Infinity, ease: [0.19, 1, 0.22, 1] as const };
+
   return (
     <svg
       viewBox="0 0 320 100"
@@ -390,29 +394,51 @@ function ExperienceChart() {
         <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#253444" strokeWidth="0.5" strokeDasharray="2 3" />
       ))}
 
-      {/* Area + line draw upward on a loop (CSS-driven, see reference-clone.css) */}
-      <path className="exp-area" d={areaPath} fill="url(#expArea)" />
-      <path
-        className="exp-line"
+      {/* Area fill */}
+      <motion.path
+        d={areaPath}
+        fill="url(#expArea)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.25, 0.88, 1] }}
+      />
+
+      {/* Line draws upward */}
+      <motion.path
         d={path}
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1.6"
         strokeLinecap="round"
-        pathLength={100}
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.38, 0.88, 1] }}
       />
 
-      {/* Pulse ring + dot pinned at the peak */}
-      <circle
-        className="exp-dot-ring"
+      {/* Pulse ring at the peak */}
+      <motion.circle
         cx={endPoint.x}
         cy={endPoint.y}
         r="6"
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1"
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: [0, 0, 0.5, 0.12, 0], scale: [0.5, 0.5, 1, 1.5, 1.6] }}
+        transition={{ ...loop, times: [0, 0.32, 0.45, 0.88, 1] }}
       />
-      <circle className="exp-dot" cx={endPoint.x} cy={endPoint.y} r="3.5" fill="#00e5ff" />
+
+      {/* Leading dot at the peak */}
+      <motion.circle
+        cx={endPoint.x}
+        cy={endPoint.y}
+        r="3.5"
+        fill="#00e5ff"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.32, 0.45, 0.88, 1] }}
+      />
     </svg>
   );
 }
