@@ -128,21 +128,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Giant DARIO.TANA */}
-        <div className="border-t border-white/8 pt-12 mb-6 overflow-hidden">
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[#EDF2F7] font-medium leading-[0.85] tracking-[-0.04em] whitespace-nowrap select-none"
-            style={{ fontSize: "clamp(3.5rem, 15vw, 15rem)" }}
-            aria-hidden="true"
-          >
-            DARIO<span className="text-[#00e5ff]">.</span>TANA
-          </motion.p>
-        </div>
-
         <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#dddddd] text-xs">
           <span>
             2026 ©{" "}

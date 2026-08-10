@@ -102,13 +102,13 @@ export function StrategicBriefing() {
         {/* Left: intro */}
         <div className="md:sticky md:top-[130px] self-start">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
-            Partiamo solo se c&apos;è materia per generare valore.
+            Raccontami il tuo progetto, ci penso io al resto.
           </AnimatedHeadline>
           <AnimatedText
             delay={0.1}
             className="text-[#dddddd] text-sm md:text-base leading-relaxed max-w-md mb-8"
           >
-            Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto. Rispondo personalmente alle richieste coerenti con il perimetro di intervento.
+            Il briefing serve a capire rapidamente obiettivi, struttura e livello di maturità del progetto.
           </AnimatedText>
 
           <div className="flex flex-col gap-3 text-sm">
