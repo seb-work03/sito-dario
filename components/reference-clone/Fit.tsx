@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { X, Check } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
+import { useReveal } from "./useReveal";
 
 export function Fit() {
+  const cardNot = useReveal({ y: 20, duration: 0.9 });
+  const cardYes = useReveal({ y: 20, delay: 0.1, duration: 0.9 });
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1120px]">
@@ -31,10 +34,7 @@ export function Fit() {
         <div className="grid md:grid-cols-2 gap-5 md:gap-6">
           {/* NOT FOR — red */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2, margin: "0px 0px 80px 0px" }}
-            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+            {...cardNot}
             style={{ willChange: "transform, opacity" }}
             className="relative rounded-2xl border border-[#FF6B6B]/25 bg-gradient-to-br from-[#FF6B6B]/[0.06] to-[#17222F]/50 p-7 md:p-9 flex flex-col gap-5 transition-all duration-500 hover:border-[#FF6B6B]/50 hover:-translate-y-1"
           >
@@ -63,10 +63,7 @@ export function Fit() {
 
           {/* FOR — green */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2, margin: "0px 0px 80px 0px" }}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
+            {...cardYes}
             style={{ willChange: "transform, opacity" }}
             className="relative rounded-2xl border border-[#22C55E]/30 bg-gradient-to-br from-[#22C55E]/[0.07] to-[#17222F]/50 p-7 md:p-9 flex flex-col gap-5 transition-all duration-500 hover:border-[#22C55E]/55 hover:-translate-y-1"
           >

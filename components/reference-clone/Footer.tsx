@@ -2,6 +2,7 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { useReveal } from "./useReveal";
 
 function LinkedinIcon({ size = 16 }: { size?: number }) {
   return (
@@ -47,26 +48,22 @@ const contacts = [
 ];
 
 export function Footer() {
+  const heading = useReveal({ y: 30, duration: 0.9, amount: 0.3 });
+  const cta = useReveal({ y: 14, delay: 0.2, duration: 0.7 });
   return (
     <footer className="bg-[#17222F] px-5 pt-20 pb-8 overflow-hidden border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-14 mb-14">
           <div className="max-w-2xl">
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3, margin: "0px 0px 80px 0px" }}
-              transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+              {...heading}
               style={{ willChange: "transform, opacity" }}
               className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] mb-8 tracking-tight text-balance"
             >
               Hai un progetto e-commerce, un problema, o una decisione da prendere?
             </motion.h2>
             <motion.a
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px 80px 0px" }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+              {...cta}
               style={{ willChange: "transform, opacity" }}
               href="/contatti"
               className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)] mb-10"

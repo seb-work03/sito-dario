@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
+import { useReveal } from "./useReveal";
 
 const engagements: {
   title: string;
@@ -67,6 +68,7 @@ function TimelineRow({
   fillPx: MotionValue<number>;
   threshold: number;
 }) {
+  const reveal = useReveal({ y: 24, duration: 0.7 });
   // Lit as soon as the line's current pixel height >= this dot's top pixel.
   const lit = useTransform(fillPx, (v) => (v >= threshold ? 1 : 0));
   const bg = useTransform(lit, (v) => (v ? "#00e5ff" : "#0D1218"));
@@ -85,10 +87,7 @@ function TimelineRow({
   return (
     <motion.li
       ref={liRef}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2, margin: "0px 0px 80px 0px" }}
-      transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+      {...reveal}
       className="relative flex items-start gap-6 md:gap-10"
     >
       <span className="absolute -left-16 md:-left-24 top-1 flex justify-center w-11 md:w-14">

@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import { AnimatedHeadline } from "./AnimatedHeadline";
-import { AnimatedText } from "./AnimatedText";
+import { useReveal } from "./useReveal";
 
 /**
  * A full-width cyan CTA section before the footer.
  * Strong contrast, minimal, just a headline and a call to action.
  */
 export function AccentCta() {
+  const cta = useReveal({ y: 14, delay: 0.25, duration: 0.7 });
   return (
     <section
       className="px-5 py-20 md:py-28"
@@ -25,10 +26,7 @@ export function AccentCta() {
         </AnimatedHeadline>
 
         <motion.a
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
+          {...cta}
           href="/contatti"
           className="group inline-flex items-center gap-2 rounded-full bg-[#0D1218] text-[#00e5ff] font-medium pl-6 pr-2 py-2 text-[16px] transition-all duration-500 hover:shadow-[0_0_32px_rgba(13,18,24,0.4)]"
         >
