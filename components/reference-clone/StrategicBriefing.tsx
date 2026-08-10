@@ -343,33 +343,31 @@ export function StrategicBriefing() {
                 </p>
               )}
 
-              {/* Actions */}
-              <div className="flex flex-wrap gap-3 justify-between mt-10">
-                <button
-                  type="button"
-                  onClick={goPrev}
-                  className={`group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#dddddd] hover:text-[#EDF2F7] transition-colors ${
-                    step === 1 ? "invisible" : ""
-                  }`}
-                >
-                  <ArrowLeft size={16} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-x-1" />
-                  Indietro
-                </button>
-
-                {step < TOTAL_STEPS ? (
-                  <span aria-hidden />
-                ) : (
+              {/* Actions — only when there is something to show */}
+              {step > 1 && (
+                <div className="flex flex-wrap gap-3 justify-between mt-6">
                   <button
-                    type="submit"
-                    className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
+                    type="button"
+                    onClick={goPrev}
+                    className="group inline-flex items-center gap-2 px-5 py-3 text-sm text-[#dddddd] hover:text-[#EDF2F7] transition-colors"
                   >
-                    Invia il briefing
-                    <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
-                      <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
-                    </span>
+                    <ArrowLeft size={16} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-x-1" />
+                    Indietro
                   </button>
-                )}
-              </div>
+
+                  {step === TOTAL_STEPS && (
+                    <button
+                      type="submit"
+                      className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
+                    >
+                      Invia il briefing
+                      <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
+                        <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
+                      </span>
+                    </button>
+                  )}
+                </div>
+              )}
             </form>
           ) : (
             <motion.div
