@@ -16,7 +16,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.15]);
 
   return (
-    <section ref={ref} className="relative bg-[#0D1218] pt-[92px] md:pt-[108px]">
+    <section ref={ref} className="relative bg-[#0D1218] pt-[92px] md:pt-[108px] overflow-x-clip">
       {/* Big name title — sits slightly above the card */}
       <div className="mx-auto max-w-[1240px] px-5 relative">
         <motion.h1
@@ -84,7 +84,8 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
                 className="text-white/80 text-[12px] sm:text-[14px] md:text-[16px] leading-[1.45] max-w-[180px] sm:max-w-[260px] md:max-w-[360px]"
                 style={{ textWrap: "pretty" }}
               >
-                Consulenza e-commerce a Rimini per PMI, imprenditori ed e-commerce manager. Docenza e interventi a eventi di settore.
+                Consulenza e-commerce a Rimini per PMI, imprenditori ed e-commerce manager.<br />
+                Docenza e interventi a eventi di settore.
               </p>
             </motion.div>
 

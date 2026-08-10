@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
@@ -58,9 +58,23 @@ function GoogleBadge() {
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const current = testimonials[index];
   const prev = () => { setDirection(-1); setIndex((i) => (i - 1 + testimonials.length) % testimonials.length); };
   const next = () => { setDirection(1); setIndex((i) => (i + 1) % testimonials.length); };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handle = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      const pct = max > 0 ? el.scrollLeft / max : 0;
+      setMobileIndex(Math.round(pct * (testimonials.length - 1)));
+    };
+    el.addEventListener("scroll", handle, { passive: true });
+    return () => el.removeEventListener("scroll", handle);
+  }, []);
 
   return (
     <section id="testimon" className="bg-[#0D1218] px-4 md:px-5 py-16 md:py-24 border-t border-[#00e5ff]/25">
@@ -141,7 +155,7 @@ export function Testimonials() {
           </div>
 
           {/* Mobile: horizontal scroll snap list of cards, no arrows */}
-          <div className="md:hidden -mx-6 px-6 overflow-x-auto snap-x snap-mandatory scrollbar-none">
+          <div ref={scrollRef} className="md:hidden -mx-6 px-6 overflow-x-auto snap-x snap-mandatory scrollbar-none">
             <ul className="flex gap-4 pb-2">
               {testimonials.map((t) => (
                 <li
@@ -164,6 +178,20 @@ export function Testimonials() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Mobile dots */}
+          <div className="md:hidden flex justify-center gap-1.5 mt-5">
+            {testimonials.map((_, i) => (
+              <span
+                key={i}
+                className="h-1 rounded-full transition-all duration-500"
+                style={{
+                  width: i === mobileIndex ? 24 : 8,
+                  background: i === mobileIndex ? "#0D1218" : "rgba(13,18,24,0.25)",
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
