@@ -123,36 +123,24 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
               </div>
               <nav className="flex flex-col px-6 py-6 gap-1">
                 {navLinks.map((l, i) => (
-                  <motion.a
+                  <a
                     key={l.href}
                     href={l.href}
                     onClick={() => setMenuOpen(false)}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      delay: 0.12 + i * 0.05,
-                      duration: 0.35,
-                      ease: [0.19, 1, 0.22, 1],
-                    }}
-                    className="text-lg font-medium text-[#EDF2F7] py-3 border-b border-white/10"
+                    style={{ animationDelay: `${0.12 + i * 0.05}s` }}
+                    className="menu-item text-lg font-medium text-[#EDF2F7] py-3 border-b border-white/10"
                   >
                     {l.label}
-                  </motion.a>
+                  </a>
                 ))}
-                <motion.a
+                <a
                   href="/contatti"
                   onClick={() => setMenuOpen(false)}
-                  initial={{ opacity: 0, x: 16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: 0.12 + navLinks.length * 0.05,
-                    duration: 0.35,
-                    ease: [0.19, 1, 0.22, 1],
-                  }}
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium py-4 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
+                  style={{ animationDelay: `${0.12 + navLinks.length * 0.05}s` }}
+                  className="menu-item mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium py-4 transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Parliamone
-                </motion.a>
+                </a>
               </nav>
             </motion.div>
           </>

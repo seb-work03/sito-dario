@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { Reveal } from "./Reveal";
 import {
@@ -68,20 +68,50 @@ function TimelineRow({
   fillPx: MotionValue<number>;
   threshold: number;
 }) {
-  // Lit as soon as the line's current pixel height >= this dot's top pixel.
-  const lit = useTransform(fillPx, (v) => (v >= threshold ? 1 : 0));
-  const bg = useTransform(lit, (v) => (v ? "#00e5ff" : "#0D1218"));
-  const numberColor = useTransform(lit, (v) => (v ? "#0D1218" : "#00e5ff"));
-  const boxShadow = useTransform(lit, (v) =>
-    v ? "0 0 20px rgba(0,229,255,0.6)" : "0 0 0 rgba(0,229,255,0)",
-  );
-  const iconColor = useTransform(lit, (v) => (v ? "#00e5ff" : "#dddddd"));
-  const iconBorder = useTransform(lit, (v) =>
-    v ? "rgba(0,229,255,0.4)" : "rgba(255,255,255,0.1)",
-  );
-  const iconBg = useTransform(lit, (v) =>
-    v ? "rgba(0,229,255,0.06)" : "rgba(255,255,255,0.02)",
-  );
+  // Framer components have been removed from the row entirely (they were
+  // causing the mobile "flash" on entry). Instead, we subscribe to the
+  // scroll-driven `fillPx` motion value and imperatively update inline styles
+  // via refs when this row's threshold is crossed. No re-renders per scroll
+  // frame, no motion.* wrappers to hydrate.
+  const dotRef = useRef<HTMLSpanElement | null>(null);
+  const numberRef = useRef<HTMLSpanElement | null>(null);
+  const iconMobileRef = useRef<HTMLDivElement | null>(null);
+  const iconDesktopRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const apply = (lit: boolean) => {
+      const dot = dotRef.current;
+      if (dot) {
+        dot.style.background = lit ? "#00e5ff" : "#0D1218";
+        dot.style.boxShadow = lit
+          ? "0 0 20px rgba(0,229,255,0.6)"
+          : "0 0 0 rgba(0,229,255,0)";
+      }
+      if (numberRef.current) {
+        numberRef.current.style.color = lit ? "#0D1218" : "#00e5ff";
+      }
+      for (const el of [iconMobileRef.current, iconDesktopRef.current]) {
+        if (!el) continue;
+        el.style.color = lit ? "#00e5ff" : "#dddddd";
+        el.style.borderColor = lit
+          ? "rgba(0,229,255,0.4)"
+          : "rgba(255,255,255,0.1)";
+        el.style.background = lit
+          ? "rgba(0,229,255,0.06)"
+          : "rgba(255,255,255,0.02)";
+      }
+    };
+    let currentLit = fillPx.get() >= threshold;
+    apply(currentLit);
+    const unsub = fillPx.on("change", (v) => {
+      const lit = v >= threshold;
+      if (lit !== currentLit) {
+        currentLit = lit;
+        apply(lit);
+      }
+    });
+    return unsub;
+  }, [fillPx, threshold]);
 
   return (
     <Reveal
@@ -92,18 +122,20 @@ function TimelineRow({
       className="relative flex items-start gap-6 md:gap-10"
     >
       <span className="absolute -left-16 md:-left-24 top-1 flex justify-center w-11 md:w-14">
-        <motion.span
+        <span
+          ref={dotRef}
           data-timeline-dot
-          style={{ background: bg, boxShadow }}
+          style={{ background: "#0D1218", boxShadow: "0 0 0 rgba(0,229,255,0)" }}
           className="relative flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full border-2 border-[#00e5ff] transition-[background,box-shadow] duration-300"
         >
-          <motion.span
-            style={{ color: numberColor }}
+          <span
+            ref={numberRef}
+            style={{ color: "#00e5ff" }}
             className="text-sm md:text-lg font-semibold tabular-nums transition-colors duration-300"
           >
             {number}
-          </motion.span>
-        </motion.span>
+          </span>
+        </span>
       </span>
 
       <div className="flex-1 pt-1 md:pr-6">
@@ -112,16 +144,17 @@ function TimelineRow({
           <h3 className="text-white text-xl md:text-[32px] font-medium tracking-tight leading-[1.2] flex-1">
             {title}
           </h3>
-          <motion.div
+          <div
+            ref={iconMobileRef}
             style={{
-              color: iconColor,
-              borderColor: iconBorder,
-              background: iconBg,
+              color: "#dddddd",
+              borderColor: "rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.02)",
             }}
             className="md:hidden shrink-0 mt-0.5 flex items-center justify-center w-11 h-11 rounded-2xl border transition-colors duration-300"
           >
             <Icon size={22} strokeWidth={1.6} aria-hidden />
-          </motion.div>
+          </div>
         </div>
         {/* Description spans full row on mobile */}
         <p className="text-white text-[15px] md:text-base leading-relaxed w-full md:max-w-[80%]">
@@ -130,16 +163,17 @@ function TimelineRow({
       </div>
 
       {/* Desktop icon on the right side of the row */}
-      <motion.div
+      <div
+        ref={iconDesktopRef}
         style={{
-          color: iconColor,
-          borderColor: iconBorder,
-          background: iconBg,
+          color: "#dddddd",
+          borderColor: "rgba(255,255,255,0.1)",
+          background: "rgba(255,255,255,0.02)",
         }}
         className="hidden md:flex shrink-0 mt-1 items-center justify-center w-16 h-16 rounded-2xl border transition-colors duration-300"
       >
         <Icon size={30} strokeWidth={1.4} aria-hidden />
-      </motion.div>
+      </div>
     </Reveal>
   );
 }

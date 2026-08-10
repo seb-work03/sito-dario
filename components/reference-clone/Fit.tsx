@@ -37,15 +37,10 @@ export function Fit() {
                 className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none opacity-40 blur-3xl"
                 style={{ background: "radial-gradient(closest-side, rgba(255,107,107,0.35), transparent 70%)" }}
               />
-              <div className="relative flex items-center gap-3">
+              <h3 className="relative flex items-center gap-3 text-[#FF6B6B] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
                 <span className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#FF6B6B]/15 text-[#FF6B6B] shrink-0">
                   <X size={22} strokeWidth={2.4} />
                 </span>
-                <span className="text-[#FF6B6B] text-[11px] uppercase tracking-[0.14em] font-medium">
-                  Non è per
-                </span>
-              </div>
-              <h3 className="relative text-[#EDF2F7] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
                 Questo spazio non è per te se…
               </h3>
               <p className="relative text-[#dddddd] text-[15px] md:text-base leading-relaxed">
@@ -64,15 +59,10 @@ export function Fit() {
                 className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none opacity-40 blur-3xl"
                 style={{ background: "radial-gradient(closest-side, rgba(34,197,94,0.35), transparent 70%)" }}
               />
-              <div className="relative flex items-center gap-3">
+              <h3 className="relative flex items-center gap-3 text-[#22C55E] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
                 <span className="inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#22C55E]/15 text-[#22C55E] shrink-0">
                   <Check size={22} strokeWidth={2.6} />
                 </span>
-                <span className="text-[#22C55E] text-[11px] uppercase tracking-[0.14em] font-medium">
-                  È per
-                </span>
-              </div>
-              <h3 className="relative text-[#EDF2F7] text-xl md:text-2xl font-medium tracking-tight leading-[1.2]">
                 Questo spazio è per te se…
               </h3>
               <p className="relative text-[#dddddd] text-[15px] md:text-base leading-relaxed">

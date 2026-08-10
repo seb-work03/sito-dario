@@ -46,3 +46,23 @@
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Mobile menu items (Header drawer). Each item slides in from the right with
+   a small stagger. `animation-delay` is set inline per item.
+--------------------------------------------------------------------------- */
+@keyframes menuItemIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.menu-item {
+  opacity: 0;
+  animation: menuItemIn 0.35s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-item {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
