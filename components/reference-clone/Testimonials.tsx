@@ -148,7 +148,7 @@ export function Testimonials() {
                   key={t.author}
                   className="snap-start shrink-0 w-[82vw] max-w-[360px]"
                 >
-                  <div className="rounded-2xl bg-[#0D1218] border border-white/8 p-6 flex flex-col gap-5 h-full">
+                  <div className="rounded-2xl bg-[#0D1218] border border-white/8 p-6 flex flex-col gap-5 h-full ml-5">
                     <div className="flex items-center gap-3">
                       <Stars />
                       <GoogleBadge />

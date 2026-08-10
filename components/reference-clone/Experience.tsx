@@ -106,25 +106,39 @@ function TimelineRow({
         </motion.span>
       </span>
 
-      <div className="flex-1 pt-1 pr-4 md:pr-6">
-        <h3 className="text-white text-xl md:text-[32px] font-medium tracking-tight leading-[1.2] mb-3">
-          {title}
-        </h3>
-        <p className="text-white text-[15px] md:text-base leading-relaxed max-w-[92%] md:max-w-[80%]">
+      <div className="flex-1 pt-1 md:pr-6">
+        {/* Title + icon row (icon inline on mobile, fixed on right on desktop) */}
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <h3 className="text-white text-xl md:text-[32px] font-medium tracking-tight leading-[1.2] flex-1">
+            {title}
+          </h3>
+          <motion.div
+            style={{
+              color: iconColor,
+              borderColor: iconBorder,
+              background: iconBg,
+            }}
+            className="md:hidden shrink-0 mt-0.5 flex items-center justify-center w-11 h-11 rounded-2xl border transition-colors duration-300"
+          >
+            <Icon size={22} strokeWidth={1.6} aria-hidden />
+          </motion.div>
+        </div>
+        {/* Description spans full row on mobile */}
+        <p className="text-white text-[15px] md:text-base leading-relaxed w-full md:max-w-[80%]">
           {description}
         </p>
       </div>
 
+      {/* Desktop icon on the right side of the row */}
       <motion.div
         style={{
           color: iconColor,
           borderColor: iconBorder,
           background: iconBg,
         }}
-        className="shrink-0 mt-1 flex items-center justify-center w-11 h-11 md:w-16 md:h-16 rounded-2xl border transition-colors duration-300"
+        className="hidden md:flex shrink-0 mt-1 items-center justify-center w-16 h-16 rounded-2xl border transition-colors duration-300"
       >
-        <Icon size={22} strokeWidth={1.6} className="md:hidden" aria-hidden />
-        <Icon size={30} strokeWidth={1.4} className="hidden md:block" aria-hidden />
+        <Icon size={30} strokeWidth={1.4} aria-hidden />
       </motion.div>
     </motion.li>
   );

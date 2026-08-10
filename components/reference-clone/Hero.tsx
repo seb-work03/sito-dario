@@ -84,7 +84,7 @@ export function Hero({ portraitUrl }: { portraitUrl?: string | null } = {}) {
                 className="text-white/80 text-[12px] sm:text-[14px] md:text-[16px] leading-[1.45] max-w-[180px] sm:max-w-[260px] md:max-w-[360px]"
                 style={{ textWrap: "pretty" }}
               >
-                Consulenza e-commerce a Rimini per PMI, imprenditori ed e-commerce manager. Formazione avanzata e interventi in eventi di settore.
+                Consulenza e-commerce a Rimini per PMI, imprenditori ed e-commerce manager. Docenza e interventi a eventi di settore.
               </p>
             </motion.div>
 
