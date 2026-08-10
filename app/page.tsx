@@ -18,6 +18,7 @@ import { Faq } from "@/components/reference-clone/Faq";
 import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefing";
 import { AccentCta } from "@/components/reference-clone/AccentCta";
 import { Footer } from "@/components/reference-clone/Footer";
+import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 
 export const dynamic = "force-dynamic";
 
@@ -144,6 +145,7 @@ export default async function HomePage() {
         <AccentCta />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
