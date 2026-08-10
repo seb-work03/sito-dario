@@ -132,7 +132,14 @@ function MobileFillHeadline({ words }: { words: string[] }) {
  * word. Once the fill completes, the pin releases and normal scrolling
  * continues.
  */
-export function About() {
+type AboutProps = {
+  backgroundUrl?: string | null;
+  selfieUrl?: string | null;
+};
+
+export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
+  const heroImage = backgroundUrl ?? "/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg";
+  const selfieImage = selfieUrl ?? "/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg";
   const pinRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: pinRef,
@@ -159,9 +166,10 @@ export function About() {
                   style={{ aspectRatio: "0.72" }}
                 >
                   <Image
-                    src="/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg"
-                    alt="[FOTO DARIO CON CLIENTE DA INSERIRE]"
+                    src={heroImage}
+                    alt="Dario Tana"
                     fill
+                    unoptimized={heroImage.startsWith("http")}
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
@@ -203,9 +211,10 @@ export function About() {
                     style={{ aspectRatio: "0.85" }}
                   >
                     <Image
-                      src="/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg"
-                      alt="[FOTO DARIO AL LAVORO DA INSERIRE]"
+                      src={selfieImage}
+                      alt="Dario Tana"
                       fill
+                      unoptimized={selfieImage.startsWith("http")}
                       className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
                       sizes="33vw"
                     />

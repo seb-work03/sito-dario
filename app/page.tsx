@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { desc, ilike, or } from "drizzle-orm";
+import { and, desc, ilike, notIlike, or } from "drizzle-orm";
 import "@/components/reference-clone/reference-clone.css";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
@@ -51,11 +51,16 @@ export const metadata: Metadata = {
 
 async function getHeroPortraitUrl(): Promise<string | null> {
   try {
+    // Exclude sfondo/selfie so we don't pick up the About images by accident.
+    const excludeAbout = and(
+      notIlike(media.filename, "%sfondo%"),
+      notIlike(media.filename, "%selfie%"),
+    );
     // Prefer the webp version
     const webp = await db
       .select({ url: media.url })
       .from(media)
-      .where(ilike(media.filename, "%dario%tana%.webp"))
+      .where(and(ilike(media.filename, "%dario%tana%.webp"), excludeAbout))
       .orderBy(desc(media.createdAt))
       .limit(1);
     if (webp[0]?.url) return webp[0].url;
@@ -63,7 +68,21 @@ async function getHeroPortraitUrl(): Promise<string | null> {
     const rows = await db
       .select({ url: media.url })
       .from(media)
-      .where(ilike(media.filename, "%dario%tana%"))
+      .where(and(ilike(media.filename, "%dario%tana%"), excludeAbout))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function getMediaByPattern(pattern: string): Promise<string | null> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, pattern))
       .orderBy(desc(media.createdAt))
       .limit(1);
     return rows[0]?.url ?? null;
@@ -118,10 +137,24 @@ async function getPartnerLogos(): Promise<PartnerLogo[]> {
 }
 
 export default async function HomePage() {
-  const [portraitUrl, logoUrl, partnerLogos] = await Promise.all([
+  const [
+    portraitUrl,
+    logoUrl,
+    partnerLogos,
+    aboutBackgroundUrl,
+    aboutSelfieUrl,
+    consulenteUrl,
+    formazioneUrl,
+    speechUrl,
+  ] = await Promise.all([
     getHeroPortraitUrl(),
     getLogoUrl(),
     getPartnerLogos(),
+    getMediaByPattern("%dario%tana%sfondo%"),
+    getMediaByPattern("%dario%tana%selfie%"),
+    getMediaByPattern("%consulente%"),
+    getMediaByPattern("%formazione%"),
+    getMediaByPattern("%speech%"),
   ]);
   return (
     <div
@@ -132,8 +165,12 @@ export default async function HomePage() {
       <main>
         <Hero portraitUrl={portraitUrl} />
         <TrustBar logos={partnerLogos} />
-        <About />
-        <Services />
+        <About backgroundUrl={aboutBackgroundUrl} selfieUrl={aboutSelfieUrl} />
+        <Services
+          consulenteUrl={consulenteUrl}
+          formazioneUrl={formazioneUrl}
+          speechUrl={speechUrl}
+        />
         <Fit />
         <Process />
         <Experience />

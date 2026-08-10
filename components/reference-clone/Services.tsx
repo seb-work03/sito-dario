@@ -10,46 +10,52 @@ import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 import { HoverArrow } from "./HoverArrow";
 
-const services = [
-  {
-    id: "consulente",
-    label: "Consulente",
-    href: "/servizi#consulente",
-    photo: "orECDk1yHAceniWXq7yKvfvv7Y.jpg",
-    bullets: [
-      "Audit strategico e tecnologico",
-      "Scalabilità e migrazioni di piattaforma",
-      "CRO, dati e advertising",
-      "Redditività e KPI",
-    ],
-  },
-  {
-    id: "formazione",
-    label: "Formazione",
-    href: "/formazione",
-    photo: "pK0MgeT7XpWRNeefyNQiRiZz7nQ.jpg",
-    bullets: [
-      "Formazione in-house su misura",
-      "Docenze per ITS e academy",
-      "Workshop operativi su casi reali",
-      "Percorsi post-diploma e master",
-    ],
-  },
-  {
-    id: "eventi",
-    label: "Interventi ed Eventi",
-    href: "/eventi",
-    photo: "2HY57myX3y7mgS1UFfrGVyN2yPw.jpg",
-    bullets: [
-      "Keynote e interventi verticali",
-      "Panel e moderazioni",
-      "Format custom per eventi corporate",
-      "Interventi in fiere di settore",
-    ],
-  },
-];
+type ServicesProps = {
+  consulenteUrl?: string | null;
+  formazioneUrl?: string | null;
+  speechUrl?: string | null;
+};
 
-export function Services() {
+export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesProps = {}) {
+  const services = [
+    {
+      id: "consulente",
+      label: "Consulente",
+      href: "/servizi#consulente",
+      photo: consulenteUrl ?? "/reference-assets/adviest/orECDk1yHAceniWXq7yKvfvv7Y.jpg",
+      bullets: [
+        "Audit strategico e tecnologico",
+        "Scalabilità e migrazioni di piattaforma",
+        "CRO, dati e advertising",
+        "Redditività e KPI",
+      ],
+    },
+    {
+      id: "formazione",
+      label: "Formazione",
+      href: "/formazione",
+      photo: formazioneUrl ?? "/reference-assets/adviest/pK0MgeT7XpWRNeefyNQiRiZz7nQ.jpg",
+      bullets: [
+        "Formazione in-house su misura",
+        "Docenze per ITS e academy",
+        "Workshop operativi su casi reali",
+        "Percorsi post-diploma e master",
+      ],
+    },
+    {
+      id: "eventi",
+      label: "Interventi ed Eventi",
+      href: "/eventi",
+      photo: speechUrl ?? "/reference-assets/adviest/2HY57myX3y7mgS1UFfrGVyN2yPw.jpg",
+      bullets: [
+        "Keynote e interventi verticali",
+        "Panel e moderazioni",
+        "Format custom per eventi corporate",
+        "Interventi in fiere di settore",
+      ],
+    },
+  ];
+
   const [active, setActive] = useState(0);
   const current = services[active];
 
@@ -127,9 +133,10 @@ export function Services() {
                 className="absolute inset-0"
               >
                 <Image
-                  src={`/reference-assets/adviest/${current.photo}`}
+                  src={current.photo}
                   alt={current.label}
                   fill
+                  unoptimized={current.photo.startsWith("http")}
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 60vw"
                 />
