@@ -57,9 +57,9 @@ const steps = [
   },
 ];
 
-const CARD_W = 300;
+const CARD_W = 340;
 const CARD_H = 220;
-const GAP = 28;
+const GAP = 64;
 
 const SPREAD_X = (CARD_W + GAP) / 2; // 164
 const SPREAD_Y = (CARD_H + GAP) / 2; // 124
