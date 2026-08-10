@@ -47,8 +47,8 @@ export function AnimatedText({
   const rendered =
     typeof children === "string" ? withSentenceBreaks(children) : children;
 
-  const initial = { opacity: 0, y: -14, filter: "blur(8px)" };
-  const whileInView = { opacity: 1, y: 0, filter: "blur(0px)" };
+  const initial = { opacity: 0, y: -14 };
+  const whileInView = { opacity: 1, y: 0 };
   const transition = { duration, delay, ease: [0.19, 1, 0.22, 1] as const };
   const viewport = { once: true, amount };
 

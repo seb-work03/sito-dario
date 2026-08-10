@@ -31,11 +31,10 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
   };
 
   const word: Variants = {
-    hidden: { opacity: 0, y: -18, filter: "blur(10px)" },
+    hidden: { opacity: 0, y: -18 },
     visible: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
       transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] },
     },
   };
@@ -46,8 +45,8 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
     return (
       <Tag
         className={className}
-        initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: -18 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.9, delay, ease: [0.19, 1, 0.22, 1] }}
       >
