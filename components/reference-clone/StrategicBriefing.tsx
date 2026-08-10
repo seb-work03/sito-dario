@@ -395,9 +395,6 @@ export function StrategicBriefing() {
             </motion.div>
           )}
 
-          <p className="text-[#dddddd] text-[11px] mt-6 border-t border-white/8 pt-4">
-            Tempo medio di compilazione: 90 secondi · Nessuna newsletter automatica.
-          </p>
           </div>
         </motion.div>
       </div>
