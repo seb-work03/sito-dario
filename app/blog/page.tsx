@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, ilike, or } from "drizzle-orm";
 import "@/components/reference-clone/reference-clone.css";
 import { Header } from "@/components/reference-clone/Header";
 import { Footer } from "@/components/reference-clone/Footer";
@@ -8,7 +8,7 @@ import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 import { db } from "@/lib/db";
-import { articles } from "@/lib/db/schema";
+import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -19,15 +19,32 @@ export const metadata: Metadata = {
     "Analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Aggiornato periodicamente.",
 };
 
+async function getLogoUrl(): Promise<string | null> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(or(ilike(media.filename, "%marchio%dario%"), ilike(media.filename, "%marchio%tana%")))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function BlogPage() {
-  const published = await db.query.articles.findMany({
-    where: eq(articles.status, "published"),
-    orderBy: desc(articles.publishedAt),
-    with: {
-      coverMedia: true,
-      articleCategories: { with: { category: true } },
-    },
-  });
+  const [logoUrl, published] = await Promise.all([
+    getLogoUrl(),
+    db.query.articles.findMany({
+      where: eq(articles.status, "published"),
+      orderBy: desc(articles.publishedAt),
+      with: {
+        coverMedia: true,
+        articleCategories: { with: { category: true } },
+      },
+    }),
+  ]);
 
   const items = published.map((a) => ({
     slug: a.slug,
@@ -57,7 +74,7 @@ export default async function BlogPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
-      <Header />
+      <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
         {/* Cyan intro band */}
         <section
@@ -106,7 +123,7 @@ export default async function BlogPage() {
 
         <BlogIndex articles={items} categories={categories} />
       </main>
-      <Footer />
+      <Footer logoUrl={logoUrl} />
       <ScrollToTop />
     </div>
   );
