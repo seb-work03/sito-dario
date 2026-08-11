@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -64,9 +65,9 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
         className="fixed top-0 left-0 right-0 z-50 h-20 md:h-24 bg-[#0D1218] border-b border-white/10"
       >
         <div className="mx-auto h-full max-w-[1240px] px-5 flex items-center justify-between">
-          <a href="#" className="py-3 md:py-0 transition-opacity hover:opacity-80">
+          <Link href="/" className="py-3 md:py-0 transition-opacity hover:opacity-80">
             <DarioTanaLogo url={logo} />
-          </a>
+          </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((l) => (
