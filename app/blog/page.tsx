@@ -98,7 +98,7 @@ export default async function BlogPage() {
               <>
                 <strong className="font-bold">Un archivio di analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione.</strong>
                 <br /><br />
-                <span className="font-normal">Qui trovi metodo prima che teoria: come leggere i numeri di un negozio online, come scegliere una piattaforma senza pentirsene, come costruire team che sanno decidere e cosa cambia davvero quando un progetto e-commerce inizia a generare valore misurabile.</span>
+                <span className="font-normal">Qui trovi metodo prima che teoria: come leggere i numeri di un negozio online, scegliere una piattaforma senza pentirsene e costruire team che sanno decidere quando conta davvero.</span>
               </>
             </AnimatedText>
           </div>
