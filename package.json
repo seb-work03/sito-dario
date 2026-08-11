@@ -14,6 +14,7 @@
     "seed:example-article": "tsx scripts/seed-example-article.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0",
     "@auth/drizzle-adapter": "^1.11.3",
     "@neondatabase/serverless": "^1.1.0",
     "@vercel/blob": "^2.6.1",

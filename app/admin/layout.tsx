@@ -7,6 +7,7 @@ const sections = [
   { label: "Media", href: "/admin/media" },
   { label: "Categorie", href: "/admin/categories" },
   { label: "Autori", href: "/admin/authors" },
+  { label: "Auto-genera", href: "/admin/auto-generate" },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
