@@ -23,11 +23,12 @@ type Category = { name: string; slug: string; count: number };
 type Props = {
   articles: ArticleItem[];
   categories: Category[];
+  hideFilter?: boolean;
 };
 
 const EASE = [0.19, 1, 0.22, 1] as const;
 
-export function BlogIndex({ articles, categories }: Props) {
+export function BlogIndex({ articles, categories, hideFilter = false }: Props) {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
@@ -42,27 +43,29 @@ export function BlogIndex({ articles, categories }: Props) {
   return (
     <>
       {/* Category tabs */}
-      <section className="bg-[#0D1218] px-5 pt-10 md:pt-14 pb-2">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="flex flex-wrap gap-2 md:gap-3">
-            <CategoryTab
-              label="Tutti"
-              count={totalCount}
-              active={activeSlug === null}
-              onClick={() => setActiveSlug(null)}
-            />
-            {categories.map((c) => (
+      {!hideFilter && (
+        <section className="bg-[#0D1218] px-5 pt-10 md:pt-14 pb-2">
+          <div className="mx-auto max-w-[1240px]">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               <CategoryTab
-                key={c.slug}
-                label={c.name}
-                count={c.count}
-                active={activeSlug === c.slug}
-                onClick={() => setActiveSlug(c.slug)}
+                label="Tutti"
+                count={totalCount}
+                active={activeSlug === null}
+                onClick={() => setActiveSlug(null)}
               />
-            ))}
+              {categories.map((c) => (
+                <CategoryTab
+                  key={c.slug}
+                  label={c.name}
+                  count={c.count}
+                  active={activeSlug === c.slug}
+                  onClick={() => setActiveSlug(c.slug)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Articles grid */}
       <section className="bg-[#0D1218] px-5 pt-10 md:pt-14 pb-24 md:pb-32">

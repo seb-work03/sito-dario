@@ -71,18 +71,6 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
   articleCategories: many(articleCategories),
 }));
 
-// --- Tags -----------------------------------------------------------------
-
-export const tags = pgTable("tag", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-});
-
-export const tagsRelations = relations(tags, ({ many }) => ({
-  articleTags: many(articleTags),
-}));
-
 // --- Articles ---------------------------------------------------------
 
 export const articleStatusEnum = pgEnum("article_status", ["draft", "published"]);
@@ -109,7 +97,6 @@ export const articlesRelations = relations(articles, ({ one, many }) => ({
   coverMedia: one(media, { fields: [articles.coverMediaId], references: [media.id] }),
   author: one(authors, { fields: [articles.authorId], references: [authors.id] }),
   articleCategories: many(articleCategories),
-  articleTags: many(articleTags),
 }));
 
 export const articleCategories = pgTable(
@@ -131,24 +118,6 @@ export const articleCategoriesRelations = relations(articleCategories, ({ one })
     fields: [articleCategories.categoryId],
     references: [categories.id],
   }),
-}));
-
-export const articleTags = pgTable(
-  "article_tag",
-  {
-    articleId: integer("article_id")
-      .notNull()
-      .references(() => articles.id, { onDelete: "cascade" }),
-    tagId: integer("tag_id")
-      .notNull()
-      .references(() => tags.id, { onDelete: "cascade" }),
-  },
-  (t) => [primaryKey({ columns: [t.articleId, t.tagId] })],
-);
-
-export const articleTagsRelations = relations(articleTags, ({ one }) => ({
-  article: one(articles, { fields: [articleTags.articleId], references: [articles.id] }),
-  tag: one(tags, { fields: [articleTags.tagId], references: [tags.id] }),
 }));
 
 // --- Auth (Auth.js / Drizzle adapter) --------------------------------------

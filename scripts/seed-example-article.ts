@@ -145,18 +145,6 @@ Se stai valutando una migrazione o una nuova build, il primo passo è capire dav
   });
   console.log(`Linked article to category '${categoryName}'.`);
 
-  // 5. Tags — create if missing, then link
-  const tagNames = ["e-commerce", "strategia", "piattaforme"];
-  for (const name of tagNames) {
-    const slug = slugify(name);
-    let tag = await db.query.tags.findFirst({ where: eq(schema.tags.slug, slug) });
-    if (!tag) {
-      [tag] = await db.insert(schema.tags).values({ name, slug }).returning();
-    }
-    await db.insert(schema.articleTags).values({ articleId: created.id, tagId: tag.id });
-  }
-  console.log(`Linked article to tags: ${tagNames.join(", ")}.`);
-
   console.log("\nDone. Visit /blog and the homepage 'Gli ultimi articoli' section.");
 }
 

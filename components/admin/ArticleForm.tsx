@@ -18,7 +18,6 @@ type Article = {
   seoTitle: string | null;
   seoDescription: string | null;
   categoryIds?: number[];
-  tagNames?: string;
 };
 
 export function ArticleForm({
@@ -157,18 +156,6 @@ export function ArticleForm({
             </label>
           ))}
         </div>
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">
-          Tag <span className="text-paper-500">(separati da virgola)</span>
-        </label>
-        <input
-          name="tagNames"
-          defaultValue={article?.tagNames ?? ""}
-          placeholder="e-commerce, marketing, strategia"
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
-        />
       </div>
 
       <details className="rounded-md border border-ink-600 bg-ink-800 p-3">

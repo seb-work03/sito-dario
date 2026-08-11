@@ -18,7 +18,6 @@ export default async function EditArticlePage({
       with: {
         coverMedia: true,
         articleCategories: true,
-        articleTags: { with: { tag: true } },
       },
     }),
     db.select().from(categories),
@@ -50,7 +49,6 @@ export default async function EditArticlePage({
           seoTitle: article.seoTitle,
           seoDescription: article.seoDescription,
           categoryIds: article.articleCategories.map((ac) => ac.categoryId),
-          tagNames: article.articleTags.map((at) => at.tag.name).join(", "),
         }}
       />
     </div>

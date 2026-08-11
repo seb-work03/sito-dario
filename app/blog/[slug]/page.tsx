@@ -9,6 +9,7 @@ import { Header } from "@/components/reference-clone/Header";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { ArticleContent } from "@/components/blog/ArticleContent";
+import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
@@ -36,7 +37,6 @@ async function getArticle(slug: string) {
       coverMedia: true,
       author: { with: { avatar: true } },
       articleCategories: { with: { category: true } },
-      articleTags: { with: { tag: true } },
     },
   });
 }
@@ -68,11 +68,11 @@ export default async function ArticlePage({
 
   const readingTime = readingTimeMinutes(article.content);
   const categories = article.articleCategories.map((ac) => ac.category);
-  const tags = article.articleTags.map((at) => at.tag);
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
       <Header logoUrl={logoUrl} />
+      <ReadingProgress />
 
       <main>
         {/* Hero image */}
@@ -186,22 +186,6 @@ export default async function ArticlePage({
           <ArticleContent content={article.content} />
         </div>
 
-        {/* Tags */}
-        {tags.length > 0 && (
-          <div className="mx-auto max-w-[896px] px-5 pb-10">
-            <div className="flex flex-wrap gap-2 pt-8 border-t border-white/8">
-              {tags.map((t) => (
-                <Link
-                  key={t.slug}
-                  href={`/blog/tag/${t.slug}`}
-                  className="rounded-full border border-white/12 px-3 py-1 text-xs text-[#93A6BB] hover:border-[#00e5ff]/40 hover:text-[#00e5ff] transition-colors duration-300"
-                >
-                  #{t.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Author card */}
         {article.author && (

@@ -5,9 +5,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
 import { db } from "@/lib/db";
-import { articleCategories, articles, articleTags } from "@/lib/db/schema";
+import { articleCategories, articles } from "@/lib/db/schema";
 import { slugify } from "@/lib/utils";
-import { resolveTagIds } from "./tags";
 
 function readArticleFields(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
@@ -35,22 +34,12 @@ function readArticleFields(formData: FormData) {
 
 async function syncTaxonomies(articleId: number, formData: FormData) {
   const categoryIds = formData.getAll("categoryIds").map(Number).filter(Boolean);
-  const tagNames = String(formData.get("tagNames") ?? "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const tagIds = await resolveTagIds(tagNames);
 
   await db.delete(articleCategories).where(eq(articleCategories.articleId, articleId));
   if (categoryIds.length > 0) {
     await db
       .insert(articleCategories)
       .values(categoryIds.map((categoryId) => ({ articleId, categoryId })));
-  }
-
-  await db.delete(articleTags).where(eq(articleTags.articleId, articleId));
-  if (tagIds.length > 0) {
-    await db.insert(articleTags).values(tagIds.map((tagId) => ({ articleId, tagId })));
   }
 }
 

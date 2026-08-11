@@ -6,7 +6,6 @@ const sections = [
   { label: "Articoli", href: "/admin" },
   { label: "Media", href: "/admin/media" },
   { label: "Categorie", href: "/admin/categories" },
-  { label: "Tag", href: "/admin/tags" },
   { label: "Autori", href: "/admin/authors" },
 ];
 
