@@ -165,26 +165,47 @@ export function StrategicBriefing() {
           <div
             className="relative rounded-[calc(1rem-1px)] bg-[#17222F] p-6 md:p-10 overflow-hidden"
           >
-          {/* Progress dots — mirror the testimonials cyan dot style */}
-          <div className="flex justify-end items-center gap-1.5 mb-8 md:mb-12 pt-2">
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => {
-              const active = done || i === step - 1;
-              return (
-                <span
-                  key={i}
-                  aria-hidden
-                  className="h-1 rounded-full transition-all duration-500"
-                  style={{
-                    width: active ? 24 : 8,
-                    background: active ? "#00e5ff" : "rgba(255,255,255,0.15)",
-                  }}
-                />
-              );
-            })}
-            <span className="sr-only">
-              {done ? "Completato" : `Step ${step} di ${TOTAL_STEPS}`}
-            </span>
-          </div>
+          {/* Header row: current step title on the left, progress dots on the right */}
+          {(() => {
+            const stepTitle = done
+              ? "Briefing ricevuto."
+              : step === 1
+                ? "Qual è il tuo obiettivo principale?"
+                : step === 2
+                  ? values.intent === "ecommerce"
+                    ? "Qual è la dimensione attuale del progetto?"
+                    : "Che tipo di intervento stai organizzando?"
+                  : "Chi guiderà questo progetto?";
+            return (
+              <div className="flex items-start justify-between gap-4 mb-8 md:mb-12 pt-2">
+                <h3
+                  key={`title-${done ? "done" : step}`}
+                  className="text-[#EDF2F7] text-[22px] md:text-[30px] font-medium tracking-tight leading-[1.15] flex-1"
+                >
+                  {stepTitle}
+                </h3>
+                <div className="flex items-center gap-1.5 shrink-0 mt-2 md:mt-3">
+                  {Array.from({ length: TOTAL_STEPS }).map((_, i) => {
+                    const active = done || i === step - 1;
+                    return (
+                      <span
+                        key={i}
+                        aria-hidden
+                        className="h-1 rounded-full transition-all duration-500"
+                        style={{
+                          width: active ? 24 : 8,
+                          background: active ? "#00e5ff" : "rgba(255,255,255,0.15)",
+                        }}
+                      />
+                    );
+                  })}
+                  <span className="sr-only">
+                    {done ? "Completato" : `Step ${step} di ${TOTAL_STEPS}`}
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Form body */}
           {!done ? (
@@ -199,7 +220,7 @@ export function StrategicBriefing() {
                     transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
                     className="border-0 p-0 m-0"
                   >
-                    <legend className="text-[#EDF2F7] text-[24px] md:text-[32px] font-medium tracking-tight leading-[1.15] mb-3">
+                    <legend className="sr-only">
                       Qual è il tuo obiettivo principale?
                     </legend>
                     <p className="text-[#93A6BB] text-sm mb-7">Scegli l&apos;area più vicina alla richiesta.</p>
@@ -232,7 +253,7 @@ export function StrategicBriefing() {
                     transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
                     className="border-0 p-0 m-0"
                   >
-                    <legend className="text-[#EDF2F7] text-[24px] md:text-[32px] font-medium tracking-tight leading-[1.15] mb-3">
+                    <legend className="sr-only">
                       {values.intent === "ecommerce"
                         ? "Qual è la dimensione attuale del progetto?"
                         : "Che tipo di intervento stai organizzando?"}
@@ -270,7 +291,7 @@ export function StrategicBriefing() {
                     transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
                     className="border-0 p-0 m-0"
                   >
-                    <legend className="text-[#EDF2F7] text-[24px] md:text-[32px] font-medium tracking-tight leading-[1.15] mb-3">
+                    <legend className="sr-only">
                       Chi guiderà questo progetto?
                     </legend>
                     <p className="text-[#93A6BB] text-sm mb-7">
@@ -390,9 +411,6 @@ export function StrategicBriefing() {
               <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#00e5ff] text-[#0D1218]">
                 <Check size={26} strokeWidth={3} />
               </span>
-              <h3 className="text-[#EDF2F7] text-2xl md:text-3xl font-medium tracking-tight">
-                Briefing ricevuto.
-              </h3>
               <p className="text-[#dddddd] max-w-md leading-relaxed">
                 Grazie per il tempo che hai dedicato. Ti ricontatterò personalmente in uno o due giorni lavorativi.
               </p>
