@@ -93,9 +93,9 @@ export default async function BlogPage() {
             </AnimatedHeadline>
             <AnimatedText
               delay={0.15}
-              className="text-[#0D1218]/80 text-base md:text-lg leading-relaxed max-w-xl"
+              className="text-[#0D1218] text-lg md:text-xl leading-relaxed max-w-2xl font-medium"
             >
-              Analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Aggiornato periodicamente.
+              Un archivio di analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Qui trovi metodo prima che teoria: come leggere i numeri di un negozio online, come scegliere una piattaforma senza pentirsene, come costruire team che sanno decidere e cosa cambia davvero quando un progetto e-commerce inizia a generare valore misurabile.
             </AnimatedText>
           </div>
         </section>
