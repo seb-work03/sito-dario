@@ -101,8 +101,8 @@ export function Footer({ logoUrl }: { logoUrl?: string | null } = {}) {
       {/* Dark bottom band */}
       <div className="bg-[#17222F] px-5 pt-20 pb-8">
         <div className="mx-auto max-w-[1240px]">
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-14 mb-14">
-            <div className="max-w-2xl flex flex-col gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 mb-14">
+            <div className="flex flex-col gap-8">
               <Link href="/" aria-label="Dario Tana — home" className="inline-flex transition-opacity hover:opacity-80">
                 <Image
                   src={logo}
