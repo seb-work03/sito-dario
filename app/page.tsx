@@ -16,7 +16,6 @@ import { Insights } from "@/components/reference-clone/Insights";
 import { LatestArticles } from "@/components/reference-clone/LatestArticles";
 import { Faq } from "@/components/reference-clone/Faq";
 import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefing";
-import { AccentCta } from "@/components/reference-clone/AccentCta";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 
@@ -179,9 +178,8 @@ export default async function HomePage() {
         <LatestArticles />
         <Faq />
         <StrategicBriefing />
-        <AccentCta />
       </main>
-      <Footer />
+      <Footer logoUrl={logoUrl} />
       <ScrollToTop />
     </div>
   );

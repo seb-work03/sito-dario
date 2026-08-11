@@ -1,7 +1,13 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { AnimatedHeadline } from "./AnimatedHeadline";
 import { Reveal } from "./Reveal";
+
+const FALLBACK_LOGO_URL =
+  "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/articoli/Marchio-Dario-Tana-eCommerce-DJJ83TmbpH4zhP3TO7culMfqCSbEPU.png";
 
 function LinkedinIcon({ size = 16 }: { size?: number }) {
   return (
@@ -34,9 +40,9 @@ const socials = [
 ];
 
 const navLinks = [
-  { label: "Chi sono", href: "#about-us" },
-  { label: "Servizi", href: "#service" },
-  { label: "Metodo", href: "#process" },
+  { label: "Chi sono", href: "/#about-us" },
+  { label: "Servizi", href: "/#service" },
+  { label: "Metodo", href: "/#process" },
   { label: "Contatti", href: "/contatti" },
 ];
 
@@ -46,95 +52,130 @@ const contacts = [
   { label: "Indirizzo", value: "Via dell'albero 34/c — Rimini (RN)", href: "https://maps.google.com/?q=Via+dell%27albero+34%2Fc+Rimini+RN", icon: <MapPin size={16} strokeWidth={1.75} /> },
 ];
 
-export function Footer() {
-  return (
-    <footer className="bg-[#17222F] px-5 pt-20 pb-8 overflow-hidden border-t border-[#00e5ff]/25">
-      <div className="mx-auto max-w-[1240px]">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-14 mb-14">
-          <div className="max-w-2xl">
-            <Reveal
-              as="h2"
-              y={30}
-              duration={0.9}
-              className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] mb-8 tracking-tight text-balance"
-            >
-              Hai un progetto e-commerce, un problema, o una decisione da prendere?
-            </Reveal>
-            <Reveal y={14} delay={0.2} duration={0.7} className="mb-10">
-              <a
-                href="/contatti"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-6 pr-2 py-2 transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_32px_rgba(0,229,255,0.55)]"
-              >
-                Parliamone
-                <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-10 h-10 shrink-0">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </a>
-            </Reveal>
+/**
+ * Site-wide footer.
+ *
+ * Structure:
+ *   1. Cyan "AccentCta" band on top — same styling as the standalone
+ *      AccentCta section but now permanently attached to the footer, so every
+ *      frontend page ends with the same CTA + footer combo.
+ *   2. Dark bottom band with logo, socials, menu, contacts and legal row.
+ *
+ * `logoUrl` is optional — falls back to the same public blob URL as the
+ * Header, so the footer keeps working on pages that don't fetch media.
+ */
+export function Footer({ logoUrl }: { logoUrl?: string | null } = {}) {
+  const logo = logoUrl ?? FALLBACK_LOGO_URL;
 
-            <div className="flex items-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#dddddd] hover:text-[#00e5ff] transition-all duration-300"
-                >
-                  {s.icon}
-                </a>
-              ))}
+  return (
+    <footer className="overflow-hidden">
+      {/* Cyan CTA band */}
+      <section
+        className="px-5 py-20 md:py-28"
+        style={{ background: "linear-gradient(135deg, #00e5ff 0%, #008a99 100%)" }}
+      >
+        <div className="mx-auto max-w-[1240px] text-center flex flex-col items-center gap-8">
+          <AnimatedHeadline
+            delay={0.1}
+            className="text-[#0D1218] font-medium text-[32px] md:text-[56px] leading-[1.05] tracking-tight max-w-3xl text-balance"
+          >
+            Pronto a costruire qualcosa che funziona davvero?
+          </AnimatedHeadline>
+
+          <Reveal y={14} delay={0.25} duration={0.7}>
+            <a
+              href="/contatti"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#0D1218] text-[#00e5ff] font-medium pl-6 pr-2 py-2 text-[16px] transition-all duration-500 hover:shadow-[0_0_32px_rgba(13,18,24,0.4)]"
+            >
+              Parliamone
+              <span className="flex items-center justify-center rounded-full bg-[#00e5ff] text-[#0D1218] w-10 h-10 shrink-0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
+                  <path d="M5 12h14M13 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Dark bottom band */}
+      <div className="bg-[#17222F] px-5 pt-20 pb-8">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-14 mb-14">
+            <div className="max-w-2xl flex flex-col gap-8">
+              <Link href="/" aria-label="Dario Tana — home" className="inline-flex transition-opacity hover:opacity-80">
+                <Image
+                  src={logo}
+                  alt="Dario Tana"
+                  width={199}
+                  height={106}
+                  unoptimized
+                  className="h-14 md:h-16 w-auto"
+                />
+              </Link>
+
+              <div className="flex items-center gap-3">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#dddddd] hover:text-[#00e5ff] transition-all duration-300"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 shrink-0">
+              <ul className="flex flex-col gap-3">
+                <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-2">Menu</li>
+                {navLinks.map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href} className="text-white hover:text-[#00e5ff] transition-colors duration-300 text-sm">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <ul className="flex flex-col gap-4">
+                <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-1">Contatti</li>
+                {contacts.map((c) => (
+                  <li key={c.label}>
+                    <a
+                      href={c.href}
+                      target={c.href.startsWith("http") ? "_blank" : undefined}
+                      rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="group flex items-start gap-2.5 text-sm"
+                    >
+                      <span className="text-[#00e5ff] mt-0.5 shrink-0">{c.icon}</span>
+                      <span className="flex flex-col leading-tight">
+                        <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.12em]">{c.label}</span>
+                        <span className="text-white group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5">
+                          {c.value}
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 shrink-0">
-            <ul className="flex flex-col gap-3">
-              <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-2">Menu</li>
-              {navLinks.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href} className="text-white hover:text-[#00e5ff] transition-colors duration-300 text-sm">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <ul className="flex flex-col gap-4">
-              <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-1">Contatti</li>
-              {contacts.map((c) => (
-                <li key={c.label}>
-                  <a
-                    href={c.href}
-                    target={c.href.startsWith("http") ? "_blank" : undefined}
-                    rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="group flex items-start gap-2.5 text-sm"
-                  >
-                    <span className="text-[#00e5ff] mt-0.5 shrink-0">{c.icon}</span>
-                    <span className="flex flex-col leading-tight">
-                      <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.12em]">{c.label}</span>
-                      <span className="text-white group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5">
-                        {c.value}
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#dddddd] text-xs">
-          <span>
-            2026 ©{" "}
-            <a href="https://dariotana.it/" className="text-white hover:text-[#00e5ff] transition-colors">Dario Tana</a>
-            , Tutti i diritti sono riservati. P.Iva: 04018390403
-          </span>
-          <div className="flex items-center gap-6">
-            <a href="/privacy" className="hover:text-[#00e5ff] transition-colors">Privacy</a>
-            <a href="/cookie" className="hover:text-[#00e5ff] transition-colors">Cookie</a>
-            <a href="/note-legali" className="hover:text-[#00e5ff] transition-colors">Note legali</a>
+          <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#dddddd] text-xs">
+            <span>
+              2026 ©{" "}
+              <a href="https://dariotana.it/" className="text-white hover:text-[#00e5ff] transition-colors">Dario Tana</a>
+              , Tutti i diritti sono riservati. P.Iva: 04018390403
+            </span>
+            <div className="flex items-center gap-6">
+              <a href="/privacy" className="hover:text-[#00e5ff] transition-colors">Privacy</a>
+              <a href="/cookie" className="hover:text-[#00e5ff] transition-colors">Cookie</a>
+              <a href="/note-legali" className="hover:text-[#00e5ff] transition-colors">Note legali</a>
+            </div>
           </div>
         </div>
       </div>
