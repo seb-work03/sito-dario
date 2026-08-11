@@ -4,11 +4,19 @@ import { Fragment, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
+type HeadingTag = "h1" | "h2" | "h3";
+
 type Props = {
   children: ReactNode;
   className?: string;
-  as?: "h2" | "h3";
+  as?: HeadingTag;
   delay?: number;
+};
+
+const MOTION_TAG: Record<HeadingTag, typeof motion.h1> = {
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
 };
 
 /**
@@ -48,7 +56,7 @@ export function AnimatedHeadline({ children, className, as = "h2", delay = 0 }: 
 
   // Non-string children (with inline JSX): animate the whole node.
   if (!text) {
-    const Tag = as === "h3" ? motion.h3 : motion.h2;
+    const Tag = MOTION_TAG[as];
     return (
       <Tag
         className={className}
