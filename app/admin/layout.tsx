@@ -1,38 +1,29 @@
-import Link from "next/link";
 import { auth } from "@/auth";
-import { SignOutButton } from "@/components/admin/SignOutButton";
-
-const sections = [
-  { label: "Articoli", href: "/admin" },
-  { label: "Media", href: "/admin/media" },
-  { label: "Categorie", href: "/admin/categories" },
-  { label: "Autori", href: "/admin/authors" },
-  { label: "Auto-genera", href: "/admin/auto-generate" },
-];
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
+  // Login page renders without sidebar
+  if (!session) {
+    return (
+      <div className="min-h-screen bg-[#0D1218] text-paper-50">
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-ink-900 text-paper-50">
-      {session && (
-        <header className="border-b border-ink-700">
-          <div className="flex items-center justify-between px-6 py-4">
-            <Link href="/admin" className="font-medium">
-              Dario Tana — Admin
-            </Link>
-            <SignOutButton />
-          </div>
-          <nav className="flex gap-5 px-6 pb-3 text-sm text-paper-300">
-            {sections.map((s) => (
-              <Link key={s.href} href={s.href} className="hover:text-celeste-400">
-                {s.label}
-              </Link>
-            ))}
-          </nav>
+    <div className="min-h-screen bg-[#0a0e14] text-paper-50">
+      <AdminSidebar />
+      <div className="ml-60">
+        {/* Top bar */}
+        <header className="sticky top-0 z-30 h-14 border-b border-white/8 bg-[#0a0e14]/80 backdrop-blur-sm flex items-center px-8">
+          <div className="h-px flex-1" />
         </header>
-      )}
-      <main className="mx-auto max-w-4xl px-6 py-10">{children}</main>
+        {/* Page content */}
+        <main className="mx-auto max-w-4xl px-8 py-8">{children}</main>
+      </div>
     </div>
   );
 }
