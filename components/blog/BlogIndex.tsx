@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { Clock } from "lucide-react";
+import { HoverArrow } from "@/components/reference-clone/HoverArrow";
 
 type ArticleItem = {
   slug: string;
@@ -159,12 +161,37 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
             <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
+          {item.categories[0] && (
+            <span className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+              {item.categories[0].name}
+            </span>
+          )}
         </div>
 
-        <div className="p-5 md:p-6">
-          <h3 className="text-[#EDF2F7] text-[18px] md:text-[20px] font-medium tracking-tight leading-[1.25] group-hover:text-[#00e5ff] transition-colors duration-300">
+        <div className="flex flex-col flex-1 p-7 gap-4">
+          <div className="flex items-center gap-3 text-[#dddddd] text-xs">
+            <span className="inline-flex items-center gap-1.5">
+              <Clock size={12} />
+              {item.readingTime} min di lettura
+            </span>
+            {item.publishedAt && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-[#4F6577]" />
+                <span>{item.publishedAt}</span>
+              </>
+            )}
+          </div>
+
+          <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
             {item.title}
           </h3>
+
+          <div className="flex items-center justify-between pt-2 mt-auto border-t border-white/6">
+            <span className="text-[#00e5ff] text-sm font-medium">Leggi l&apos;articolo</span>
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0D1218] text-[#00e5ff] transition-all duration-500 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] group-hover:shadow-[0_0_16px_rgba(0,229,255,0.5)]">
+              <HoverArrow size={16} />
+            </span>
+          </div>
         </div>
       </Link>
     </motion.article>

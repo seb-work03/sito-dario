@@ -27,12 +27,33 @@ export function formatDate(date: string | Date): string {
 }
 
 /**
- * Estimate reading time in minutes for Italian prose. Strips markdown
- * syntax and image/link URLs before counting words, then divides by an
- * average adult reading rate of 200 wpm. Always returns at least 1.
+ * Estimate reading time in minutes for Italian prose. Handles both new
+ * block-JSON articles (extracting the plain text of every block) and
+ * legacy markdown. Strips markdown syntax before counting words, then
+ * divides by an average adult reading rate of 200 wpm. Always returns
+ * at least 1.
  */
 export function readingTimeMinutes(content: string): number {
-  const plain = content
+  const trimmed = content.trim();
+  let source = content;
+  if (trimmed.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(trimmed) as Array<Record<string, unknown>>;
+      if (Array.isArray(parsed)) {
+        source = parsed
+          .map((b) => {
+            if (typeof b.text === "string") return b.text;
+            if (Array.isArray(b.items)) return b.items.join(" ");
+            if (typeof b.caption === "string") return b.caption;
+            return "";
+          })
+          .join(" ");
+      }
+    } catch {
+      // fall through to raw string
+    }
+  }
+  const plain = source
     // Remove code fences and their content
     .replace(/```[\s\S]*?```/g, " ")
     // Remove inline code

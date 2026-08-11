@@ -1,0 +1,127 @@
+import ReactMarkdown from "react-markdown";
+import type { Block } from "@/lib/blocks";
+
+/**
+ * Renders an array of Block objects on the frontend article page. Inline
+ * text (in paragraph, list item, image-text) is treated as markdown so
+ * users can still write **bold**, *italic*, [link](url).
+ */
+export function BlocksRenderer({ blocks }: { blocks: Block[] }) {
+  return (
+    <div className="flex flex-col gap-10">
+      {blocks.map((block) => (
+        <BlockView key={block.id} block={block} />
+      ))}
+    </div>
+  );
+}
+
+function InlineMarkdown({ children }: { children: string }) {
+  return (
+    <ReactMarkdown
+      components={{
+        p: ({ children }) => <>{children}</>,
+      }}
+    >
+      {children}
+    </ReactMarkdown>
+  );
+}
+
+function BlockView({ block }: { block: Block }) {
+  switch (block.type) {
+    case "paragraph":
+      return (
+        <div className="rich-text">
+          <p>
+            <InlineMarkdown>{block.text}</InlineMarkdown>
+          </p>
+        </div>
+      );
+
+    case "heading": {
+      const Tag = block.level === 2 ? "h2" : "h3";
+      return (
+        <div className="rich-text">
+          <Tag>{block.text}</Tag>
+        </div>
+      );
+    }
+
+    case "list": {
+      const Tag = block.ordered ? "ol" : "ul";
+      return (
+        <div className="rich-text">
+          <Tag>
+            {block.items.map((item, i) => (
+              <li key={i}>
+                <InlineMarkdown>{item}</InlineMarkdown>
+              </li>
+            ))}
+          </Tag>
+        </div>
+      );
+    }
+
+    case "image":
+      if (!block.url) return null;
+      return (
+        <figure>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={block.url}
+            alt={block.alt}
+            className="w-full rounded-xl object-cover"
+          />
+          {block.caption && (
+            <figcaption className="mt-2 text-center text-[13px] text-[#93A6BB] italic">
+              {block.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+
+    case "image-text":
+      if (!block.url) return null;
+      return (
+        <div
+          className={`flex flex-col gap-6 items-start md:flex-row${
+            block.align === "left" ? "" : " md:flex-row-reverse"
+          }`}
+        >
+          <div className="w-full md:w-[42%] shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={block.url}
+              alt={block.alt}
+              className="w-full rounded-xl object-cover"
+            />
+          </div>
+          <div className="flex-1 rich-text">
+            <p>
+              <InlineMarkdown>{block.text}</InlineMarkdown>
+            </p>
+          </div>
+        </div>
+      );
+
+    case "quote":
+      return (
+        <div className="rich-text">
+          <blockquote>
+            <InlineMarkdown>{block.text}</InlineMarkdown>
+            {block.cite && (
+              <footer className="mt-2 text-[13px] text-[#93A6BB] not-italic">
+                — {block.cite}
+              </footer>
+            )}
+          </blockquote>
+        </div>
+      );
+
+    case "separator":
+      return (
+        <hr className="border-t border-white/8 my-2" />
+      );
+  }
+}

@@ -1,19 +1,24 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import { tryParseBlocks } from "@/lib/blocks";
+import { BlocksRenderer } from "./BlocksRenderer";
 
-type Block =
+// ---------------------------------------------------------------------------
+// Legacy markdown parser (kept for backward compat with pre-blocks articles)
+// ---------------------------------------------------------------------------
+
+type LegacyBlock =
   | { type: "md"; content: string }
   | { type: "img-full"; url: string; alt: string }
   | { type: "img-left"; url: string; alt: string; text: string }
   | { type: "img-right"; url: string; alt: string; text: string };
 
-// Matches: <!-- foto: URL | alt --> or <!-- foto-sinistra: URL | alt --> etc.
 const SHORTCODE_RE =
   /<!--\s*(foto(?:-sinistra|-destra)?)\s*:\s*(https?:\/\/\S+?)(?:\s*\|\s*([^\n>]*?))?\s*-->/;
 
-function parseBlocks(raw: string): Block[] {
-  const blocks: Block[] = [];
+function parseLegacyBlocks(raw: string): LegacyBlock[] {
+  const blocks: LegacyBlock[] = [];
   let remaining = raw;
 
   while (remaining.length > 0) {
@@ -34,10 +39,10 @@ function parseBlocks(raw: string): Block[] {
       blocks.push({ type: "img-full", url: url.trim(), alt: alt.trim() });
       remaining = after.trim();
     } else {
-      // Consume next paragraph (up to first blank line) as the paired text
       const stripped = after.replace(/^\n+/, "");
       const blankIdx = stripped.search(/\n\n/);
-      const paraText = blankIdx === -1 ? stripped.trim() : stripped.slice(0, blankIdx).trim();
+      const paraText =
+        blankIdx === -1 ? stripped.trim() : stripped.slice(0, blankIdx).trim();
       const rest = blankIdx === -1 ? "" : stripped.slice(blankIdx + 2).trim();
       blocks.push({
         type: kind === "foto-sinistra" ? "img-left" : "img-right",
@@ -76,8 +81,8 @@ function MdBlock({ content }: { content: string }) {
   );
 }
 
-export function ArticleContent({ content }: { content: string }) {
-  const blocks = parseBlocks(content);
+function LegacyRenderer({ content }: { content: string }) {
+  const blocks = parseLegacyBlocks(content);
 
   return (
     <div className="flex flex-col gap-10">
@@ -104,7 +109,6 @@ export function ArticleContent({ content }: { content: string }) {
           );
         }
 
-        // img-left or img-right
         const isLeft = block.type === "img-left";
         return (
           <div
@@ -127,4 +131,14 @@ export function ArticleContent({ content }: { content: string }) {
       })}
     </div>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Dispatch: JSON blocks → BlocksRenderer, otherwise legacy markdown pipeline
+// ---------------------------------------------------------------------------
+
+export function ArticleContent({ content }: { content: string }) {
+  const blocks = tryParseBlocks(content);
+  if (blocks) return <BlocksRenderer blocks={blocks} />;
+  return <LegacyRenderer content={content} />;
 }
