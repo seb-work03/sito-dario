@@ -165,14 +165,25 @@ export function StrategicBriefing() {
           <div
             className="relative rounded-[calc(1rem-1px)] bg-[#17222F] p-6 md:p-10 overflow-hidden"
           >
-          {/* Meta row */}
-          <div className="flex justify-between items-center gap-3 mb-8 md:mb-12 pt-2">
-            <p className="text-[#dddddd] text-[10px] md:text-[11px] uppercase tracking-[0.12em]">
-              Briefing strategico
-            </p>
-            <p className="text-[#dddddd] text-[10px] md:text-[11px] uppercase tracking-[0.12em] tabular-nums">
-              {done ? "Completato" : `Step ${step} / ${TOTAL_STEPS}`}
-            </p>
+          {/* Progress dots — mirror the testimonials cyan dot style */}
+          <div className="flex justify-end items-center gap-1.5 mb-8 md:mb-12 pt-2">
+            {Array.from({ length: TOTAL_STEPS }).map((_, i) => {
+              const active = done || i === step - 1;
+              return (
+                <span
+                  key={i}
+                  aria-hidden
+                  className="h-1 rounded-full transition-all duration-500"
+                  style={{
+                    width: active ? 24 : 8,
+                    background: active ? "#00e5ff" : "rgba(255,255,255,0.15)",
+                  }}
+                />
+              );
+            })}
+            <span className="sr-only">
+              {done ? "Completato" : `Step ${step} di ${TOTAL_STEPS}`}
+            </span>
           </div>
 
           {/* Form body */}
