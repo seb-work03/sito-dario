@@ -87,18 +87,24 @@ export default async function AuthorArchivePage({
               Tutti gli articoli
             </Link>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              {author.avatar && (
-                <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-[#00e5ff]/25">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-12">
+              {/* Avatar — large */}
+              {author.avatar ? (
+                <div className="relative w-36 h-36 md:w-48 md:h-48 shrink-0 rounded-full overflow-hidden border-2 border-[#00e5ff]/30 shadow-xl shadow-[#00e5ff]/10">
                   <Image
                     src={author.avatar.url}
                     alt={author.name}
                     fill
                     unoptimized
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                 </div>
+              ) : (
+                <div className="w-36 h-36 md:w-48 md:h-48 shrink-0 rounded-full bg-[#0D1218] border-2 border-[#77C0CF]/40 flex items-center justify-center text-[#77C0CF] font-semibold text-4xl md:text-5xl">
+                  {author.name.split(/\s+/).slice(0, 2).map((w: string) => w[0] ?? "").join("").toUpperCase()}
+                </div>
               )}
+
               <div className="flex flex-col gap-2">
                 <span className="text-[11px] uppercase tracking-[0.15em] text-[#93A6BB]">Autore</span>
                 <h1 className="text-[#EDF2F7] font-medium text-[28px] md:text-[40px] leading-tight tracking-tight">

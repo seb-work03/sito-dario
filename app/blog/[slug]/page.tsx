@@ -232,9 +232,10 @@ interface ArticleCtaProps {
   question: string;
   paragraph: string;
   buttonLabel: string;
+  avatarUrl: string;
 }
 
-function ArticleCta({ question, paragraph, buttonLabel }: ArticleCtaProps) {
+function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaProps) {
   return (
     <div className="my-16 mx-auto max-w-[896px] px-5">
       <div className="relative overflow-hidden rounded-2xl bg-[#0A2A3A] border border-[#77C0CF]/30 px-7 py-8 md:px-12 md:py-10">
@@ -246,12 +247,12 @@ function ArticleCta({ question, paragraph, buttonLabel }: ArticleCtaProps) {
         />
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6 md:gap-10">
           {/* Portrait */}
-          <div className="shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-[#77C0CF]/50 shadow-lg shadow-[#77C0CF]/20">
+          <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#77C0CF]/50 shadow-lg shadow-[#77C0CF]/20">
             <Image
-              src={DARIO_PORTRAIT_URL}
+              src={avatarUrl}
               alt="Dario Tana"
-              width={80}
-              height={80}
+              width={128}
+              height={128}
               unoptimized
               className="w-full h-full object-cover object-top"
             />
@@ -301,6 +302,20 @@ async function getLogoUrl(): Promise<string | null> {
   }
 }
 
+async function getCtaAvatarUrl(): Promise<string> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, "%avatar%cta%"))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? DARIO_PORTRAIT_URL;
+  } catch {
+    return DARIO_PORTRAIT_URL;
+  }
+}
+
 async function getArticle(slug: string) {
   return db.query.articles.findFirst({
     where: and(eq(articles.slug, slug), eq(articles.status, "published")),
@@ -333,7 +348,11 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [logoUrl, article] = await Promise.all([getLogoUrl(), getArticle(slug)]);
+  const [logoUrl, article, ctaAvatarUrl] = await Promise.all([
+    getLogoUrl(),
+    getArticle(slug),
+    getCtaAvatarUrl(),
+  ]);
 
   if (!article) notFound();
 
@@ -358,21 +377,6 @@ export default async function ArticlePage({
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/30 to-transparent" />
-
-            {/* Category pills overlaid on image */}
-            {categories.length > 0 && (
-              <div className="absolute bottom-6 left-5 md:left-[calc((100%-896px)/2+20px)] flex flex-wrap gap-2">
-                {categories.map((c) => (
-                  <Link
-                    key={c.slug}
-                    href={`/blog/categoria/${c.slug}`}
-                    className="inline-flex items-center rounded-full border border-[#00e5ff]/50 bg-[#00e5ff]/15 backdrop-blur-sm px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/25 transition-colors"
-                  >
-                    {c.name}
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
         ) : (
           <div className="h-20 md:h-24" />
@@ -391,21 +395,6 @@ export default async function ArticlePage({
             />
             Tutti gli articoli
           </Link>
-
-          {/* Categories (shown only when no hero image) */}
-          {!article.coverMedia && categories.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {categories.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/blog/categoria/${c.slug}`}
-                  className="inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
-                >
-                  {c.name}
-                </Link>
-              ))}
-            </div>
-          )}
 
           {/* Title */}
           <h1 className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] tracking-tight mb-6">
@@ -435,6 +424,21 @@ export default async function ArticlePage({
               </div>
             )}
           </div>
+
+          {/* Categories — shown below meta row */}
+          {categories.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-5">
+              {categories.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/blog/categoria/${c.slug}`}
+                  className="inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Excerpt / lead */}
@@ -457,11 +461,13 @@ export default async function ArticlePage({
               question: "Vuoi portare il tuo e-commerce al livello successivo?",
               paragraph: "Strategia, tecnologia e CRO: ti aiuto a scalare il tuo shop online con metodo e dati.",
               buttonLabel: "Parliamo del tuo progetto",
+              avatarUrl: ctaAvatarUrl,
             },
             {
               question: "Cerchi formazione per il tuo team?",
               paragraph: "Workshop, percorsi aziendali e docenze: costruiamo insieme il programma più adatto alle tue esigenze.",
               buttonLabel: "Richiedi un briefing",
+              avatarUrl: ctaAvatarUrl,
             },
           ];
           return (
