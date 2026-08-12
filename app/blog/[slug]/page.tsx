@@ -88,7 +88,7 @@ function extractToc(content: string): TocEntry[] {
 function TableOfContents({ entries }: { entries: TocEntry[] }) {
   if (entries.length === 0) return null;
   return (
-    <div className="mx-auto max-w-[896px] px-5 pb-10">
+    <div className="mx-auto max-w-[896px] px-5">
       <div className="rounded-xl border border-[#77C0CF]/30 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
@@ -239,16 +239,16 @@ interface ArticleCtaProps {
 function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaProps) {
   return (
     <div className="my-16 mx-auto max-w-[896px] px-5">
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#77C0CF]/25 via-[#77C0CF]/12 to-[#77C0CF]/5 border border-[#77C0CF]/50 px-7 py-8 md:px-12 md:py-10">
-        {/* Teal glow */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#00e5ff]/20 via-[#00e5ff]/10 to-[#00e5ff]/5 border border-[#00e5ff]/40 px-7 py-8 md:px-12 md:py-10">
+        {/* Cyan glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, #77C0CF 0%, transparent 65%)" }}
+          className="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full opacity-25"
+          style={{ background: "radial-gradient(circle, #00e5ff 0%, transparent 65%)" }}
         />
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6 md:gap-10">
           {/* Portrait */}
-          <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#77C0CF]/70 shadow-lg shadow-[#77C0CF]/30">
+          <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#00e5ff]/60 shadow-lg shadow-[#00e5ff]/20">
             <Image
               src={avatarUrl}
               alt="Dario Tana"
@@ -264,7 +264,7 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
             <h4 className="text-[#EDF2F7] font-semibold text-lg md:text-xl leading-snug">
               {question}
             </h4>
-            <p className="text-[#B8D8E4] text-sm leading-relaxed max-w-lg">
+            <p className="text-[#93A6BB] text-sm leading-relaxed max-w-lg">
               {paragraph}
             </p>
           </div>
@@ -273,10 +273,10 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
           <div className="shrink-0">
             <Link
               href="/contatti"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#8fd3e1] hover:shadow-[0_0_24px_rgba(119,192,207,0.6)]"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ebff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
             >
               {buttonLabel}
-              <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-7 h-7 shrink-0">
+              <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-7 h-7 shrink-0">
                 <ArrowRight size={12} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
               </span>
             </Link>
@@ -397,14 +397,27 @@ export default async function ArticlePage({
             Tutti gli articoli
           </Link>
 
-          {/* Title */}
-          <h1 className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] tracking-tight mb-6">
-            {article.title}
-          </h1>
+          {/* Title row — author to the right on desktop */}
+          <div className="flex items-start gap-6 mb-6">
+            <h1 className="flex-1 text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] tracking-tight">
+              {article.title}
+            </h1>
+            {/* Author — desktop only, right of title */}
+            {article.author && (
+              <div className="hidden md:flex flex-col items-center gap-2 shrink-0 mt-1">
+                <AuthorAvatar
+                  name={article.author.name}
+                  url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
+                  size="lg"
+                />
+                <span className="text-[#EDF2F7] font-semibold text-base">{article.author.name}</span>
+              </div>
+            )}
+          </div>
 
           {/* Meta row */}
           <div className="flex items-start gap-6 pb-8 border-b border-white/8">
-            {/* Left: date, reading time, then categories */}
+            {/* Left: date, reading time, categories */}
             <div className="flex-1 flex flex-col gap-3 text-sm text-[#93A6BB]">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 {article.publishedAt && (
@@ -432,15 +445,15 @@ export default async function ArticlePage({
                 </div>
               )}
             </div>
-            {/* Right: author */}
+            {/* Author — mobile only, smaller */}
             {article.author && (
-              <div className="flex flex-col items-center gap-2 shrink-0">
+              <div className="md:hidden flex flex-col items-center gap-1.5 shrink-0">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
-                  size="xl"
+                  size="sm"
                 />
-                <span className="text-[#EDF2F7] font-semibold text-sm">{article.author.name}</span>
+                <span className="text-[#EDF2F7] font-semibold text-xs">{article.author.name}</span>
               </div>
             )}
           </div>
