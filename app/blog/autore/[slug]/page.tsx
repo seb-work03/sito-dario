@@ -78,7 +78,7 @@ export default async function AuthorArchivePage({
           <div className="mx-auto max-w-[1240px]">
             <Link
               href="/blog"
-              className="group inline-flex items-center gap-2 text-[#93A6BB] text-sm hover:text-[#00e5ff] transition-colors mb-8"
+              className="group inline-flex items-center gap-2 text-[#ddd] text-sm hover:text-[#00e5ff] transition-colors mb-8"
             >
               <ArrowLeft
                 size={15}
@@ -106,14 +106,14 @@ export default async function AuthorArchivePage({
               )}
 
               <div className="flex flex-col gap-2">
-                <span className="text-[11px] uppercase tracking-[0.15em] text-[#93A6BB]">Autore</span>
+                <span className="text-[11px] uppercase tracking-[0.15em] text-[#ddd]">Autore</span>
                 <h1 className="text-[#EDF2F7] font-medium text-[28px] md:text-[40px] leading-tight tracking-tight">
                   {author.name}
                 </h1>
                 {author.bio && (
-                  <p className="text-[#93A6BB] text-base leading-relaxed max-w-xl">{author.bio}</p>
+                  <p className="text-[#ddd] text-base leading-relaxed max-w-xl">{author.bio}</p>
                 )}
-                <span className="text-[#4F6577] text-sm">
+                <span className="text-[#93A6BB] text-sm">
                   {items.length} {items.length === 1 ? "articolo" : "articoli"}
                 </span>
               </div>
@@ -122,7 +122,7 @@ export default async function AuthorArchivePage({
         </section>
 
         {items.length === 0 ? (
-          <div className="mx-auto max-w-[1240px] px-5 py-20 text-center text-[#93A6BB]">
+          <div className="mx-auto max-w-[1240px] px-5 py-20 text-center text-[#ddd]">
             Nessun articolo pubblicato da questo autore.
           </div>
         ) : (

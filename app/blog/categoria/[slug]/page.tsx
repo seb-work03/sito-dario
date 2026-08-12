@@ -84,7 +84,7 @@ export default async function CategoryArchivePage({
           <div className="mx-auto max-w-[1240px]">
             <Link
               href="/blog"
-              className="group inline-flex items-center gap-2 text-[#93A6BB] text-sm hover:text-[#00e5ff] transition-colors mb-8"
+              className="group inline-flex items-center gap-2 text-[#ddd] text-sm hover:text-[#00e5ff] transition-colors mb-8"
             >
               <ArrowLeft
                 size={15}
@@ -93,25 +93,25 @@ export default async function CategoryArchivePage({
               Tutti gli articoli
             </Link>
 
-            <span className="block text-[11px] uppercase tracking-[0.15em] text-[#93A6BB] mb-3">
+            <span className="block text-[11px] uppercase tracking-[0.15em] text-[#ddd] mb-3">
               Categoria
             </span>
             <h1 className="text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-tight tracking-tight mb-3">
               {category.name}
             </h1>
             {category.description && (
-              <p className="text-[#93A6BB] text-base leading-relaxed max-w-2xl">
+              <p className="text-[#ddd] text-base leading-relaxed max-w-2xl">
                 {category.description}
               </p>
             )}
-            <span className="block mt-3 text-[#4F6577] text-sm">
+            <span className="block mt-3 text-[#93A6BB] text-sm">
               {items.length} {items.length === 1 ? "articolo" : "articoli"}
             </span>
           </div>
         </section>
 
         {items.length === 0 ? (
-          <div className="mx-auto max-w-[1240px] px-5 py-20 text-center text-[#93A6BB]">
+          <div className="mx-auto max-w-[1240px] px-5 py-20 text-center text-[#ddd]">
             Nessun articolo in questa categoria.
           </div>
         ) : (

@@ -176,7 +176,7 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
             </span>
             {item.publishedAt && (
               <>
-                <span className="w-1 h-1 rounded-full bg-[#4F6577]" />
+                <span className="w-1 h-1 rounded-full bg-[#93A6BB]" />
                 <span>{item.publishedAt}</span>
               </>
             )}

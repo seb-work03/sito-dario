@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { and, desc, eq, ilike, or } from "drizzle-orm";
+import { and, desc, eq, ilike, ne, or } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
 import "@/components/reference-clone/reference-clone.css";
@@ -152,7 +152,7 @@ function AuthorAvatar({
   size: "sm" | "md" | "lg" | "xl";
 }) {
   const dim =
-    size === "sm" ? "w-10 h-10 text-xs" :
+    size === "sm" ? "w-[18px] h-[18px] text-[6px]" :
     size === "md" ? "w-12 h-12 text-sm" :
     size === "lg" ? "w-20 h-20 text-lg" :
     "w-28 h-28 text-2xl";
@@ -287,6 +287,73 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
   );
 }
 
+// ---------------------------------------------------------------------------
+// Related article card (same style as BlogIndex ArticleCard)
+// ---------------------------------------------------------------------------
+
+type RelatedArticle = {
+  slug: string;
+  title: string;
+  content: string;
+  publishedAt: Date | null;
+  coverMedia: { url: string; altText: string | null } | null;
+  articleCategories: { category: { name: string; slug: string } }[];
+};
+
+function RelatedArticleCard({ article }: { article: RelatedArticle }) {
+  const rt = readingTimeMinutes(article.content);
+  const cats = article.articleCategories.map((ac) => ac.category);
+  return (
+    <Link
+      href={`/blog/${article.slug}`}
+      className="group flex flex-col rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-[#0D1218]">
+        {article.coverMedia ? (
+          <Image
+            src={article.coverMedia.url}
+            alt={article.coverMedia.altText ?? article.title}
+            fill
+            unoptimized
+            className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
+        {cats[0] && (
+          <span className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+            {cats[0].name}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col flex-1 p-7 gap-4">
+        <div className="flex items-center gap-3 text-[#ddd] text-xs">
+          <span className="inline-flex items-center gap-1.5">
+            <Clock size={12} />
+            {rt} min di lettura
+          </span>
+          {article.publishedAt && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-[#93A6BB]" />
+              <span>{formatDate(article.publishedAt)}</span>
+            </>
+          )}
+        </div>
+        <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
+          {article.title}
+        </h3>
+        <div className="flex items-center justify-between pt-2 mt-auto border-t border-white/6">
+          <span className="text-[#00e5ff] text-sm font-medium">Leggi l&apos;articolo</span>
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0D1218] text-[#00e5ff] transition-all duration-500 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] group-hover:shadow-[0_0_16px_rgba(0,229,255,0.5)]">
+            <ArrowRight size={16} />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 export const dynamic = "force-dynamic";
 
 async function getLogoUrl(): Promise<string | null> {
@@ -328,6 +395,18 @@ async function getArticle(slug: string) {
   });
 }
 
+async function getRelatedArticles(currentSlug: string) {
+  return db.query.articles.findMany({
+    where: and(eq(articles.status, "published"), ne(articles.slug, currentSlug)),
+    orderBy: desc(articles.publishedAt),
+    limit: 3,
+    with: {
+      coverMedia: true,
+      articleCategories: { with: { category: true } },
+    },
+  });
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -349,10 +428,11 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [logoUrl, article, ctaAvatarUrl] = await Promise.all([
+  const [logoUrl, article, ctaAvatarUrl, relatedArticles] = await Promise.all([
     getLogoUrl(),
     getArticle(slug),
     getCtaAvatarUrl(),
+    getRelatedArticles(slug),
   ]);
 
   if (!article) notFound();
@@ -418,8 +498,8 @@ export default async function ArticlePage({
           {/* Meta row */}
           <div className="flex items-start gap-6 pb-8 border-b border-white/8">
             {/* Left: date, reading time, categories */}
-            <div className="flex-1 flex flex-col gap-3 text-sm text-[#93A6BB]">
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="flex-1 flex flex-col gap-3 text-sm text-[#ddd]">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-5 sm:gap-y-2">
                 {article.publishedAt && (
                   <span className="inline-flex items-center gap-1.5">
                     <Calendar size={13} />
@@ -432,7 +512,7 @@ export default async function ArticlePage({
                 </span>
               </div>
               {categories.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {categories.map((c) => (
                     <Link
                       key={c.slug}
@@ -519,14 +599,14 @@ export default async function ArticlePage({
                 size="lg"
               />
               <div className="flex flex-col gap-1 min-w-0">
-                <span className="text-[11px] text-[#93A6BB] uppercase tracking-[0.12em]">
+                <span className="text-[11px] text-[#ddd] uppercase tracking-[0.12em]">
                   Scritto da
                 </span>
                 <span className="text-[#EDF2F7] font-medium text-lg group-hover:text-[#00e5ff] transition-colors duration-300">
                   {article.author.name}
                 </span>
                 {article.author.bio && (
-                  <span className="text-[#93A6BB] text-sm leading-relaxed line-clamp-2">
+                  <span className="text-[#ddd] text-sm leading-relaxed line-clamp-2">
                     {article.author.bio}
                   </span>
                 )}
@@ -537,6 +617,32 @@ export default async function ArticlePage({
               />
             </Link>
           </div>
+        )}
+        {/* Related articles */}
+        {relatedArticles.length > 0 && (
+          <section className="border-t border-white/8 px-5 pt-16 pb-24">
+            <div className="mx-auto max-w-[1240px]">
+              <div className="flex items-end justify-between mb-10">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-[#00e5ff] mb-2">Continua a leggere</p>
+                  <h2 className="text-[#EDF2F7] text-3xl md:text-4xl font-medium tracking-tight">
+                    Altri articoli per <em>te</em>
+                  </h2>
+                </div>
+                <Link
+                  href="/blog"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-[#ddd] text-sm hover:text-[#00e5ff] transition-colors"
+                >
+                  Vedi tutti <ArrowRight size={14} />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedArticles.map((rel) => (
+                  <RelatedArticleCard key={rel.slug} article={rel} />
+                ))}
+              </div>
+            </div>
+          </section>
         )}
       </main>
 
