@@ -128,70 +128,100 @@ function TableOfContents({ entries }: { entries: TocEntry[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Dario portrait used in CTA banners
+// Dario portrait used in CTA banners and as author avatar fallback
 // ---------------------------------------------------------------------------
 
 const DARIO_PORTRAIT_URL =
   "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/Dario%20tana-VPnb7FSkCeuXKwy4rdEsImphyzlhbs.png";
 
 // ---------------------------------------------------------------------------
-// Split content string into 3 parts for CTA injection
+// Author avatar component (circle + initials fallback)
 // ---------------------------------------------------------------------------
 
-function splitContent(content: string): [string, string, string] {
+function getInitials(name: string): string {
+  return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
+}
+
+function AuthorAvatar({
+  name,
+  url,
+  size,
+}: {
+  name: string;
+  url?: string | null;
+  size: "sm" | "md" | "lg";
+}) {
+  const dim =
+    size === "sm" ? "w-10 h-10 text-xs" :
+    size === "md" ? "w-12 h-12 text-sm" :
+    "w-20 h-20 text-lg";
+
+  if (!url) {
+    return (
+      <div
+        className={`${dim} rounded-full bg-[#17222F] border-2 border-[#77C0CF]/40 flex items-center justify-center text-[#77C0CF] font-semibold shrink-0`}
+      >
+        {getInitials(name)}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${dim} rounded-full overflow-hidden border-2 border-white/20 shrink-0`}>
+      <Image
+        src={url}
+        alt={name}
+        fill
+        unoptimized
+        className="object-cover object-top"
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Split content at H2 boundaries (returns array of chunks)
+// chunk[0] = content before first H2, chunk[1..N] = each H2 section
+// ---------------------------------------------------------------------------
+
+function splitAtH2s(content: string): string[] {
   const trimmed = content.trim();
 
   // JSON blocks
-  if (!trimmed.startsWith("<")) {
-    const blocks = tryParseBlocks(content);
-    if (blocks && blocks.length >= 3) {
-      const t1 = Math.floor(blocks.length / 3);
-      const t2 = Math.floor((blocks.length * 2) / 3);
-      return [
-        serializeBlocks(blocks.slice(0, t1)),
-        serializeBlocks(blocks.slice(t1, t2)),
-        serializeBlocks(blocks.slice(t2)),
-      ];
+  const blocks = tryParseBlocks(content);
+  if (blocks) {
+    const chunks: string[] = [];
+    let start = 0;
+    for (let i = 1; i < blocks.length; i++) {
+      const b = blocks[i];
+      if (b.type === "heading" && b.level === 2) {
+        chunks.push(serializeBlocks(blocks.slice(start, i)));
+        start = i;
+      }
     }
+    chunks.push(serializeBlocks(blocks.slice(start)));
+    return chunks.filter((c) => c.trim());
   }
 
-  // HTML: split at closing block-level tags
+  // HTML — split before each <h2
   if (trimmed.startsWith("<")) {
-    // Find all positions right after closing block tags
-    const re = /(<\/(?:p|h[1-6]|blockquote|ul|ol|pre|figure|div)>)/g;
-    const segs: string[] = [];
-    let last = 0;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(content)) !== null) {
-      segs.push(content.slice(last, m.index + m[0].length));
-      last = m.index + m[0].length;
-    }
-    if (last < content.length) segs.push(content.slice(last));
-    if (segs.length >= 3) {
-      const t1 = Math.floor(segs.length / 3);
-      const t2 = Math.floor((segs.length * 2) / 3);
-      return [
-        segs.slice(0, t1).join(""),
-        segs.slice(t1, t2).join(""),
-        segs.slice(t2).join(""),
-      ];
-    }
+    const parts = content.split(/(?=<h2[\s>])/i).filter((s) => s.trim());
+    return parts.length > 0 ? parts : [content];
   }
 
-  // Legacy markdown: split at double newlines
-  const paras = content.split(/\n\n+/);
-  if (paras.length >= 3) {
-    const t1 = Math.floor(paras.length / 3);
-    const t2 = Math.floor((paras.length * 2) / 3);
-    return [
-      paras.slice(0, t1).join("\n\n"),
-      paras.slice(t1, t2).join("\n\n"),
-      paras.slice(t2).join("\n\n"),
-    ];
+  // Legacy markdown — split before each ## heading
+  const lines = content.split("\n");
+  const chunks: string[] = [];
+  let current: string[] = [];
+  for (const line of lines) {
+    if (line.match(/^##\s/) && current.some((l) => l.trim())) {
+      chunks.push(current.join("\n"));
+      current = [];
+    }
+    current.push(line);
   }
-
-  // Short content — don't split
-  return [content, "", ""];
+  if (current.some((l) => l.trim())) chunks.push(current.join("\n"));
+  return chunks.length > 0 ? chunks : [content];
 }
 
 // ---------------------------------------------------------------------------
@@ -383,7 +413,7 @@ export default async function ArticlePage({
           </h1>
 
           {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#93A6BB] pb-8 border-b border-white/8">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[#93A6BB] pb-8 border-b border-white/8">
             {article.publishedAt && (
               <span className="inline-flex items-center gap-1.5">
                 <Calendar size={13} />
@@ -395,17 +425,13 @@ export default async function ArticlePage({
               {readingTime} min di lettura
             </span>
             {article.author && (
-              <div className="flex items-center gap-2.5 ml-auto">
-                <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/15 shrink-0">
-                  <Image
-                    src={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
-                    alt={article.author.name}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-                <span className="text-[#EDF2F7] font-medium">{article.author.name}</span>
+              <div className="flex flex-col items-center gap-1.5 ml-auto shrink-0">
+                <AuthorAvatar
+                  name={article.author.name}
+                  url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
+                  size="md"
+                />
+                <span className="text-[#EDF2F7] font-medium text-xs">{article.author.name}</span>
               </div>
             )}
           </div>
@@ -423,38 +449,34 @@ export default async function ArticlePage({
         {/* Table of contents */}
         <TableOfContents entries={extractToc(article.content)} />
 
-        {/* Article body — split into thirds with CTA banners */}
+        {/* Article body — CTA banner injected before each H2 section */}
         {(() => {
-          const [part1, part2, part3] = splitContent(article.content);
-          const hasSplit = part2.trim().length > 0;
+          const chunks = splitAtH2s(article.content);
+          const ctas = [
+            {
+              question: "Vuoi portare il tuo e-commerce al livello successivo?",
+              paragraph: "Strategia, tecnologia e CRO: ti aiuto a scalare il tuo shop online con metodo e dati.",
+              buttonLabel: "Parliamo del tuo progetto",
+            },
+            {
+              question: "Cerchi formazione per il tuo team?",
+              paragraph: "Workshop, percorsi aziendali e docenze: costruiamo insieme il programma più adatto alle tue esigenze.",
+              buttonLabel: "Richiedi un briefing",
+            },
+          ];
           return (
             <>
-              <div className="mx-auto max-w-[896px] px-5 pb-2">
-                <ArticleContent content={part1} />
-              </div>
-              {hasSplit && (
-                <>
-                  <ArticleCta
-                    question="Vuoi portare il tuo e-commerce al livello successivo?"
-                    paragraph="Strategia, tecnologia e CRO: ti aiuto a scalare il tuo shop online con metodo e dati."
-                    buttonLabel="Parliamo del tuo progetto"
-                  />
-                  <div className="mx-auto max-w-[896px] px-5 pb-2">
-                    <ArticleContent content={part2} />
+              {chunks.map((chunk, i) => (
+                <div key={i}>
+                  {/* Inject CTA before every H2 section (i > 0), alternating between the 2 */}
+                  {i > 0 && (
+                    <ArticleCta {...ctas[(i - 1) % ctas.length]} />
+                  )}
+                  <div className={`mx-auto max-w-[896px] px-5 ${i === chunks.length - 1 ? "pb-16" : "pb-2"}`}>
+                    <ArticleContent content={chunk} />
                   </div>
-                  <ArticleCta
-                    question="Cerchi formazione per il tuo team?"
-                    paragraph="Workshop, percorsi aziendali e docenze: costruiamo insieme il programma più adatto alle tue esigenze."
-                    buttonLabel="Richiedi un briefing"
-                  />
-                  <div className="mx-auto max-w-[896px] px-5 pb-16">
-                    <ArticleContent content={part3} />
-                  </div>
-                </>
-              )}
-              {!hasSplit && (
-                <div className="pb-16" />
-              )}
+                </div>
+              ))}
             </>
           );
         })()}
@@ -467,17 +489,11 @@ export default async function ArticlePage({
               href={`/blog/autore/${article.author.slug}`}
               className="group flex items-center gap-5 rounded-2xl border border-white/8 bg-[#17222F] p-6 hover:border-[#00e5ff]/30 transition-all duration-300"
             >
-              {article.author.avatar && (
-                <div className="relative w-16 h-16 shrink-0 rounded-full overflow-hidden border-2 border-[#00e5ff]/20">
-                  <Image
-                    src={article.author.avatar.url}
-                    alt=""
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-              )}
+              <AuthorAvatar
+                name={article.author.name}
+                url={article.author.avatar?.url ?? null}
+                size="lg"
+              />
               <div className="flex flex-col gap-1 min-w-0">
                 <span className="text-[11px] text-[#93A6BB] uppercase tracking-[0.12em]">
                   Scritto da
