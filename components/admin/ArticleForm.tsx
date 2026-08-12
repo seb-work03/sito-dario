@@ -58,43 +58,38 @@ export function ArticleForm({
     return result;
   }
 
+  const inputCls =
+    "rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-gray-500 focus:outline-none w-full";
+  const labelCls = "text-sm font-medium text-gray-700";
+
   return (
     <form action={action} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">Titolo</label>
-        <input
-          name="title"
-          required
-          defaultValue={article?.title}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
-        />
+        <label className={labelCls}>Titolo</label>
+        <input name="title" required defaultValue={article?.title} className={inputCls} />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">
-          Slug <span className="text-paper-500">(lascia vuoto per generarlo dal titolo)</span>
+        <label className={labelCls}>
+          Slug <span className="font-normal text-gray-400">(lascia vuoto per generarlo dal titolo)</span>
         </label>
-        <input
-          name="slug"
-          defaultValue={article?.slug}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
-        />
+        <input name="slug" defaultValue={article?.slug} className={inputCls} />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">
-          Estratto <span className="text-paper-500">(riassunto breve, mostrato nelle preview)</span>
+        <label className={labelCls}>
+          Estratto <span className="font-normal text-gray-400">(mostrato nelle anteprime)</span>
         </label>
         <textarea
           name="excerpt"
           rows={2}
           defaultValue={article?.excerpt ?? ""}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+          className={inputCls}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm text-paper-300">Contenuto</label>
+        <label className={labelCls}>Contenuto</label>
         <BlockEditor name="content" defaultValue={article?.content ?? ""} />
       </div>
 
@@ -107,27 +102,25 @@ export function ArticleForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1">
-          <label className="text-sm text-paper-300">Autore</label>
+          <label className={labelCls}>Autore</label>
           <select
             name="authorId"
             defaultValue={article?.authorId ?? ""}
-            className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+            className={inputCls}
           >
             <option value="">— nessuno —</option>
             {authors.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name}
-              </option>
+              <option key={a.id} value={a.id}>{a.name}</option>
             ))}
           </select>
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm text-paper-300">Stato</label>
+          <label className={labelCls}>Stato</label>
           <select
             name="status"
             defaultValue={article?.status ?? "draft"}
-            className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+            className={inputCls}
           >
             <option value="draft">Bozza</option>
             <option value="published">Pubblicato</option>
@@ -136,15 +129,15 @@ export function ArticleForm({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">Categorie</label>
-        <div className="flex flex-col gap-1 rounded-md border border-ink-600 bg-ink-800 p-3">
+        <label className={labelCls}>Categorie</label>
+        <div className="flex flex-col gap-1 rounded border border-gray-200 bg-gray-50 p-3">
           {orderedCategories().length === 0 && (
-            <p className="text-sm text-paper-500">
-              Nessuna categoria — creane una in Admin → Categorie.
+            <p className="text-sm text-gray-400">
+              Nessuna categoria — creane una in Categorie.
             </p>
           )}
           {orderedCategories().map(({ cat, depth }) => (
-            <label key={cat.id} className="flex items-center gap-2 text-sm text-paper-200">
+            <label key={cat.id} className="flex items-center gap-2 text-sm text-gray-700">
               <input
                 type="checkbox"
                 name="categoryIds"
@@ -164,24 +157,24 @@ export function ArticleForm({
         </div>
       </div>
 
-      <details className="rounded-md border border-ink-600 bg-ink-800 p-3">
-        <summary className="cursor-pointer text-sm text-paper-300">SEO (opzionale)</summary>
+      <details className="rounded border border-gray-200 p-3">
+        <summary className="cursor-pointer text-sm font-medium text-gray-600">SEO (opzionale)</summary>
         <div className="mt-3 flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-paper-300">Titolo SEO</label>
+            <label className={labelCls}>Titolo SEO</label>
             <input
               name="seoTitle"
               defaultValue={article?.seoTitle ?? ""}
-              className="rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+              className={inputCls}
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-paper-300">Descrizione SEO</label>
+            <label className={labelCls}>Descrizione SEO</label>
             <textarea
               name="seoDescription"
               rows={2}
               defaultValue={article?.seoDescription ?? ""}
-              className="rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+              className={inputCls}
             />
           </div>
         </div>
@@ -189,7 +182,7 @@ export function ArticleForm({
 
       <button
         type="submit"
-        className="self-start rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400"
+        className="self-start rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
       >
         Salva
       </button>

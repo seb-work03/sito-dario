@@ -38,7 +38,7 @@ export function MediaUploadWidget() {
     : "Carica immagini";
 
   return (
-    <label className="cursor-pointer rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400 select-none">
+    <label className="cursor-pointer rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 select-none">
       {label}
       <input
         ref={inputRef}

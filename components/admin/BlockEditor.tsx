@@ -11,11 +11,6 @@ import {
   tryParseBlocks,
 } from "@/lib/blocks";
 
-// ---------------------------------------------------------------------------
-// Public component: wraps a hidden <input name="content"> so it slots into
-// the existing server action pipeline unchanged.
-// ---------------------------------------------------------------------------
-
 export function BlockEditor({
   name = "content",
   defaultValue = "",
@@ -31,12 +26,9 @@ export function BlockEditor({
   }, [defaultValue]);
 
   const [blocks, setBlocks] = useState<Block[]>(initial);
-  const [showJsonDebug, setShowJsonDebug] = useState(false);
 
   function update(id: string, patch: Partial<Block>) {
-    setBlocks((prev) =>
-      prev.map((b) => (b.id === id ? ({ ...b, ...patch } as Block) : b)),
-    );
+    setBlocks((prev) => prev.map((b) => (b.id === id ? ({ ...b, ...patch } as Block) : b)));
   }
 
   function insertAfter(index: number, type: BlockType) {
@@ -64,27 +56,16 @@ export function BlockEditor({
   const serialized = serializeBlocks(blocks);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-0">
       <input type="hidden" name={name} value={serialized} />
 
-      <div className="rounded-xl border border-ink-600 bg-ink-900/60">
-        {/* Top help bar */}
-        <div className="flex items-center justify-between border-b border-ink-600 px-4 py-2.5">
-          <div className="text-xs text-paper-400">
-            {blocks.length} {blocks.length === 1 ? "blocco" : "blocchi"} · Trascina l&apos;articolo
-            usando i pulsanti a destra di ogni blocco
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowJsonDebug((v) => !v)}
-            className="text-[11px] text-paper-500 hover:text-paper-300 transition-colors"
-          >
-            {showJsonDebug ? "Nascondi JSON" : "Vedi JSON"}
-          </button>
+      <div className="rounded border border-gray-300 bg-white">
+        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2 text-xs text-gray-400">
+          <span>{blocks.length} {blocks.length === 1 ? "blocco" : "blocchi"}</span>
+          <span>↑ ↓ sposta · ✕ elimina</span>
         </div>
 
-        {/* Blocks list */}
-        <div className="flex flex-col p-4 md:p-6 gap-1">
+        <div className="flex flex-col p-4 gap-0.5">
           <BlockInserter onSelect={(type) => insertAfter(-1, type)} isTop />
           {blocks.map((block, i) => (
             <div key={block.id} className="flex flex-col">
@@ -100,28 +81,22 @@ export function BlockEditor({
           ))}
         </div>
       </div>
-
-      {showJsonDebug && (
-        <pre className="mt-1 rounded-md border border-ink-600 bg-ink-900 p-3 text-[11px] text-paper-400 overflow-x-auto max-h-40">
-          {JSON.stringify(blocks, null, 2)}
-        </pre>
-      )}
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Block-type inserter: hover to reveal, click to open the type menu
+// Block inserter
 // ---------------------------------------------------------------------------
 
-const BLOCK_TYPE_LABELS: { type: BlockType; label: string; icon: string; desc: string }[] = [
-  { type: "paragraph", label: "Paragrafo", icon: "¶", desc: "Testo semplice" },
-  { type: "heading", label: "Titolo", icon: "H", desc: "H2 o H3" },
-  { type: "list", label: "Elenco", icon: "•", desc: "Puntato o numerato" },
-  { type: "image", label: "Immagine", icon: "🖼", desc: "Larghezza piena" },
-  { type: "image-text", label: "Immagine + testo", icon: "◨", desc: "Affiancate" },
-  { type: "quote", label: "Citazione", icon: "❝", desc: "Frase in evidenza" },
-  { type: "separator", label: "Separatore", icon: "—", desc: "Linea orizzontale" },
+const BLOCK_TYPE_LABELS: { type: BlockType; label: string; desc: string }[] = [
+  { type: "paragraph", label: "Paragrafo", desc: "Testo semplice" },
+  { type: "heading", label: "Titolo", desc: "H2 o H3" },
+  { type: "list", label: "Elenco", desc: "Puntato o numerato" },
+  { type: "image", label: "Immagine", desc: "Larghezza piena" },
+  { type: "image-text", label: "Immagine + testo", desc: "Affiancate" },
+  { type: "quote", label: "Citazione", desc: "Frase in evidenza" },
+  { type: "separator", label: "Separatore", desc: "Linea orizzontale" },
 ];
 
 function BlockInserter({
@@ -150,35 +125,29 @@ function BlockInserter({
           open ? "opacity-100" : "opacity-0 group-hover/insert:opacity-100"
         } transition-opacity`}
       >
-        <div className="flex-1 h-px bg-ink-600" />
+        <div className="flex-1 h-px bg-gray-200" />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-celeste-500/50 bg-celeste-500/10 text-celeste-400 hover:bg-celeste-500 hover:text-ink-950 px-3 py-1 text-xs font-medium transition-colors"
+          className="inline-flex items-center gap-1 rounded border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 px-2.5 py-0.5 text-xs transition-colors"
         >
-          <span className="text-sm leading-none">+</span> Aggiungi blocco
+          + Aggiungi blocco
         </button>
-        <div className="flex-1 h-px bg-ink-600" />
+        <div className="flex-1 h-px bg-gray-200" />
       </div>
 
       {open && (
-        <div className="absolute z-20 left-1/2 -translate-x-1/2 mt-1 w-[520px] max-w-[92vw] rounded-lg border border-ink-500 bg-ink-800 shadow-xl p-2 grid grid-cols-2 gap-1">
+        <div className="absolute z-20 left-1/2 -translate-x-1/2 mt-1 w-[480px] max-w-[92vw] rounded border border-gray-200 bg-white shadow-lg p-1.5 grid grid-cols-2 gap-0.5">
           {BLOCK_TYPE_LABELS.map((b) => (
             <button
               key={b.type}
               type="button"
-              onClick={() => {
-                onSelect(b.type);
-                setOpen(false);
-              }}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-ink-700 transition-colors"
+              onClick={() => { onSelect(b.type); setOpen(false); }}
+              className="flex items-center gap-2.5 rounded px-3 py-2 text-left hover:bg-gray-100 transition-colors"
             >
-              <span className="w-9 h-9 rounded-md bg-ink-900 flex items-center justify-center text-celeste-400 text-base shrink-0">
-                {b.icon}
-              </span>
               <span className="flex flex-col">
-                <span className="text-sm text-paper-50 font-medium">{b.label}</span>
-                <span className="text-[11px] text-paper-400">{b.desc}</span>
+                <span className="text-sm text-gray-800 font-medium">{b.label}</span>
+                <span className="text-[11px] text-gray-400">{b.desc}</span>
               </span>
             </button>
           ))}
@@ -189,7 +158,7 @@ function BlockInserter({
 }
 
 // ---------------------------------------------------------------------------
-// Row wrapper: block content + side controls
+// Block row with controls
 // ---------------------------------------------------------------------------
 
 function BlockRow({
@@ -205,43 +174,23 @@ function BlockRow({
   onMoveUp?: () => void;
   onMoveDown?: () => void;
 }) {
-  const [hover, setHover] = useState(false);
-
   return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      className="relative group/block flex gap-2 rounded-lg border border-transparent hover:border-ink-600 hover:bg-ink-800/40 p-2 md:p-3 transition-colors"
-    >
+    <div className="group/block relative flex gap-2 rounded hover:bg-gray-50 p-2 transition-colors">
       <div className="flex-1 min-w-0">
         <BlockBody block={block} onChange={onChange} />
       </div>
 
-      <div
-        className={`flex flex-col gap-1 shrink-0 transition-opacity ${
-          hover ? "opacity-100" : "opacity-0 md:group-hover/block:opacity-100"
-        }`}
-      >
-        <SideBtn title="Sposta su" onClick={onMoveUp} disabled={!onMoveUp}>
-          ↑
-        </SideBtn>
-        <SideBtn title="Sposta giù" onClick={onMoveDown} disabled={!onMoveDown}>
-          ↓
-        </SideBtn>
-        <SideBtn title="Elimina" onClick={onDelete} danger>
-          ✕
-        </SideBtn>
+      <div className="flex flex-col gap-0.5 shrink-0 opacity-0 group-hover/block:opacity-100 transition-opacity">
+        <SideBtn title="Sposta su" onClick={onMoveUp} disabled={!onMoveUp}>↑</SideBtn>
+        <SideBtn title="Sposta giù" onClick={onMoveDown} disabled={!onMoveDown}>↓</SideBtn>
+        <SideBtn title="Elimina" onClick={onDelete} danger>✕</SideBtn>
       </div>
     </div>
   );
 }
 
 function SideBtn({
-  children,
-  title,
-  onClick,
-  disabled,
-  danger,
+  children, title, onClick, disabled, danger,
 }: {
   children: React.ReactNode;
   title: string;
@@ -255,12 +204,12 @@ function SideBtn({
       title={title}
       onClick={onClick}
       disabled={disabled}
-      className={`w-7 h-7 rounded-md flex items-center justify-center text-sm border transition-colors ${
+      className={`w-6 h-6 rounded flex items-center justify-center text-xs border transition-colors ${
         disabled
-          ? "border-ink-700 text-paper-600 cursor-not-allowed"
+          ? "border-gray-200 text-gray-300 cursor-not-allowed"
           : danger
-            ? "border-ink-600 text-paper-400 hover:border-red-500/40 hover:text-red-400 hover:bg-red-500/10"
-            : "border-ink-600 text-paper-400 hover:border-celeste-500/40 hover:text-celeste-400"
+            ? "border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-500 hover:bg-red-50"
+            : "border-gray-200 text-gray-400 hover:border-gray-400 hover:text-gray-700"
       }`}
     >
       {children}
@@ -272,56 +221,37 @@ function SideBtn({
 // Per-block editor bodies
 // ---------------------------------------------------------------------------
 
-function BlockBody({
-  block,
-  onChange,
-}: {
-  block: Block;
-  onChange: (patch: Partial<Block>) => void;
-}) {
+function BlockBody({ block, onChange }: { block: Block; onChange: (patch: Partial<Block>) => void }) {
+  const inputCls = "w-full rounded border border-gray-200 px-2 py-1.5 text-sm text-gray-900 focus:border-gray-400 focus:outline-none";
+
   switch (block.type) {
     case "paragraph":
       return (
         <AutoTextarea
           value={block.text}
           onChange={(text) => onChange({ text })}
-          placeholder="Scrivi il paragrafo. Usa **grassetto**, *corsivo*, [link](https://…)"
-          className="text-[15px] leading-relaxed text-paper-50"
+          placeholder="Scrivi il paragrafo…"
+          className="text-sm leading-relaxed text-gray-900"
         />
       );
 
     case "heading":
       return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <BlockLabel>Titolo</BlockLabel>
-            <div className="inline-flex rounded-md border border-ink-600 overflow-hidden">
-              {([2, 3] as const).map((lv) => (
-                <button
-                  key={lv}
-                  type="button"
-                  onClick={() => onChange({ level: lv })}
-                  className={`px-2.5 py-0.5 text-xs transition-colors ${
-                    block.level === lv
-                      ? "bg-celeste-500 text-ink-950"
-                      : "bg-ink-900 text-paper-300 hover:bg-ink-700"
-                  }`}
-                >
-                  H{lv}
-                </button>
-              ))}
-            </div>
+            <ToggleGroup
+              options={[{ value: 2, label: "H2" }, { value: 3, label: "H3" }]}
+              value={block.level}
+              onChange={(v) => onChange({ level: v as 2 | 3 })}
+            />
           </div>
           <AutoTextarea
             value={block.text}
             onChange={(text) => onChange({ text })}
             placeholder={block.level === 2 ? "Titolo di sezione" : "Sottotitolo"}
             singleLine
-            className={
-              block.level === 2
-                ? "text-[22px] font-medium tracking-tight text-paper-50"
-                : "text-[18px] font-medium tracking-tight text-paper-50"
-            }
+            className={block.level === 2 ? "text-xl font-semibold text-gray-900" : "text-lg font-semibold text-gray-900"}
           />
         </div>
       );
@@ -331,67 +261,44 @@ function BlockBody({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <BlockLabel>Elenco</BlockLabel>
-            <div className="inline-flex rounded-md border border-ink-600 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => onChange({ ordered: false })}
-                className={`px-2.5 py-0.5 text-xs transition-colors ${
-                  !block.ordered
-                    ? "bg-celeste-500 text-ink-950"
-                    : "bg-ink-900 text-paper-300 hover:bg-ink-700"
-                }`}
-              >
-                • Puntato
-              </button>
-              <button
-                type="button"
-                onClick={() => onChange({ ordered: true })}
-                className={`px-2.5 py-0.5 text-xs transition-colors ${
-                  block.ordered
-                    ? "bg-celeste-500 text-ink-950"
-                    : "bg-ink-900 text-paper-300 hover:bg-ink-700"
-                }`}
-              >
-                1. Numerato
-              </button>
-            </div>
+            <ToggleGroup
+              options={[{ value: false, label: "• Puntato" }, { value: true, label: "1. Numerato" }]}
+              value={block.ordered}
+              onChange={(v) => onChange({ ordered: v as boolean })}
+            />
           </div>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             {block.items.map((item, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <span className="mt-2 text-paper-500 text-sm shrink-0 w-6 text-right">
+              <div key={i} className="flex items-center gap-2">
+                <span className="text-gray-400 text-sm w-5 text-right shrink-0">
                   {block.ordered ? `${i + 1}.` : "•"}
                 </span>
-                <div className="flex-1 min-w-0">
-                  <AutoTextarea
-                    value={item}
-                    onChange={(text) => {
-                      const items = [...block.items];
-                      items[i] = text;
-                      onChange({ items });
-                    }}
-                    placeholder="Voce dell'elenco"
-                    singleLine
-                    className="text-[15px] text-paper-50"
-                  />
-                </div>
+                <AutoTextarea
+                  value={item}
+                  onChange={(text) => {
+                    const items = [...block.items];
+                    items[i] = text;
+                    onChange({ items });
+                  }}
+                  placeholder="Voce dell'elenco"
+                  singleLine
+                  className="flex-1 text-sm text-gray-900"
+                />
                 <button
                   type="button"
                   onClick={() => {
                     const items = block.items.filter((_, j) => j !== i);
                     onChange({ items: items.length ? items : [""] });
                   }}
-                  className="mt-1.5 text-paper-500 hover:text-red-400 text-sm shrink-0 w-6"
+                  className="text-gray-300 hover:text-red-500 text-xs shrink-0"
                   title="Rimuovi voce"
-                >
-                  ✕
-                </button>
+                >✕</button>
               </div>
             ))}
             <button
               type="button"
               onClick={() => onChange({ items: [...block.items, ""] })}
-              className="self-start mt-1 text-xs text-celeste-400 hover:text-celeste-300 transition-colors"
+              className="self-start mt-0.5 text-xs text-gray-500 hover:text-gray-800"
             >
               + Aggiungi voce
             </button>
@@ -414,44 +321,23 @@ function BlockBody({
             value={block.caption ?? ""}
             onChange={(e) => onChange({ caption: e.target.value })}
             placeholder="Didascalia (opzionale)"
-            className="w-full rounded-md border border-ink-600 bg-ink-800 px-3 py-1.5 text-sm text-paper-50 focus:border-celeste-500 focus:outline-none"
+            className={inputCls}
           />
         </div>
       );
 
     case "image-text":
       return (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <BlockLabel>Immagine + testo</BlockLabel>
-            <div className="inline-flex rounded-md border border-ink-600 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => onChange({ align: "left" })}
-                className={`px-2.5 py-0.5 text-xs transition-colors ${
-                  block.align === "left"
-                    ? "bg-celeste-500 text-ink-950"
-                    : "bg-ink-900 text-paper-300 hover:bg-ink-700"
-                }`}
-              >
-                ◧ Foto a sx
-              </button>
-              <button
-                type="button"
-                onClick={() => onChange({ align: "right" })}
-                className={`px-2.5 py-0.5 text-xs transition-colors ${
-                  block.align === "right"
-                    ? "bg-celeste-500 text-ink-950"
-                    : "bg-ink-900 text-paper-300 hover:bg-ink-700"
-                }`}
-              >
-                Foto a dx ◨
-              </button>
-            </div>
+            <ToggleGroup
+              options={[{ value: "left", label: "◧ Foto sx" }, { value: "right", label: "Foto dx ◨" }]}
+              value={block.align}
+              onChange={(v) => onChange({ align: v as "left" | "right" })}
+            />
           </div>
-          <div
-            className={`flex flex-col gap-3 md:flex-row${block.align === "right" ? " md:flex-row-reverse" : ""}`}
-          >
+          <div className={`flex flex-col gap-3 md:flex-row${block.align === "right" ? " md:flex-row-reverse" : ""}`}>
             <div className="w-full md:w-2/5 shrink-0">
               <ImagePickerInline
                 url={block.url}
@@ -464,8 +350,8 @@ function BlockBody({
               <AutoTextarea
                 value={block.text}
                 onChange={(text) => onChange({ text })}
-                placeholder="Testo del paragrafo accanto all'immagine"
-                className="text-[15px] leading-relaxed text-paper-50"
+                placeholder="Testo accanto all'immagine"
+                className="text-sm leading-relaxed text-gray-900"
               />
             </div>
           </div>
@@ -476,29 +362,29 @@ function BlockBody({
       return (
         <div className="flex flex-col gap-2">
           <BlockLabel>Citazione</BlockLabel>
-          <div className="border-l-[3px] border-celeste-500/60 pl-4">
+          <div className="border-l-2 border-gray-400 pl-3">
             <AutoTextarea
               value={block.text}
               onChange={(text) => onChange({ text })}
               placeholder="Frase in evidenza"
-              className="text-[16px] italic text-paper-50 leading-relaxed"
+              className="text-sm italic text-gray-700 leading-relaxed"
             />
           </div>
           <input
             type="text"
             value={block.cite ?? ""}
             onChange={(e) => onChange({ cite: e.target.value })}
-            placeholder="Fonte / autore (opzionale)"
-            className="w-full rounded-md border border-ink-600 bg-ink-800 px-3 py-1.5 text-sm text-paper-50 focus:border-celeste-500 focus:outline-none"
+            placeholder="Fonte (opzionale)"
+            className={inputCls}
           />
         </div>
       );
 
     case "separator":
       return (
-        <div className="flex items-center gap-3 py-2">
+        <div className="flex items-center gap-3 py-1">
           <BlockLabel>Separatore</BlockLabel>
-          <div className="flex-1 h-px bg-ink-500" />
+          <div className="flex-1 h-px bg-gray-300" />
         </div>
       );
   }
@@ -506,22 +392,47 @@ function BlockBody({
 
 function BlockLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-[10px] uppercase tracking-[0.14em] text-paper-500 font-medium">
+    <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">
       {children}
     </span>
   );
 }
 
+function ToggleGroup<T extends string | number | boolean>({
+  options,
+  value,
+  onChange,
+}: {
+  options: { value: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="inline-flex rounded border border-gray-300 overflow-hidden">
+      {options.map((opt) => (
+        <button
+          key={String(opt.value)}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`px-2 py-0.5 text-xs transition-colors ${
+            value === opt.value
+              ? "bg-gray-900 text-white"
+              : "bg-white text-gray-600 hover:bg-gray-100"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
-// Auto-growing textarea (used by paragraph, headings, list items, image-text)
+// Auto-growing textarea
 // ---------------------------------------------------------------------------
 
 function AutoTextarea({
-  value,
-  onChange,
-  placeholder,
-  className = "",
-  singleLine = false,
+  value, onChange, placeholder, className = "", singleLine = false,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -546,32 +457,22 @@ function AutoTextarea({
         const v = singleLine ? e.target.value.replace(/\n/g, " ") : e.target.value;
         onChange(v);
       }}
-      onKeyDown={(e) => {
-        if (singleLine && e.key === "Enter") e.preventDefault();
-      }}
+      onKeyDown={(e) => { if (singleLine && e.key === "Enter") e.preventDefault(); }}
       placeholder={placeholder}
       rows={1}
-      className={`w-full bg-transparent border-0 focus:outline-none resize-none overflow-hidden placeholder:text-paper-500 ${className}`}
+      className={`w-full bg-transparent border-0 focus:outline-none resize-none overflow-hidden placeholder:text-gray-400 ${className}`}
     />
   );
 }
 
 // ---------------------------------------------------------------------------
-// Inline image picker (browse media library + upload)
+// Inline image picker
 // ---------------------------------------------------------------------------
 
-type MediaItem = {
-  id: number;
-  url: string;
-  filename: string;
-  altText?: string | null;
-};
+type MediaItem = { id: number; url: string; filename: string; altText?: string | null };
 
 function ImagePickerInline({
-  url,
-  alt,
-  onSelect,
-  onAltChange,
+  url, alt, onSelect, onAltChange,
 }: {
   url: string;
   alt: string;
@@ -584,10 +485,7 @@ function ImagePickerInline({
 
   useEffect(() => {
     if (!open || items.length > 0) return;
-    fetch("/api/admin/media")
-      .then((res) => res.json())
-      .then(setItems)
-      .catch(() => setItems([]));
+    fetch("/api/admin/media").then((res) => res.json()).then(setItems).catch(() => setItems([]));
   }, [open, items.length]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -610,12 +508,12 @@ function ImagePickerInline({
   return (
     <div className="flex flex-col gap-2">
       {url ? (
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-md border border-ink-600 bg-ink-900">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded border border-gray-200">
           <Image src={url} alt={alt} fill className="object-cover" unoptimized />
           <button
             type="button"
             onClick={() => onSelect("", "")}
-            className="absolute top-2 right-2 rounded-md bg-ink-950/80 text-paper-200 hover:text-red-400 px-2 py-1 text-xs backdrop-blur-sm"
+            className="absolute top-2 right-2 rounded bg-white/90 text-gray-700 hover:text-red-600 px-2 py-0.5 text-xs border border-gray-200"
           >
             Rimuovi
           </button>
@@ -624,10 +522,9 @@ function ImagePickerInline({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex flex-col items-center justify-center gap-2 aspect-[16/10] w-full rounded-md border-2 border-dashed border-ink-500 hover:border-celeste-500 text-paper-400 hover:text-celeste-400 transition-colors"
+          className="flex flex-col items-center justify-center gap-1 aspect-[16/9] w-full rounded border-2 border-dashed border-gray-300 hover:border-gray-500 text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <span className="text-2xl">🖼</span>
-          <span className="text-sm">Scegli un&apos;immagine</span>
+          <span className="text-xs">Scegli immagine</span>
         </button>
       )}
 
@@ -635,47 +532,44 @@ function ImagePickerInline({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-md bg-ink-700 hover:bg-ink-600 text-paper-50 px-3 py-1 text-xs transition-colors"
+          className="rounded border border-gray-300 bg-white px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-50"
         >
-          {open ? "Chiudi libreria" : url ? "Cambia immagine" : "Sfoglia libreria"}
+          {open ? "Chiudi" : url ? "Cambia" : "Sfoglia"}
         </button>
         <input
           type="text"
           value={alt}
           onChange={(e) => onAltChange(e.target.value)}
-          placeholder="Testo alternativo (SEO)"
-          className="flex-1 min-w-[140px] rounded-md border border-ink-600 bg-ink-800 px-3 py-1 text-xs text-paper-50 focus:border-celeste-500 focus:outline-none"
+          placeholder="Testo alternativo"
+          className="flex-1 min-w-[120px] rounded border border-gray-200 px-2 py-1 text-xs text-gray-700 focus:border-gray-400 focus:outline-none"
         />
       </div>
 
       {open && (
-        <div className="rounded-md border border-ink-600 bg-ink-900 p-3 flex flex-col gap-3">
-          <label className="text-xs text-paper-300 flex items-center gap-2">
+        <div className="rounded border border-gray-200 bg-gray-50 p-3 flex flex-col gap-2">
+          <label className="text-xs text-gray-600 flex items-center gap-2">
             Carica nuova:
             <input
               type="file"
               accept="image/*"
               onChange={handleUpload}
               disabled={uploading}
-              className="text-xs text-paper-300 file:mr-2 file:rounded-md file:border-0 file:bg-ink-700 file:px-2 file:py-1 file:text-paper-50 file:cursor-pointer file:text-xs"
+              className="text-xs text-gray-600 file:mr-2 file:rounded file:border file:border-gray-300 file:bg-white file:px-2 file:py-0.5 file:text-xs file:cursor-pointer"
             />
-            {uploading && <span className="text-paper-400">…</span>}
+            {uploading && <span className="text-gray-400">…</span>}
           </label>
-          <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-56 overflow-y-auto">
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-1.5 max-h-48 overflow-y-auto">
             {items.length === 0 && !uploading && (
-              <p className="col-span-full text-xs text-paper-500 py-4 text-center">
-                Nessuna immagine nella libreria. Caricane una qui sopra.
+              <p className="col-span-full text-xs text-gray-400 py-4 text-center">
+                Nessuna immagine. Caricane una.
               </p>
             )}
             {items.map((item) => (
               <button
                 key={item.id}
                 type="button"
-                onClick={() => {
-                  onSelect(item.url, item.altText ?? "");
-                  setOpen(false);
-                }}
-                className="relative aspect-square overflow-hidden rounded-md border border-ink-600 hover:border-celeste-500 transition-colors"
+                onClick={() => { onSelect(item.url, item.altText ?? ""); setOpen(false); }}
+                className="relative aspect-square overflow-hidden rounded border border-gray-200 hover:border-gray-500 transition-colors"
                 title={item.filename}
               >
                 <Image src={item.url} alt="" fill className="object-cover" unoptimized />

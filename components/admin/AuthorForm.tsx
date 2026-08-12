@@ -18,33 +18,33 @@ export function AuthorForm({
   return (
     <form action={action} className="flex max-w-lg flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">Nome</label>
+        <label className="text-sm font-medium text-gray-700">Nome</label>
         <input
           name="name"
           required
           defaultValue={author?.name}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+          className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-gray-500 focus:outline-none"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">
-          Slug <span className="text-paper-500">(lascia vuoto per generarlo dal nome)</span>
+        <label className="text-sm font-medium text-gray-700">
+          Slug <span className="font-normal text-gray-400">(lascia vuoto per generarlo dal nome)</span>
         </label>
         <input
           name="slug"
           defaultValue={author?.slug}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+          className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-gray-500 focus:outline-none"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-paper-300">Bio</label>
+        <label className="text-sm font-medium text-gray-700">Bio</label>
         <textarea
           name="bio"
           rows={3}
           defaultValue={author?.bio ?? ""}
-          className="rounded-md border border-ink-600 bg-ink-800 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+          className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-gray-500 focus:outline-none"
         />
       </div>
 
@@ -57,7 +57,7 @@ export function AuthorForm({
 
       <button
         type="submit"
-        className="self-start rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400"
+        className="self-start rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
       >
         Salva
       </button>

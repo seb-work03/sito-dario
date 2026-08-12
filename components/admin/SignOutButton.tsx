@@ -18,7 +18,7 @@ export function SignOutButton() {
       <button
         type="submit"
         disabled={!csrfToken}
-        className="text-sm text-paper-400 hover:text-paper-200 disabled:opacity-50"
+        className="text-xs text-gray-400 hover:text-gray-700 disabled:opacity-50"
       >
         Esci
       </button>

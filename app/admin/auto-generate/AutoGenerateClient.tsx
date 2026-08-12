@@ -18,18 +18,19 @@ export function AutoGenerateClient() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="rounded-lg border border-ink-600 bg-ink-800 p-5 flex flex-col gap-4">
-        <h2 className="text-paper-50 font-medium">Genera articolo ora</h2>
+    <div className="flex flex-col gap-6 max-w-2xl">
+      {/* Genera ora */}
+      <div className="rounded border border-gray-200 bg-white p-5 flex flex-col gap-4">
+        <h2 className="text-sm font-semibold text-gray-800">Genera articolo ora</h2>
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm text-paper-300">Argomento</label>
+          <label className="text-sm font-medium text-gray-700">Argomento</label>
           <select
             value={selectedIndex}
             onChange={(e) =>
               setSelectedIndex(e.target.value === "auto" ? "auto" : Number(e.target.value))
             }
-            className="rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-paper-50 focus:border-celeste-500 focus:outline-none"
+            className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-gray-500 focus:outline-none"
           >
             <option value="auto">Automatico (rotazione mensile)</option>
             {AUTO_GENERATE_TOPICS.map((t, i) => (
@@ -43,10 +44,10 @@ export function AutoGenerateClient() {
         <button
           onClick={generate}
           disabled={pending}
-          className="self-start rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="self-start rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {pending && (
-            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+            <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
@@ -55,20 +56,18 @@ export function AutoGenerateClient() {
         </button>
 
         {result && (
-          <div
-            className={`rounded-md px-4 py-3 text-sm ${
-              result.success
-                ? "bg-green-900/40 border border-green-700 text-green-300"
-                : "bg-red-900/40 border border-red-700 text-red-300"
-            }`}
-          >
+          <div className={`rounded border px-4 py-3 text-sm ${
+            result.success
+              ? "border-green-200 bg-green-50 text-green-800"
+              : "border-red-200 bg-red-50 text-red-800"
+          }`}>
             {result.success ? (
               <>
-                <p className="font-medium">Articolo creato in bozza!</p>
-                <p className="mt-1 text-paper-400">{result.title}</p>
+                <p className="font-medium">Articolo creato in bozza.</p>
+                <p className="mt-0.5 text-gray-600">{result.title}</p>
                 <a
                   href={`/admin/articles/${result.articleId}/edit`}
-                  className="mt-2 inline-block text-celeste-400 underline"
+                  className="mt-2 inline-block text-gray-800 underline text-sm"
                 >
                   Apri e rivedi →
                 </a>
@@ -80,20 +79,19 @@ export function AutoGenerateClient() {
         )}
       </div>
 
-      <div className="rounded-lg border border-ink-600 bg-ink-800 p-5 flex flex-col gap-3">
-        <h2 className="text-paper-50 font-medium">Argomenti configurati</h2>
-        <p className="text-sm text-paper-400">
-          Modifica <code className="text-celeste-400">lib/auto-generate/topics.ts</code> per cambiare gli argomenti o aggiungerne di nuovi.
+      {/* Argomenti */}
+      <div className="rounded border border-gray-200 bg-white p-5 flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-800">Argomenti configurati</h2>
+        <p className="text-xs text-gray-500">
+          Per modificare gli argomenti, edita <code>lib/auto-generate/topics.ts</code>.
         </p>
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col divide-y divide-gray-100">
           {AUTO_GENERATE_TOPICS.map((t, i) => (
-            <li key={i} className="flex items-start gap-3 text-sm">
-              <span className="shrink-0 rounded bg-ink-700 px-2 py-0.5 text-xs text-paper-400 font-mono">
-                #{i + 1}
-              </span>
+            <li key={i} className="flex items-start gap-3 py-2 text-sm">
+              <span className="shrink-0 w-6 text-right text-xs text-gray-400 mt-0.5">#{i + 1}</span>
               <div>
-                <p className="text-paper-200">{t.topic}</p>
-                <p className="text-paper-500 text-xs mt-0.5">
+                <p className="text-gray-800">{t.topic}</p>
+                <p className="text-xs text-gray-400 mt-0.5">
                   categoria: {t.categorySlug} · immagine: &ldquo;{t.imageKeywords}&rdquo;
                 </p>
               </div>
@@ -102,19 +100,17 @@ export function AutoGenerateClient() {
         </ul>
       </div>
 
-      <div className="rounded-lg border border-amber-800/50 bg-amber-950/30 p-5 flex flex-col gap-2">
-        <h2 className="text-amber-300 font-medium text-sm">Configurazione richiesta</h2>
-        <p className="text-sm text-paper-400">
-          Aggiungi queste variabili d&apos;ambiente su Vercel (Settings → Environment Variables):
+      {/* Setup */}
+      <div className="rounded border border-amber-200 bg-amber-50 p-5 flex flex-col gap-2">
+        <h2 className="text-sm font-semibold text-amber-800">Variabili d&apos;ambiente richieste</h2>
+        <p className="text-xs text-gray-600">
+          Aggiungi su Vercel → Settings → Environment Variables:
         </p>
-        <ul className="flex flex-col gap-1 text-sm font-mono">
-          <li><span className="text-celeste-400">ANTHROPIC_API_KEY</span> — chiave da console.anthropic.com</li>
-          <li><span className="text-celeste-400">UNSPLASH_ACCESS_KEY</span> — chiave da unsplash.com/developers</li>
-          <li><span className="text-celeste-400">CRON_SECRET</span> — stringa casuale (es. <code>openssl rand -hex 32</code>)</li>
+        <ul className="flex flex-col gap-1 text-sm font-mono text-gray-700">
+          <li><span className="font-semibold">ANTHROPIC_API_KEY</span> — da console.anthropic.com</li>
+          <li><span className="font-semibold">UNSPLASH_ACCESS_KEY</span> — da unsplash.com/developers</li>
+          <li><span className="font-semibold">CRON_SECRET</span> — stringa casuale segreta</li>
         </ul>
-        <p className="text-xs text-paper-500 mt-1">
-          Il cron è impostato al 1° di ogni mese alle 8:00 UTC (vedi <code>vercel.json</code>).
-        </p>
       </div>
     </div>
   );
