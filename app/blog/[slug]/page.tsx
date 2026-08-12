@@ -149,12 +149,13 @@ function AuthorAvatar({
 }: {
   name: string;
   url?: string | null;
-  size: "sm" | "md" | "lg";
+  size: "sm" | "md" | "lg" | "xl";
 }) {
   const dim =
     size === "sm" ? "w-10 h-10 text-xs" :
     size === "md" ? "w-12 h-12 text-sm" :
-    "w-20 h-20 text-lg";
+    size === "lg" ? "w-20 h-20 text-lg" :
+    "w-28 h-28 text-2xl";
 
   if (!url) {
     return (
@@ -402,43 +403,47 @@ export default async function ArticlePage({
           </h1>
 
           {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[#93A6BB] pb-8 border-b border-white/8">
-            {article.publishedAt && (
-              <span className="inline-flex items-center gap-1.5">
-                <Calendar size={13} />
-                {formatDate(article.publishedAt)}
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1.5">
-              <Clock size={13} />
-              {readingTime} min di lettura
-            </span>
+          <div className="flex items-start gap-6 pb-8 border-b border-white/8">
+            {/* Left: date, reading time, then categories */}
+            <div className="flex-1 flex flex-col gap-3 text-sm text-[#93A6BB]">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                {article.publishedAt && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Calendar size={13} />
+                    {formatDate(article.publishedAt)}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock size={13} />
+                  {readingTime} min di lettura
+                </span>
+              </div>
+              {categories.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((c) => (
+                    <Link
+                      key={c.slug}
+                      href={`/blog/categoria/${c.slug}`}
+                      className="inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
+                    >
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            {/* Right: author */}
             {article.author && (
-              <div className="flex flex-col items-center gap-1.5 ml-auto shrink-0">
+              <div className="flex flex-col items-center gap-2 shrink-0">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
-                  size="md"
+                  size="xl"
                 />
-                <span className="text-[#EDF2F7] font-medium text-xs">{article.author.name}</span>
+                <span className="text-[#EDF2F7] font-semibold text-sm">{article.author.name}</span>
               </div>
             )}
           </div>
-
-          {/* Categories — shown below meta row */}
-          {categories.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-5">
-              {categories.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/blog/categoria/${c.slug}`}
-                  className="inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
-                >
-                  {c.name}
-                </Link>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Excerpt / lead */}
