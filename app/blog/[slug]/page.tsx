@@ -239,16 +239,16 @@ interface ArticleCtaProps {
 function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaProps) {
   return (
     <div className="my-16 mx-auto max-w-[896px] px-5">
-      <div className="relative overflow-hidden rounded-2xl bg-[#0A2A3A] border border-[#77C0CF]/30 px-7 py-8 md:px-12 md:py-10">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#77C0CF]/25 via-[#77C0CF]/12 to-[#77C0CF]/5 border border-[#77C0CF]/50 px-7 py-8 md:px-12 md:py-10">
         {/* Teal glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, #77C0CF 0%, transparent 70%)" }}
+          className="pointer-events-none absolute -top-16 -right-16 w-72 h-72 rounded-full opacity-30"
+          style={{ background: "radial-gradient(circle, #77C0CF 0%, transparent 65%)" }}
         />
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6 md:gap-10">
           {/* Portrait */}
-          <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#77C0CF]/50 shadow-lg shadow-[#77C0CF]/20">
+          <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-[#77C0CF]/70 shadow-lg shadow-[#77C0CF]/30">
             <Image
               src={avatarUrl}
               alt="Dario Tana"
@@ -264,7 +264,7 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
             <h4 className="text-[#EDF2F7] font-semibold text-lg md:text-xl leading-snug">
               {question}
             </h4>
-            <p className="text-[#93A6BB] text-sm leading-relaxed max-w-lg">
+            <p className="text-[#B8D8E4] text-sm leading-relaxed max-w-lg">
               {paragraph}
             </p>
           </div>
@@ -273,7 +273,7 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
           <div className="shrink-0">
             <Link
               href="/contatti"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#8fd3e1] hover:shadow-[0_0_24px_rgba(119,192,207,0.5)]"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#77C0CF] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#8fd3e1] hover:shadow-[0_0_24px_rgba(119,192,207,0.6)]"
             >
               {buttonLabel}
               <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#77C0CF] w-7 h-7 shrink-0">
