@@ -52,7 +52,7 @@ export default async function ContattiPage() {
         <StrategicBriefing />
       </main>
 
-      <Footer logoUrl={logoUrl} />
+      <Footer logoUrl={logoUrl} hideCta />
       <ScrollToTop />
     </div>
   );

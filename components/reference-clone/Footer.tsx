@@ -64,12 +64,13 @@ const contacts = [
  * `logoUrl` is optional — falls back to the same public blob URL as the
  * Header, so the footer keeps working on pages that don't fetch media.
  */
-export function Footer({ logoUrl }: { logoUrl?: string | null } = {}) {
+export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; hideCta?: boolean } = {}) {
   const logo = logoUrl ?? FALLBACK_LOGO_URL;
 
   return (
     <footer className="overflow-hidden">
       {/* Cyan CTA band */}
+      {!hideCta && (
       <section
         className="px-5 py-20 md:py-28"
         style={{ background: "linear-gradient(135deg, #00e5ff 0%, #008a99 100%)" }}
@@ -97,6 +98,7 @@ export function Footer({ logoUrl }: { logoUrl?: string | null } = {}) {
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* Dark bottom band */}
       <div className="bg-[#17222F] px-5 pt-20 pb-8">
