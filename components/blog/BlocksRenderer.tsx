@@ -31,6 +31,14 @@ function InlineMarkdown({ children }: { children: string }) {
 function BlockView({ block }: { block: Block }) {
   switch (block.type) {
     case "paragraph":
+      if (block.text.trim().startsWith("<")) {
+        return (
+          <div
+            className="rich-text prose prose-sm max-w-none text-[#EDF2F7] [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-[#EDF2F7] [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-[#EDF2F7] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:mb-1 [&_blockquote]:border-l-2 [&_blockquote]:border-[#77C0CF] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#93A6BB] [&_a]:text-[#77C0CF] [&_a]:underline [&_strong]:text-white [&_em]:text-[#B8C8D8]"
+            dangerouslySetInnerHTML={{ __html: block.text }}
+          />
+        );
+      }
       return (
         <div className="rich-text">
           <p>
@@ -109,7 +117,11 @@ function BlockView({ block }: { block: Block }) {
       return (
         <div className="rich-text">
           <blockquote>
-            <InlineMarkdown>{block.text}</InlineMarkdown>
+            {block.text.trim().startsWith("<") ? (
+              <span dangerouslySetInnerHTML={{ __html: block.text }} />
+            ) : (
+              <InlineMarkdown>{block.text}</InlineMarkdown>
+            )}
             {block.cite && (
               <footer className="mt-2 text-[13px] text-[#93A6BB] not-italic">
                 — {block.cite}

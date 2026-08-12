@@ -10,6 +10,7 @@ import {
   serializeBlocks,
   tryParseBlocks,
 } from "@/lib/blocks";
+import { RichEditor } from "@/components/admin/RichEditor";
 
 export function BlockEditor({
   name = "content",
@@ -26,6 +27,8 @@ export function BlockEditor({
   }, [defaultValue]);
 
   const [blocks, setBlocks] = useState<Block[]>(initial);
+  const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
+  const editingBlock = editingBlockId ? blocks.find((b) => b.id === editingBlockId) ?? null : null;
 
   function update(id: string, patch: Partial<Block>) {
     setBlocks((prev) => prev.map((b) => (b.id === id ? ({ ...b, ...patch } as Block) : b)));
@@ -56,13 +59,14 @@ export function BlockEditor({
   const serialized = serializeBlocks(blocks);
 
   return (
+    <>
     <div className="flex flex-col gap-0">
       <input type="hidden" name={name} value={serialized} />
 
       <div className="rounded border border-gray-300 bg-white">
         <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2 text-xs text-gray-400">
           <span>{blocks.length} {blocks.length === 1 ? "blocco" : "blocchi"}</span>
-          <span>↑ ↓ sposta · ✕ elimina</span>
+          <span>✎ formatta · ↑ ↓ sposta · ✕ elimina</span>
         </div>
 
         <div className="flex flex-col p-4 gap-0.5">
@@ -75,10 +79,78 @@ export function BlockEditor({
                 onDelete={() => remove(block.id)}
                 onMoveUp={i > 0 ? () => move(i, -1) : undefined}
                 onMoveDown={i < blocks.length - 1 ? () => move(i, 1) : undefined}
+                onEdit={
+                  block.type === "paragraph" || block.type === "heading" || block.type === "quote"
+                    ? () => setEditingBlockId(block.id)
+                    : undefined
+                }
               />
               <BlockInserter onSelect={(type) => insertAfter(i, type)} />
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Rich text modal for text blocks */}
+    {editingBlock && (editingBlock.type === "paragraph" || editingBlock.type === "heading" || editingBlock.type === "quote") && (
+      <RichTextModal
+        initialContent={"text" in editingBlock ? editingBlock.text : ""}
+        onSave={(html) => {
+          update(editingBlockId!, { text: html } as Partial<Block>);
+          setEditingBlockId(null);
+        }}
+        onClose={() => setEditingBlockId(null)}
+      />
+    )}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Rich text modal
+// ---------------------------------------------------------------------------
+
+function RichTextModal({
+  initialContent,
+  onSave,
+  onClose,
+}: {
+  initialContent: string;
+  onSave: (html: string) => void;
+  onClose: () => void;
+}) {
+  const [html, setHtml] = useState(initialContent);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4">
+      <div className="w-full sm:max-w-3xl rounded-t-2xl sm:rounded-xl border border-gray-200 bg-white shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+          <h3 className="text-sm font-semibold text-gray-900">Formattazione testo</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 text-lg leading-none"
+          >✕</button>
+        </div>
+        <div className="overflow-y-auto flex-1 p-4">
+          <RichEditor defaultValue={initialContent} onChange={setHtml} />
+        </div>
+        <div className="flex justify-end gap-2 px-5 py-4 border-t border-gray-100 shrink-0 bg-gray-50">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100"
+          >
+            Annulla
+          </button>
+          <button
+            type="button"
+            onClick={() => onSave(html)}
+            className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+          >
+            Salva
+          </button>
         </div>
       </div>
     </div>
@@ -167,12 +239,14 @@ function BlockRow({
   onDelete,
   onMoveUp,
   onMoveDown,
+  onEdit,
 }: {
   block: Block;
   onChange: (patch: Partial<Block>) => void;
   onDelete: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onEdit?: () => void;
 }) {
   return (
     <div className="group/block relative flex gap-2 rounded hover:bg-gray-50 p-2 transition-colors">
@@ -181,6 +255,9 @@ function BlockRow({
       </div>
 
       <div className="flex flex-col gap-0.5 shrink-0 opacity-0 group-hover/block:opacity-100 transition-opacity">
+        {onEdit && (
+          <SideBtn title="Modifica testo (rich)" onClick={onEdit}>✎</SideBtn>
+        )}
         <SideBtn title="Sposta su" onClick={onMoveUp} disabled={!onMoveUp}>↑</SideBtn>
         <SideBtn title="Sposta giù" onClick={onMoveDown} disabled={!onMoveDown}>↓</SideBtn>
         <SideBtn title="Elimina" onClick={onDelete} danger>✕</SideBtn>

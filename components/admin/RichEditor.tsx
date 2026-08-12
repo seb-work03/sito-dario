@@ -147,9 +147,11 @@ function Sep() {
 export function RichEditor({
   name = "content",
   defaultValue = "",
+  onChange,
 }: {
   name?: string;
   defaultValue?: string;
+  onChange?: (html: string) => void;
 }) {
   const [mediaOpen, setMediaOpen] = useState(false);
   const [linkOpen, setLinkOpen] = useState(false);
@@ -179,6 +181,9 @@ export function RichEditor({
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
     content: initialHtml || "",
+    onUpdate: ({ editor }) => {
+      onChange?.(editor.getHTML());
+    },
     editorProps: {
       attributes: {
         class:
