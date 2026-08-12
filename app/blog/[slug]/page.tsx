@@ -152,7 +152,7 @@ function AuthorAvatar({
   size: "sm" | "md" | "lg" | "xl";
 }) {
   const dim =
-    size === "sm" ? "w-[18px] h-[18px] text-[6px]" :
+    size === "sm" ? "w-18 h-18 text-lg" :
     size === "md" ? "w-12 h-12 text-sm" :
     size === "lg" ? "w-20 h-20 text-lg" :
     "w-28 h-28 text-2xl";

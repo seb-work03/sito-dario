@@ -80,7 +80,7 @@ export function BlockEditor({
                 onMoveUp={i > 0 ? () => move(i, -1) : undefined}
                 onMoveDown={i < blocks.length - 1 ? () => move(i, 1) : undefined}
                 onEdit={
-                  block.type === "paragraph" || block.type === "heading" || block.type === "quote"
+                  block.type === "paragraph" || block.type === "heading" || block.type === "quote" || block.type === "image-text"
                     ? () => setEditingBlockId(block.id)
                     : undefined
                 }
@@ -93,7 +93,7 @@ export function BlockEditor({
     </div>
 
     {/* Rich text modal for text blocks */}
-    {editingBlock && (editingBlock.type === "paragraph" || editingBlock.type === "heading" || editingBlock.type === "quote") && (
+    {editingBlock && (editingBlock.type === "paragraph" || editingBlock.type === "heading" || editingBlock.type === "quote" || editingBlock.type === "image-text") && (
       <RichTextModal
         initialContent={"text" in editingBlock ? editingBlock.text : ""}
         onSave={(html) => {

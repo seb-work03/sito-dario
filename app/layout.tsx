@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { ScrollToTopOnNav } from "@/components/ScrollToTopOnNav";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,6 +34,7 @@ export default function RootLayout({
     >
       <body>
         <SmoothScroll />
+        <ScrollToTopOnNav />
         {children}
       </body>
     </html>
