@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown";
 import { tryParseBlocks } from "@/lib/blocks";
+import { slugify } from "@/lib/utils";
 import { BlocksRenderer } from "./BlocksRenderer";
 
 // ---------------------------------------------------------------------------
@@ -62,6 +63,10 @@ function MdBlock({ content }: { content: string }) {
     <div className="rich-text">
       <ReactMarkdown
         components={{
+          h2: ({ children }) => {
+            const text = String(children ?? "");
+            return <h2 id={slugify(text)}>{children}</h2>;
+          },
           img: ({ src, alt }) => (
             <figure>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -137,11 +142,20 @@ function LegacyRenderer({ content }: { content: string }) {
 // HTML renderer (Tiptap output)
 // ---------------------------------------------------------------------------
 
+function addH2Ids(html: string): string {
+  return html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, "").trim();
+    const id = slugify(text);
+    if (!id) return `<h2${attrs}>${inner}</h2>`;
+    return `<h2${attrs} id="${id}">${inner}</h2>`;
+  });
+}
+
 function HtmlRenderer({ content }: { content: string }) {
   return (
     <div
-      className="rich-text prose prose-sm max-w-none text-[#EDF2F7] [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-[#EDF2F7] [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-[#EDF2F7] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:mb-1 [&_blockquote]:border-l-2 [&_blockquote]:border-[#77C0CF] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#93A6BB] [&_a]:text-[#77C0CF] [&_a]:underline [&_img]:rounded-xl [&_img]:my-6 [&_img]:max-w-full [&_hr]:border-white/10 [&_hr]:my-8 [&_code]:bg-white/10 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_pre]:bg-white/10 [&_pre]:p-4 [&_pre]:rounded-xl [&_pre]:overflow-x-auto [&_pre_code]:bg-transparent [&_strong]:text-white [&_em]:text-[#B8C8D8]"
-      dangerouslySetInnerHTML={{ __html: content }}
+      className="rich-text prose prose-sm max-w-none text-[#EDF2F7] [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-[#EDF2F7] [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-[#EDF2F7] [&_h4]:text-base [&_h4]:font-semibold [&_h4]:mt-5 [&_h4]:mb-1 [&_h4]:text-[#EDF2F7] [&_p]:leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4 [&_li]:mb-1 [&_blockquote]:border-l-2 [&_blockquote]:border-[#77C0CF] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-[#93A6BB] [&_a]:text-[#77C0CF] [&_a]:underline [&_img]:rounded-xl [&_img]:my-6 [&_img]:max-w-full [&_hr]:border-white/10 [&_hr]:my-8 [&_code]:bg-white/10 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_pre]:bg-white/10 [&_pre]:p-4 [&_pre]:rounded-xl [&_pre]:overflow-x-auto [&_pre_code]:bg-transparent [&_strong]:text-white [&_em]:text-[#B8C8D8]"
+      dangerouslySetInnerHTML={{ __html: addH2Ids(content) }}
     />
   );
 }

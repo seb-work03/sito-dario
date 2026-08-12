@@ -14,6 +14,118 @@ import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
+import { slugify } from "@/lib/utils";
+
+// ---------------------------------------------------------------------------
+// Table of Contents extraction
+// ---------------------------------------------------------------------------
+
+interface TocEntry { text: string; id: string; description: string }
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, "").trim();
+}
+
+function firstSentence(text: string): string {
+  const clean = stripHtml(text).replace(/\s+/g, " ").trim();
+  const m = clean.match(/^.{0,120}?[.!?]/);
+  return m ? m[0].trim() : clean.slice(0, 100);
+}
+
+function extractToc(content: string): TocEntry[] {
+  const trimmed = content.trim();
+
+  // JSON blocks
+  const blocks = tryParseBlocks(content);
+  if (blocks) {
+    const entries: TocEntry[] = [];
+    for (let i = 0; i < blocks.length; i++) {
+      const b = blocks[i];
+      if (b.type === "heading" && b.level === 2) {
+        const text = stripHtml(b.text);
+        const id = slugify(text);
+        const next = blocks[i + 1];
+        const desc = next?.type === "paragraph" ? firstSentence(next.text) : "";
+        entries.push({ text, id, description: desc });
+      }
+    }
+    return entries;
+  }
+
+  // HTML
+  if (trimmed.startsWith("<")) {
+    const entries: TocEntry[] = [];
+    const h2Re = /<h2[^>]*>([\s\S]*?)<\/h2>(?:[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>)?/gi;
+    let m: RegExpExecArray | null;
+    while ((m = h2Re.exec(content)) !== null) {
+      const text = stripHtml(m[1]);
+      if (!text) continue;
+      const id = slugify(text);
+      const desc = m[2] ? firstSentence(m[2]) : "";
+      entries.push({ text, id, description: desc });
+    }
+    return entries;
+  }
+
+  // Legacy markdown
+  const lines = content.split("\n");
+  const entries: TocEntry[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^##\s+(.+)$/);
+    if (!m) continue;
+    const text = m[1].trim();
+    const id = slugify(text);
+    let desc = "";
+    for (let j = i + 1; j < lines.length && j < i + 8; j++) {
+      const l = lines[j].trim();
+      if (l && !l.startsWith("#")) { desc = firstSentence(l); break; }
+    }
+    entries.push({ text, id, description: desc });
+  }
+  return entries;
+}
+
+function TableOfContents({ entries }: { entries: TocEntry[] }) {
+  if (entries.length === 0) return null;
+  return (
+    <div className="mx-auto max-w-[896px] px-5 pb-10">
+      <div className="rounded-xl border border-[#77C0CF]/30 overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-[#17222F] border-b border-[#77C0CF]/20">
+              <th className="text-left px-5 py-3 text-[#EDF2F7] font-medium text-xs uppercase tracking-wider">
+                Sezione
+              </th>
+              <th className="text-left px-5 py-3 text-[#EDF2F7] font-medium text-xs uppercase tracking-wider hidden sm:table-cell">
+                Argomento
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map((entry, i) => (
+              <tr
+                key={entry.id}
+                className="border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors"
+              >
+                <td className="px-5 py-3">
+                  <a
+                    href={`#${entry.id}`}
+                    className="text-[#77C0CF] hover:text-[#8fd3e1] transition-colors"
+                  >
+                    {i + 1}. {entry.text}
+                  </a>
+                </td>
+                <td className="px-5 py-3 text-[#93A6BB] leading-snug hidden sm:table-cell">
+                  {entry.description}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Dario portrait used in CTA banners
@@ -284,17 +396,15 @@ export default async function ArticlePage({
             </span>
             {article.author && (
               <div className="flex items-center gap-2.5 ml-auto">
-                {article.author.avatar && (
-                  <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/15 shrink-0">
-                    <Image
-                      src={article.author.avatar.url}
-                      alt={article.author.name}
-                      fill
-                      unoptimized
-                      className="object-cover"
-                    />
-                  </div>
-                )}
+                <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/15 shrink-0">
+                  <Image
+                    src={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
+                    alt={article.author.name}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
                 <span className="text-[#EDF2F7] font-medium">{article.author.name}</span>
               </div>
             )}
@@ -303,12 +413,15 @@ export default async function ArticlePage({
 
         {/* Excerpt / lead */}
         {article.excerpt && (
-          <div className="mx-auto max-w-[896px] px-5 pb-10">
+          <div className="mx-auto max-w-[896px] px-5 pb-8">
             <p className="text-[#dddddd] text-lg md:text-xl leading-relaxed border-l-[3px] border-[#00e5ff]/50 pl-5 italic">
               {article.excerpt}
             </p>
           </div>
         )}
+
+        {/* Table of contents */}
+        <TableOfContents entries={extractToc(article.content)} />
 
         {/* Article body — split into thirds with CTA banners */}
         {(() => {

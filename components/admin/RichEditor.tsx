@@ -173,7 +173,7 @@ export function RichEditor({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: { levels: [2, 3] },
+        heading: { levels: [2, 3, 4] },
       }),
       Underline,
       Image.configure({ inline: false, allowBase64: false }),
@@ -187,7 +187,7 @@ export function RichEditor({
     editorProps: {
       attributes: {
         class:
-          "min-h-[320px] focus:outline-none prose prose-sm max-w-none text-gray-900 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline [&_img]:rounded-lg [&_img]:my-3 [&_img]:max-w-full [&_hr]:border-gray-200 [&_hr]:my-4 [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:rounded [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:rounded-lg [&_pre]:overflow-x-auto",
+          "min-h-[320px] focus:outline-none prose prose-sm max-w-none text-gray-900 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-1 [&_h4]:text-base [&_h4]:font-semibold [&_h4]:mt-3 [&_h4]:mb-0.5 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_a]:text-blue-600 [&_a]:underline [&_img]:rounded-lg [&_img]:my-3 [&_img]:max-w-full [&_hr]:border-gray-200 [&_hr]:my-4 [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:rounded [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:rounded-lg [&_pre]:overflow-x-auto",
       },
     },
   });
@@ -255,6 +255,9 @@ export function RichEditor({
         </Btn>
         <Btn title="Titolo H3" active={e.isActive("heading", { level: 3 })} onClick={() => e.chain().focus().toggleHeading({ level: 3 }).run()}>
           H3
+        </Btn>
+        <Btn title="Titolo H4" active={e.isActive("heading", { level: 4 })} onClick={() => e.chain().focus().toggleHeading({ level: 4 }).run()}>
+          H4
         </Btn>
 
         <Sep />

@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import type { Block } from "@/lib/blocks";
+import { slugify } from "@/lib/utils";
 
 /**
  * Renders an array of Block objects on the frontend article page. Inline
@@ -49,9 +50,10 @@ function BlockView({ block }: { block: Block }) {
 
     case "heading": {
       const Tag = block.level === 2 ? "h2" : "h3";
+      const id = block.level === 2 ? slugify(block.text.replace(/<[^>]+>/g, "")) : undefined;
       return (
         <div className="rich-text">
-          <Tag>{block.text}</Tag>
+          <Tag id={id}>{block.text}</Tag>
         </div>
       );
     }
