@@ -11,30 +11,46 @@ export default async function CategoriesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-medium">Categorie</h1>
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900">Categorie</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{allCategories.length} categorie totali</p>
+        </div>
         <Link
           href="/admin/categories/new"
-          className="rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400"
+          className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
         >
-          Nuova categoria
+          + Nuova categoria
         </Link>
       </div>
 
-      <div className="flex flex-col divide-y divide-ink-700 rounded-lg border border-ink-700">
+      <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
         {allCategories.length === 0 && (
-          <p className="px-4 py-6 text-sm text-paper-400">Nessuna categoria ancora.</p>
+          <p className="px-5 py-8 text-sm text-gray-400 text-center">Nessuna categoria ancora.</p>
         )}
-        {allCategories.map((cat) => (
-          <div key={cat.id} className="flex items-center justify-between px-4 py-3">
+        {allCategories.map((cat, i) => (
+          <div
+            key={cat.id}
+            className={`flex items-center justify-between px-5 py-3.5 ${
+              i < allCategories.length - 1 ? "border-b border-gray-100" : ""
+            }`}
+          >
             <div>
-              <p className="font-medium text-paper-50">{cat.name}</p>
-              <p className="text-xs text-paper-400">
+              <p className="text-sm font-medium text-gray-900">
+                {cat.parentId && <span className="text-gray-400">— </span>}
+                {cat.name}
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5">
                 /{cat.slug}
-                {cat.parentId && byId.get(cat.parentId) && ` · sotto ${byId.get(cat.parentId)!.name}`}
+                {cat.parentId && byId.get(cat.parentId) && (
+                  <> · sotto {byId.get(cat.parentId)!.name}</>
+                )}
               </p>
             </div>
-            <div className="flex items-center gap-3 text-sm">
-              <Link href={`/admin/categories/${cat.id}/edit`} className="text-celeste-400 hover:underline">
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/admin/categories/${cat.id}/edit`}
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              >
                 Modifica
               </Link>
               <DeleteEntityButton

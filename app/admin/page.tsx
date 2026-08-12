@@ -15,31 +15,52 @@ export default async function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-medium">Articoli del blog</h1>
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900">Articoli</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{allArticles.length} articoli totali</p>
+        </div>
         <Link
           href="/admin/articles/new"
-          className="rounded-md bg-celeste-500 px-4 py-2 text-sm font-medium text-ink-950 hover:bg-celeste-400"
+          className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
         >
-          Nuovo articolo
+          + Nuovo articolo
         </Link>
       </div>
 
-      <div className="flex flex-col divide-y divide-ink-700 rounded-lg border border-ink-700">
+      <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
         {allArticles.length === 0 && (
-          <p className="px-4 py-6 text-sm text-paper-400">Nessun articolo ancora.</p>
+          <p className="px-5 py-8 text-sm text-gray-400 text-center">Nessun articolo ancora.</p>
         )}
-        {allArticles.map((article) => (
-          <div key={article.id} className="flex items-center justify-between px-4 py-3">
-            <div>
-              <p className="font-medium text-paper-50">{article.title}</p>
-              <p className="text-xs text-paper-400">
+        {allArticles.map((article, i) => (
+          <div
+            key={article.id}
+            className={`flex items-center justify-between px-5 py-3.5 ${
+              i < allArticles.length - 1 ? "border-b border-gray-100" : ""
+            }`}
+          >
+            <div className="flex items-start gap-3 min-w-0">
+              <span
+                className={`mt-0.5 shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                  article.status === "published"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
                 {article.status === "published" ? "Pubblicato" : "Bozza"}
-                {article.author && ` · ${article.author.name}`} · Aggiornato il{" "}
-                {formatDate(article.updatedAt)}
-              </p>
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{article.title}</p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  {article.author && `${article.author.name} · `}Aggiornato il{" "}
+                  {formatDate(article.updatedAt)}
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-3 text-sm">
-              <Link href={`/admin/articles/${article.id}/edit`} className="text-celeste-400 hover:underline">
+            <div className="flex items-center gap-3 ml-4 shrink-0">
+              <Link
+                href={`/admin/articles/${article.id}/edit`}
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              >
                 Modifica
               </Link>
               <DeleteEntityButton
