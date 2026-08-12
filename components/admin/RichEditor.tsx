@@ -19,11 +19,13 @@ function MediaModal({
   onSelect,
   onClose,
 }: {
-  onSelect: (url: string) => void;
+  onSelect: (url: string, alt: string) => void;
   onClose: () => void;
 }) {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [pending, setPending] = useState<MediaItem | null>(null);
+  const [altText, setAltText] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/media")
@@ -42,10 +44,60 @@ function MediaModal({
       const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
       const item: MediaItem = await res.json();
       setItems((prev) => [item, ...prev]);
-      onSelect(item.url);
+      setPending(item);
+      setAltText(item.altText ?? "");
     } finally {
       setUploading(false);
     }
+  }
+
+  function pickItem(item: MediaItem) {
+    setPending(item);
+    setAltText(item.altText ?? "");
+  }
+
+  function confirmInsert() {
+    if (!pending) return;
+    onSelect(pending.url, altText.trim());
+  }
+
+  if (pending) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+        <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white shadow-xl flex flex-col gap-4 p-5">
+          <h3 className="text-sm font-semibold text-gray-900">Alt text immagine</h3>
+          <div className="relative h-36 w-full overflow-hidden rounded-lg bg-gray-100">
+            <NextImage src={pending.url} alt="" fill className="object-cover" unoptimized />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-700">
+              Alt text <span className="text-gray-400 font-normal">(descrizione per SEO e accessibilità)</span>
+            </label>
+            <input
+              type="text"
+              autoFocus
+              value={altText}
+              onChange={(e) => setAltText(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") confirmInsert(); if (e.key === "Escape") setPending(null); }}
+              placeholder="es. Schema strategia e-commerce 2024"
+              className="rounded border border-gray-300 px-2.5 py-1.5 text-sm text-gray-900 focus:outline-none focus:border-gray-500"
+            />
+          </div>
+          <div className="flex items-center gap-2 justify-end">
+            <button type="button" onClick={() => setPending(null)} className="text-sm text-gray-400 hover:text-gray-700">
+              Indietro
+            </button>
+            <button
+              type="button"
+              onClick={confirmInsert}
+              className="rounded bg-gray-900 text-white px-4 py-1.5 text-sm font-medium hover:bg-gray-700"
+            >
+              Inserisci
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -88,9 +140,9 @@ function MediaModal({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => onSelect(item.url)}
+                onClick={() => pickItem(item)}
                 className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-500 transition-colors"
-                title={item.filename}
+                title={item.altText || item.filename}
               >
                 <NextImage src={item.url} alt="" fill className="object-cover" unoptimized />
               </button>
@@ -194,8 +246,8 @@ export function RichEditor({
 
   const html = editor?.getHTML() ?? "";
 
-  function insertImage(url: string) {
-    editor?.chain().focus().setImage({ src: url }).run();
+  function insertImage(url: string, alt: string) {
+    editor?.chain().focus().setImage({ src: url, alt }).run();
     setMediaOpen(false);
   }
 

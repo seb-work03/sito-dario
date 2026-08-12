@@ -5,6 +5,7 @@ import { media } from "@/lib/db/schema";
 import { deleteMedia } from "@/app/admin/actions/media";
 import { MediaUploadWidget } from "@/components/admin/MediaUploadWidget";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { MediaAltEditor } from "@/components/admin/MediaAltEditor";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -54,6 +55,7 @@ export default async function MediaLibraryPage() {
                 {item.width && item.height ? `${item.width}×${item.height} · ` : ""}
                 {formatBytes(item.size)}
               </p>
+              <MediaAltEditor id={item.id} initialAlt={item.altText} />
             </div>
             <DeleteEntityButton
               id={item.id}
