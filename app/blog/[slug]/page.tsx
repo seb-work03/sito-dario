@@ -115,7 +115,7 @@ function TableOfContents({ entries }: { entries: TocEntry[] }) {
                     {i + 1}. {entry.text}
                   </a>
                 </td>
-                <td className="px-5 py-3 text-[#93A6BB] leading-snug hidden sm:table-cell">
+                <td className="px-5 py-3 text-[#ddd] leading-snug hidden sm:table-cell">
                   {entry.description}
                 </td>
               </tr>
@@ -264,7 +264,7 @@ function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaP
             <h4 className="text-[#EDF2F7] font-semibold text-lg md:text-xl leading-snug">
               {question}
             </h4>
-            <p className="text-[#93A6BB] text-sm leading-relaxed max-w-lg">
+            <p className="text-[#ddd] text-sm leading-relaxed max-w-lg">
               {paragraph}
             </p>
           </div>
@@ -468,7 +468,7 @@ export default async function ArticlePage({
           {/* Back link */}
           <Link
             href="/blog"
-            className="group inline-flex items-center gap-2 text-[#93A6BB] text-sm hover:text-[#00e5ff] transition-colors mb-8"
+            className="group inline-flex items-center gap-2 text-[#ddd] text-sm hover:text-[#00e5ff] transition-colors mb-8"
           >
             <ArrowLeft
               size={15}
