@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BlockEditor } from "@/components/admin/BlockEditor";
+import { RichEditor } from "@/components/admin/RichEditor";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 
 type Category = { id: number; name: string; parentId: number | null };
@@ -90,7 +90,7 @@ export function ArticleForm({
 
       <div className="flex flex-col gap-2">
         <label className={labelCls}>Contenuto</label>
-        <BlockEditor name="content" defaultValue={article?.content ?? ""} />
+        <RichEditor name="content" defaultValue={article?.content ?? ""} />
       </div>
 
       <MediaPicker
