@@ -1,15 +1,23 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import NextAuth from "next-auth";
+import { authConfig } from "@/auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isLoginPage = req.nextUrl.pathname.startsWith("/admin/login");
+  const { pathname } = req.nextUrl;
 
-  if (!isLoggedIn && !isLoginPage) {
-    return NextResponse.redirect(new URL("/admin/login", req.nextUrl));
+  if (pathname.startsWith("/admin/login")) return NextResponse.next();
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+    if (!req.auth) {
+      return NextResponse.redirect(new URL("/admin/login", req.nextUrl));
+    }
   }
+
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

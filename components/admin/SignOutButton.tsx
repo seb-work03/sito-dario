@@ -1,25 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { logoutAction } from "@/app/admin/actions/auth";
 
 export function SignOutButton() {
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/auth/csrf")
-      .then((res) => res.json())
-      .then((data) => setCsrfToken(data.csrfToken));
-  }, []);
-
   return (
-    <form method="POST" action="/api/auth/signout">
-      <input type="hidden" name="csrfToken" value={csrfToken ?? ""} />
-      <input type="hidden" name="callbackUrl" value="/admin/login" />
-      <button
-        type="submit"
-        disabled={!csrfToken}
-        className="text-xs text-gray-400 hover:text-gray-700 disabled:opacity-50"
-      >
+    <form action={logoutAction}>
+      <button type="submit" className="text-xs text-gray-400 hover:text-gray-700">
         Esci
       </button>
     </form>

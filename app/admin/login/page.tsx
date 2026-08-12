@@ -1,12 +1,6 @@
 import { LoginForm } from "@/components/admin/LoginForm";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
-  const { error } = await searchParams;
-
+export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -19,17 +13,11 @@ export default async function LoginPage({
           </div>
           <h1 className="text-lg font-semibold text-gray-900">Accesso admin</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Inserisci la tua email per ricevere il link di accesso.
+            Inserisci username e password per accedere al pannello.
           </p>
         </div>
 
         <LoginForm />
-
-        {error && (
-          <p className="mt-4 text-sm text-red-500">
-            Accesso non consentito per questo indirizzo email.
-          </p>
-        )}
       </div>
     </div>
   );

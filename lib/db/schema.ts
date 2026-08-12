@@ -120,6 +120,16 @@ export const articleCategoriesRelations = relations(articleCategories, ({ one })
   }),
 }));
 
+// --- Admin users (credentials login) ---------------------------------------
+
+export const adminUsers = pgTable("admin_user", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
 // --- Auth (Auth.js / Drizzle adapter) --------------------------------------
 
 export const users = pgTable("user", {

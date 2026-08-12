@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Image, FolderOpen, Users, Sparkles, Tag, LayoutDashboard } from "lucide-react";
+import { FileText, Image, FolderOpen, Users, Sparkles, Tag, LayoutDashboard, BarChart3, KeyRound } from "lucide-react";
 import { SignOutButton } from "./SignOutButton";
 
 const navItems = [
@@ -11,6 +11,8 @@ const navItems = [
   { label: "Categorie", href: "/admin/categories", icon: FolderOpen, exact: false },
   { label: "Autori", href: "/admin/authors", icon: Users, exact: false },
   { label: "Auto-genera", href: "/admin/auto-generate", icon: Sparkles, exact: false },
+  { label: "Analytics", href: "/admin/analytics", icon: BarChart3, exact: false },
+  { label: "Utenti", href: "/admin/users", icon: KeyRound, exact: false },
 ];
 
 export function AdminSidebar() {

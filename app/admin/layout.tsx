@@ -1,10 +1,11 @@
-import { auth } from "@/auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { auth } from "@/auth";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
-  if (!session) {
+  // If unauthenticated (e.g. rendering /admin/login), skip the sidebar chrome
+  if (!session?.user) {
     return <div className="min-h-screen bg-white">{children}</div>;
   }
 
