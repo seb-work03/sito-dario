@@ -100,8 +100,13 @@ export async function countPageviews(p: CountParams): Promise<unknown> {
 export interface AggregateParams {
   since: string;
   until: string;
-  dimension?: Dimension | "time";
-  granularity?: Granularity;
+  /**
+   * The grouping dimension. For a time series this is a granularity
+   * ("hour" | "day" | "week" | "month"); for a breakdown it is one of the
+   * visit dimensions ("country", "requestPath", …). The Vercel aggregate
+   * endpoint requires this parameter and rejects the request without it.
+   */
+  by: Granularity | Dimension;
   limit?: number;
   environment?: "production" | "preview";
   filter?: string;
@@ -112,8 +117,7 @@ export async function aggregatePageviews(p: AggregateParams): Promise<unknown> {
   return callApi("/v1/query/web-analytics/visits/aggregate", {
     since: p.since,
     until: p.until,
-    dimension: p.dimension,
-    granularity: p.granularity,
+    by: p.by,
     limit: p.limit,
     environment: p.environment,
     filter: p.filter,

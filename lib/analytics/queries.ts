@@ -32,7 +32,7 @@ export async function getTimeseries(period: Period, granularity?: Granularity): 
   const key = `ts:${since}:${until}:${g}`;
 
   const current = await withCache(key, 5 * 60, async () => {
-    const raw = await aggregatePageviews({ since, until, dimension: "time", granularity: g });
+    const raw = await aggregatePageviews({ since, until, by: g });
     return normalizeTimeseries(raw, g);
   });
 
@@ -44,8 +44,7 @@ export async function getTimeseries(period: Period, granularity?: Granularity): 
     const raw = await aggregatePageviews({
       since: prev.since.toISOString(),
       until: prev.until.toISOString(),
-      dimension: "time",
-      granularity: g,
+      by: g,
     });
     return normalizeTimeseries(raw, g);
   });
@@ -57,7 +56,7 @@ export async function getBreakdown(period: Period, dimension: Dimension, limit =
   const { since, until } = isoRange(period);
   const key = `bd:${since}:${until}:${dimension}:${limit}`;
   return withCache(key, 10 * 60, async () => {
-    const raw = await aggregatePageviews({ since, until, dimension, limit });
+    const raw = await aggregatePageviews({ since, until, by: dimension, limit });
     return normalizeBreakdown(raw, dimension);
   });
 }

@@ -99,7 +99,10 @@ export function normalizeTimeseries(raw: unknown, granularity: Granularity): Tim
   const points: TimeseriesPoint[] = pickRows(raw).map((r) => {
     if (!r || typeof r !== "object") return { timestamp: "", pageviews: 0, visitors: 0 };
     const rec = r as UnknownRec;
-    const ts = rec.timestamp ?? rec.time ?? rec.date ?? rec.bucket ?? "";
+    // When grouping via `by=<granularity>`, Vercel keys the time bucket by the
+    // granularity name (e.g. `day`), alongside the more generic aliases.
+    const ts =
+      rec[granularity] ?? rec.timestamp ?? rec.time ?? rec.date ?? rec.bucket ?? "";
     return {
       timestamp: typeof ts === "string" ? ts : new Date(num(ts)).toISOString(),
       pageviews: pickNumber(r, ["pageviews", "views", "total", "count"]),
