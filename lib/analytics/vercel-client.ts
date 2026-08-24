@@ -105,8 +105,11 @@ export async function countPageviews(p: CountParams): Promise<unknown> {
 export interface AggregateParams {
   since: string;
   until: string;
-  dimension?: Dimension;
-  granularity?: Granularity;
+  /**
+   * `by` is required. For time series pass a granularity value ("hour",
+   * "day", "week", "month"); for breakdowns pass a Dimension.
+   */
+  by: Dimension | Granularity;
   limit?: number;
   environment?: "production" | "preview";
   filter?: string;
@@ -117,8 +120,7 @@ export async function aggregatePageviews(p: AggregateParams): Promise<unknown> {
   return callApi("/v1/query/web-analytics/visits/aggregate", {
     since: p.since,
     until: p.until,
-    dimension: p.dimension,
-    granularity: p.granularity,
+    by: p.by,
     limit: p.limit,
     environment: p.environment,
     filter: p.filter,
