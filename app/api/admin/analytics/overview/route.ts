@@ -28,10 +28,12 @@ export async function GET(req: Request) {
     return NextResponse.json(result);
   } catch (err) {
     const code = (err as { code?: string })?.code;
+    const message = err instanceof Error ? err.message : "unknown";
+    console.error("[analytics/overview]", message);
     const status =
       code === "unauthorized" ? 502 :
       code === "not_found" ? 502 :
       code === "rate_limited" ? 429 : 500;
-    return NextResponse.json({ error: "analytics_failed", code: code ?? "unknown" }, { status });
+    return NextResponse.json({ error: "analytics_failed", code: code ?? "unknown", message }, { status });
   }
 }

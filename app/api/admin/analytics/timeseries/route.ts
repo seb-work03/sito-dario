@@ -31,6 +31,8 @@ export async function GET(req: Request) {
     return NextResponse.json(result);
   } catch (err) {
     const code = (err as { code?: string })?.code ?? "unknown";
-    return NextResponse.json({ error: "analytics_failed", code }, { status: 500 });
+    const message = err instanceof Error ? err.message : "unknown";
+    console.error("[analytics/timeseries]", message);
+    return NextResponse.json({ error: "analytics_failed", code, message }, { status: 500 });
   }
 }

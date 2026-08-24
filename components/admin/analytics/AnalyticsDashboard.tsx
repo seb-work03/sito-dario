@@ -23,7 +23,7 @@ async function fetchJson<T>(url: string): Promise<T> {
     let detail = "";
     try {
       const body = await res.json();
-      detail = body?.code ? ` (${body.code})` : body?.error ? ` (${body.error})` : "";
+      detail = body?.message ? ` — ${body.message}` : body?.code ? ` (${body.code})` : "";
     } catch {}
     throw new Error(`HTTP ${res.status}${detail}`);
   }

@@ -32,7 +32,10 @@ export async function getTimeseries(period: Period, granularity?: Granularity): 
   const key = `ts:${since}:${until}:${g}`;
 
   const current = await withCache(key, 5 * 60, async () => {
-    const raw = await aggregatePageviews({ since, until, dimension: "time", granularity: g });
+    // For timeseries we pass granularity WITHOUT a dimension — the API returns
+    // one row per time bucket in that case. Passing dimension: "time" is not
+    // a valid Vercel dimension and yields a server error.
+    const raw = await aggregatePageviews({ since, until, granularity: g });
     return normalizeTimeseries(raw, g);
   });
 
@@ -44,7 +47,6 @@ export async function getTimeseries(period: Period, granularity?: Granularity): 
     const raw = await aggregatePageviews({
       since: prev.since.toISOString(),
       until: prev.until.toISOString(),
-      dimension: "time",
       granularity: g,
     });
     return normalizeTimeseries(raw, g);

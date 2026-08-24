@@ -49,14 +49,19 @@ async function callApi(path: string, params: Record<string, string | number | un
   });
 
   if (!res.ok) {
-    const err = new Error(`Vercel API ${res.status} ${res.statusText}`) as VercelClientError;
+    let body = "";
+    try {
+      body = await res.text();
+      // Trim to avoid dumping huge HTML error pages
+      if (body.length > 500) body = body.slice(0, 500) + "…";
+    } catch {}
+    const err = new Error(`Vercel API ${res.status} ${res.statusText}${body ? ` — ${body}` : ""}`) as VercelClientError;
     err.status = res.status;
     err.code =
       res.status === 401 || res.status === 403 ? "unauthorized" :
       res.status === 404 ? "not_found" :
       res.status === 429 ? "rate_limited" :
       res.status >= 500 ? "server" : "other";
-    // Do not surface token or full body — keep the error message minimal
     throw err;
   }
 
@@ -100,7 +105,7 @@ export async function countPageviews(p: CountParams): Promise<unknown> {
 export interface AggregateParams {
   since: string;
   until: string;
-  dimension?: Dimension | "time";
+  dimension?: Dimension;
   granularity?: Granularity;
   limit?: number;
   environment?: "production" | "preview";
