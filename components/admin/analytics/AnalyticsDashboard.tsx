@@ -74,11 +74,9 @@ export function AnalyticsDashboard() {
 
   useEffect(() => {
     load(preset);
+    const interval = setInterval(() => load(preset), 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, [preset, load]);
-
-  const anyLoading =
-    status.loading || overview.loading || ts.loading ||
-    Object.values(tops).some((t) => t.loading);
 
   const ov = overview.data;
   const viewsPerVisitor =
@@ -104,14 +102,6 @@ export function AnalyticsDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <PeriodSelector value={preset} onChange={setPreset} />
-          <button
-            type="button"
-            onClick={() => load(preset)}
-            disabled={anyLoading}
-            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-          >
-            {anyLoading ? "Aggiorno…" : "Aggiorna"}
-          </button>
         </div>
       </div>
 
