@@ -8,9 +8,10 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  type MotionValue,
 } from "framer-motion";
 import { BarChart3, GraduationCap, MessageSquareText } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
@@ -138,15 +139,6 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
 }
 
 function Story() {
-  const roadmapRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: roadmapRef,
-    offset: ["start 72%", "end 92%"],
-  });
-  const lineProgress = useTransform(scrollYProgress, (value) => {
-    return Math.max(0, Math.min(1, value));
-  });
-
   return (
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
@@ -159,26 +151,41 @@ function Story() {
           </AnimatedText>
         </div>
 
-        <div ref={roadmapRef} className="relative mx-auto max-w-[980px] pl-6 md:pl-14">
-          <div aria-hidden className="absolute inset-y-0 left-0 w-px bg-white/10 md:left-4" />
-          <motion.div
-            aria-hidden
-            className="absolute inset-y-0 left-0 w-[2px] origin-top bg-[#00e5ff] md:left-4"
-            style={{ scaleY: lineProgress }}
-          />
-
-          <ol className="relative flex flex-col gap-7 md:gap-10">
-            {timeline.map((item, index) => (
-              <RoadmapItem key={item.year} item={item} index={index} />
-            ))}
-          </ol>
-        </div>
+        <MobileRoadmap />
+        <DesktopRoadmap />
       </div>
     </section>
   );
 }
 
-function RoadmapItem({
+function MobileRoadmap() {
+  const roadmapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: roadmapRef,
+    offset: ["start 72%", "end 92%"],
+  });
+  const lineProgress = useTransform(scrollYProgress, (value) =>
+    Math.max(0, Math.min(1, value)),
+  );
+
+  return (
+    <div ref={roadmapRef} className="relative mx-auto max-w-[980px] pl-6 md:hidden">
+      <div aria-hidden className="absolute inset-y-0 left-0 w-px bg-white/10" />
+      <motion.div
+        aria-hidden
+        className="absolute inset-y-0 left-0 w-[2px] origin-top bg-[#00e5ff]"
+        style={{ scaleY: lineProgress }}
+      />
+      <ol className="relative flex flex-col gap-7">
+        {timeline.map((item, index) => (
+          <MobileRoadmapItem key={item.year} item={item} index={index} />
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function MobileRoadmapItem({
   item,
   index,
 }: {
@@ -192,14 +199,152 @@ function RoadmapItem({
       transition={{ duration: 0.75, delay: index * 0.04, ease: [0.19, 1, 0.22, 1] }}
       viewport={{ once: true, amount: 0.22 }}
     >
-      <article className="py-5 md:px-4 md:py-8">
-        <span className="block text-[40px] font-medium leading-none tracking-[-0.045em] text-[#00e5ff] md:text-[58px]">
+      <article className="py-5">
+        <span className="block text-[40px] font-medium leading-none tracking-[-0.045em] text-[#00e5ff]">
           {item.year}
         </span>
-        <h3 className="mt-5 text-[27px] font-medium leading-[1.08] tracking-tight text-[#EDF2F7] md:mt-6 md:text-[38px]">
+        <h3 className="mt-5 text-[27px] font-medium leading-[1.08] tracking-tight text-[#EDF2F7]">
           {item.title}
         </h3>
-        <p className="mt-5 max-w-[800px] text-[15px] leading-relaxed text-[#dddddd] md:text-[17px]">
+        <p className="mt-5 text-[15px] leading-relaxed text-[#dddddd]">
+          <EmphasizedText text={item.text} highlights={item.highlights} />
+        </p>
+      </article>
+    </motion.li>
+  );
+}
+
+function DesktopRoadmap() {
+  const roadmapRef = useRef<HTMLDivElement>(null);
+  const progressTrackRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [thresholds, setThresholds] = useState<number[]>([]);
+  const { scrollYProgress } = useScroll({
+    target: progressTrackRef,
+    offset: ["start 72%", "end 72%"],
+  });
+  const lineProgress = useTransform(scrollYProgress, (value) =>
+    Math.max(0, Math.min(1, value)),
+  );
+  const fallbackThresholds = [0.035, 0.305, 0.575, 0.845];
+  const nodeThresholds = timeline.map(
+    (_, index) => thresholds[index] ?? fallbackThresholds[index],
+  );
+  const firstNode = nodeThresholds[0];
+  const lastNode = nodeThresholds[nodeThresholds.length - 1];
+  const lineSpan = Math.max(0.01, lastNode - firstNode);
+  const nodeY = nodeThresholds.map((threshold) => threshold * 100);
+  const midpoint = (start: number, end: number) => start + (end - start) / 2;
+  const roadmapPath = `M 50 ${nodeY[0]} C 50 ${midpoint(nodeY[0], nodeY[1])}, 43 ${midpoint(nodeY[0], nodeY[1])}, 43 ${nodeY[1]} S 56 ${midpoint(nodeY[1], nodeY[2])}, 56 ${nodeY[2]} S 50 ${midpoint(nodeY[2], nodeY[3])}, 50 ${nodeY[3]}`;
+  const fillHeight = useTransform(lineProgress, [0, 1], [0, lineSpan * 100]);
+
+  useLayoutEffect(() => {
+    function measureNodes() {
+      const roadmap = roadmapRef.current;
+      if (!roadmap) return;
+      const roadmapRect = roadmap.getBoundingClientRect();
+      const next = itemRefs.current.map((item) => {
+        const node = item?.querySelector<HTMLElement>("[data-roadmap-node]");
+        if (!node) return 1;
+        const nodeRect = node.getBoundingClientRect();
+        const nodeCenter = nodeRect.top + nodeRect.height / 2 - roadmapRect.top;
+        return Math.max(0, Math.min(1, nodeCenter / roadmapRect.height));
+      });
+      setThresholds(next);
+    }
+
+    measureNodes();
+    window.addEventListener("resize", measureNodes);
+    return () => window.removeEventListener("resize", measureNodes);
+  }, []);
+
+  return (
+    <div ref={roadmapRef} className="relative hidden md:block">
+      <div
+        ref={progressTrackRef}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 w-px"
+        style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
+      />
+      <svg
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 h-full w-full"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <clipPath id="desktop-roadmap-scroll-fill" clipPathUnits="userSpaceOnUse">
+            <motion.rect x="0" y={firstNode * 100} width="100" height={fillHeight} />
+          </clipPath>
+        </defs>
+        <path d={roadmapPath} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+        <path d={roadmapPath} fill="none" stroke="#00e5ff" strokeWidth="1.5" strokeLinecap="round" vectorEffect="non-scaling-stroke" clipPath="url(#desktop-roadmap-scroll-fill)" />
+      </svg>
+      <ol className="relative flex flex-col gap-20">
+        {timeline.map((item, index) => (
+          <DesktopRoadmapItem
+            key={item.year}
+            item={item}
+            index={index}
+            progress={lineProgress}
+            threshold={Math.max(0.001, (nodeThresholds[index] - firstNode) / lineSpan)}
+            liRef={(element) => {
+              itemRefs.current[index] = element;
+            }}
+          />
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function DesktopRoadmapItem({
+  item,
+  index,
+  progress,
+  threshold,
+  liRef,
+}: {
+  item: (typeof timeline)[number];
+  index: number;
+  progress: MotionValue<number>;
+  threshold: number;
+  liRef: (element: HTMLLIElement | null) => void;
+}) {
+  const activationStart = Math.max(0, threshold - 0.055);
+  const opacity = useTransform(progress, [activationStart, threshold], [0.3, 1]);
+  const y = useTransform(progress, [activationStart, threshold], [28, 0]);
+  const dotScale = useTransform(progress, [activationStart, threshold], [0.72, 1]);
+  const dotBackground = useTransform(progress, [activationStart, threshold], ["#0D1218", "#00e5ff"]);
+  const dotColor = useTransform(progress, [activationStart, threshold], ["#00e5ff", "#0D1218"]);
+  const dotShadow = useTransform(progress, [activationStart, threshold], ["0 0 0 rgba(0,229,255,0)", "0 0 28px rgba(0,229,255,0.75)"]);
+  const positions = ["50%", "43%", "56%", "50%"];
+  const alignLeft = index % 2 === 0;
+
+  return (
+    <motion.li ref={liRef} style={{ opacity, y }} className="relative min-h-[285px]">
+      <motion.span
+        data-roadmap-node
+        style={{
+          scale: dotScale,
+          left: positions[index],
+          backgroundColor: dotBackground,
+          color: dotColor,
+          boxShadow: dotShadow,
+        }}
+        className="absolute top-1 z-10 flex h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-sm font-semibold leading-tight"
+      >
+        {item.year}
+      </motion.span>
+      <article
+        className={`rounded-2xl border border-[#253444] bg-[#17222F] p-9 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:w-[42%] ${
+          alignLeft ? "mr-auto" : "ml-auto"
+        }`}
+      >
+        <h3 className="text-[30px] font-medium leading-[1.12] tracking-tight text-[#EDF2F7]">
+          {item.title}
+        </h3>
+        <p className="mt-5 text-base leading-relaxed text-[#dddddd]">
           <EmphasizedText text={item.text} highlights={item.highlights} />
         </p>
       </article>
