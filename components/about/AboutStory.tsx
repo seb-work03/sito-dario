@@ -384,35 +384,37 @@ function Numbers() {
   ];
 
   return (
-    <section className="border-y border-[#00e5ff]/20 bg-[#121A24] px-5 py-16 md:py-20">
-      <div className="mx-auto max-w-[1240px]">
-        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <AnimatedHeadline className="text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
-            La pratica lascia tracce misurabili.
-          </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd]">
-            Numeri diversi, un unico filo: esperienza applicata e condivisa nel tempo.
-          </AnimatedText>
-        </div>
+    <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-4 py-16 md:px-5 md:py-24">
+      <div className="mx-auto max-w-[1360px]">
+        <div className="overflow-hidden rounded-[28px] bg-[#00e5ff] px-6 py-12 md:rounded-[36px] md:px-14 md:py-16">
+          <div className="mx-auto mb-10 max-w-3xl text-center md:mb-12">
+            <AnimatedHeadline className="text-[32px] font-medium leading-[1.05] tracking-tight text-[#0D1218] md:text-[52px]">
+              La pratica lascia tracce misurabili.
+            </AnimatedHeadline>
+            <AnimatedText delay={0.1} className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#0D1218]/70 md:text-base">
+              Numeri diversi, un unico filo: esperienza applicata e condivisa nel tempo.
+            </AnimatedText>
+          </div>
 
-        <div className="grid gap-10 sm:grid-cols-3 sm:gap-0">
-          {stats.map((stat, index) => (
-            <Reveal
-              key={stat.label}
-              y={20}
-              delay={index * 0.08}
-              className="flex flex-col items-center border-white/10 text-center sm:border-l sm:first:border-0"
-            >
-              <span className="text-[46px] font-medium leading-none tracking-[-0.04em] text-[#00e5ff] md:text-[64px]">
-                {stat.prefix}
-                <CountUp value={stat.value} />
-                {stat.suffix}
-              </span>
-              <span className="mt-3 text-xs uppercase tracking-[0.13em] text-[#dddddd]">
-                {stat.label}
-              </span>
-            </Reveal>
-          ))}
+          <div className="grid rounded-2xl border border-white/8 bg-[#0D1218] px-7 py-6 sm:grid-cols-3 sm:px-5 md:px-10 md:py-10">
+            {stats.map((stat, index) => (
+              <Reveal
+                key={stat.label}
+                y={20}
+                delay={index * 0.08}
+                className="flex flex-col items-center border-t border-white/10 py-7 text-center first:border-0 first:pt-2 last:pb-2 sm:border-l sm:border-t-0 sm:py-2 sm:first:border-l-0"
+              >
+                <span className="text-[46px] font-medium leading-none tracking-[-0.04em] text-[#00e5ff] md:text-[64px]">
+                  {stat.prefix}
+                  <CountUp value={stat.value} />
+                  {stat.suffix}
+                </span>
+                <span className="mt-3 text-xs uppercase tracking-[0.13em] text-[#dddddd]">
+                  {stat.label}
+                </span>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
