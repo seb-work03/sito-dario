@@ -118,7 +118,15 @@ function ServicesHero() {
           maskImage: "radial-gradient(circle at 70% 45%, black, transparent 78%)",
         }}
       />
-      <div className="pointer-events-none absolute -left-32 top-1/3 h-80 w-80 rounded-full bg-[#00e5ff]/8 blur-[110px]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 58% 82% at -4% 42%, rgba(0,229,255,0.2) 0%, rgba(0,229,255,0.08) 40%, transparent 72%)",
+        }}
+      />
+      <div className="pointer-events-none absolute -left-40 top-[16%] h-[520px] w-[520px] rounded-full bg-[#00e5ff]/12 blur-[130px]" />
 
       <div className="relative mx-auto grid max-w-[1240px] items-center gap-14 lg:min-h-[620px] lg:grid-cols-[1.04fr_0.96fr] lg:gap-16">
         <div className="max-w-[760px] text-center lg:text-left">
@@ -127,13 +135,15 @@ function ServicesHero() {
             delay={0.08}
             className="text-[42px] font-medium leading-[0.99] tracking-[-0.045em] text-[#EDF2F7] sm:text-[54px] md:text-[72px] lg:text-[78px]"
           >
-            Tre modi per portare esperienza nel tuo progetto.
+            3 modi per portare esperienza nel tuo progetto.
           </AnimatedHeadline>
           <AnimatedText
             delay={0.22}
             className="mx-auto mt-7 max-w-[650px] text-base leading-relaxed text-[#dddddd] md:text-xl lg:mx-0"
           >
-            Consulenza, formazione e speech e-commerce per aziende, professionisti ed enti in tutta Italia. Tre forme diverse, costruite sullo stesso principio: partire dalla realtà e lasciare strumenti utili.
+            <strong className="font-semibold text-[#EDF2F7]">Consulenza e-commerce</strong>,{" "}
+            <strong className="font-semibold text-[#EDF2F7]">formazione</strong> e{" "}
+            <strong className="font-semibold text-[#EDF2F7]">speech ed eventi</strong> per aziende, professionisti ed enti in tutta Italia. 3 forme diverse, costruite sullo stesso principio: partire dalla realtà e lasciare strumenti utili.
           </AnimatedText>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -145,7 +155,7 @@ function ServicesHero() {
             {["Base a Rimini", "Progetti in tutta Italia", "20+ anni sul campo"].map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-[#253444] bg-[#17222F]/75 px-4 py-2 text-xs text-[#DDE5EF] backdrop-blur-md"
+                className="rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/7 px-4 py-2 text-xs text-[#DDE5EF] shadow-[inset_0_0_22px_rgba(0,229,255,0.035)] backdrop-blur-md"
               >
                 {item}
               </span>
@@ -161,9 +171,9 @@ function ServicesHero() {
 
 function ServiceConstellation() {
   const nodes = [
-    { label: "Consulenza", className: "left-1/2 top-[4%] -translate-x-1/2" },
+    { label: "Consulenza e-commerce", className: "left-1/2 top-[4%] -translate-x-1/2" },
     { label: "Formazione", className: "bottom-[10%] left-[3%]" },
-    { label: "Speech", className: "bottom-[10%] right-[3%]" },
+    { label: "Speech ed eventi", className: "bottom-[10%] right-[3%]" },
   ];
 
   return (
@@ -175,13 +185,13 @@ function ServiceConstellation() {
     >
       <motion.div
         aria-hidden
-        className="absolute inset-[9%] rounded-full border border-dashed border-[#00e5ff]/18"
+        className="absolute inset-[9%] rounded-full border border-dashed border-[#00e5ff]/32"
         animate={{ rotate: 360 }}
         transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
       />
       <motion.div
         aria-hidden
-        className="absolute inset-[21%] rounded-full border border-[#00e5ff]/15"
+        className="absolute inset-[21%] rounded-full border border-[#00e5ff]/28"
         animate={{ rotate: -360 }}
         transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
       >
@@ -191,10 +201,10 @@ function ServiceConstellation() {
       <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 100 100">
         <motion.path
           d="M50 17 L17 73 L83 73 Z"
-          fill="rgba(0,229,255,0.025)"
+          fill="rgba(0,229,255,0.065)"
           stroke="#00e5ff"
-          strokeOpacity="0.34"
-          strokeWidth="0.45"
+          strokeOpacity="0.72"
+          strokeWidth="0.65"
           strokeDasharray="2 2"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1, strokeDashoffset: [0, -12] }}
@@ -206,8 +216,8 @@ function ServiceConstellation() {
             d={path}
             fill="none"
             stroke="#00e5ff"
-            strokeOpacity="0.34"
-            strokeWidth="0.45"
+            strokeOpacity="0.56"
+            strokeWidth="0.55"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.9, delay: 0.65 + index * 0.12 }}
@@ -215,7 +225,7 @@ function ServiceConstellation() {
         ))}
       </svg>
 
-      <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/35 bg-[#17222F]/90 p-5 text-center shadow-[0_0_60px_rgba(0,229,255,0.15)] backdrop-blur-md md:h-40 md:w-40">
+      <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/50 bg-[#0D1218]/90 p-5 text-center shadow-[0_0_70px_rgba(0,229,255,0.22)] backdrop-blur-md md:h-40 md:w-40">
         <span className="text-sm font-medium leading-tight text-[#EDF2F7] md:text-base">
           Esperienza
           <br />
@@ -229,7 +239,7 @@ function ServiceConstellation() {
           initial={{ opacity: 0, scale: 0.75 }}
           animate={{ opacity: 1, scale: 1, y: [0, -5, 0] }}
           transition={{ opacity: { duration: 0.55, delay: 0.75 + index * 0.12 }, scale: { duration: 0.55, delay: 0.75 + index * 0.12 }, y: { duration: 3.2, delay: index * 0.4, repeat: Infinity, ease: "easeInOut" } }}
-          className={`absolute flex h-20 min-w-24 items-center justify-center rounded-2xl border border-[#253444] bg-[#17222F] px-4 text-center text-xs font-medium text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3)] md:h-24 md:min-w-32 md:text-sm ${node.className}`}
+          className={`absolute flex h-20 min-w-24 max-w-36 items-center justify-center rounded-2xl border border-[#00e5ff]/40 bg-[#00e5ff]/8 px-4 text-center text-xs font-bold text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3)] backdrop-blur-md md:h-24 md:min-w-32 md:max-w-40 md:text-sm ${node.className}`}
         >
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
           {node.label}
@@ -241,7 +251,7 @@ function ServiceConstellation() {
 
 function ServicesPanels() {
   return (
-    <section className="border-b border-white/8 bg-[#0D1218] px-5 py-20 md:py-32">
+    <section className="border-b border-[#00e5ff]/18 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
           <AnimatedHeadline className="text-[34px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[54px]">
@@ -286,7 +296,7 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.16 }}
       transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
-      className="group relative isolate overflow-hidden rounded-[26px] border border-[#253444] bg-[#17222F] md:rounded-[34px]"
+      className="group relative isolate overflow-hidden rounded-[26px] border border-[#00e5ff]/22 bg-[#17222F] transition-colors duration-500 hover:border-[#00e5ff]/48 md:rounded-[34px]"
     >
       <motion.div aria-hidden className="pointer-events-none absolute inset-0 z-0" style={{ background: glow }} />
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#00e5ff]/10 transition-transform duration-1000 group-hover:scale-110" />
@@ -306,12 +316,12 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {service.audiences.map((audience) => (
-              <span key={audience} className="rounded-full border border-white/10 bg-[#0D1218]/45 px-3.5 py-2 text-xs text-[#DDE5EF]">
+              <span key={audience} className="rounded-full border border-[#00e5ff]/20 bg-[#00e5ff]/5 px-3.5 py-2 text-xs text-[#DDE5EF]">
                 {audience}
               </span>
             ))}
           </div>
-          <ul className="mt-8 grid gap-3 border-t border-white/8 pt-7 sm:grid-cols-2">
+          <ul className="mt-8 grid gap-3 border-t border-[#00e5ff]/14 pt-7 sm:grid-cols-2">
             {service.areas.map((area) => (
               <li key={area} className="flex items-start gap-2.5 text-sm leading-snug text-[#dddddd]">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00e5ff]" />
@@ -329,7 +339,7 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
         </div>
 
         <div className={`min-h-[330px] p-5 sm:p-7 lg:min-h-full ${index % 2 === 1 ? "lg:order-1" : ""}`}>
-          <div className="h-full min-h-[300px] overflow-hidden rounded-[22px] border border-white/8 bg-[#0D1218]">
+          <div className="h-full min-h-[300px] overflow-hidden rounded-[22px] border border-[#00e5ff]/18 bg-[#0D1218]">
             {service.visual === "consulting" && <ConsultingVisual />}
             {service.visual === "training" && <TrainingVisual />}
             {service.visual === "speech" && <SpeechVisual />}
@@ -432,7 +442,7 @@ function TrainingVisual() {
           whileInView={{ opacity: 1, scale: 1, y: [0, -4, 0] }}
           viewport={{ once: true }}
           transition={{ opacity: { delay: 0.25 + index * 0.12 }, scale: { delay: 0.25 + index * 0.12 }, y: { duration: 3, repeat: Infinity, delay: index * 0.35 } }}
-          className={`absolute rounded-xl border border-[#253444] bg-[#17222F] px-4 py-3 text-xs font-medium text-[#DDE5EF] ${topic.className}`}
+          className={`absolute rounded-xl border border-[#00e5ff]/25 bg-[#00e5ff]/6 px-4 py-3 text-xs font-medium text-[#DDE5EF] ${topic.className}`}
         >
           {topic.label}
         </motion.span>
@@ -485,7 +495,7 @@ function ServiceChooser() {
             </AnimatedText>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0D1218] px-5 md:px-7">
+          <div className="overflow-hidden rounded-2xl border border-[#00e5ff]/22 bg-[#0D1218] px-5 md:px-7">
             {choices.map((choice, index) => (
               <motion.div
                 key={choice.answer}
@@ -493,7 +503,7 @@ function ServiceChooser() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.65, delay: index * 0.1, ease: [0.19, 1, 0.22, 1] }}
-                className="border-b border-white/10 last:border-0"
+                className="border-b border-[#00e5ff]/16 last:border-0"
               >
                 <Link href={choice.href} className="group grid gap-3 py-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-6">
                   <span className="text-sm leading-relaxed text-[#dddddd] md:text-base">{choice.question}</span>
@@ -524,7 +534,7 @@ function SharedMethod() {
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
           <AnimatedHeadline className="text-[34px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[54px]">
-            Tre forme. Lo stesso modo di lavorare.
+            3 forme. Lo stesso modo di lavorare.
           </AnimatedHeadline>
           <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             Che si tratti di un progetto, di un’aula o di un palco, il valore nasce quando l’esperienza diventa comprensione e la comprensione diventa autonomia.
@@ -532,7 +542,7 @@ function SharedMethod() {
         </div>
 
         <div ref={flowRef} className="relative">
-          <div className="absolute bottom-0 left-5 top-0 w-px bg-white/10 md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-px md:w-auto" />
+          <div className="absolute bottom-0 left-5 top-0 w-px bg-[#00e5ff]/14 md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-px md:w-auto" />
           <motion.div
             aria-hidden
             className="absolute bottom-0 left-5 top-0 w-[2px] origin-top bg-[#00e5ff] md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-[2px] md:w-auto md:origin-left"
