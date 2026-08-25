@@ -7,7 +7,7 @@ export function TrustBar({ logos = [] }: { logos?: Logo[] }) {
   const doubled = logos.length > 0 ? [...logos, ...logos] : [];
 
   return (
-    <section className="bg-[#0D1218] px-5 py-14">
+    <section className="bg-[#0D1218] px-5 pb-20 pt-8 md:pb-24 md:pt-10">
       <div className="mx-auto max-w-[1240px] flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
         <p className="text-[#dddddd] text-[15px] shrink-0 max-w-[240px] mx-auto md:mx-0 text-center md:text-left leading-snug uppercase tracking-[0.15em]">
           Collaboro con
