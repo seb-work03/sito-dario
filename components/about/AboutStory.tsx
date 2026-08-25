@@ -343,6 +343,7 @@ function RoadmapItem({
 
 function PodcastLoop() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [videoVisible, setVideoVisible] = useState(false);
   const videoId = "oy-B6GI02kk";
   const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&start=40&end=80&rel=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&enablejsapi=1`;
 
@@ -376,6 +377,7 @@ function PodcastLoop() {
     const youtubeWindow = window as YouTubeWindow;
     let player: Player | undefined;
     let timeCheck: ReturnType<typeof setInterval> | undefined;
+    let revealVideo: ReturnType<typeof setTimeout> | undefined;
     const captionChecks: ReturnType<typeof setTimeout>[] = [];
     let cancelled = false;
 
@@ -402,6 +404,7 @@ function PodcastLoop() {
               setTimeout(() => hideCaptions(target), 1500),
             );
             restartSegment(target);
+            revealVideo = setTimeout(() => setVideoVisible(true), 2400);
             timeCheck = setInterval(() => {
               if (target.getCurrentTime() >= 79.8) restartSegment(target);
             }, 200);
@@ -433,6 +436,7 @@ function PodcastLoop() {
     return () => {
       cancelled = true;
       if (timeCheck) clearInterval(timeCheck);
+      if (revealVideo) clearTimeout(revealVideo);
       captionChecks.forEach(clearTimeout);
       player?.destroy();
     };
@@ -443,7 +447,11 @@ function PodcastLoop() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
           <div className="relative aspect-[16/8] min-h-[360px] md:min-h-0">
-            <div className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-auto md:w-[145%]">
+            <div
+              className={`pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden transition-opacity duration-700 md:h-auto md:w-[145%] ${
+                videoVisible ? "opacity-100" : "opacity-0"
+              }`}
+            >
               <iframe
                 ref={iframeRef}
                 src={embedUrl}
@@ -460,10 +468,10 @@ function PodcastLoop() {
             <div className="pointer-events-none absolute inset-0 flex items-center px-7 py-10 md:px-14 lg:px-20">
               <div className="max-w-[590px]">
                 <h2 className="text-[34px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] md:text-[52px]">
-                  Il confronto è parte del lavoro.
+                  In aula porto quello che succede davvero.
                 </h2>
                 <p className="mt-5 max-w-[520px] text-base leading-relaxed text-[#dddddd] md:text-lg">
-                  Le idee migliori nascono quando esperienza, domande e punti di vista diversi si incontrano. Per me, insegnare significa anche ascoltare e costruire insieme risposte utili.
+                  Una lezione non è una parentesi teorica: è uno spazio in cui casi reali, errori e decisioni diventano strumenti utili per chi lavora ogni giorno nell&apos;e-commerce.
                 </p>
               </div>
             </div>
