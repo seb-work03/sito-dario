@@ -40,7 +40,7 @@ const socials = [
 ];
 
 const navLinks = [
-  { label: "Chi sono", href: "/#about-us" },
+  { label: "Chi sono", href: "/chi-sono" },
   { label: "Servizi", href: "/#service" },
   { label: "Metodo", href: "/#process" },
   { label: "Contatti", href: "/contatti" },

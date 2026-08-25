@@ -7,10 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Chi sono", href: "#about-us" },
-  { label: "Servizi", href: "#service" },
-  { label: "Metodo", href: "#process" },
-  { label: "Testimonianze", href: "#testimon" },
+  { label: "Chi sono", href: "/chi-sono" },
+  { label: "Servizi", href: "/#service" },
+  { label: "Metodo", href: "/#process" },
+  { label: "Testimonianze", href: "/#testimon" },
 ];
 
 const FALLBACK_LOGO_URL =
