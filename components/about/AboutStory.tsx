@@ -8,10 +8,9 @@ import {
   useScroll,
   useSpring,
   useTransform,
-  type MotionValue,
 } from "framer-motion";
 import { BarChart3, GraduationCap, MessageSquareText } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
@@ -140,53 +139,13 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
 
 function Story() {
   const roadmapRef = useRef<HTMLDivElement>(null);
-  const progressTrackRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const [thresholds, setThresholds] = useState<number[]>([]);
   const { scrollYProgress } = useScroll({
-    target: progressTrackRef,
-    offset: ["start 72%", "end 72%"],
+    target: roadmapRef,
+    offset: ["start 72%", "end 92%"],
   });
   const lineProgress = useTransform(scrollYProgress, (value) => {
     return Math.max(0, Math.min(1, value));
   });
-
-  const fallbackThresholds = [0.035, 0.305, 0.575, 0.845];
-  const nodeThresholds = timeline.map(
-    (_, index) => thresholds[index] ?? fallbackThresholds[index],
-  );
-  const firstNode = nodeThresholds[0];
-  const lastNode = nodeThresholds[nodeThresholds.length - 1];
-  const lineSpan = Math.max(0.01, lastNode - firstNode);
-  const nodeY = nodeThresholds.map((threshold) => threshold * 100);
-  const midpoint = (start: number, end: number) => start + (end - start) / 2;
-  const roadmapPath = `M 50 ${nodeY[0]} C 50 ${midpoint(nodeY[0], nodeY[1])}, 43 ${midpoint(nodeY[0], nodeY[1])}, 43 ${nodeY[1]} S 56 ${midpoint(nodeY[1], nodeY[2])}, 56 ${nodeY[2]} S 50 ${midpoint(nodeY[2], nodeY[3])}, 50 ${nodeY[3]}`;
-  const fillHeight = useTransform(lineProgress, [0, 1], [0, lineSpan * 100]);
-
-  useLayoutEffect(() => {
-    function measureNodes() {
-      const roadmap = roadmapRef.current;
-      if (!roadmap) return;
-      const roadmapRect = roadmap.getBoundingClientRect();
-      const next = itemRefs.current.map((item) => {
-        const node = Array.from(
-          item?.querySelectorAll<HTMLElement>("[data-roadmap-node]") ?? [],
-        ).find((candidate) => {
-          const rect = candidate.getBoundingClientRect();
-          return rect.width > 0 && rect.height > 0;
-        });
-        if (!node) return 1;
-        const nodeRect = node.getBoundingClientRect();
-        const nodeCenter = nodeRect.top + nodeRect.height / 2 - roadmapRect.top;
-        return Math.max(0, Math.min(1, nodeCenter / roadmapRect.height));
-      });
-      setThresholds(next);
-    }
-
-    measureNodes();
-    window.addEventListener("resize", measureNodes);
-    return () => window.removeEventListener("resize", measureNodes);
-  }, []);
 
   return (
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
@@ -200,78 +159,17 @@ function Story() {
           </AnimatedText>
         </div>
 
-        <div ref={roadmapRef} className="relative">
-          <div
-            ref={progressTrackRef}
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 w-px"
-            style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
-          />
-
-          <svg
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 left-0 hidden h-full w-full md:block"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <clipPath id="roadmap-scroll-fill" clipPathUnits="userSpaceOnUse">
-                <motion.rect
-                  x="0"
-                  y={firstNode * 100}
-                  width="100"
-                  height={fillHeight}
-                />
-              </clipPath>
-            </defs>
-            <path
-              d={roadmapPath}
-              fill="none"
-              stroke="rgba(255,255,255,0.10)"
-              strokeWidth="1.5"
-              vectorEffect="non-scaling-stroke"
-            />
-            <path
-              d={roadmapPath}
-              fill="none"
-              stroke="#00e5ff"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              clipPath="url(#roadmap-scroll-fill)"
-            />
-          </svg>
-
-          <div
-            aria-hidden
-            className="absolute left-[39px] w-px bg-white/10 md:hidden"
-            style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
-          />
+        <div ref={roadmapRef} className="relative mx-auto max-w-[980px] pl-6 md:pl-14">
+          <div aria-hidden className="absolute inset-y-0 left-0 w-px bg-white/10 md:left-4" />
           <motion.div
             aria-hidden
-            className="absolute left-[39px] w-px origin-top bg-[#00e5ff] md:hidden"
-            style={{
-              top: `${firstNode * 100}%`,
-              height: `${lineSpan * 100}%`,
-              scaleY: lineProgress,
-            }}
+            className="absolute inset-y-0 left-0 w-[2px] origin-top bg-[#00e5ff] md:left-4"
+            style={{ scaleY: lineProgress }}
           />
 
-          <ol className="relative flex flex-col gap-10 md:gap-20">
+          <ol className="relative flex flex-col gap-7 md:gap-10">
             {timeline.map((item, index) => (
-              <RoadmapItem
-                key={item.year}
-                item={item}
-                index={index}
-                progress={lineProgress}
-                threshold={Math.max(
-                  0.001,
-                  (nodeThresholds[index] - firstNode) / lineSpan,
-                )}
-                liRef={(element) => {
-                  itemRefs.current[index] = element;
-                }}
-              />
+              <RoadmapItem key={item.year} item={item} index={index} />
             ))}
           </ol>
         </div>
@@ -283,81 +181,28 @@ function Story() {
 function RoadmapItem({
   item,
   index,
-  progress,
-  threshold,
-  liRef,
 }: {
   item: (typeof timeline)[number];
   index: number;
-  progress: MotionValue<number>;
-  threshold: number;
-  liRef: (element: HTMLLIElement | null) => void;
 }) {
-  const activationStart = Math.max(0, threshold - 0.055);
-  const opacity = useTransform(progress, [activationStart, threshold], [0.3, 1]);
-  const y = useTransform(progress, [activationStart, threshold], [28, 0]);
-  const dotScale = useTransform(progress, [activationStart, threshold], [0.72, 1]);
-  const dotBackground = useTransform(
-    progress,
-    [activationStart, threshold],
-    ["#0D1218", "#00e5ff"],
-  );
-  const dotColor = useTransform(
-    progress,
-    [activationStart, threshold],
-    ["#00e5ff", "#0D1218"],
-  );
-  const dotShadow = useTransform(
-    progress,
-    [activationStart, threshold],
-    ["0 0 0 rgba(0,229,255,0)", "0 0 28px rgba(0,229,255,0.75)"],
-  );
-  const positions = ["50%", "43%", "56%", "50%"];
-  const alignLeft = index % 2 === 0;
-
   return (
     <motion.li
-      ref={liRef}
-      style={{ opacity, y }}
-      className="relative min-h-[250px] pl-24 md:min-h-[285px] md:pl-0"
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.75, delay: index * 0.04, ease: [0.19, 1, 0.22, 1] }}
+      viewport={{ once: true, amount: 0.22 }}
     >
-      <motion.span
-        data-roadmap-node
-        style={{
-          scale: dotScale,
-          left: positions[index],
-          backgroundColor: dotBackground,
-          color: dotColor,
-          boxShadow: dotShadow,
-        }}
-        className="absolute top-1 z-10 hidden h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-sm font-semibold leading-tight md:flex"
-      >
-        {item.year}
-      </motion.span>
-      <motion.span
-        data-roadmap-node
-        style={{
-          scale: dotScale,
-          backgroundColor: dotBackground,
-          color: dotColor,
-          boxShadow: dotShadow,
-        }}
-        className="absolute left-0 top-1 z-10 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-[11px] font-semibold leading-tight md:hidden"
-      >
-        {item.year}
-      </motion.span>
-
-      <article
-        className={`rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:w-[42%] md:p-9 ${
-          alignLeft ? "md:mr-auto" : "md:ml-auto"
-        }`}
-      >
-        <h3 className="text-2xl font-medium leading-[1.12] tracking-tight text-[#EDF2F7] md:text-[30px]">
+      <article className="group relative overflow-hidden rounded-2xl border border-[#253444] bg-[#17222F] p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/45 md:p-10">
+        <span className="block text-[40px] font-medium leading-none tracking-[-0.045em] text-[#00e5ff] md:text-[58px]">
+          {item.year}
+        </span>
+        <h3 className="mt-5 text-[27px] font-medium leading-[1.08] tracking-tight text-[#EDF2F7] md:mt-6 md:text-[38px]">
           {item.title}
         </h3>
-        <p className="mt-5 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
+        <p className="mt-5 max-w-[800px] text-[15px] leading-relaxed text-[#dddddd] md:text-[17px]">
           <EmphasizedText text={item.text} highlights={item.highlights} />
         </p>
+        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] origin-top bg-[#00e5ff]/70 transition-colors duration-500 group-hover:bg-[#00e5ff]" />
       </article>
     </motion.li>
   );
@@ -483,8 +328,8 @@ function PodcastLoop() {
     <section className="px-5 pb-20 md:pb-32">
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
-          <div className="relative aspect-[16/8]">
-            <div className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-auto md:w-[145%]">
+          <div className="relative aspect-[16/10] md:aspect-[16/8]">
+            <div className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[145%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-auto md:w-[145%]">
               <iframe
                 ref={iframeRef}
                 src={embedUrl}
@@ -499,11 +344,11 @@ function PodcastLoop() {
 
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(13,18,24,0.88)_0%,rgba(13,18,24,0.68)_30%,rgba(13,18,24,0.22)_62%,rgba(13,18,24,0.03)_100%)]" />
             <div className="pointer-events-none absolute inset-0 flex items-center px-5 py-4 sm:px-8 md:px-14 md:py-10 lg:px-20">
-              <div className="max-w-[590px]">
-                <h2 className="max-w-[260px] text-[23px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] sm:max-w-[420px] sm:text-[34px] md:max-w-none md:text-[52px]">
+              <div className="w-[48%] max-w-[590px] md:w-auto">
+                <h2 className="text-[21px] font-medium leading-[1.04] tracking-[-0.035em] text-[#EDF2F7] sm:text-[28px] md:text-[52px] md:leading-[1.02]">
                   In aula porto quello che succede davvero.
                 </h2>
-                <p className="mt-3 max-w-[270px] text-[11px] leading-[1.45] text-[#dddddd] sm:mt-4 sm:max-w-[430px] sm:text-sm md:mt-5 md:max-w-[520px] md:text-lg md:leading-relaxed">
+                <p className="mt-5 hidden max-w-[520px] text-lg leading-relaxed text-[#dddddd] md:block">
                   Una lezione non è una parentesi teorica: è uno spazio in cui casi reali, errori e decisioni diventano strumenti utili per chi lavora ogni giorno nell&apos;e-commerce.
                 </p>
               </div>
