@@ -118,11 +118,12 @@ function Hero() {
 
 function Story() {
   const roadmapRef = useRef<HTMLDivElement>(null);
+  const progressTrackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [thresholds, setThresholds] = useState<number[]>([]);
   const { scrollYProgress } = useScroll({
-    target: roadmapRef,
-    offset: ["start 72%", "end 38%"],
+    target: progressTrackRef,
+    offset: ["start 72%", "end 72%"],
   });
   const lineProgress = useTransform(scrollYProgress, (value) => {
     return Math.max(0, Math.min(1, value));
@@ -178,6 +179,13 @@ function Story() {
         </div>
 
         <div ref={roadmapRef} className="relative">
+          <div
+            ref={progressTrackRef}
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 w-px"
+            style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
+          />
+
           <svg
             aria-hidden
             className="pointer-events-none absolute inset-y-0 left-0 hidden h-full w-full md:block"
