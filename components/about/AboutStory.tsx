@@ -383,7 +383,6 @@ function EmphasizedText({ text, highlights }: { text: string; highlights: string
 
 function PodcastLoop() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [videoVisible, setVideoVisible] = useState(false);
   const videoId = "oy-B6GI02kk";
   const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&start=40&end=80&rel=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&enablejsapi=1`;
 
@@ -417,13 +416,11 @@ function PodcastLoop() {
     const youtubeWindow = window as YouTubeWindow;
     let player: Player | undefined;
     let timeCheck: ReturnType<typeof setInterval> | undefined;
-    let revealVideo: ReturnType<typeof setTimeout> | undefined;
     const captionChecks: ReturnType<typeof setTimeout>[] = [];
     let cancelled = false;
 
-    const restartSegment = (target: Player) => {
+    const seekToSegmentStart = (target: Player) => {
       target.seekTo(40, true);
-      target.playVideo();
     };
 
     const hideCaptions = (target: Player) => {
@@ -443,14 +440,15 @@ function PodcastLoop() {
               setTimeout(() => hideCaptions(target), 500),
               setTimeout(() => hideCaptions(target), 1500),
             );
-            restartSegment(target);
-            revealVideo = setTimeout(() => setVideoVisible(true), 2400);
             timeCheck = setInterval(() => {
-              if (target.getCurrentTime() >= 79.8) restartSegment(target);
+              if (target.getCurrentTime() >= 79.8) seekToSegmentStart(target);
             }, 200);
           },
           onStateChange: ({ data, target }) => {
-            if (data === 0) restartSegment(target);
+            if (data === 0) {
+              seekToSegmentStart(target);
+              target.playVideo();
+            }
           },
         },
       });
@@ -476,7 +474,6 @@ function PodcastLoop() {
     return () => {
       cancelled = true;
       if (timeCheck) clearInterval(timeCheck);
-      if (revealVideo) clearTimeout(revealVideo);
       captionChecks.forEach(clearTimeout);
       player?.destroy();
     };
@@ -487,11 +484,7 @@ function PodcastLoop() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
           <div className="relative aspect-[16/8]">
-            <div
-              className={`pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden transition-opacity duration-700 md:h-auto md:w-[145%] ${
-                videoVisible ? "opacity-100" : "opacity-0"
-              }`}
-            >
+            <div className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-auto md:w-[145%]">
               <iframe
                 ref={iframeRef}
                 src={embedUrl}
