@@ -52,6 +52,20 @@ async function getLogoUrl(): Promise<string | null> {
   }
 }
 
+async function getAboutHeroUrl(): Promise<string | null> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, "%dario%tana%chi%sono%"))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function getPartnerLogos(): Promise<PartnerLogo[]> {
   try {
     const results = await Promise.all(
@@ -72,13 +86,17 @@ async function getPartnerLogos(): Promise<PartnerLogo[]> {
 }
 
 export default async function ChiSonoPage() {
-  const [logoUrl, partnerLogos] = await Promise.all([getLogoUrl(), getPartnerLogos()]);
+  const [logoUrl, partnerLogos, heroImageUrl] = await Promise.all([
+    getLogoUrl(),
+    getPartnerLogos(),
+    getAboutHeroUrl(),
+  ]);
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
-        <AboutStory />
+        <AboutStory heroImageUrl={heroImageUrl} />
         <TrustBar logos={partnerLogos} />
       </main>
       <Footer logoUrl={logoUrl} />

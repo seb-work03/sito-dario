@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   motion,
   useInView,
@@ -59,10 +60,10 @@ const principles = [
   },
 ];
 
-export function AboutStory() {
+export function AboutStory({ heroImageUrl }: { heroImageUrl?: string | null }) {
   return (
     <>
-      <Hero />
+      <Hero imageUrl={heroImageUrl} />
       <Story />
       <PodcastLoop />
       <Numbers />
@@ -72,7 +73,7 @@ export function AboutStory() {
   );
 }
 
-function Hero() {
+function Hero({ imageUrl }: { imageUrl?: string | null }) {
   return (
     <section className="relative overflow-hidden border-b border-white/8 px-5 py-16 md:py-24">
       <div
@@ -109,6 +110,7 @@ function Hero() {
             label="Ritratto di Dario"
             className="mx-auto aspect-[4/5] w-full max-w-[430px]"
             index="01"
+            imageUrl={imageUrl}
           />
         </Reveal>
       </div>
@@ -610,7 +612,17 @@ function PhotoSequence() {
   );
 }
 
-function PhotoPlaceholder({ label, index, className }: { label: string; index: string; className?: string }) {
+function PhotoPlaceholder({
+  label,
+  index,
+  className,
+  imageUrl,
+}: {
+  label: string;
+  index: string;
+  className?: string;
+  imageUrl?: string | null;
+}) {
   return (
     <div
       className={`group relative overflow-hidden rounded-[18px] border border-white/10 bg-[#17222F] ${className ?? ""}`}
@@ -619,7 +631,18 @@ function PhotoPlaceholder({ label, index, className }: { label: string; index: s
           "linear-gradient(135deg, rgba(0,229,255,0.1), transparent 45%), radial-gradient(circle at 70% 25%, rgba(0,229,255,0.13), transparent 28%)",
       }}
     >
-      <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:32px_32px] transition-transform duration-[1400ms] group-hover:scale-105" />
+      {imageUrl ? (
+        <Image
+          src={imageUrl}
+          alt={label}
+          fill
+          priority={index === "01"}
+          sizes="(min-width: 1024px) 430px, 90vw"
+          className="object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+        />
+      ) : (
+        <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:32px_32px] transition-transform duration-[1400ms] group-hover:scale-105" />
+      )}
       <div className="absolute left-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-[#00e5ff]/25 bg-[#0D1218]/70 text-[11px] font-medium text-[#00e5ff] backdrop-blur-md">
         {index}
       </div>
