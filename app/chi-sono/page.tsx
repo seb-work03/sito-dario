@@ -66,6 +66,20 @@ async function getAboutHeroUrl(): Promise<string | null> {
   }
 }
 
+async function getMediaUrl(filename: string): Promise<string | null> {
+  try {
+    const rows = await db
+      .select({ url: media.url })
+      .from(media)
+      .where(ilike(media.filename, filename))
+      .orderBy(desc(media.createdAt))
+      .limit(1);
+    return rows[0]?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function getPartnerLogos(): Promise<PartnerLogo[]> {
   try {
     const results = await Promise.all(
@@ -86,17 +100,27 @@ async function getPartnerLogos(): Promise<PartnerLogo[]> {
 }
 
 export default async function ChiSonoPage() {
-  const [logoUrl, partnerLogos, heroImageUrl] = await Promise.all([
+  const [logoUrl, partnerLogos, heroImageUrl, galleryLeft, galleryCenter, galleryRight] = await Promise.all([
     getLogoUrl(),
     getPartnerLogos(),
     getAboutHeroUrl(),
+    getMediaUrl("dario tana con sfondo.jpg"),
+    getMediaUrl("dario tana lezione.jpg"),
+    getMediaUrl("dario tana lezione 2.jpg"),
   ]);
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
-        <AboutStory heroImageUrl={heroImageUrl} />
+        <AboutStory
+          heroImageUrl={heroImageUrl}
+          galleryImages={{
+            left: galleryLeft,
+            center: galleryCenter,
+            right: galleryRight,
+          }}
+        />
         <TrustBar logos={partnerLogos} />
       </main>
       <Footer logoUrl={logoUrl} />

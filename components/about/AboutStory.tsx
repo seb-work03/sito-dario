@@ -64,7 +64,19 @@ const principles = [
   },
 ];
 
-export function AboutStory({ heroImageUrl }: { heroImageUrl?: string | null }) {
+type GalleryImages = {
+  left?: string | null;
+  center?: string | null;
+  right?: string | null;
+};
+
+export function AboutStory({
+  heroImageUrl,
+  galleryImages,
+}: {
+  heroImageUrl?: string | null;
+  galleryImages?: GalleryImages;
+}) {
   return (
     <>
       <Hero imageUrl={heroImageUrl} />
@@ -72,7 +84,7 @@ export function AboutStory({ heroImageUrl }: { heroImageUrl?: string | null }) {
       <PodcastLoop />
       <Numbers />
       <TeachingApproach />
-      <PhotoSequence />
+      <PhotoSequence images={galleryImages} />
     </>
   );
 }
@@ -609,7 +621,7 @@ function TeachingApproach() {
   );
 }
 
-function PhotoSequence() {
+function PhotoSequence({ images }: { images?: GalleryImages }) {
   return (
     <section className="overflow-hidden px-5 pb-20 pt-4 md:pb-32 md:pt-8">
       <div className="mx-auto max-w-[1240px]">
@@ -624,13 +636,28 @@ function PhotoSequence() {
 
         <div className="grid items-end gap-5 md:grid-cols-[0.9fr_1.2fr_0.8fr] md:gap-6">
           <Reveal y={36}>
-            <PhotoPlaceholder label="Dario in aula" index="02" className="aspect-[4/5]" />
+            <PhotoPlaceholder
+              label="Dario Tana"
+              index="02"
+              className="aspect-[4/5]"
+              imageUrl={images?.left}
+            />
           </Reveal>
           <Reveal y={36} delay={0.1}>
-            <PhotoPlaceholder label="Durante una lezione" index="03" className="aspect-[4/3]" />
+            <PhotoPlaceholder
+              label="Dario Tana durante una lezione"
+              index="03"
+              className="aspect-[4/3]"
+              imageUrl={images?.center}
+            />
           </Reveal>
           <Reveal y={36} delay={0.2}>
-            <PhotoPlaceholder label="Dario sul palco" index="04" className="aspect-[4/5]" />
+            <PhotoPlaceholder
+              label="Dario Tana durante una lezione"
+              index="04"
+              className="aspect-[4/5]"
+              imageUrl={images?.right}
+            />
           </Reveal>
         </div>
       </div>
