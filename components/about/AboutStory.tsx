@@ -110,7 +110,7 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
             className="text-[40px] font-medium leading-[1.01] tracking-[-0.045em] text-[#EDF2F7] sm:text-[46px] md:text-[72px] lg:text-[82px]"
           >
             <>
-              Prima di insegnare <span className="whitespace-nowrap">l&apos;e-commerce,</span> l&apos;ho vissuto.
+              Prima di insegnare <span className="whitespace-nowrap">l&apos;e-commerce,</span>{" "}l&apos;ho vissuto.
             </>
           </AnimatedHeadline>
           <AnimatedText
