@@ -126,12 +126,28 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
         </div>
 
         <Reveal y={34} delay={0.18}>
-          <PhotoPlaceholder
-            label="Ritratto di Dario"
-            className="mx-auto aspect-[4/5] w-full max-w-[430px]"
-            index="01"
-            imageUrl={imageUrl}
-          />
+          <div className="relative isolate mx-auto aspect-[4/5] w-full max-w-[430px] overflow-hidden rounded-[20px] p-[1.5px]">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -inset-[100%] -z-10"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, transparent 200deg, rgba(0,229,255,0.85) 300deg, #00e5ff 340deg, transparent 360deg)",
+                animation: "refborderspin 4s linear infinite",
+              }}
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 -z-10 rounded-[20px]"
+              style={{ boxShadow: "inset 0 0 0 1px rgba(0,229,255,0.28)" }}
+            />
+            <PhotoPlaceholder
+              label="Ritratto di Dario"
+              className="h-full w-full"
+              index="01"
+              imageUrl={imageUrl}
+            />
+          </div>
         </Reveal>
       </div>
     </section>
