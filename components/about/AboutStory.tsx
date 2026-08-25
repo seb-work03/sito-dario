@@ -353,6 +353,8 @@ function PodcastLoop() {
       mute: () => void;
       playVideo: () => void;
       seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+      setOption?: (module: string, option: string, value: unknown) => void;
+      unloadModule?: (module: string) => void;
     };
     type PlayerEvent = { target: Player };
     type PlayerStateEvent = PlayerEvent & { data: number };
@@ -374,11 +376,17 @@ function PodcastLoop() {
     const youtubeWindow = window as YouTubeWindow;
     let player: Player | undefined;
     let timeCheck: ReturnType<typeof setInterval> | undefined;
+    const captionChecks: ReturnType<typeof setTimeout>[] = [];
     let cancelled = false;
 
     const restartSegment = (target: Player) => {
       target.seekTo(40, true);
       target.playVideo();
+    };
+
+    const hideCaptions = (target: Player) => {
+      target.setOption?.("captions", "track", {});
+      target.unloadModule?.("captions");
     };
 
     const initialisePlayer = () => {
@@ -388,6 +396,11 @@ function PodcastLoop() {
         events: {
           onReady: ({ target }) => {
             target.mute();
+            hideCaptions(target);
+            captionChecks.push(
+              setTimeout(() => hideCaptions(target), 500),
+              setTimeout(() => hideCaptions(target), 1500),
+            );
             restartSegment(target);
             timeCheck = setInterval(() => {
               if (target.getCurrentTime() >= 79.8) restartSegment(target);
@@ -420,6 +433,7 @@ function PodcastLoop() {
     return () => {
       cancelled = true;
       if (timeCheck) clearInterval(timeCheck);
+      captionChecks.forEach(clearTimeout);
       player?.destroy();
     };
   }, []);
@@ -429,19 +443,20 @@ function PodcastLoop() {
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
           <div className="relative aspect-[16/8] min-h-[360px] md:min-h-0">
-            <iframe
-              ref={iframeRef}
-              src={embedUrl}
-              title="Dario Tana durante una conversazione in podcast"
-              tabIndex={-1}
-              aria-hidden="true"
-              allow="autoplay; encrypted-media; picture-in-picture"
-              loading="lazy"
-              className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full w-auto max-w-none -translate-x-1/2 -translate-y-1/2 md:h-auto md:w-full"
-            />
+            <div className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-auto md:w-[145%]">
+              <iframe
+                ref={iframeRef}
+                src={embedUrl}
+                title="Dario Tana durante una conversazione in podcast"
+                tabIndex={-1}
+                aria-hidden="true"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                loading="lazy"
+                className="pointer-events-none h-full w-full"
+              />
+            </div>
 
-            <div className="pointer-events-none absolute inset-0 bg-[#0D1218]/35" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0D1218]/95 via-[#0D1218]/55 to-[#0D1218]/10" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(13,18,24,0.88)_0%,rgba(13,18,24,0.68)_30%,rgba(13,18,24,0.22)_62%,rgba(13,18,24,0.03)_100%)]" />
             <div className="pointer-events-none absolute inset-0 flex items-center px-7 py-10 md:px-14 lg:px-20">
               <div className="max-w-[590px]">
                 <h2 className="text-[34px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] md:text-[52px]">
