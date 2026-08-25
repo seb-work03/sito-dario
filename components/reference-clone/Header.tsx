@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -59,6 +59,15 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const logo = logoUrl ?? FALLBACK_LOGO_URL;
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
   return (
     <>
       <header
@@ -96,55 +105,53 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
 
       <AnimatePresence>
         {menuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-              onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 z-[51] bg-black/50 backdrop-blur-sm lg:hidden"
-            />
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.9 }}
-              className="fixed right-0 top-0 z-[60] flex h-full w-[82%] max-w-[360px] flex-col bg-[#0D1218] shadow-2xl lg:hidden"
-            >
-              <div className="flex h-20 items-center justify-between border-b border-white/10 px-6">
-                <DarioTanaLogo url={logo} />
+          <motion.div
+            initial={{ opacity: 0, y: -18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -18 }}
+            transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+            className="fixed inset-0 z-[60] flex min-h-[100dvh] flex-col bg-[#0D1218] lg:hidden"
+          >
+              <div className="flex h-20 shrink-0 items-center justify-between border-b border-white/10 px-5 md:h-24 md:px-8">
+                <Link href="/" onClick={() => setMenuOpen(false)}>
+                  <DarioTanaLogo url={logo} />
+                </Link>
                 <button
                   onClick={() => setMenuOpen(false)}
                   aria-label="Chiudi menu"
-                  className="p-2 text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#00e5ff]/70 text-[#EDF2F7] transition-colors hover:bg-[#00e5ff]/10 hover:text-[#00e5ff]"
                 >
-                  <X size={22} />
+                  <X size={24} />
                 </button>
               </div>
-              <nav className="flex flex-col px-6 py-6 gap-1">
+              <div className="flex flex-1 items-center justify-center px-7 pb-20 pt-10">
+                <nav className="flex w-full max-w-[440px] flex-col">
                 {navLinks.map((l, i) => (
-                  <a
+                  <motion.a
                     key={l.href}
                     href={l.href}
                     onClick={() => setMenuOpen(false)}
-                    style={{ animationDelay: `${0.12 + i * 0.05}s` }}
-                    className="menu-item text-lg font-medium text-[#EDF2F7] py-3 border-b border-white/10"
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
+                    className="border-b border-[#00e5ff]/20 py-4 text-center text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
                   >
                     {l.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <a
+                <motion.a
                   href="/contatti"
                   onClick={() => setMenuOpen(false)}
-                  style={{ animationDelay: `${0.12 + navLinks.length * 0.05}s` }}
-                  className="menu-item mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium py-4 transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.44, ease: [0.19, 1, 0.22, 1] }}
+                  className="mt-8 inline-flex items-center justify-center rounded-full bg-[#00e5ff] py-4 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Parliamone
-                </a>
-              </nav>
-            </motion.div>
-          </>
+                </motion.a>
+                </nav>
+              </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
