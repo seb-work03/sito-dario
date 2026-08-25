@@ -38,16 +38,6 @@ export default async function ContattiPage() {
         {/* Page header spacer */}
         <div className="h-20 md:h-24" />
 
-        {/* Intro header */}
-        <div className="mx-auto max-w-[896px] px-5 pt-12 pb-4">
-          <p className="text-[#77C0CF] text-[11px] uppercase tracking-[0.14em] font-medium mb-4">
-            Contatti
-          </p>
-          <h1 className="text-[#EDF2F7] font-medium text-[32px] md:text-[52px] leading-[1.05] tracking-tight">
-            Parliamo del tuo progetto.
-          </h1>
-        </div>
-
         {/* Briefing form (reused from homepage) */}
         <StrategicBriefing />
       </main>
