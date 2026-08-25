@@ -1,9 +1,18 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { BarChart3, GraduationCap, MessageSquareText, VolumeX } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
+import { AnimatedLabel } from "@/components/reference-clone/AnimatedLabel";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
 
@@ -11,22 +20,22 @@ const timeline = [
   {
     year: "1997",
     title: "La tecnologia diventa un mestiere",
-    text: "Dopo il diploma tecnico commerciale a Rimini, entro in un corso di specializzazione per analisti programmatori finanziato dalla Comunità Europea. È il primo passo verso un mondo digitale ancora tutto da costruire.",
+    text: "Dopo il diploma tecnico commerciale all’I.T.C. R. Valturio di Rimini, supero le selezioni per un corso di specializzazione in Analista programmatore finanziato dalla Comunità Europea. Lì capisco che tecnologia e impresa non sono due mondi separati: il valore nasce quando il codice risolve un problema commerciale concreto.",
   },
   {
     year: "Anni 2000",
     title: "Dentro l’e-commerce, fin dall’inizio",
-    text: "Lavoro in alcune delle realtà e-commerce che stanno crescendo sul territorio. Imparo sul campo come si intrecciano tecnologia, vendita, organizzazione e relazione con il cliente.",
+    text: "Entro in alcune realtà e-commerce che stanno crescendo insieme al territorio. Vivo in prima persona piattaforme, cataloghi, customer care, marketing e organizzazione interna: non soltanto ciò che il cliente vede, ma tutto quello che deve funzionare dietro una vendita online. Intanto iniziano le prime collaborazioni con gli enti di formazione.",
   },
   {
     year: "2015",
     title: "Nasce DT E-commerce Consulting",
-    text: "Creo una realtà mia per trasformare l’esperienza operativa in un metodo: aiutare le imprese a leggere meglio il proprio business online e prendere decisioni più consapevoli.",
+    text: "Apro DT E-commerce Consulting per dare una forma indipendente all’esperienza maturata. È un passaggio importante, non il centro del racconto: mi permette di seguire progetti differenti, confrontarmi direttamente con gli imprenditori e trasformare problemi ricorrenti in un metodo di lavoro più chiaro e trasferibile.",
   },
   {
     year: "Oggi",
     title: "Consulenza, formazione e divulgazione",
-    text: "Collaboro con aziende, imprenditori ed enti di formazione. Porto in aula ciò che accade davvero nei progetti e-commerce, con esempi concreti, domande scomode e strumenti che si possono usare subito.",
+    text: "Continuo a lavorare accanto ad aziende e imprenditori e collaboro con un numero crescente di enti formativi. Dopo più di 150 corsi, il mio obiettivo resta lo stesso: portare in aula ciò che succede davvero nei progetti e-commerce e dare alle persone strumenti per leggere i dati, fare domande migliori e decidere con maggiore autonomia.",
   },
 ];
 
@@ -36,18 +45,21 @@ const principles = [
     number: "01",
     title: "Esperienza prima della teoria",
     text: "Ogni contenuto nasce da progetti reali: numeri, problemi, decisioni ed errori compresi.",
+    bullets: ["Casi reali", "Esempi operativi", "Errori da riconoscere"],
   },
   {
     icon: GraduationCap,
     number: "02",
     title: "Capire prima di applicare",
     text: "Non insegno ricette universali. Costruisco le basi per scegliere strumenti e strategie con autonomia.",
+    bullets: ["Niente formule magiche", "Metodo prima degli strumenti", "Decisioni motivate"],
   },
   {
     icon: MessageSquareText,
     number: "03",
     title: "Confronto, non lezione frontale",
     text: "Le domande e i casi di chi partecipa entrano nel percorso e diventano parte del lavoro in aula.",
+    bullets: ["Dialogo continuo", "Contenuti sul contesto", "Competenze che restano"],
   },
 ];
 
@@ -79,9 +91,9 @@ function Hero() {
       />
       <div className="relative mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
         <div className="max-w-3xl">
-          <AnimatedText className="mb-6 text-[11px] font-medium uppercase tracking-[0.16em] text-[#77C0CF]">
-            Chi sono
-          </AnimatedText>
+          <div className="mb-6">
+            <AnimatedLabel>CHI SONO</AnimatedLabel>
+          </div>
           <AnimatedHeadline
             as="h1"
             delay={0.08}
@@ -93,7 +105,7 @@ function Hero() {
           </AnimatedHeadline>
           <AnimatedText
             delay={0.24}
-            className="mt-8 max-w-2xl text-lg leading-relaxed text-[#C1CEDF] md:text-xl"
+            className="mt-8 max-w-2xl text-lg leading-relaxed text-[#dddddd] md:text-xl"
           >
             Sono Dario Tana. Da oltre vent&apos;anni lavoro nel commercio elettronico e trasformo l&apos;esperienza sul campo in formazione concreta per imprenditori e aziende.
           </AnimatedText>
@@ -112,47 +124,131 @@ function Hero() {
 }
 
 function Story() {
-  return (
-    <section className="bg-[#0D1218] px-5 py-20 md:py-32">
-      <div className="mx-auto max-w-[1240px]">
-        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24">
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            <AnimatedText className="mb-5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#77C0CF]">
-              Il percorso
-            </AnimatedText>
-            <AnimatedHeadline className="text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[50px]">
-              Dal codice all&apos;aula, passando per imprese vere.
-            </AnimatedHeadline>
-            <AnimatedText delay={0.12} className="mt-6 max-w-md text-base leading-relaxed text-[#93A6BB]">
-              Sono cresciuto professionalmente insieme all&apos;e-commerce italiano. Prima operando nei progetti, poi affiancando le imprese e infine portando quell&apos;esperienza nella formazione.
-            </AnimatedText>
-          </div>
+  const roadmapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: roadmapRef,
+    offset: ["start 72%", "end 38%"],
+  });
+  const pathProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 24,
+    mass: 0.35,
+  });
 
-          <ol className="relative border-l border-[#253444]">
+  return (
+    <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
+      <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto mb-16 max-w-3xl text-center md:mb-24">
+          <AnimatedLabel>IL PERCORSO</AnimatedLabel>
+          <AnimatedHeadline className="mt-5 text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
+            Dal codice all&apos;aula, passando per imprese vere.
+          </AnimatedHeadline>
+          <AnimatedText delay={0.12} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
+            Sono cresciuto professionalmente insieme all&apos;e-commerce italiano. Prima dentro i progetti, poi accanto agli imprenditori e infine in aula, dove l&apos;esperienza diventa un metodo condiviso.
+          </AnimatedText>
+        </div>
+
+        <div ref={roadmapRef} className="relative">
+          <svg
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-0 hidden h-full w-full md:block"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
+              fill="none"
+              stroke="rgba(255,255,255,0.10)"
+              strokeWidth="1.5"
+              vectorEffect="non-scaling-stroke"
+            />
+            <motion.path
+              d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
+              fill="none"
+              stroke="#00e5ff"
+              strokeWidth="2.25"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+              style={{
+                pathLength: pathProgress,
+                filter: "drop-shadow(0 0 5px rgba(0,229,255,0.65))",
+              }}
+            />
+          </svg>
+
+          <div aria-hidden className="absolute bottom-0 left-[19px] top-0 w-px bg-white/10 md:hidden" />
+          <motion.div
+            aria-hidden
+            className="absolute left-[19px] top-0 w-px origin-top bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.65)] md:hidden"
+            style={{ height: "100%", scaleY: pathProgress }}
+          />
+
+          <ol className="relative flex flex-col gap-10 md:gap-20">
             {timeline.map((item, index) => (
-              <Reveal
-                as="li"
+              <RoadmapItem
                 key={item.year}
-                y={28}
-                delay={index * 0.06}
-                className="relative border-b border-white/8 py-9 pl-8 first:pt-0 last:border-0 last:pb-0 md:pl-12"
-              >
-                <span className="absolute -left-[5px] top-11 h-[9px] w-[9px] rounded-full bg-[#00e5ff] shadow-[0_0_16px_rgba(0,229,255,0.7)] first:top-2" />
-                <span className="text-xs font-medium uppercase tracking-[0.15em] text-[#00e5ff]">
-                  {item.year}
-                </span>
-                <h3 className="mt-3 text-2xl font-medium tracking-tight text-[#EDF2F7] md:text-[30px]">
-                  {item.title}
-                </h3>
-                <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#AFC0D2] md:text-base">
-                  {item.text}
-                </p>
-              </Reveal>
+                item={item}
+                index={index}
+                progress={scrollYProgress}
+              />
             ))}
           </ol>
         </div>
       </div>
     </section>
+  );
+}
+
+function RoadmapItem({
+  item,
+  index,
+  progress,
+}: {
+  item: (typeof timeline)[number];
+  index: number;
+  progress: MotionValue<number>;
+}) {
+  const start = index * 0.23;
+  const opacity = useTransform(progress, [start, start + 0.12], [0.2, 1]);
+  const y = useTransform(progress, [start, start + 0.12], [34, 0]);
+  const dotScale = useTransform(progress, [start, start + 0.08], [0.45, 1]);
+  const positions = ["50%", "43%", "56%", "50%"];
+  const alignLeft = index % 2 === 0;
+
+  return (
+    <motion.li style={{ opacity, y }} className="relative min-h-[250px] pl-12 md:min-h-[285px] md:pl-0">
+      <motion.span
+        aria-hidden
+        style={{ scale: dotScale, left: positions[index] }}
+        className="absolute top-8 z-10 hidden h-4 w-4 -translate-x-1/2 rounded-full border-[3px] border-[#0D1218] bg-[#00e5ff] shadow-[0_0_22px_rgba(0,229,255,0.9)] md:block"
+      />
+      <motion.span
+        aria-hidden
+        style={{ scale: dotScale }}
+        className="absolute left-[12px] top-8 z-10 h-4 w-4 rounded-full border-[3px] border-[#0D1218] bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.8)] md:hidden"
+      />
+
+      <article
+        className={`rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:w-[42%] md:p-9 ${
+          alignLeft ? "md:mr-auto" : "md:ml-auto"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-4 border-b border-white/8 pb-5">
+          <span className="text-xs font-medium uppercase tracking-[0.16em] text-[#00e5ff]">
+            {item.year}
+          </span>
+          <span className="text-[11px] font-medium tracking-[0.15em] text-[#4F6577]">
+            0{index + 1}
+          </span>
+        </div>
+        <h3 className="mt-6 text-2xl font-medium leading-[1.12] tracking-tight text-[#EDF2F7] md:text-[30px]">
+          {item.title}
+        </h3>
+        <p className="mt-5 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
+          {item.text}
+        </p>
+      </article>
+    </motion.li>
   );
 }
 
@@ -233,54 +329,68 @@ function Numbers() {
 
   return (
     <section className="border-y border-[#00e5ff]/20 bg-[#121A24] px-5 py-16 md:py-20">
-      <div className="mx-auto grid max-w-[1240px] gap-10 sm:grid-cols-3 sm:gap-0">
-        {stats.map((stat, index) => (
-          <Reveal
-            key={stat.label}
-            y={20}
-            delay={index * 0.08}
-            className="flex flex-col items-center border-white/10 text-center sm:border-l sm:first:border-0"
-          >
-            <span className="text-[46px] font-medium leading-none tracking-[-0.04em] text-[#00e5ff] md:text-[64px]">
-              {stat.prefix}
-              <CountUp value={stat.value} />
-              {stat.suffix}
-            </span>
-            <span className="mt-3 text-xs uppercase tracking-[0.13em] text-[#AFC0D2]">
-              {stat.label}
-            </span>
-          </Reveal>
-        ))}
+      <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <AnimatedLabel>L&apos;ESPERIENZA IN NUMERI</AnimatedLabel>
+          <AnimatedHeadline className="mt-5 text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
+            La pratica lascia tracce misurabili.
+          </AnimatedHeadline>
+          <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd]">
+            Numeri diversi, un unico filo: esperienza applicata e condivisa nel tempo.
+          </AnimatedText>
+        </div>
+
+        <div className="grid gap-10 sm:grid-cols-3 sm:gap-0">
+          {stats.map((stat, index) => (
+            <Reveal
+              key={stat.label}
+              y={20}
+              delay={index * 0.08}
+              className="flex flex-col items-center border-white/10 text-center sm:border-l sm:first:border-0"
+            >
+              <span className="text-[46px] font-medium leading-none tracking-[-0.04em] text-[#00e5ff] md:text-[64px]">
+                {stat.prefix}
+                <CountUp value={stat.value} />
+                {stat.suffix}
+              </span>
+              <span className="mt-3 text-xs uppercase tracking-[0.13em] text-[#dddddd]">
+                {stat.label}
+              </span>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 function TeachingApproach() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridInView = useInView(gridRef, { once: true, amount: 0.2 });
+
   return (
-    <section className="bg-[#0D1218] px-5 py-20 md:py-32">
+    <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
-        <div className="mb-12 max-w-3xl md:mb-16">
-          <AnimatedText className="mb-5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#77C0CF]">
-            Il mio modo di formare
-          </AnimatedText>
-          <AnimatedHeadline className="text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[54px]">
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <AnimatedLabel>IL MIO MODO DI FORMARE</AnimatedLabel>
+          <AnimatedHeadline className="mt-5 text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
             Porto in aula ciò che succede fuori dall&apos;aula.
           </AnimatedHeadline>
-          <AnimatedText delay={0.12} className="mt-6 max-w-2xl text-base leading-relaxed text-[#93A6BB] md:text-lg">
+          <AnimatedText delay={0.12} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             La formazione funziona quando rende le persone più autonome. Per questo parto dai problemi reali, costruisco un linguaggio comune e arrivo alle decisioni che contano.
           </AnimatedText>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div ref={gridRef} className="grid gap-5 md:grid-cols-3 md:gap-6">
           {principles.map((item, index) => {
             const Icon = item.icon;
             return (
-              <Reveal
+              <motion.article
                 key={item.number}
-                y={30}
-                delay={index * 0.08}
-                className="group rounded-[18px] border border-white/8 bg-[#17222F] p-7 transition-[border-color,transform] duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:p-8"
+                initial={{ opacity: 0, y: 24 }}
+                animate={gridInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                transition={{ duration: 0.7, delay: index * 0.18, ease: [0.19, 1, 0.22, 1] }}
+                className="group relative flex flex-col gap-5 rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:p-8"
               >
                 <div className="flex items-center justify-between">
                   <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#00e5ff]/25 bg-[#00e5ff]/8 text-[#00e5ff]">
@@ -293,10 +403,19 @@ function TeachingApproach() {
                 <h3 className="mt-10 text-2xl font-medium leading-tight tracking-tight text-[#EDF2F7]">
                   {item.title}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-[#AFC0D2]">
+                <p className="mt-4 text-sm leading-relaxed text-[#dddddd]">
                   {item.text}
                 </p>
-              </Reveal>
+                <div className="h-px bg-white/8" />
+                <ul className="flex flex-col gap-2.5">
+                  {item.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-2.5 text-sm leading-snug text-[#DDE5EF]">
+                      <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00e5ff]" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+              </motion.article>
             );
           })}
         </div>
@@ -307,8 +426,18 @@ function TeachingApproach() {
 
 function PhotoSequence() {
   return (
-    <section className="overflow-hidden px-5 pb-20 md:pb-32">
+    <section className="overflow-hidden px-5 pb-20 pt-4 md:pb-32 md:pt-8">
       <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <AnimatedLabel>DENTRO IL LAVORO</AnimatedLabel>
+          <AnimatedHeadline className="mt-5 text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[50px]">
+            Aula, confronto, palco.
+          </AnimatedHeadline>
+          <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd]">
+            Tre momenti diversi dello stesso lavoro: rendere comprensibile ciò che nell&apos;e-commerce spesso sembra complicato.
+          </AnimatedText>
+        </div>
+
         <div className="grid items-end gap-5 md:grid-cols-[0.9fr_1.2fr_0.8fr] md:gap-6">
           <Reveal y={36}>
             <PhotoPlaceholder label="Dario in aula" index="02" className="aspect-[4/5]" />
