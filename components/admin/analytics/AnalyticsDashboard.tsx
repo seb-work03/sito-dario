@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PeriodSelector } from "./PeriodSelector";
 import { KpiCard } from "./KpiCard";
 import { Timeseries } from "./Timeseries";
@@ -13,6 +13,8 @@ import type {
   PeriodPreset,
   TimeseriesResult,
 } from "@/lib/analytics/types";
+
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 type FetchState<T> = { data: T | null; error: string | null; loading: boolean };
 const initial = <T,>(): FetchState<T> => ({ data: null, error: null, loading: true });
@@ -46,6 +48,8 @@ export function AnalyticsDashboard() {
   const [tops, setTops] = useState<Record<Dimension, FetchState<BreakdownResult>>>(() =>
     TOP_DIMENSIONS.reduce((acc, d) => ({ ...acc, [d.dim]: initial() }), {} as Record<Dimension, FetchState<BreakdownResult>>)
   );
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const load = useCallback((p: PeriodPreset) => {
     // Status is independent; always fetch it first so we know if the token/project are configured.
@@ -70,10 +74,19 @@ export function AnalyticsDashboard() {
         .then((data) => setTops((prev) => ({ ...prev, [d.dim]: { data, error: null, loading: false } })))
         .catch((err) => setTops((prev) => ({ ...prev, [d.dim]: { data: null, error: String(err.message ?? err), loading: false } })));
     }
+
+    setLastUpdated(new Date());
   }, []);
 
   useEffect(() => {
     load(preset);
+
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => load(preset), REFRESH_INTERVAL_MS);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [preset, load]);
 
   const anyLoading =
@@ -104,14 +117,11 @@ export function AnalyticsDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <PeriodSelector value={preset} onChange={setPreset} />
-          <button
-            type="button"
-            onClick={() => load(preset)}
-            disabled={anyLoading}
-            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-          >
-            {anyLoading ? "Aggiorno…" : "Aggiorna"}
-          </button>
+          {lastUpdated && (
+            <span className="text-[11px] text-gray-400">
+              {anyLoading ? "Aggiorno…" : `Aggiornato alle ${lastUpdated.toLocaleTimeString("it-IT")}`}
+            </span>
+          )}
         </div>
       </div>
 
