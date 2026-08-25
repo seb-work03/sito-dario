@@ -10,9 +10,8 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { BarChart3, GraduationCap, MessageSquareText, VolumeX } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
-import { AnimatedLabel } from "@/components/reference-clone/AnimatedLabel";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
 
@@ -42,21 +41,18 @@ const timeline = [
 const principles = [
   {
     icon: BarChart3,
-    number: "01",
     title: "Esperienza prima della teoria",
     text: "Ogni contenuto nasce da progetti reali: numeri, problemi, decisioni ed errori compresi.",
     bullets: ["Casi reali", "Esempi operativi", "Errori da riconoscere"],
   },
   {
     icon: GraduationCap,
-    number: "02",
     title: "Capire prima di applicare",
     text: "Non insegno ricette universali. Costruisco le basi per scegliere strumenti e strategie con autonomia.",
     bullets: ["Niente formule magiche", "Metodo prima degli strumenti", "Decisioni motivate"],
   },
   {
     icon: MessageSquareText,
-    number: "03",
     title: "Confronto, non lezione frontale",
     text: "Le domande e i casi di chi partecipa entrano nel percorso e diventano parte del lavoro in aula.",
     bullets: ["Dialogo continuo", "Contenuti sul contesto", "Competenze che restano"],
@@ -91,9 +87,6 @@ function Hero() {
       />
       <div className="relative mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
         <div className="max-w-3xl">
-          <div className="mb-6">
-            <AnimatedLabel>CHI SONO</AnimatedLabel>
-          </div>
           <AnimatedHeadline
             as="h1"
             delay={0.08}
@@ -125,22 +118,46 @@ function Hero() {
 
 function Story() {
   const roadmapRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [thresholds, setThresholds] = useState<number[]>([]);
   const { scrollYProgress } = useScroll({
     target: roadmapRef,
     offset: ["start 72%", "end 38%"],
   });
-  const pathProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 24,
-    mass: 0.35,
+  const lineProgress = useTransform(scrollYProgress, (value) => {
+    return Math.max(0, Math.min(1, value));
   });
+
+  useLayoutEffect(() => {
+    function measureNodes() {
+      const roadmap = roadmapRef.current;
+      if (!roadmap) return;
+      const roadmapRect = roadmap.getBoundingClientRect();
+      const next = itemRefs.current.map((item) => {
+        const node = Array.from(
+          item?.querySelectorAll<HTMLElement>("[data-roadmap-node]") ?? [],
+        ).find((candidate) => {
+          const rect = candidate.getBoundingClientRect();
+          return rect.width > 0 && rect.height > 0;
+        });
+        if (!node) return 1;
+        const nodeRect = node.getBoundingClientRect();
+        const nodeCenter = nodeRect.top + nodeRect.height / 2 - roadmapRect.top;
+        return Math.max(0, Math.min(1, nodeCenter / roadmapRect.height));
+      });
+      setThresholds(next);
+    }
+
+    measureNodes();
+    window.addEventListener("resize", measureNodes);
+    return () => window.removeEventListener("resize", measureNodes);
+  }, []);
 
   return (
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-16 max-w-3xl text-center md:mb-24">
-          <AnimatedLabel>IL PERCORSO</AnimatedLabel>
-          <AnimatedHeadline className="mt-5 text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
+          <AnimatedHeadline className="text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
             Dal codice all&apos;aula, passando per imprese vere.
           </AnimatedHeadline>
           <AnimatedText delay={0.12} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
@@ -155,6 +172,17 @@ function Story() {
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
+            <defs>
+              <clipPath id="roadmap-scroll-fill" clipPathUnits="userSpaceOnUse">
+                <motion.rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="100"
+                  style={{ scaleY: lineProgress, transformOrigin: "top" }}
+                />
+              </clipPath>
+            </defs>
             <path
               d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
               fill="none"
@@ -162,25 +190,23 @@ function Story() {
               strokeWidth="1.5"
               vectorEffect="non-scaling-stroke"
             />
-            <motion.path
+            <path
               d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
               fill="none"
               stroke="#00e5ff"
               strokeWidth="2.25"
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
-              style={{
-                pathLength: pathProgress,
-                filter: "drop-shadow(0 0 5px rgba(0,229,255,0.65))",
-              }}
+              clipPath="url(#roadmap-scroll-fill)"
+              style={{ filter: "drop-shadow(0 0 5px rgba(0,229,255,0.65))" }}
             />
           </svg>
 
-          <div aria-hidden className="absolute bottom-0 left-[19px] top-0 w-px bg-white/10 md:hidden" />
+          <div aria-hidden className="absolute bottom-0 left-[39px] top-0 w-px bg-white/10 md:hidden" />
           <motion.div
             aria-hidden
-            className="absolute left-[19px] top-0 w-px origin-top bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.65)] md:hidden"
-            style={{ height: "100%", scaleY: pathProgress }}
+            className="absolute left-[39px] top-0 w-px origin-top bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.65)] md:hidden"
+            style={{ height: "100%", scaleY: lineProgress }}
           />
 
           <ol className="relative flex flex-col gap-10 md:gap-20">
@@ -190,6 +216,10 @@ function Story() {
                 item={item}
                 index={index}
                 progress={scrollYProgress}
+                threshold={thresholds[index] ?? index / timeline.length}
+                liRef={(element) => {
+                  itemRefs.current[index] = element;
+                }}
               />
             ))}
           </ol>
@@ -203,45 +233,75 @@ function RoadmapItem({
   item,
   index,
   progress,
+  threshold,
+  liRef,
 }: {
   item: (typeof timeline)[number];
   index: number;
   progress: MotionValue<number>;
+  threshold: number;
+  liRef: (element: HTMLLIElement | null) => void;
 }) {
-  const start = index * 0.23;
-  const opacity = useTransform(progress, [start, start + 0.12], [0.2, 1]);
-  const y = useTransform(progress, [start, start + 0.12], [34, 0]);
-  const dotScale = useTransform(progress, [start, start + 0.08], [0.45, 1]);
+  const activationStart = Math.max(0, threshold - 0.055);
+  const opacity = useTransform(progress, [activationStart, threshold], [0.3, 1]);
+  const y = useTransform(progress, [activationStart, threshold], [28, 0]);
+  const dotScale = useTransform(progress, [activationStart, threshold], [0.72, 1]);
+  const dotBackground = useTransform(
+    progress,
+    [activationStart, threshold],
+    ["#0D1218", "#00e5ff"],
+  );
+  const dotColor = useTransform(
+    progress,
+    [activationStart, threshold],
+    ["#00e5ff", "#0D1218"],
+  );
+  const dotShadow = useTransform(
+    progress,
+    [activationStart, threshold],
+    ["0 0 0 rgba(0,229,255,0)", "0 0 28px rgba(0,229,255,0.75)"],
+  );
   const positions = ["50%", "43%", "56%", "50%"];
   const alignLeft = index % 2 === 0;
 
   return (
-    <motion.li style={{ opacity, y }} className="relative min-h-[250px] pl-12 md:min-h-[285px] md:pl-0">
+    <motion.li
+      ref={liRef}
+      style={{ opacity, y }}
+      className="relative min-h-[250px] pl-24 md:min-h-[285px] md:pl-0"
+    >
       <motion.span
-        aria-hidden
-        style={{ scale: dotScale, left: positions[index] }}
-        className="absolute top-8 z-10 hidden h-4 w-4 -translate-x-1/2 rounded-full border-[3px] border-[#0D1218] bg-[#00e5ff] shadow-[0_0_22px_rgba(0,229,255,0.9)] md:block"
-      />
+        data-roadmap-node
+        style={{
+          scale: dotScale,
+          left: positions[index],
+          backgroundColor: dotBackground,
+          color: dotColor,
+          boxShadow: dotShadow,
+        }}
+        className="absolute top-1 z-10 hidden h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-xs font-semibold leading-tight md:flex"
+      >
+        {item.year}
+      </motion.span>
       <motion.span
-        aria-hidden
-        style={{ scale: dotScale }}
-        className="absolute left-[12px] top-8 z-10 h-4 w-4 rounded-full border-[3px] border-[#0D1218] bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.8)] md:hidden"
-      />
+        data-roadmap-node
+        style={{
+          scale: dotScale,
+          backgroundColor: dotBackground,
+          color: dotColor,
+          boxShadow: dotShadow,
+        }}
+        className="absolute left-0 top-1 z-10 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-[11px] font-semibold leading-tight md:hidden"
+      >
+        {item.year}
+      </motion.span>
 
       <article
         className={`rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:w-[42%] md:p-9 ${
           alignLeft ? "md:mr-auto" : "md:ml-auto"
         }`}
       >
-        <div className="flex items-center justify-between gap-4 border-b border-white/8 pb-5">
-          <span className="text-xs font-medium uppercase tracking-[0.16em] text-[#00e5ff]">
-            {item.year}
-          </span>
-          <span className="text-[11px] font-medium tracking-[0.15em] text-[#4F6577]">
-            0{index + 1}
-          </span>
-        </div>
-        <h3 className="mt-6 text-2xl font-medium leading-[1.12] tracking-tight text-[#EDF2F7] md:text-[30px]">
+        <h3 className="text-2xl font-medium leading-[1.12] tracking-tight text-[#EDF2F7] md:text-[30px]">
           {item.title}
         </h3>
         <p className="mt-5 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
@@ -295,10 +355,7 @@ function PodcastLoop({ videoUrl }: { videoUrl?: string | null }) {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0D1218]/90 via-transparent to-[#0D1218]/15" />
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 md:p-10">
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#77C0CF]">
-                  Dietro le idee
-                </p>
-                <p className="mt-2 max-w-xl text-2xl font-medium leading-tight text-[#EDF2F7] md:text-[38px]">
+                <p className="max-w-xl text-2xl font-medium leading-tight text-[#EDF2F7] md:text-[38px]">
                   Il confronto è parte del lavoro.
                 </p>
               </div>
@@ -331,8 +388,7 @@ function Numbers() {
     <section className="border-y border-[#00e5ff]/20 bg-[#121A24] px-5 py-16 md:py-20">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <AnimatedLabel>L&apos;ESPERIENZA IN NUMERI</AnimatedLabel>
-          <AnimatedHeadline className="mt-5 text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
+          <AnimatedHeadline className="text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
             La pratica lascia tracce misurabili.
           </AnimatedHeadline>
           <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd]">
@@ -372,8 +428,7 @@ function TeachingApproach() {
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <AnimatedLabel>IL MIO MODO DI FORMARE</AnimatedLabel>
-          <AnimatedHeadline className="mt-5 text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
+          <AnimatedHeadline className="text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[52px]">
             Porto in aula ciò che succede fuori dall&apos;aula.
           </AnimatedHeadline>
           <AnimatedText delay={0.12} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd] md:text-lg">
@@ -386,28 +441,23 @@ function TeachingApproach() {
             const Icon = item.icon;
             return (
               <motion.article
-                key={item.number}
+                key={item.title}
                 initial={{ opacity: 0, y: 24 }}
                 animate={gridInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
                 transition={{ duration: 0.7, delay: index * 0.18, ease: [0.19, 1, 0.22, 1] }}
-                className="group relative flex flex-col gap-5 rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:p-8"
+                className="group relative flex flex-col gap-3 rounded-2xl border border-[#253444] bg-[#17222F] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/40 md:p-8"
               >
-                <div className="flex items-center justify-between">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#00e5ff]/25 bg-[#00e5ff]/8 text-[#00e5ff]">
-                    <Icon size={20} strokeWidth={1.6} />
-                  </span>
-                  <span className="text-xs font-medium tracking-[0.15em] text-[#4F6577]">
-                    {item.number}
-                  </span>
-                </div>
-                <h3 className="mt-10 text-2xl font-medium leading-tight tracking-tight text-[#EDF2F7]">
+                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#00e5ff]/25 bg-[#00e5ff]/8 text-[#00e5ff] transition-transform duration-500 group-hover:scale-105">
+                  <Icon size={30} strokeWidth={1.5} />
+                </span>
+                <h3 className="mt-2 text-center text-2xl font-medium leading-tight tracking-tight text-[#EDF2F7]">
                   {item.title}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-[#dddddd]">
+                <p className="text-center text-sm leading-relaxed text-[#dddddd]">
                   {item.text}
                 </p>
-                <div className="h-px bg-white/8" />
-                <ul className="flex flex-col gap-2.5">
+                <div className="my-1 h-px bg-white/8" />
+                <ul className="flex flex-col gap-2">
                   {item.bullets.map((bullet) => (
                     <li key={bullet} className="flex items-start gap-2.5 text-sm leading-snug text-[#DDE5EF]">
                       <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00e5ff]" />
@@ -429,8 +479,7 @@ function PhotoSequence() {
     <section className="overflow-hidden px-5 pb-20 pt-4 md:pb-32 md:pt-8">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <AnimatedLabel>DENTRO IL LAVORO</AnimatedLabel>
-          <AnimatedHeadline className="mt-5 text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[50px]">
+          <AnimatedHeadline className="text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[50px]">
             Aula, confronto, palco.
           </AnimatedHeadline>
           <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#dddddd]">
@@ -468,8 +517,7 @@ function PhotoPlaceholder({ label, index, className }: { label: string; index: s
         {index}
       </div>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/70 to-transparent p-6 pt-20">
-        <p className="text-[11px] uppercase tracking-[0.14em] text-[#77C0CF]">Segnaposto foto</p>
-        <p className="mt-2 text-lg font-medium text-[#EDF2F7]">{label}</p>
+        <p className="text-lg font-medium text-[#EDF2F7]">{label}</p>
       </div>
     </div>
   );
