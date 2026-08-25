@@ -21,21 +21,25 @@ const timeline = [
     year: "1997",
     title: "La tecnologia diventa un mestiere",
     text: "Dopo il diploma tecnico commerciale all’I.T.C. R. Valturio di Rimini, supero le selezioni per un corso di specializzazione in Analista programmatore finanziato dalla Comunità Europea. Lì capisco che tecnologia e impresa non sono due mondi separati: il valore nasce quando il codice risolve un problema commerciale concreto.",
+    highlights: ["Analista programmatore", "tecnologia e impresa", "problema commerciale concreto"],
   },
   {
     year: "Anni 2000",
     title: "Dentro l’e-commerce, fin dall’inizio",
     text: "Entro in alcune realtà e-commerce che stanno crescendo insieme al territorio. Vivo in prima persona piattaforme, cataloghi, customer care, marketing e organizzazione interna: non soltanto ciò che il cliente vede, ma tutto quello che deve funzionare dietro una vendita online. Intanto iniziano le prime collaborazioni con gli enti di formazione.",
+    highlights: ["piattaforme, cataloghi, customer care, marketing e organizzazione interna", "prime collaborazioni con gli enti di formazione"],
   },
   {
     year: "2015",
     title: "Nasce DT E-commerce Consulting",
     text: "Apro DT E-commerce Consulting per dare una forma indipendente all’esperienza maturata. È un passaggio importante, non il centro del racconto: mi permette di seguire progetti differenti, confrontarmi direttamente con gli imprenditori e trasformare problemi ricorrenti in un metodo di lavoro più chiaro e trasferibile.",
+    highlights: ["DT E-commerce Consulting", "confrontarmi direttamente con gli imprenditori", "metodo di lavoro più chiaro e trasferibile"],
   },
   {
     year: "Oggi",
     title: "Consulenza, formazione e divulgazione",
     text: "Continuo a lavorare accanto ad aziende e imprenditori e collaboro con un numero crescente di enti formativi. Dopo più di 150 corsi, il mio obiettivo resta lo stesso: portare in aula ciò che succede davvero nei progetti e-commerce e dare alle persone strumenti per leggere i dati, fare domande migliori e decidere con maggiore autonomia.",
+    highlights: ["più di 150 corsi", "ciò che succede davvero nei progetti e-commerce", "decidere con maggiore autonomia"],
   },
 ];
 
@@ -101,7 +105,11 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
             delay={0.24}
             className="mt-8 max-w-2xl text-lg leading-relaxed text-[#dddddd] md:text-xl"
           >
-            Sono Dario Tana. Da oltre vent&apos;anni lavoro nel commercio elettronico e trasformo l&apos;esperienza sul campo in formazione concreta per imprenditori e aziende.
+            <>
+              Sono Dario Tana.
+              <br />
+              Da oltre vent&apos;anni lavoro nel commercio elettronico e trasformo l&apos;esperienza sul campo in formazione concreta per <span className="whitespace-nowrap">imprenditori e aziende.</span>
+            </>
           </AnimatedText>
         </div>
 
@@ -224,12 +232,12 @@ function Story() {
 
           <div
             aria-hidden
-            className="absolute left-[39px] w-px bg-white/10 md:hidden"
+            className="absolute left-[47px] w-px bg-white/10 md:hidden"
             style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
           />
           <motion.div
             aria-hidden
-            className="absolute left-[39px] w-px origin-top bg-[#00e5ff] md:hidden"
+            className="absolute left-[47px] w-px origin-top bg-[#00e5ff] md:hidden"
             style={{
               top: `${firstNode * 100}%`,
               height: `${lineSpan * 100}%`,
@@ -299,7 +307,7 @@ function RoadmapItem({
     <motion.li
       ref={liRef}
       style={{ opacity, y }}
-      className="relative min-h-[250px] pl-24 md:min-h-[285px] md:pl-0"
+      className="relative min-h-[250px] pl-28 md:min-h-[285px] md:pl-0"
     >
       <motion.span
         data-roadmap-node
@@ -310,7 +318,7 @@ function RoadmapItem({
           color: dotColor,
           boxShadow: dotShadow,
         }}
-        className="absolute top-1 z-10 hidden h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-xs font-semibold leading-tight md:flex"
+        className="absolute top-1 z-10 hidden h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-sm font-semibold leading-tight md:flex"
       >
         {item.year}
       </motion.span>
@@ -322,7 +330,7 @@ function RoadmapItem({
           color: dotColor,
           boxShadow: dotShadow,
         }}
-        className="absolute left-0 top-1 z-10 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-[11px] font-semibold leading-tight md:hidden"
+        className="absolute left-0 top-1 z-10 flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-xs font-semibold leading-tight md:hidden"
       >
         {item.year}
       </motion.span>
@@ -336,10 +344,28 @@ function RoadmapItem({
           {item.title}
         </h3>
         <p className="mt-5 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
-          {item.text}
+          <EmphasizedText text={item.text} highlights={item.highlights} />
         </p>
       </article>
     </motion.li>
+  );
+}
+
+function EmphasizedText({ text, highlights }: { text: string; highlights: string[] }) {
+  const escapedHighlights = highlights.map((highlight) =>
+    highlight.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  );
+  const parts = text.split(new RegExp(`(${escapedHighlights.join("|")})`, "g"));
+  const highlighted = new Set(highlights);
+
+  return parts.map((part, index) =>
+    highlighted.has(part) ? (
+      <strong key={`${part}-${index}`} className="font-semibold text-[#EDF2F7]">
+        {part}
+      </strong>
+    ) : (
+      part
+    ),
   );
 }
 
@@ -625,7 +651,9 @@ function PhotoPlaceholder({
 }) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-[18px] border border-white/10 bg-[#17222F] ${className ?? ""}`}
+      className={`group relative overflow-hidden rounded-[18px] border bg-[#17222F] ${
+        imageUrl ? "border-[#00e5ff]/60" : "border-white/10"
+      } ${className ?? ""}`}
       style={{
         backgroundImage:
           "linear-gradient(135deg, rgba(0,229,255,0.1), transparent 45%), radial-gradient(circle at 70% 25%, rgba(0,229,255,0.13), transparent 28%)",
