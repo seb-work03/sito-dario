@@ -192,7 +192,7 @@ function RoadmapItem({
       transition={{ duration: 0.75, delay: index * 0.04, ease: [0.19, 1, 0.22, 1] }}
       viewport={{ once: true, amount: 0.22 }}
     >
-      <article className="group relative overflow-hidden rounded-2xl border border-[#253444] bg-[#17222F] p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#00e5ff]/45 md:p-10">
+      <article className="py-5 md:px-4 md:py-8">
         <span className="block text-[40px] font-medium leading-none tracking-[-0.045em] text-[#00e5ff] md:text-[58px]">
           {item.year}
         </span>
@@ -202,7 +202,6 @@ function RoadmapItem({
         <p className="mt-5 max-w-[800px] text-[15px] leading-relaxed text-[#dddddd] md:text-[17px]">
           <EmphasizedText text={item.text} highlights={item.highlights} />
         </p>
-        <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] origin-top bg-[#00e5ff]/70 transition-colors duration-500 group-hover:bg-[#00e5ff]" />
       </article>
     </motion.li>
   );
