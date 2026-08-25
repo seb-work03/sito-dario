@@ -184,28 +184,27 @@ function Story() {
               </clipPath>
             </defs>
             <path
-              d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
+              d="M 50 0 C 50 9, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 88, 50 100"
               fill="none"
               stroke="rgba(255,255,255,0.10)"
               strokeWidth="1.5"
               vectorEffect="non-scaling-stroke"
             />
             <path
-              d="M 50 2 C 50 11, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 86, 50 98"
+              d="M 50 0 C 50 9, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 88, 50 100"
               fill="none"
               stroke="#00e5ff"
-              strokeWidth="2.25"
+              strokeWidth="1.5"
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
               clipPath="url(#roadmap-scroll-fill)"
-              style={{ filter: "drop-shadow(0 0 5px rgba(0,229,255,0.65))" }}
             />
           </svg>
 
           <div aria-hidden className="absolute bottom-0 left-[39px] top-0 w-px bg-white/10 md:hidden" />
           <motion.div
             aria-hidden
-            className="absolute left-[39px] top-0 w-px origin-top bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.65)] md:hidden"
+            className="absolute left-[39px] top-0 w-px origin-top bg-[#00e5ff] md:hidden"
             style={{ height: "100%", scaleY: lineProgress }}
           />
 
