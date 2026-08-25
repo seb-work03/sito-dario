@@ -21,7 +21,7 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
     {
       id: "consulente",
       label: "Consulente",
-      href: "/servizi#consulente",
+      href: "/servizi/consulenza-ecommerce",
       photo: consulenteUrl ?? "/reference-assets/adviest/orECDk1yHAceniWXq7yKvfvv7Y.jpg",
       bullets: [
         "Audit strategico e tecnologico",
@@ -33,7 +33,7 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
     {
       id: "formazione",
       label: "Formazione",
-      href: "/formazione",
+      href: "/servizi/formazione",
       photo: formazioneUrl ?? "/reference-assets/adviest/pK0MgeT7XpWRNeefyNQiRiZz7nQ.jpg",
       bullets: [
         "Formazione in-house su misura",
@@ -45,7 +45,7 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
     {
       id: "eventi",
       label: "Interventi ed Eventi",
-      href: "/eventi",
+      href: "/servizi/speech-eventi",
       photo: speechUrl ?? "/reference-assets/adviest/2HY57myX3y7mgS1UFfrGVyN2yPw.jpg",
       bullets: [
         "Keynote e interventi verticali",

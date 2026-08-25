@@ -41,7 +41,7 @@ const socials = [
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Servizi", href: "/#service" },
+  { label: "Servizi", href: "/servizi" },
   { label: "Chi sono", href: "/chi-sono" },
   { label: "Blog", href: "/blog" },
 ];

@@ -1,0 +1,563 @@
+"use client";
+
+import Link from "next/link";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { ArrowUpRight, BarChart3, GraduationCap, Mic2 } from "lucide-react";
+import { useRef, type MouseEvent } from "react";
+import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
+import { AnimatedText } from "@/components/reference-clone/AnimatedText";
+
+const services = [
+  {
+    id: "consulenza",
+    number: "01",
+    title: "Consulenza e-commerce",
+    headline: "Dare priorità a ciò che muove davvero il progetto.",
+    description:
+      "Per progettare un nuovo e-commerce o far evolvere un’attività già avviata. Analizzo tecnologia, numeri, marketing e organizzazione per trasformare la complessità in una sequenza di decisioni concrete.",
+    href: "/servizi/consulenza-ecommerce",
+    linkLabel: "Esplora la consulenza",
+    audiences: ["Nuovi progetti", "E-commerce avviati", "Audit o affiancamento"],
+    areas: ["Strategia e piattaforma", "Dati, CRO e advertising", "Processi, team e marginalità"],
+    icon: BarChart3,
+    visual: "consulting" as const,
+  },
+  {
+    id: "formazione",
+    number: "02",
+    title: "Formazione e-commerce",
+    headline: "Trasformare esperienza e strumenti in autonomia.",
+    description:
+      "Corsi e percorsi per professionisti, aziende, team ed enti di formazione. Ogni intervento parte dalle basi condivise e arriva a casi, strumenti e problemi che le persone incontrano davvero nel lavoro.",
+    href: "/servizi/formazione",
+    linkLabel: "Scopri la formazione",
+    audiences: ["Professionisti", "Aziende e team", "Enti e academy"],
+    areas: ["Workshop e corsi", "Percorsi su misura", "Online o in presenza"],
+    icon: GraduationCap,
+    visual: "training" as const,
+  },
+  {
+    id: "speech",
+    number: "03",
+    title: "Speech ed eventi",
+    headline: "Portare sul palco contenuti che restano.",
+    description:
+      "Keynote, panel e interventi dedicati a e-commerce, piattaforme, analytics, marketing e advertising. Contenuti costruiti sul pubblico e raccontati con esempi leggibili, senza semplificazioni vuote.",
+    href: "/servizi/speech-eventi",
+    linkLabel: "Scopri speech ed eventi",
+    audiences: ["Eventi e fiere", "Panel e keynote", "Format aziendali"],
+    areas: ["E-commerce e piattaforme", "Analytics e dati", "Marketing e ADV"],
+    icon: Mic2,
+    visual: "speech" as const,
+  },
+];
+
+const choices = [
+  {
+    question: "Devi partire, riorganizzare o far crescere un e-commerce?",
+    answer: "Consulenza",
+    href: "/servizi/consulenza-ecommerce",
+  },
+  {
+    question: "Vuoi rendere più autonome persone, team o partecipanti?",
+    answer: "Formazione",
+    href: "/servizi/formazione",
+  },
+  {
+    question: "Vuoi portare l’e-commerce dentro un evento o un confronto pubblico?",
+    answer: "Speech ed eventi",
+    href: "/servizi/speech-eventi",
+  },
+];
+
+const method = [
+  {
+    number: "01",
+    title: "Leggere il contesto",
+    text: "Obiettivi, persone, numeri e vincoli vengono prima degli strumenti.",
+  },
+  {
+    number: "02",
+    title: "Tradurre la complessità",
+    text: "Dati e problemi diventano priorità comprensibili e utilizzabili.",
+  },
+  {
+    number: "03",
+    title: "Lasciare autonomia",
+    text: "Ogni intervento deve produrre decisioni e competenze che restano.",
+  },
+];
+
+export function ServicesOverview() {
+  return (
+    <>
+      <ServicesHero />
+      <ServicesPanels />
+      <ServiceChooser />
+      <SharedMethod />
+    </>
+  );
+}
+
+function ServicesHero() {
+  return (
+    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-5 py-16 md:py-24 lg:min-h-[calc(100vh-6rem)] lg:py-20">
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,229,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: "radial-gradient(circle at 70% 45%, black, transparent 78%)",
+        }}
+      />
+      <div className="pointer-events-none absolute -left-32 top-1/3 h-80 w-80 rounded-full bg-[#00e5ff]/8 blur-[110px]" />
+
+      <div className="relative mx-auto grid max-w-[1240px] items-center gap-14 lg:min-h-[620px] lg:grid-cols-[1.04fr_0.96fr] lg:gap-16">
+        <div className="max-w-[760px] text-center lg:text-left">
+          <AnimatedHeadline
+            as="h1"
+            delay={0.08}
+            className="text-[42px] font-medium leading-[0.99] tracking-[-0.045em] text-[#EDF2F7] sm:text-[54px] md:text-[72px] lg:text-[78px]"
+          >
+            Tre modi per portare esperienza nel tuo progetto.
+          </AnimatedHeadline>
+          <AnimatedText
+            delay={0.22}
+            className="mx-auto mt-7 max-w-[650px] text-base leading-relaxed text-[#dddddd] md:text-xl lg:mx-0"
+          >
+            Consulenza, formazione e speech e-commerce per aziende, professionisti ed enti in tutta Italia. Tre forme diverse, costruite sullo stesso principio: partire dalla realtà e lasciare strumenti utili.
+          </AnimatedText>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75, delay: 0.34, ease: [0.19, 1, 0.22, 1] }}
+            className="mt-8 flex flex-wrap justify-center gap-2.5 lg:justify-start"
+          >
+            {["Base a Rimini", "Progetti in tutta Italia", "20+ anni sul campo"].map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-[#253444] bg-[#17222F]/75 px-4 py-2 text-xs text-[#DDE5EF] backdrop-blur-md"
+              >
+                {item}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+
+        <ServiceConstellation />
+      </div>
+    </section>
+  );
+}
+
+function ServiceConstellation() {
+  const nodes = [
+    { label: "Consulenza", className: "left-1/2 top-[4%] -translate-x-1/2" },
+    { label: "Formazione", className: "bottom-[10%] left-[3%]" },
+    { label: "Speech", className: "bottom-[10%] right-[3%]" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+      transition={{ duration: 1.1, delay: 0.18, ease: [0.19, 1, 0.22, 1] }}
+      className="relative mx-auto aspect-square w-full max-w-[500px]"
+    >
+      <motion.div
+        aria-hidden
+        className="absolute inset-[9%] rounded-full border border-dashed border-[#00e5ff]/18"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute inset-[21%] rounded-full border border-[#00e5ff]/15"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+      >
+        <span className="absolute -top-1 left-1/2 h-2 w-2 rounded-full bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.9)]" />
+      </motion.div>
+
+      <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 100 100">
+        <motion.path
+          d="M50 17 L17 73 L83 73 Z"
+          fill="rgba(0,229,255,0.025)"
+          stroke="#00e5ff"
+          strokeOpacity="0.34"
+          strokeWidth="0.45"
+          strokeDasharray="2 2"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1, strokeDashoffset: [0, -12] }}
+          transition={{ pathLength: { duration: 1.4, delay: 0.45 }, strokeDashoffset: { duration: 4, repeat: Infinity, ease: "linear" } }}
+        />
+        {["M50 50 L50 17", "M50 50 L17 73", "M50 50 L83 73"].map((path, index) => (
+          <motion.path
+            key={path}
+            d={path}
+            fill="none"
+            stroke="#00e5ff"
+            strokeOpacity="0.34"
+            strokeWidth="0.45"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.9, delay: 0.65 + index * 0.12 }}
+          />
+        ))}
+      </svg>
+
+      <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/35 bg-[#17222F]/90 p-5 text-center shadow-[0_0_60px_rgba(0,229,255,0.15)] backdrop-blur-md md:h-40 md:w-40">
+        <span className="text-sm font-medium leading-tight text-[#EDF2F7] md:text-base">
+          Esperienza
+          <br />
+          sul campo
+        </span>
+      </div>
+
+      {nodes.map((node, index) => (
+        <motion.div
+          key={node.label}
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1, y: [0, -5, 0] }}
+          transition={{ opacity: { duration: 0.55, delay: 0.75 + index * 0.12 }, scale: { duration: 0.55, delay: 0.75 + index * 0.12 }, y: { duration: 3.2, delay: index * 0.4, repeat: Infinity, ease: "easeInOut" } }}
+          className={`absolute flex h-20 min-w-24 items-center justify-center rounded-2xl border border-[#253444] bg-[#17222F] px-4 text-center text-xs font-medium text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3)] md:h-24 md:min-w-32 md:text-sm ${node.className}`}
+        >
+          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
+          {node.label}
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
+function ServicesPanels() {
+  return (
+    <section className="border-b border-white/8 bg-[#0D1218] px-5 py-20 md:py-32">
+      <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
+          <AnimatedHeadline className="text-[34px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[54px]">
+            Il servizio giusto dipende da ciò che deve cambiare.
+          </AnimatedHeadline>
+          <AnimatedText delay={0.12} className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
+            Non parto da un pacchetto predefinito. Parto dal punto in cui si trova il progetto, dalle persone coinvolte e dal risultato che deve diventare possibile.
+          </AnimatedText>
+        </div>
+
+        <div className="flex flex-col gap-7 md:gap-9">
+          {services.map((service, index) => (
+            <ServicePanel key={service.id} service={service} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServicePanel({ service, index }: { service: (typeof services)[number]; index: number }) {
+  const mouseX = useMotionValue(-500);
+  const mouseY = useMotionValue(-500);
+  const glow = useMotionTemplate`radial-gradient(440px circle at ${mouseX}px ${mouseY}px, rgba(0,229,255,0.13), transparent 68%)`;
+  const Icon = service.icon;
+
+  function handlePointerMove(event: MouseEvent<HTMLElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    mouseX.set(event.clientX - rect.left);
+    mouseY.set(event.clientY - rect.top);
+  }
+
+  return (
+    <motion.article
+      id={service.id}
+      onMouseMove={handlePointerMove}
+      onMouseLeave={() => {
+        mouseX.set(-500);
+        mouseY.set(-500);
+      }}
+      initial={{ opacity: 0, y: 48 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.16 }}
+      transition={{ duration: 0.85, ease: [0.19, 1, 0.22, 1] }}
+      className="group relative isolate overflow-hidden rounded-[26px] border border-[#253444] bg-[#17222F] md:rounded-[34px]"
+    >
+      <motion.div aria-hidden className="pointer-events-none absolute inset-0 z-0" style={{ background: glow }} />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#00e5ff]/10 transition-transform duration-1000 group-hover:scale-110" />
+      <div className="relative z-10 grid items-stretch lg:grid-cols-2">
+        <div className={`flex flex-col p-7 sm:p-9 md:p-12 lg:p-14 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
+          <div className="flex items-center justify-between gap-5">
+            <span className="text-sm font-medium text-[#00e5ff]">{service.number}</span>
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#00e5ff]/25 bg-[#00e5ff]/8 text-[#00e5ff] transition-transform duration-500 group-hover:scale-110">
+              <Icon size={23} strokeWidth={1.6} />
+            </span>
+          </div>
+          <h2 className="mt-8 text-[34px] font-medium leading-[1.02] tracking-[-0.04em] text-[#EDF2F7] md:text-[48px]">
+            {service.headline}
+          </h2>
+          <p className="mt-6 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
+            {service.description}
+          </p>
+          <div className="mt-7 flex flex-wrap gap-2">
+            {service.audiences.map((audience) => (
+              <span key={audience} className="rounded-full border border-white/10 bg-[#0D1218]/45 px-3.5 py-2 text-xs text-[#DDE5EF]">
+                {audience}
+              </span>
+            ))}
+          </div>
+          <ul className="mt-8 grid gap-3 border-t border-white/8 pt-7 sm:grid-cols-2">
+            {service.areas.map((area) => (
+              <li key={area} className="flex items-start gap-2.5 text-sm leading-snug text-[#dddddd]">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00e5ff]" />
+                {area}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href={service.href}
+            className="mt-9 inline-flex w-fit items-center gap-2 text-sm font-medium text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
+          >
+            {service.linkLabel}
+            <ArrowUpRight size={16} />
+          </Link>
+        </div>
+
+        <div className={`min-h-[330px] p-5 sm:p-7 lg:min-h-full ${index % 2 === 1 ? "lg:order-1" : ""}`}>
+          <div className="h-full min-h-[300px] overflow-hidden rounded-[22px] border border-white/8 bg-[#0D1218]">
+            {service.visual === "consulting" && <ConsultingVisual />}
+            {service.visual === "training" && <TrainingVisual />}
+            {service.visual === "speech" && <SpeechVisual />}
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+function ConsultingVisual() {
+  return (
+    <div className="relative h-full min-h-[300px] overflow-hidden p-6">
+      <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:38px_38px]" />
+      <div className="relative flex items-center justify-between">
+        <span className="text-xs uppercase tracking-[0.13em] text-[#77C0CF]">Scenario operativo</span>
+        <span className="flex items-center gap-2 text-[11px] text-[#dddddd]">
+          <span className="h-2 w-2 rounded-full bg-[#00e5ff] shadow-[0_0_14px_rgba(0,229,255,0.8)]" />
+          dati attivi
+        </span>
+      </div>
+      <svg aria-hidden className="absolute inset-x-5 bottom-8 h-[72%] w-[calc(100%-2.5rem)]" viewBox="0 0 520 250" preserveAspectRatio="none">
+        <path d="M12 220 C90 205, 100 185, 155 190 S235 145, 285 158 S365 92, 415 112 S470 56, 508 42" fill="none" stroke="rgba(255,255,255,0.11)" strokeWidth="2" />
+        <motion.path
+          d="M12 220 C90 205, 100 185, 155 190 S235 145, 285 158 S365 92, 415 112 S470 56, 508 42"
+          fill="none"
+          stroke="#00e5ff"
+          strokeWidth="3"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+        />
+        {[[155, 190], [285, 158], [415, 112], [508, 42]].map(([cx, cy], index) => (
+          <motion.circle
+            key={`${cx}-${cy}`}
+            cx={cx}
+            cy={cy}
+            r="5"
+            fill="#00e5ff"
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.55 + index * 0.18, duration: 0.4 }}
+            style={{ transformOrigin: `${cx}px ${cy}px` }}
+          />
+        ))}
+      </svg>
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.8 }}
+        className="absolute bottom-7 right-6 rounded-xl border border-[#00e5ff]/25 bg-[#17222F]/90 px-4 py-3 backdrop-blur-md"
+      >
+        <span className="block text-2xl font-medium text-[#00e5ff]">Priorità</span>
+        <span className="mt-1 block text-[11px] text-[#dddddd]">prima degli strumenti</span>
+      </motion.div>
+    </div>
+  );
+}
+
+function TrainingVisual() {
+  const topics = [
+    { label: "Strategia", className: "left-[7%] top-[13%]" },
+    { label: "Dati", className: "right-[8%] top-[17%]" },
+    { label: "Marketing", className: "bottom-[13%] left-[6%]" },
+    { label: "Processi", className: "bottom-[11%] right-[7%]" },
+  ];
+
+  return (
+    <div className="relative h-full min-h-[300px] overflow-hidden bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.12),transparent_46%)]">
+      <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {["M50 50 L20 22", "M50 50 L80 25", "M50 50 L19 77", "M50 50 L81 78"].map((path, index) => (
+          <motion.path
+            key={path}
+            d={path}
+            fill="none"
+            stroke="#00e5ff"
+            strokeOpacity="0.32"
+            strokeWidth="0.5"
+            strokeDasharray="2 2"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1, strokeDashoffset: [0, -8] }}
+            viewport={{ once: true }}
+            transition={{ pathLength: { duration: 0.8, delay: index * 0.12 }, strokeDashoffset: { duration: 3, repeat: Infinity, ease: "linear" } }}
+          />
+        ))}
+      </svg>
+      <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/40 bg-[#17222F] p-4 text-center text-sm font-medium text-[#EDF2F7] shadow-[0_0_40px_rgba(0,229,255,0.15)]">
+        Competenze
+        <br />
+        che restano
+      </div>
+      {topics.map((topic, index) => (
+        <motion.span
+          key={topic.label}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1, y: [0, -4, 0] }}
+          viewport={{ once: true }}
+          transition={{ opacity: { delay: 0.25 + index * 0.12 }, scale: { delay: 0.25 + index * 0.12 }, y: { duration: 3, repeat: Infinity, delay: index * 0.35 } }}
+          className={`absolute rounded-xl border border-[#253444] bg-[#17222F] px-4 py-3 text-xs font-medium text-[#DDE5EF] ${topic.className}`}
+        >
+          {topic.label}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
+function SpeechVisual() {
+  const bars = [32, 58, 42, 78, 48, 92, 62, 84, 44, 72, 38, 66, 50, 88, 56, 74, 40];
+
+  return (
+    <div className="relative flex h-full min-h-[300px] flex-col items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(0,229,255,0.16),transparent_43%)] px-6">
+      <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-[#00e5ff]/50 to-transparent" />
+      <div className="relative flex h-28 items-center justify-center gap-1.5">
+        {bars.map((height, index) => (
+          <motion.span
+            key={`${height}-${index}`}
+            className="w-1.5 rounded-full bg-[#00e5ff]"
+            style={{ height }}
+            animate={{ scaleY: [0.35, 1, 0.55, 0.82, 0.35] }}
+            transition={{ duration: 2, repeat: Infinity, delay: index * 0.055, ease: "easeInOut" }}
+          />
+        ))}
+      </div>
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.45 }}
+        className="relative mt-8 max-w-sm text-center text-xl font-medium leading-tight text-[#EDF2F7] md:text-2xl"
+      >
+        Rendere comprensibile ciò che spesso viene raccontato come complicato.
+      </motion.p>
+    </div>
+  );
+}
+
+function ServiceChooser() {
+  return (
+    <section className="bg-[#0D1218] px-4 py-20 md:px-5 md:py-28">
+      <div className="mx-auto max-w-[1360px] overflow-hidden rounded-[28px] bg-[#00e5ff] p-5 md:rounded-[38px] md:p-10">
+        <div className="grid gap-9 p-3 md:grid-cols-[0.76fr_1.24fr] md:items-center md:p-6 lg:gap-16">
+          <div>
+            <AnimatedHeadline className="text-[34px] font-medium leading-[1.03] tracking-tight text-[#0D1218] md:text-[52px]">
+              Non devi sapere già quale servizio ti serve.
+            </AnimatedHeadline>
+            <AnimatedText delay={0.1} className="mt-5 max-w-lg text-base leading-relaxed text-[#0D1218]/72">
+              Parti da ciò che vuoi rendere possibile. Il formato dell’intervento viene dopo.
+            </AnimatedText>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0D1218] px-5 md:px-7">
+            {choices.map((choice, index) => (
+              <motion.div
+                key={choice.answer}
+                initial={{ opacity: 0, x: 24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.65, delay: index * 0.1, ease: [0.19, 1, 0.22, 1] }}
+                className="border-b border-white/10 last:border-0"
+              >
+                <Link href={choice.href} className="group grid gap-3 py-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-6">
+                  <span className="text-sm leading-relaxed text-[#dddddd] md:text-base">{choice.question}</span>
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-[#00e5ff]">
+                    {choice.answer}
+                    <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SharedMethod() {
+  const flowRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: flowRef,
+    offset: ["start 72%", "end 62%"],
+  });
+  const horizontalProgress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  return (
+    <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
+      <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
+          <AnimatedHeadline className="text-[34px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[54px]">
+            Tre forme. Lo stesso modo di lavorare.
+          </AnimatedHeadline>
+          <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
+            Che si tratti di un progetto, di un’aula o di un palco, il valore nasce quando l’esperienza diventa comprensione e la comprensione diventa autonomia.
+          </AnimatedText>
+        </div>
+
+        <div ref={flowRef} className="relative">
+          <div className="absolute bottom-0 left-5 top-0 w-px bg-white/10 md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-px md:w-auto" />
+          <motion.div
+            aria-hidden
+            className="absolute bottom-0 left-5 top-0 w-[2px] origin-top bg-[#00e5ff] md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-[2px] md:w-auto md:origin-left"
+            style={{ scaleY: horizontalProgress, scaleX: horizontalProgress }}
+          />
+          <div className="relative grid gap-10 md:grid-cols-3 md:gap-8">
+            {method.map((step, index) => (
+              <motion.article
+                key={step.number}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.7, delay: index * 0.13, ease: [0.19, 1, 0.22, 1] }}
+                className="relative pl-14 md:px-7 md:pt-20 md:text-center"
+              >
+                <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-[#00e5ff]/55 bg-[#0D1218] text-xs font-medium text-[#00e5ff] md:left-1/2 md:h-12 md:w-12 md:-translate-x-1/2">
+                  {step.number}
+                </span>
+                <h3 className="text-2xl font-medium tracking-tight text-[#EDF2F7]">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-[#dddddd] md:text-base">{step.text}</p>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
