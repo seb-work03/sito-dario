@@ -135,7 +135,7 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.55, delay: 0.44, ease: [0.19, 1, 0.22, 1] }}
-                  className="group mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] py-2 pl-6 pr-2 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
+                  className="group mt-8 inline-flex w-fit self-center items-center justify-center gap-2 rounded-full bg-[#00e5ff] py-2 pl-6 pr-2 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Contatti
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff]">
