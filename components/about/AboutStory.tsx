@@ -59,12 +59,12 @@ const principles = [
   },
 ];
 
-export function AboutStory({ videoUrl }: { videoUrl?: string | null }) {
+export function AboutStory() {
   return (
     <>
       <Hero />
       <Story />
-      <PodcastLoop videoUrl={videoUrl} />
+      <PodcastLoop />
       <Numbers />
       <TeachingApproach />
       <PhotoSequence />
@@ -341,45 +341,24 @@ function RoadmapItem({
   );
 }
 
-function PodcastLoop({ videoUrl }: { videoUrl?: string | null }) {
+function PodcastLoop() {
+  const videoId = "oy-B6GI02kk";
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&playlist=${videoId}&start=40&end=80&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
+
   return (
     <section className="px-5 pb-20 md:pb-32">
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
           <div className="relative aspect-[16/8] min-h-[360px] md:min-h-0">
-            {videoUrl ? (
-              <video
-                src={videoUrl}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label="Dario Tana durante una conversazione in podcast"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            ) : (
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "radial-gradient(circle at 72% 35%, rgba(0,229,255,0.22), transparent 24%), linear-gradient(135deg, #17222F 0%, #0D1218 70%)",
-                }}
-              >
-                <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(rgba(237,242,247,0.25)_1px,transparent_1px)] [background-size:22px_22px]" />
-                <div className="absolute inset-x-[8%] bottom-[18%] flex h-20 items-end justify-center gap-1.5 opacity-60" aria-hidden>
-                  {[28, 52, 38, 68, 44, 76, 48, 62, 34, 56, 40, 72, 46, 60, 32].map((height, index) => (
-                    <motion.span
-                      key={index}
-                      className="w-1.5 rounded-full bg-[#00e5ff]"
-                      style={{ height }}
-                      animate={{ scaleY: [0.45, 1, 0.6, 0.9, 0.45] }}
-                      transition={{ duration: 1.8, repeat: Infinity, delay: index * 0.06, ease: "easeInOut" }}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            <iframe
+              src={embedUrl}
+              title="Dario Tana durante una conversazione in podcast"
+              tabIndex={-1}
+              aria-hidden="true"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              loading="lazy"
+              className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full w-auto max-w-none -translate-x-1/2 -translate-y-1/2 md:h-auto md:w-full"
+            />
 
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0D1218]/90 via-transparent to-[#0D1218]/15" />
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 md:p-10">
@@ -393,12 +372,6 @@ function PodcastLoop({ videoUrl }: { videoUrl?: string | null }) {
                 Video senza audio
               </span>
             </div>
-
-            {!videoUrl && (
-              <span className="absolute right-5 top-5 rounded-full border border-[#00e5ff]/30 bg-[#0D1218]/75 px-3 py-1.5 text-[10px] uppercase tracking-[0.12em] text-[#77C0CF] backdrop-blur-md">
-                Segnaposto video podcast
-              </span>
-            )}
           </div>
         </Reveal>
       </div>
