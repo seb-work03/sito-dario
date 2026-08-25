@@ -103,19 +103,19 @@ function Hero({ imageUrl }: { imageUrl?: string | null }) {
         }}
       />
       <div className="relative mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
-        <div className="max-w-3xl">
+        <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
           <AnimatedHeadline
             as="h1"
             delay={0.08}
-            className="text-[44px] font-medium leading-[0.98] tracking-[-0.045em] text-[#EDF2F7] md:text-[72px] lg:text-[82px]"
+            className="text-[40px] font-medium leading-[1.01] tracking-[-0.045em] text-[#EDF2F7] sm:text-[46px] md:text-[72px] lg:text-[82px]"
           >
             <>
-              Prima di insegnare l&apos;e-commerce, l&apos;ho vissuto.
+              Prima di insegnare <span className="whitespace-nowrap">l&apos;e-commerce,</span> l&apos;ho vissuto.
             </>
           </AnimatedHeadline>
           <AnimatedText
             delay={0.24}
-            className="mt-8 max-w-2xl text-lg leading-relaxed text-[#dddddd] md:text-xl"
+            className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-[#dddddd] md:text-xl lg:mx-0"
           >
             <>
               Sono Dario Tana.
@@ -244,12 +244,12 @@ function Story() {
 
           <div
             aria-hidden
-            className="absolute left-[47px] w-px bg-white/10 md:hidden"
+            className="absolute left-[39px] w-px bg-white/10 md:hidden"
             style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
           />
           <motion.div
             aria-hidden
-            className="absolute left-[47px] w-px origin-top bg-[#00e5ff] md:hidden"
+            className="absolute left-[39px] w-px origin-top bg-[#00e5ff] md:hidden"
             style={{
               top: `${firstNode * 100}%`,
               height: `${lineSpan * 100}%`,
@@ -319,7 +319,7 @@ function RoadmapItem({
     <motion.li
       ref={liRef}
       style={{ opacity, y }}
-      className="relative min-h-[250px] pl-28 md:min-h-[285px] md:pl-0"
+      className="relative min-h-[250px] pl-24 md:min-h-[285px] md:pl-0"
     >
       <motion.span
         data-roadmap-node
@@ -342,7 +342,7 @@ function RoadmapItem({
           color: dotColor,
           boxShadow: dotShadow,
         }}
-        className="absolute left-0 top-1 z-10 flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-xs font-semibold leading-tight md:hidden"
+        className="absolute left-0 top-1 z-10 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#00e5ff] px-2 text-center text-[11px] font-semibold leading-tight md:hidden"
       >
         {item.year}
       </motion.span>
