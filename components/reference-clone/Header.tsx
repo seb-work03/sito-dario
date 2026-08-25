@@ -7,10 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Chi sono", href: "/chi-sono" },
+  { label: "Home", href: "/" },
   { label: "Servizi", href: "/#service" },
-  { label: "Metodo", href: "/#process" },
-  { label: "Testimonianze", href: "/#testimon" },
+  { label: "Chi sono", href: "/chi-sono" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const FALLBACK_LOGO_URL =
@@ -91,7 +91,7 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
             ))}
           </nav>
 
-          <PillCta href="/contatti" label="Parliamone" />
+          <PillCta href="/contatti" label="Contatti" />
 
           <button
             className="lg:hidden p-2 text-[#EDF2F7]"
@@ -147,7 +147,7 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
                   transition={{ duration: 0.55, delay: 0.44, ease: [0.19, 1, 0.22, 1] }}
                   className="mt-8 inline-flex items-center justify-center rounded-full bg-[#00e5ff] py-4 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
-                  Parliamone
+                  Contatti
                 </motion.a>
                 </nav>
               </div>

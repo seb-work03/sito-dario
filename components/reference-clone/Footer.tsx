@@ -40,10 +40,10 @@ const socials = [
 ];
 
 const navLinks = [
-  { label: "Chi sono", href: "/chi-sono" },
+  { label: "Home", href: "/" },
   { label: "Servizi", href: "/#service" },
-  { label: "Metodo", href: "/#process" },
-  { label: "Contatti", href: "/contatti" },
+  { label: "Chi sono", href: "/chi-sono" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const contacts = [
@@ -88,7 +88,7 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
               href="/contatti"
               className="group inline-flex items-center gap-2 rounded-full bg-[#0D1218] text-[#00e5ff] font-medium pl-6 pr-2 py-2 text-[16px] transition-all duration-500 hover:shadow-[0_0_32px_rgba(13,18,24,0.4)]"
             >
-              Parliamone
+              Contatti
               <span className="flex items-center justify-center rounded-full bg-[#00e5ff] text-[#0D1218] w-10 h-10 shrink-0">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45">
                   <path d="M5 12h14M13 5l7 7-7 7" />
