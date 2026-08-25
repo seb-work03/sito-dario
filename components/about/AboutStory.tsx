@@ -486,7 +486,7 @@ function PodcastLoop() {
     <section className="px-5 pb-20 md:pb-32">
       <div className="mx-auto max-w-[1240px]">
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
-          <div className="relative aspect-[16/8] min-h-[360px] md:min-h-0">
+          <div className="relative aspect-[16/8]">
             <div
               className={`pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[115%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 overflow-hidden transition-opacity duration-700 md:h-auto md:w-[145%] ${
                 videoVisible ? "opacity-100" : "opacity-0"
@@ -505,12 +505,12 @@ function PodcastLoop() {
             </div>
 
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(13,18,24,0.88)_0%,rgba(13,18,24,0.68)_30%,rgba(13,18,24,0.22)_62%,rgba(13,18,24,0.03)_100%)]" />
-            <div className="pointer-events-none absolute inset-0 flex items-center px-7 py-10 md:px-14 lg:px-20">
+            <div className="pointer-events-none absolute inset-0 flex items-center px-5 py-4 sm:px-8 md:px-14 md:py-10 lg:px-20">
               <div className="max-w-[590px]">
-                <h2 className="text-[34px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] md:text-[52px]">
+                <h2 className="max-w-[260px] text-[23px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] sm:max-w-[420px] sm:text-[34px] md:max-w-none md:text-[52px]">
                   In aula porto quello che succede davvero.
                 </h2>
-                <p className="mt-5 max-w-[520px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+                <p className="mt-3 max-w-[270px] text-[11px] leading-[1.45] text-[#dddddd] sm:mt-4 sm:max-w-[430px] sm:text-sm md:mt-5 md:max-w-[520px] md:text-lg md:leading-relaxed">
                   Una lezione non è una parentesi teorica: è uno spazio in cui casi reali, errori e decisioni diventano strumenti utili per chi lavora ogni giorno nell&apos;e-commerce.
                 </p>
               </div>
