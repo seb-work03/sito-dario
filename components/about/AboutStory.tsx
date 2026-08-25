@@ -128,6 +128,18 @@ function Story() {
     return Math.max(0, Math.min(1, value));
   });
 
+  const fallbackThresholds = [0.035, 0.305, 0.575, 0.845];
+  const nodeThresholds = timeline.map(
+    (_, index) => thresholds[index] ?? fallbackThresholds[index],
+  );
+  const firstNode = nodeThresholds[0];
+  const lastNode = nodeThresholds[nodeThresholds.length - 1];
+  const lineSpan = Math.max(0.01, lastNode - firstNode);
+  const nodeY = nodeThresholds.map((threshold) => threshold * 100);
+  const midpoint = (start: number, end: number) => start + (end - start) / 2;
+  const roadmapPath = `M 50 ${nodeY[0]} C 50 ${midpoint(nodeY[0], nodeY[1])}, 43 ${midpoint(nodeY[0], nodeY[1])}, 43 ${nodeY[1]} S 56 ${midpoint(nodeY[1], nodeY[2])}, 56 ${nodeY[2]} S 50 ${midpoint(nodeY[2], nodeY[3])}, 50 ${nodeY[3]}`;
+  const fillHeight = useTransform(lineProgress, [0, 1], [0, lineSpan * 100]);
+
   useLayoutEffect(() => {
     function measureNodes() {
       const roadmap = roadmapRef.current;
@@ -176,22 +188,21 @@ function Story() {
               <clipPath id="roadmap-scroll-fill" clipPathUnits="userSpaceOnUse">
                 <motion.rect
                   x="0"
-                  y="0"
+                  y={firstNode * 100}
                   width="100"
-                  height="100"
-                  style={{ scaleY: lineProgress, transformOrigin: "top" }}
+                  height={fillHeight}
                 />
               </clipPath>
             </defs>
             <path
-              d="M 50 0 C 50 9, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 88, 50 100"
+              d={roadmapPath}
               fill="none"
               stroke="rgba(255,255,255,0.10)"
               strokeWidth="1.5"
               vectorEffect="non-scaling-stroke"
             />
             <path
-              d="M 50 0 C 50 9, 42 13, 43 25 S 58 37, 56 49 S 40 61, 44 73 S 56 88, 50 100"
+              d={roadmapPath}
               fill="none"
               stroke="#00e5ff"
               strokeWidth="1.5"
@@ -201,11 +212,19 @@ function Story() {
             />
           </svg>
 
-          <div aria-hidden className="absolute bottom-0 left-[39px] top-0 w-px bg-white/10 md:hidden" />
+          <div
+            aria-hidden
+            className="absolute left-[39px] w-px bg-white/10 md:hidden"
+            style={{ top: `${firstNode * 100}%`, height: `${lineSpan * 100}%` }}
+          />
           <motion.div
             aria-hidden
-            className="absolute left-[39px] top-0 w-px origin-top bg-[#00e5ff] md:hidden"
-            style={{ height: "100%", scaleY: lineProgress }}
+            className="absolute left-[39px] w-px origin-top bg-[#00e5ff] md:hidden"
+            style={{
+              top: `${firstNode * 100}%`,
+              height: `${lineSpan * 100}%`,
+              scaleY: lineProgress,
+            }}
           />
 
           <ol className="relative flex flex-col gap-10 md:gap-20">
@@ -214,8 +233,11 @@ function Story() {
                 key={item.year}
                 item={item}
                 index={index}
-                progress={scrollYProgress}
-                threshold={thresholds[index] ?? index / timeline.length}
+                progress={lineProgress}
+                threshold={Math.max(
+                  0.001,
+                  (nodeThresholds[index] - firstNode) / lineSpan,
+                )}
                 liRef={(element) => {
                   itemRefs.current[index] = element;
                 }}
