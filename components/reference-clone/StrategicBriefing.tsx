@@ -115,24 +115,32 @@ export function StrategicBriefing() {
             <span className="text-white text-[11px] uppercase tracking-[0.12em] font-medium">
               Preferisci un contatto diretto?
             </span>
-            <a
+            <motion.a
               href="mailto:info@dariotana.it"
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.65, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
               className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
             >
               <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
                 <Mail size={14} strokeWidth={1.75} />
               </span>
               info@dariotana.it
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="tel:+393487830571"
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.65, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
               className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
             >
               <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
                 <Phone size={14} strokeWidth={1.75} />
               </span>
               +39 348 783 0571
-            </a>
+            </motion.a>
           </div>
         </div>
 
