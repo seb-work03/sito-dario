@@ -9,7 +9,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { BarChart3, GraduationCap, MessageSquareText, VolumeX } from "lucide-react";
+import { BarChart3, GraduationCap, MessageSquareText } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
@@ -342,8 +342,87 @@ function RoadmapItem({
 }
 
 function PodcastLoop() {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const videoId = "oy-B6GI02kk";
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&playlist=${videoId}&start=40&end=80&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&start=40&end=80&rel=0&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&enablejsapi=1`;
+
+  useEffect(() => {
+    type Player = {
+      destroy: () => void;
+      getCurrentTime: () => number;
+      mute: () => void;
+      playVideo: () => void;
+      seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+    };
+    type PlayerEvent = { target: Player };
+    type PlayerStateEvent = PlayerEvent & { data: number };
+    type YouTubeWindow = Window & {
+      YT?: {
+        Player: new (
+          element: HTMLIFrameElement,
+          options: {
+            events: {
+              onReady: (event: PlayerEvent) => void;
+              onStateChange: (event: PlayerStateEvent) => void;
+            };
+          },
+        ) => Player;
+      };
+      onYouTubeIframeAPIReady?: () => void;
+    };
+
+    const youtubeWindow = window as YouTubeWindow;
+    let player: Player | undefined;
+    let timeCheck: ReturnType<typeof setInterval> | undefined;
+    let cancelled = false;
+
+    const restartSegment = (target: Player) => {
+      target.seekTo(40, true);
+      target.playVideo();
+    };
+
+    const initialisePlayer = () => {
+      if (cancelled || player || !iframeRef.current || !youtubeWindow.YT?.Player) return;
+
+      player = new youtubeWindow.YT.Player(iframeRef.current, {
+        events: {
+          onReady: ({ target }) => {
+            target.mute();
+            restartSegment(target);
+            timeCheck = setInterval(() => {
+              if (target.getCurrentTime() >= 79.8) restartSegment(target);
+            }, 200);
+          },
+          onStateChange: ({ data, target }) => {
+            if (data === 0) restartSegment(target);
+          },
+        },
+      });
+    };
+
+    if (youtubeWindow.YT?.Player) {
+      initialisePlayer();
+    } else {
+      const previousReady = youtubeWindow.onYouTubeIframeAPIReady;
+      youtubeWindow.onYouTubeIframeAPIReady = () => {
+        previousReady?.();
+        initialisePlayer();
+      };
+
+      if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        const script = document.createElement("script");
+        script.src = "https://www.youtube.com/iframe_api";
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    }
+
+    return () => {
+      cancelled = true;
+      if (timeCheck) clearInterval(timeCheck);
+      player?.destroy();
+    };
+  }, []);
 
   return (
     <section className="px-5 pb-20 md:pb-32">
@@ -351,6 +430,7 @@ function PodcastLoop() {
         <Reveal y={34} className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#17222F]">
           <div className="relative aspect-[16/8] min-h-[360px] md:min-h-0">
             <iframe
+              ref={iframeRef}
               src={embedUrl}
               title="Dario Tana durante una conversazione in podcast"
               tabIndex={-1}
@@ -360,17 +440,17 @@ function PodcastLoop() {
               className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full w-auto max-w-none -translate-x-1/2 -translate-y-1/2 md:h-auto md:w-full"
             />
 
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0D1218]/90 via-transparent to-[#0D1218]/15" />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 md:p-10">
-              <div>
-                <p className="max-w-xl text-2xl font-medium leading-tight text-[#EDF2F7] md:text-[38px]">
+            <div className="pointer-events-none absolute inset-0 bg-[#0D1218]/35" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0D1218]/95 via-[#0D1218]/55 to-[#0D1218]/10" />
+            <div className="pointer-events-none absolute inset-0 flex items-center px-7 py-10 md:px-14 lg:px-20">
+              <div className="max-w-[590px]">
+                <h2 className="text-[34px] font-medium leading-[1.02] tracking-[-0.035em] text-[#EDF2F7] md:text-[52px]">
                   Il confronto è parte del lavoro.
+                </h2>
+                <p className="mt-5 max-w-[520px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+                  Le idee migliori nascono quando esperienza, domande e punti di vista diversi si incontrano. Per me, insegnare significa anche ascoltare e costruire insieme risposte utili.
                 </p>
               </div>
-              <span className="hidden items-center gap-2 rounded-full border border-white/10 bg-[#0D1218]/70 px-4 py-2 text-xs text-[#C1CEDF] backdrop-blur-md sm:inline-flex">
-                <VolumeX size={14} className="text-[#00e5ff]" />
-                Video senza audio
-              </span>
             </div>
           </div>
         </Reveal>
