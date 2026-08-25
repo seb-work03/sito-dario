@@ -22,6 +22,11 @@ export function SmoothScroll() {
       smoothWheel: true,
     });
 
+    const resetOnNavigation = () => {
+      lenis.scrollTo(0, { immediate: true, force: true });
+    };
+    window.addEventListener("site:navigation-top", resetOnNavigation);
+
     let rafId = 0;
     function raf(time: number) {
       lenis.raf(time);
@@ -31,6 +36,7 @@ export function SmoothScroll() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      window.removeEventListener("site:navigation-top", resetOnNavigation);
       lenis.destroy();
     };
   }, []);
