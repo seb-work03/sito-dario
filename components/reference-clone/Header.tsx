@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -30,7 +30,7 @@ function DarioTanaLogo({ url }: { url: string }) {
   );
 }
 
-/** Pill CTA button — electric cyan, glow + upward arrow rotation on hover */
+/** Pill CTA button — electric cyan with contact icon. */
 function PillCta({ href, label }: { href: string; label: string }) {
   return (
     <a
@@ -38,18 +38,8 @@ function PillCta({ href, label }: { href: string; label: string }) {
       className="group hidden md:inline-flex items-center gap-2 rounded-full bg-[#00e5ff] pl-5 pr-1.5 py-1.5 text-[#0D1218] text-[15px] font-medium transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
     >
       <span>{label}</span>
-      <span className="flex items-center justify-center rounded-full bg-[#0D1218] w-9 h-9 shrink-0">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#00e5ff"
-          strokeWidth="2.2"
-          className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45"
-        >
-          <path d="M5 12h14M13 5l7 7-7 7" />
-        </svg>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff]">
+        <Mail size={15} strokeWidth={2} className="transition-transform duration-500 group-hover:scale-110" />
       </span>
     </a>
   );
@@ -145,9 +135,12 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.55, delay: 0.44, ease: [0.19, 1, 0.22, 1] }}
-                  className="mt-8 inline-flex items-center justify-center rounded-full bg-[#00e5ff] py-4 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
+                  className="group mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-[#00e5ff] py-2 pl-6 pr-2 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Contatti
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff]">
+                    <Mail size={17} strokeWidth={2} className="transition-transform duration-500 group-hover:scale-110" />
+                  </span>
                 </motion.a>
                 </nav>
               </div>

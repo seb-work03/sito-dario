@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, ArrowRight } from "lucide-react";
+import { Mail, Plus } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 import { Reveal } from "./Reveal";
@@ -57,7 +57,7 @@ export function Faq() {
             >
               Contatti
               <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
-                <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
+                <Mail size={13} strokeWidth={2} className="transition-transform duration-500 group-hover:scale-110" />
               </span>
             </a>
           </Reveal>
