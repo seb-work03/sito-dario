@@ -132,7 +132,7 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 shrink-0">
+            <div className="flex flex-col sm:flex-row gap-10 sm:gap-16 lg:gap-64 shrink-0">
               <ul className="flex flex-col gap-3">
                 <li className="text-xs uppercase tracking-[0.15em] text-white font-medium mb-2">Menu</li>
                 {navLinks.map((l) => (
