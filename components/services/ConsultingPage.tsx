@@ -51,37 +51,37 @@ const scopeAreas = [
   {
     icon: Compass,
     title: "Strategia e modello e-commerce",
-    text: "Obiettivi, posizionamento, proposta di valore, catalogo e sostenibilità economica. Per chiarire dove competere e quali risultati hanno davvero senso.",
+    text: "Obiettivi, posizionamento, proposta di valore, catalogo, margini e sostenibilità economica vengono letti insieme. Per chiarire dove competere, quali investimenti hanno davvero senso e con quale ordine affrontarli.",
     className: "md:col-span-2",
   },
   {
     icon: Monitor,
     title: "Piattaforma e user experience",
-    text: "Tecnologia, architettura, usabilità e percorso d’acquisto vengono valutati rispetto alle esigenze reali del business, non alle mode del momento.",
+    text: "Piattaforma, architettura e percorso d’acquisto valutati sulle esigenze reali del business.",
     className: "",
   },
   {
     icon: BarChart3,
     title: "Dati, analytics e CRO",
-    text: "Misurazione, funnel, conversioni e comportamenti diventano una base leggibile per capire dove intervenire e con quale priorità.",
+    text: "Funnel, conversioni e comportamenti tradotti in priorità chiare e misurabili.",
     className: "",
   },
   {
     icon: Megaphone,
     title: "Marketing e advertising",
-    text: "Canali, campagne, contenuti e acquisizione vengono collegati a clienti, margini e obiettivi. La visibilità conta solo quando produce valore sostenibile.",
+    text: "Canali, campagne, contenuti e acquisizione vengono letti insieme a costi, margini e qualità dei clienti. L’obiettivo non è soltanto aumentare la visibilità, ma capire dove il budget genera valore e dove invece viene disperso.",
     className: "md:col-span-2",
   },
   {
     icon: Package,
     title: "Processi, logistica e marginalità",
-    text: "Ordini, magazzino, customer care, costi e responsabilità interne fanno parte della strategia quanto il sito e le campagne.",
+    text: "Ordini, magazzino, pagamenti, customer care, costi e responsabilità interne vengono analizzati insieme. Un e-commerce cresce davvero quando promessa commerciale, operatività e marginalità restano allineate anche con l’aumento dei volumi.",
     className: "md:col-span-2",
   },
   {
     icon: Users,
     title: "Persone e organizzazione",
-    text: "Ruoli, competenze e rapporto tra azienda, fornitori e agenzie devono permettere decisioni rapide, verificabili e condivise.",
+    text: "Ruoli, competenze e fornitori organizzati per decidere più velocemente e con responsabilità chiare.",
     className: "",
   },
 ];
