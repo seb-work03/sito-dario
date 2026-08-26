@@ -225,12 +225,27 @@ function DiagnosticSection() {
   return (
     <section className="border-b border-[#00e5ff]/18 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
-        <div className="mx-auto mb-14 max-w-4xl text-center md:mb-20">
-          <AnimatedHeadline className="text-[36px] font-medium leading-[1.03] tracking-tight text-[#EDF2F7] md:text-[58px]">
-            La consulenza serve quando una decisione pesa più di uno strumento.
+        <div className="mx-auto mb-14 max-w-[1120px] text-center md:mb-20">
+          <AnimatedHeadline className="text-[36px] font-medium leading-[1.03] tracking-tight text-[#EDF2F7] [text-wrap:balance] md:text-[48px] min-[900px]:text-[44px] lg:text-[54px]">
+            <>
+              <span className="min-[900px]:hidden">La consulenza serve quando una decisione pesa più di uno strumento.</span>
+              <span className="hidden min-[900px]:block">
+                <span className="block whitespace-nowrap">La consulenza serve quando una</span>
+                <span className="block whitespace-nowrap">decisione pesa più di uno strumento.</span>
+              </span>
+            </>
           </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
-            Un e-commerce non è soltanto un sito. È un sistema fatto di offerta, tecnologia, traffico, dati, processi e persone. Se una parte si muove senza le altre, anche una buona idea può diventare costosa.
+          <AnimatedText delay={0.1} className="mx-auto mt-6 max-w-[1040px] text-base leading-relaxed text-[#dddddd] [text-wrap:pretty] md:text-lg">
+            <>
+              <span className="min-[900px]:hidden">
+                Un e-commerce non è soltanto un sito. È un sistema fatto di offerta, tecnologia, traffico, dati, processi e persone. Se una parte si muove senza le altre, anche una buona idea può diventare costosa.
+              </span>
+              <span className="hidden min-[900px]:block">
+                <span className="block whitespace-nowrap">Un e-commerce non è soltanto un sito.</span>
+                <span className="block whitespace-nowrap">È un sistema fatto di offerta, tecnologia, traffico, dati, processi e persone.</span>
+                <span className="block whitespace-nowrap">Se una parte si muove senza le altre, anche una buona idea può diventare costosa.</span>
+              </span>
+            </>
           </AnimatedText>
         </div>
 
