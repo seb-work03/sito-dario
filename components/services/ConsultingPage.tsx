@@ -145,7 +145,7 @@ export function ConsultingPage({
 
 function ConsultingHero() {
   return (
-    <section className="relative flex min-h-[650px] items-center overflow-hidden border-b border-[#00e5ff]/25 px-5 py-20 md:min-h-[720px] md:py-28">
+    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-5 pb-20 pt-16 md:pb-28 md:pt-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -156,43 +156,48 @@ function ConsultingHero() {
       />
 
       <div className="relative mx-auto w-full max-w-[1240px]">
-        <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end lg:gap-24">
-          <AnimatedHeadline
-            as="h1"
-            delay={0.06}
-            className="text-[clamp(48px,15vw,124px)] font-light leading-[0.84] tracking-[-0.065em] text-[#EDF2F7]"
-          >
-            <>
-              <span className="block">Consulenza</span>
-                <span className="block whitespace-nowrap font-semibold text-[#00e5ff]">e-commerce</span>
-            </>
-          </AnimatedHeadline>
+        <AnimatedHeadline
+          as="h1"
+          delay={0.06}
+          className="text-[clamp(48px,15vw,124px)] font-light leading-[0.84] tracking-[-0.065em] text-[#EDF2F7]"
+        >
+          <>
+            <span className="block">Consulenza</span>
+            <span className="block whitespace-nowrap font-semibold text-[#00e5ff]">e-commerce</span>
+          </>
+        </AnimatedHeadline>
 
-          <div className="border-l border-[#00e5ff] pl-6 md:pl-8 lg:mb-2 lg:pl-10">
-            <AnimatedText
-              delay={0.18}
-              className="max-w-[520px] text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
+        <div className="mt-12 max-w-[900px] md:mt-16">
+          <motion.div
+            aria-hidden
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.18, ease: [0.19, 1, 0.22, 1] }}
+            className="mb-7 h-px w-16 origin-left bg-[#00e5ff]"
+          />
+          <AnimatedText
+            delay={0.18}
+            className="max-w-[860px] text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
+          >
+            Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
+          </AnimatedText>
+          <AnimatedText delay={0.28} className="mt-6 max-w-[700px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+            Da oltre vent&apos;anni lavoro accanto a imprenditori e team. Ho base a Rimini e seguo progetti in tutta Italia.
+          </AnimatedText>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.46, duration: 0.7 }}
+            className="mt-8"
+          >
+            <Link
+              href="#metodo-consulenza"
+              className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
             >
-              Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
-            </AnimatedText>
-            <AnimatedText delay={0.28} className="mt-6 max-w-[500px] text-base leading-relaxed text-[#dddddd] md:text-lg">
-              Da oltre vent&apos;anni lavoro accanto a imprenditori e team. Ho base a Rimini e seguo progetti in tutta Italia.
-            </AnimatedText>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.46, duration: 0.7 }}
-              className="mt-8"
-            >
-              <Link
-                href="#metodo-consulenza"
-                className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
-              >
-                Come lavoro
-                <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-            </motion.div>
-          </div>
+              Come lavoro
+              <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </motion.div>
         </div>
 
         <motion.div
@@ -200,7 +205,7 @@ function ConsultingHero() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1.1, delay: 0.32, ease: [0.19, 1, 0.22, 1] }}
-          className="mt-16 h-px origin-left bg-gradient-to-r from-[#00e5ff] via-[#00e5ff]/35 to-transparent md:mt-24"
+          className="mt-16 h-px origin-left bg-gradient-to-r from-[#00e5ff]/45 to-transparent md:mt-20"
         />
       </div>
     </section>
