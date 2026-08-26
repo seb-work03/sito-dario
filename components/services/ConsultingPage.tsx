@@ -157,41 +157,47 @@ function ConsultingHero() {
       />
 
       <div className="relative mx-auto w-full max-w-[1240px]">
-        <AnimatedHeadline
-          as="h1"
-          delay={0.06}
-          className="text-[clamp(48px,15vw,124px)] font-light leading-[0.84] tracking-[-0.065em] text-[#EDF2F7]"
-        >
-          <>
-            <span className="block">Consulenza</span>
-            <span className="block whitespace-nowrap font-semibold text-[#00e5ff]">e-commerce</span>
-          </>
-        </AnimatedHeadline>
-
-        <div className="ml-auto mt-12 max-w-[560px] border-l border-[#00e5ff] pl-6 md:mt-16 md:pl-10">
-          <AnimatedText
-            delay={0.18}
-            className="text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
-          >
-            Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
-          </AnimatedText>
-          <AnimatedText delay={0.28} className="mt-6 text-base leading-relaxed text-[#dddddd] md:text-lg">
-            Da oltre vent&apos;anni lavoro accanto a imprenditori e team. Ho base a Rimini e seguo progetti in tutta Italia.
-          </AnimatedText>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.46, duration: 0.7 }}
-            className="mt-8"
-          >
-            <Link
-              href="#metodo-consulenza"
-              className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
+        <div className="grid gap-12 lg:grid-cols-[1.18fr_0.82fr] lg:items-end lg:gap-20">
+          <div>
+            <AnimatedHeadline
+              as="h1"
+              delay={0.06}
+              className="text-[clamp(48px,13vw,118px)] font-light leading-[0.84] tracking-[-0.065em] text-[#EDF2F7]"
             >
-              Come lavoro
-              <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </motion.div>
+              <>
+                <span className="block">Consulenza</span>
+                <span className="block whitespace-nowrap font-semibold text-[#00e5ff]">e-commerce</span>
+              </>
+            </AnimatedHeadline>
+            <AnimatedText delay={0.26} className="mt-10 max-w-[620px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+              Da oltre vent&apos;anni lavoro accanto a imprenditori e team.
+              <br />
+              Ho base a Rimini e seguo progetti in tutta Italia.
+            </AnimatedText>
+          </div>
+
+          <div className="border-l border-[#00e5ff] pl-6 md:pl-8 lg:mb-1 lg:pl-10">
+            <AnimatedText
+              delay={0.18}
+              className="text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
+            >
+              Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
+            </AnimatedText>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.46, duration: 0.7 }}
+              className="mt-8"
+            >
+              <Link
+                href="#metodo-consulenza"
+                className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
+              >
+                Come lavoro
+                <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </motion.div>
+          </div>
         </div>
 
         <motion.div
