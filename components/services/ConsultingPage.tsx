@@ -51,7 +51,7 @@ const scopeAreas = [
   {
     icon: Compass,
     title: "Strategia e modello e-commerce",
-    text: "Obiettivi, posizionamento, proposta di valore, catalogo, margini e sostenibilità economica vengono letti insieme. Per chiarire dove competere, quali investimenti hanno davvero senso e con quale ordine affrontarli.",
+    text: "Obiettivi, posizionamento, proposta di valore, catalogo, margini e sostenibilità economica vengono letti insieme. Per chiarire dove competere, quali investimenti hanno davvero senso, con quale ordine affrontarli e quali risultati verificare nel tempo.",
     className: "md:col-span-2",
   },
   {
@@ -69,13 +69,13 @@ const scopeAreas = [
   {
     icon: Megaphone,
     title: "Marketing e advertising",
-    text: "Canali, campagne, contenuti e acquisizione vengono letti insieme a costi, margini e qualità dei clienti. L’obiettivo non è soltanto aumentare la visibilità, ma capire dove il budget genera valore e dove invece viene disperso.",
+    text: "Canali, campagne, contenuti e acquisizione vengono letti insieme a costi, margini e qualità dei clienti. L’obiettivo non è soltanto aumentare la visibilità, ma capire dove il budget genera valore, dove viene disperso e come collegare le attività agli obiettivi economici.",
     className: "md:col-span-2",
   },
   {
     icon: Package,
     title: "Processi, logistica e marginalità",
-    text: "Ordini, magazzino, pagamenti, customer care, costi e responsabilità interne vengono analizzati insieme. Un e-commerce cresce davvero quando promessa commerciale, operatività e marginalità restano allineate anche con l’aumento dei volumi.",
+    text: "Ordini, magazzino, pagamenti, customer care, costi e responsabilità interne vengono analizzati insieme. Un e-commerce cresce davvero quando promessa commerciale, operatività e marginalità restano allineate, senza rendere più fragili servizio e redditività all’aumentare dei volumi.",
     className: "md:col-span-2",
   },
   {
@@ -304,7 +304,7 @@ function ScopeCard({ area, index }: { area: (typeof scopeAreas)[number]; index: 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.28 }}
       transition={{ duration: 0.72, delay: index * 0.07, ease: [0.19, 1, 0.22, 1] }}
-      className={`group relative isolate min-h-[250px] overflow-hidden rounded-[24px] border border-[#00e5ff]/24 bg-[#17222F] p-7 transition-colors duration-500 hover:border-[#00e5ff]/55 md:min-h-[290px] md:p-9 ${area.className}`}
+      className={`group relative isolate h-full overflow-hidden rounded-[24px] border border-[#00e5ff]/24 bg-[#17222F] p-7 transition-colors duration-500 hover:border-[#00e5ff]/55 md:p-8 ${area.className}`}
     >
       <motion.div aria-hidden className="pointer-events-none absolute inset-0 -z-0" style={{ background: glow }} />
       <div className="absolute right-7 top-7 h-2 w-14 overflow-hidden rounded-full bg-[#00e5ff]/16">
@@ -314,14 +314,14 @@ function ScopeCard({ area, index }: { area: (typeof scopeAreas)[number]; index: 
           transition={{ duration: 3.8, delay: index * 0.25, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
-      <div className="relative z-10 flex h-full flex-col">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#00e5ff]/32 bg-[#0D1218]/45 text-[#00e5ff] transition-colors duration-500 group-hover:border-[#00e5ff]/65 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] md:h-14 md:w-14">
-          <Icon size={24} strokeWidth={1.7} />
+      <div className="relative z-10">
+        <div className="flex items-center gap-4 pr-14 md:gap-5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00e5ff]/32 bg-[#0D1218]/45 text-[#00e5ff] transition-colors duration-500 group-hover:border-[#00e5ff]/65 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] md:h-14 md:w-14">
+            <Icon size={24} strokeWidth={1.7} />
+          </div>
+          <h3 className="max-w-xl text-[25px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[30px]">{area.title}</h3>
         </div>
-        <div className="mt-7 md:mt-8">
-          <h3 className="max-w-xl text-[27px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[34px]">{area.title}</h3>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
-        </div>
+        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
       </div>
     </motion.article>
   );
