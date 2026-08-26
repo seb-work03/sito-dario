@@ -5,11 +5,9 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { useRef, type MouseEvent } from "react";
+import { type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 
@@ -146,7 +144,7 @@ function ServicesHero() {
             {["Base a Rimini", "Progetti in tutta Italia", "20+ anni sul campo"].map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 py-2 text-xs text-[#EDF2F7] shadow-[inset_0_0_24px_rgba(0,229,255,0.08),0_0_20px_rgba(0,229,255,0.04)] backdrop-blur-md"
+                className="rounded-full border border-[#00e5ff] bg-[#00e5ff] px-4 py-2 text-xs font-medium text-[#0D1218] shadow-[0_8px_28px_rgba(0,229,255,0.16)]"
               >
                 {item}
               </span>
@@ -216,8 +214,8 @@ function ServiceConstellation() {
         ))}
       </svg>
 
-      <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/50 bg-[#0D1218]/90 p-5 text-center shadow-[0_0_70px_rgba(0,229,255,0.22)] backdrop-blur-md md:h-40 md:w-40">
-        <span className="text-sm font-medium leading-tight text-[#EDF2F7] md:text-base">
+      <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff] bg-[#00e5ff] p-5 text-center shadow-[0_0_70px_rgba(0,229,255,0.25)] md:h-40 md:w-40">
+        <span className="text-sm font-semibold leading-tight text-[#0D1218] md:text-base">
           Esperienza
           <br />
           sul campo
@@ -230,9 +228,8 @@ function ServiceConstellation() {
           initial={{ opacity: 0, scale: 0.75 }}
           animate={{ opacity: 1, scale: 1, y: [0, -9, 0, 6, 0] }}
           transition={{ opacity: { duration: 0.55, delay: 0.75 + index * 0.12 }, scale: { duration: 0.55, delay: 0.75 + index * 0.12 }, y: { duration: 7.2, delay: index * 0.55, repeat: Infinity, ease: [0.45, 0, 0.55, 1] } }}
-          className={`absolute flex h-20 min-w-24 max-w-36 transform-gpu will-change-transform items-center justify-center rounded-2xl border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 text-center text-xs font-bold text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3),inset_0_0_24px_rgba(0,229,255,0.07)] backdrop-blur-md md:h-24 md:min-w-32 md:max-w-40 md:text-sm ${node.className}`}
+          className={`absolute flex h-20 min-w-24 max-w-36 transform-gpu will-change-transform items-center justify-center rounded-2xl border border-[#00e5ff] bg-[#00e5ff] px-4 text-center text-xs font-bold text-[#0D1218] shadow-[0_14px_42px_rgba(0,229,255,0.2)] md:h-24 md:min-w-32 md:max-w-40 md:text-sm ${node.className}`}
         >
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
           {node.label}
         </motion.div>
       ))}
@@ -300,7 +297,7 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {service.audiences.map((audience) => (
-              <span key={audience} className="rounded-full border border-[#00e5ff]/52 bg-[#00e5ff]/13 px-3.5 py-2 text-xs text-[#EDF2F7] shadow-[inset_0_0_20px_rgba(0,229,255,0.06)]">
+              <span key={audience} className="rounded-full border border-[#00e5ff] bg-[#00e5ff] px-3.5 py-2 text-xs font-medium text-[#0D1218] shadow-[0_8px_24px_rgba(0,229,255,0.12)]">
                 {audience}
               </span>
             ))}
@@ -378,10 +375,10 @@ function ConsultingVisual() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.8 }}
-        className="absolute bottom-7 right-6 rounded-xl border border-[#00e5ff]/55 bg-[#00e5ff]/13 px-4 py-3 shadow-[inset_0_0_24px_rgba(0,229,255,0.07)] backdrop-blur-md"
+        className="absolute bottom-7 right-6 rounded-xl border border-[#00e5ff] bg-[#00e5ff] px-4 py-3 shadow-[0_10px_30px_rgba(0,229,255,0.16)]"
       >
-        <span className="block text-2xl font-medium text-[#00e5ff]">Priorità</span>
-        <span className="mt-1 block text-[11px] text-[#dddddd]">prima degli strumenti</span>
+        <span className="block text-2xl font-semibold text-[#0D1218]">Priorità</span>
+        <span className="mt-1 block text-[11px] text-[#0D1218]/75">prima degli strumenti</span>
       </motion.div>
     </div>
   );
@@ -414,7 +411,7 @@ function TrainingVisual() {
           />
         ))}
       </svg>
-      <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/62 bg-[#00e5ff]/12 p-4 text-center text-sm font-medium text-[#EDF2F7] shadow-[0_0_54px_rgba(0,229,255,0.2),inset_0_0_28px_rgba(0,229,255,0.07)]">
+      <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff] bg-[#00e5ff] p-4 text-center text-sm font-semibold text-[#0D1218] shadow-[0_0_54px_rgba(0,229,255,0.24)]">
         Competenze
         <br />
         che restano
@@ -431,7 +428,7 @@ function TrainingVisual() {
           <motion.span
             animate={{ y: [-7, 7, -7] }}
             transition={{ duration: 6.4, delay: topic.delay, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
-            className="block transform-gpu will-change-transform rounded-xl border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 py-3 text-xs font-medium text-[#EDF2F7] shadow-[inset_0_0_22px_rgba(0,229,255,0.07)]"
+            className="block transform-gpu will-change-transform rounded-xl border border-[#00e5ff] bg-[#00e5ff] px-4 py-3 text-xs font-semibold text-[#0D1218] shadow-[0_9px_26px_rgba(0,229,255,0.15)]"
           >
             {topic.label}
           </motion.span>
@@ -512,47 +509,54 @@ function ServiceChooser() {
 }
 
 function SharedMethod() {
-  const flowRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: flowRef,
-    offset: ["start 72%", "end 62%"],
-  });
-  const horizontalProgress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const alignments = ["mr-auto", "mx-auto", "ml-auto"];
 
   return (
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
-        <div className="mx-auto mb-14 max-w-3xl text-center md:mb-20">
-          <AnimatedHeadline className="text-[34px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[54px]">
-            3 forme. Lo stesso modo di lavorare.
+        <div className="mb-14 grid gap-7 md:mb-20 lg:grid-cols-[0.86fr_1.14fr] lg:items-end lg:gap-20">
+          <AnimatedHeadline className="text-[38px] font-medium leading-[1.02] tracking-tight text-[#EDF2F7] md:text-[58px]">
+            3 forme.
+            <br />
+            Un solo modo di lavorare.
           </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
+          <AnimatedText delay={0.1} className="max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             Che si tratti di un progetto, di un’aula o di un palco, il valore nasce quando l’esperienza diventa comprensione e la comprensione diventa autonomia.
           </AnimatedText>
         </div>
 
-        <div ref={flowRef} className="relative">
-          <div className="absolute bottom-0 left-5 top-0 w-px bg-[#00e5ff]/14 md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-px md:w-auto" />
-          <motion.div
-            aria-hidden
-            className="absolute bottom-0 left-5 top-0 w-[2px] origin-top bg-[#00e5ff] md:bottom-auto md:left-[16.66%] md:right-[16.66%] md:top-6 md:h-[2px] md:w-auto md:origin-left"
-            style={{ scaleY: horizontalProgress, scaleX: horizontalProgress }}
-          />
-          <div className="relative grid gap-10 md:grid-cols-3 md:gap-8">
+        <div className="relative">
+          <div className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#00e5ff]/10 blur-[110px]" />
+          <div className="relative flex flex-col gap-4 md:gap-5">
             {method.map((step, index) => (
               <motion.article
                 key={step.number}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.7, delay: index * 0.13, ease: [0.19, 1, 0.22, 1] }}
-                className="relative pl-14 md:px-7 md:pt-20 md:text-center"
+                initial={{ opacity: 0, x: index === 0 ? -42 : index === 2 ? 42 : 0, y: 18 }}
+                whileInView={{ opacity: 1, x: 0, y: 0 }}
+                whileHover={{ x: index === 0 ? 8 : index === 2 ? -8 : 0 }}
+                viewport={{ once: true, amount: 0.32 }}
+                transition={{ duration: 0.82, delay: index * 0.12, ease: [0.19, 1, 0.22, 1] }}
+                className={`group relative isolate w-full overflow-hidden rounded-[22px] border border-[#00e5ff]/32 bg-[#17222F] px-5 py-7 shadow-[0_18px_60px_rgba(0,0,0,0.2)] md:w-[88%] md:px-8 md:py-9 ${alignments[index]}`}
               >
-                <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border border-[#00e5ff]/55 bg-[#0D1218] text-xs font-medium text-[#00e5ff] md:left-1/2 md:h-12 md:w-12 md:-translate-x-1/2">
-                  {step.number}
-                </span>
-                <h3 className="text-2xl font-medium tracking-tight text-[#EDF2F7]">{step.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#dddddd] md:text-base">{step.text}</p>
+                <motion.div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 -z-0 w-[30%] -skew-x-12 bg-gradient-to-r from-transparent via-[#00e5ff]/12 to-transparent blur-xl will-change-transform"
+                  animate={{ x: ["-150%", "450%"] }}
+                  transition={{ duration: 7.8, delay: index * 1.25, repeat: Infinity, ease: "linear" }}
+                />
+                <div className="relative z-10 grid gap-5 md:grid-cols-[64px_0.8fr_1.2fr] md:items-center md:gap-8">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#00e5ff] text-xs font-bold text-[#0D1218] shadow-[0_0_28px_rgba(0,229,255,0.2)]">
+                    {step.number}
+                  </span>
+                  <h3 className="text-[25px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[30px]">{step.title}</h3>
+                  <p className="max-w-xl text-sm leading-relaxed text-[#dddddd] md:text-base">{step.text}</p>
+                </div>
+                <motion.span
+                  aria-hidden
+                  className="absolute right-5 top-5 h-2 w-2 rounded-full bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.8)]"
+                  animate={{ opacity: [0.35, 1, 0.35], scale: [0.8, 1.25, 0.8] }}
+                  transition={{ duration: 2.8, delay: index * 0.45, repeat: Infinity, ease: "easeInOut" }}
+                />
               </motion.article>
             ))}
           </div>
