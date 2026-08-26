@@ -167,21 +167,14 @@ function ConsultingHero() {
           </>
         </AnimatedHeadline>
 
-        <div className="mt-12 max-w-[900px] md:mt-16">
-          <motion.div
-            aria-hidden
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.18, ease: [0.19, 1, 0.22, 1] }}
-            className="mb-7 h-px w-16 origin-left bg-[#00e5ff]"
-          />
+        <div className="ml-auto mt-12 max-w-[560px] border-l border-[#00e5ff] pl-6 md:mt-16 md:pl-10">
           <AnimatedText
             delay={0.18}
-            className="max-w-[860px] text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
+            className="text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
           >
             Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
           </AnimatedText>
-          <AnimatedText delay={0.28} className="mt-6 max-w-[700px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+          <AnimatedText delay={0.28} className="mt-6 text-base leading-relaxed text-[#dddddd] md:text-lg">
             Da oltre vent&apos;anni lavoro accanto a imprenditori e team. Ho base a Rimini e seguo progetti in tutta Italia.
           </AnimatedText>
           <motion.div
