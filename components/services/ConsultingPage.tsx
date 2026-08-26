@@ -318,9 +318,9 @@ function ScopeCard({ area, index }: { area: (typeof scopeAreas)[number]; index: 
         <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#00e5ff]/32 bg-[#0D1218]/45 text-[#00e5ff] transition-colors duration-500 group-hover:border-[#00e5ff]/65 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] md:h-14 md:w-14">
           <Icon size={24} strokeWidth={1.7} />
         </div>
-        <div className="mt-auto pt-9">
+        <div className="mt-7 md:mt-8">
           <h3 className="max-w-xl text-[27px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[34px]">{area.title}</h3>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
         </div>
       </div>
     </motion.article>
