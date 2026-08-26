@@ -5,7 +5,6 @@ import { ConsultingPage } from "@/components/services/ConsultingPage";
 import { Footer } from "@/components/reference-clone/Footer";
 import { Header } from "@/components/reference-clone/Header";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
-import { TrustBar } from "@/components/reference-clone/TrustBar";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
 
@@ -37,18 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-type PartnerLogo = { url: string; alt: string };
-
-const partners = [
-  { pattern: "%its%turismo%marche%", alt: "ITS Turismo Marche" },
-  { pattern: "%formart%", alt: "Formart" },
-  { pattern: "%fondazione%aldini%valeriani%", alt: "Fondazione Aldini Valeriani" },
-  { pattern: "%digital%coach%", alt: "Digital Coach" },
-  { pattern: "%cescot%emilia%romagna%", alt: "Cescot Emilia Romagna" },
-  { pattern: "%centro%zavatta%", alt: "Centro Zavatta" },
-  { pattern: "%banca%malatestiana%", alt: "Banca Malatestiana" },
-];
-
 async function getLogoUrl(): Promise<string | null> {
   try {
     const rows = await db
@@ -74,25 +61,6 @@ async function getPortraitImageUrl(): Promise<string | null> {
     return rows[0]?.url ?? null;
   } catch {
     return null;
-  }
-}
-
-async function getPartnerLogos(): Promise<PartnerLogo[]> {
-  try {
-    const results = await Promise.all(
-      partners.map(async ({ pattern, alt }) => {
-        const rows = await db
-          .select({ url: media.url })
-          .from(media)
-          .where(ilike(media.filename, pattern))
-          .orderBy(desc(media.createdAt))
-          .limit(1);
-        return rows[0]?.url ? { url: rows[0].url, alt } : null;
-      }),
-    );
-    return results.filter((item): item is PartnerLogo => item !== null);
-  } catch {
-    return [];
   }
 }
 
@@ -173,10 +141,9 @@ const structuredData = {
 };
 
 export default async function ConsulenzaEcommercePage() {
-  const [logoUrl, portraitImageUrl, partnerLogos] = await Promise.all([
+  const [logoUrl, portraitImageUrl] = await Promise.all([
     getLogoUrl(),
     getPortraitImageUrl(),
-    getPartnerLogos(),
   ]);
 
   return (
@@ -184,7 +151,6 @@ export default async function ConsulenzaEcommercePage() {
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
         <ConsultingPage portraitImageUrl={portraitImageUrl} />
-        <TrustBar logos={partnerLogos} />
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />

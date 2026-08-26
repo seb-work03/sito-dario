@@ -10,7 +10,17 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight, Mail, Plus } from "lucide-react";
+import {
+  ArrowUpRight,
+  BarChart3,
+  Compass,
+  Mail,
+  Megaphone,
+  Monitor,
+  Package,
+  Plus,
+  Users,
+} from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
@@ -39,31 +49,37 @@ const diagnosticScenarios = [
 
 const scopeAreas = [
   {
+    icon: Compass,
     title: "Strategia e modello e-commerce",
     text: "Obiettivi, posizionamento, proposta di valore, catalogo e sostenibilità economica. Per chiarire dove competere e quali risultati hanno davvero senso.",
     className: "md:col-span-2",
   },
   {
+    icon: Monitor,
     title: "Piattaforma e user experience",
     text: "Tecnologia, architettura, usabilità e percorso d’acquisto vengono valutati rispetto alle esigenze reali del business, non alle mode del momento.",
     className: "",
   },
   {
+    icon: BarChart3,
     title: "Dati, analytics e CRO",
     text: "Misurazione, funnel, conversioni e comportamenti diventano una base leggibile per capire dove intervenire e con quale priorità.",
     className: "",
   },
   {
+    icon: Megaphone,
     title: "Marketing e advertising",
     text: "Canali, campagne, contenuti e acquisizione vengono collegati a clienti, margini e obiettivi. La visibilità conta solo quando produce valore sostenibile.",
     className: "md:col-span-2",
   },
   {
+    icon: Package,
     title: "Processi, logistica e marginalità",
     text: "Ordini, magazzino, customer care, costi e responsabilità interne fanno parte della strategia quanto il sito e le campagne.",
     className: "md:col-span-2",
   },
   {
+    icon: Users,
     title: "Persone e organizzazione",
     text: "Ruoli, competenze e rapporto tra azienda, fornitori e agenzie devono permettere decisioni rapide, verificabili e condivise.",
     className: "",
@@ -266,6 +282,7 @@ function ScopeSection() {
 }
 
 function ScopeCard({ area, index }: { area: (typeof scopeAreas)[number]; index: number }) {
+  const Icon = area.icon;
   const mouseX = useMotionValue(-300);
   const mouseY = useMotionValue(-300);
   const glow = useMotionTemplate`radial-gradient(360px circle at ${mouseX}px ${mouseY}px, rgba(0,229,255,0.18), transparent 66%)`;
@@ -297,9 +314,14 @@ function ScopeCard({ area, index }: { area: (typeof scopeAreas)[number]; index: 
           transition={{ duration: 3.8, delay: index * 0.25, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
-      <div className="relative z-10 flex h-full flex-col justify-end">
-        <h3 className="max-w-xl text-[27px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[34px]">{area.title}</h3>
-        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#00e5ff]/32 bg-[#0D1218]/45 text-[#00e5ff] transition-colors duration-500 group-hover:border-[#00e5ff]/65 group-hover:bg-[#00e5ff] group-hover:text-[#0D1218] md:h-14 md:w-14">
+          <Icon size={24} strokeWidth={1.7} />
+        </div>
+        <div className="mt-auto pt-9">
+          <h3 className="max-w-xl text-[27px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[34px]">{area.title}</h3>
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#dddddd] md:text-base">{area.text}</p>
+        </div>
       </div>
     </motion.article>
   );
@@ -412,7 +434,7 @@ function PartnershipSection({ imageUrl }: { imageUrl?: string | null }) {
 
         <div>
           <AnimatedHeadline className="text-[38px] font-medium leading-[1.03] tracking-tight text-[#EDF2F7] md:text-[58px]">
-            Non entro per sostituire il team. Entro per renderlo più lucido.
+            Più chiarezza per il team.
           </AnimatedHeadline>
           <AnimatedText delay={0.1} className="mt-7 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             Posso lavorare accanto alla proprietà, a un e-commerce manager, al reparto marketing, agli sviluppatori o all’agenzia che segue il progetto. Porto una lettura indipendente, collego competenze diverse e aiuto tutti a discutere sulla stessa base.
