@@ -10,10 +10,11 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight, Mail, Plus } from "lucide-react";
 import { useRef, useState, type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
+import { Reveal } from "@/components/reference-clone/Reveal";
 
 const FALLBACK_PORTRAIT_IMAGE =
   "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/dario%20tana%20con%20sfondo-DWIijOtVTabGdnuHQn3QGWEgHZvDi2.jpg";
@@ -503,32 +504,59 @@ function ConsultingFaq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="border-t border-[#00e5ff]/22 bg-[#0D1218] px-5 py-20 md:py-32">
-      <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
-        <div className="lg:sticky lg:top-32 lg:h-fit">
-          <AnimatedHeadline className="text-[38px] font-medium leading-[1.03] tracking-tight text-[#EDF2F7] md:text-[56px]">
+    <section id="faq" className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-16 md:py-28">
+      <div className="mx-auto grid max-w-[1240px] gap-12 md:grid-cols-[380px_1fr] md:gap-24">
+        <div className="self-start md:sticky md:top-[130px]">
+          <AnimatedHeadline className="mb-6 text-[32px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
             Domande prima di iniziare.
           </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="mt-6 max-w-md text-base leading-relaxed text-[#dddddd] md:text-lg">
+          <AnimatedText delay={0.15} className="mb-8 max-w-xs text-sm leading-relaxed text-[#EDF2F7] md:text-base">
             Ogni progetto ha un punto di partenza diverso. Queste sono le domande che aiutano più spesso a capire se e come una consulenza e-commerce può essere utile.
           </AnimatedText>
+          <Reveal y={20} delay={0.2} duration={0.9}>
+            <Link
+              href="/contatti"
+              className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] py-1.5 pl-5 pr-1.5 text-sm font-medium text-[#0D1218] transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)]"
+            >
+              Contatti
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff]">
+                <Mail size={13} strokeWidth={2} className="transition-transform duration-500 group-hover:scale-110" />
+              </span>
+            </Link>
+          </Reveal>
         </div>
 
-        <div className="overflow-hidden rounded-[26px] border border-[#00e5ff]/24 bg-[#17222F]">
+        <div className="flex flex-col divide-y divide-white/8">
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
             return (
-              <div key={item.question} className="border-b border-[#00e5ff]/16 last:border-0">
+              <motion.div
+                key={item.question}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, delay: index * 0.05 }}
+              >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-6 px-6 py-6 text-left md:px-8 md:py-7"
+                  className="group flex w-full cursor-pointer items-start justify-between gap-4 py-6 text-left md:py-7"
                 >
-                  <span className="text-lg font-medium leading-snug text-[#EDF2F7] md:text-xl">{item.question}</span>
-                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${isOpen ? "bg-[#00e5ff] text-[#0D1218]" : "border border-[#00e5ff]/45 text-[#00e5ff]"}`}>
-                    <ChevronDown size={18} className={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <span className="pr-4 text-lg font-medium leading-snug tracking-tight text-[#EDF2F7] transition-colors duration-300 group-hover:text-[#00e5ff] md:text-xl">
+                    {item.question}
                   </span>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors duration-500 ${
+                      isOpen
+                        ? "border-[#00e5ff] bg-[#00e5ff] text-[#0D1218]"
+                        : "border-white/15 text-[#EDF2F7] group-hover:border-[#00e5ff]/40"
+                    }`}
+                  >
+                    <Plus size={16} />
+                  </motion.span>
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
@@ -536,14 +564,14 @@ function ConsultingFaq() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.45, ease: [0.19, 1, 0.22, 1] }}
+                      transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="px-6 pb-7 pr-16 text-sm leading-relaxed text-[#dddddd] md:px-8 md:pb-8 md:pr-24 md:text-base">{item.answer}</p>
+                      <p className="pb-6 pr-12 leading-relaxed text-[#dddddd]">{item.answer}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
         </div>
