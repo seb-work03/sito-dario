@@ -8,7 +8,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight, BarChart3, GraduationCap, Mic2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useRef, type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
@@ -16,8 +16,6 @@ import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 const services = [
   {
     id: "consulenza",
-    number: "01",
-    title: "Consulenza e-commerce",
     headline: "Dare priorità a ciò che muove davvero il progetto.",
     description:
       "Per progettare un nuovo e-commerce o far evolvere un’attività già avviata. Analizzo tecnologia, numeri, marketing e organizzazione per trasformare la complessità in una sequenza di decisioni concrete.",
@@ -25,13 +23,10 @@ const services = [
     linkLabel: "Esplora la consulenza",
     audiences: ["Nuovi progetti", "E-commerce avviati", "Audit o affiancamento"],
     areas: ["Strategia e piattaforma", "Dati, CRO e advertising", "Processi, team e marginalità"],
-    icon: BarChart3,
     visual: "consulting" as const,
   },
   {
     id: "formazione",
-    number: "02",
-    title: "Formazione e-commerce",
     headline: "Trasformare esperienza e strumenti in autonomia.",
     description:
       "Corsi e percorsi per professionisti, aziende, team ed enti di formazione. Ogni intervento parte dalle basi condivise e arriva a casi, strumenti e problemi che le persone incontrano davvero nel lavoro.",
@@ -39,13 +34,10 @@ const services = [
     linkLabel: "Scopri la formazione",
     audiences: ["Professionisti", "Aziende e team", "Enti e academy"],
     areas: ["Workshop e corsi", "Percorsi su misura", "Online o in presenza"],
-    icon: GraduationCap,
     visual: "training" as const,
   },
   {
     id: "speech",
-    number: "03",
-    title: "Speech ed eventi",
     headline: "Portare sul palco contenuti che restano.",
     description:
       "Keynote, panel e interventi dedicati a e-commerce, piattaforme, analytics, marketing e advertising. Contenuti costruiti sul pubblico e raccontati con esempi leggibili, senza semplificazioni vuote.",
@@ -53,7 +45,6 @@ const services = [
     linkLabel: "Scopri speech ed eventi",
     audiences: ["Eventi e fiere", "Panel e keynote", "Format aziendali"],
     areas: ["E-commerce e piattaforme", "Analytics e dati", "Marketing e ADV"],
-    icon: Mic2,
     visual: "speech" as const,
   },
 ];
@@ -155,7 +146,7 @@ function ServicesHero() {
             {["Base a Rimini", "Progetti in tutta Italia", "20+ anni sul campo"].map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/7 px-4 py-2 text-xs text-[#DDE5EF] shadow-[inset_0_0_22px_rgba(0,229,255,0.035)] backdrop-blur-md"
+                className="rounded-full border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 py-2 text-xs text-[#EDF2F7] shadow-[inset_0_0_24px_rgba(0,229,255,0.08),0_0_20px_rgba(0,229,255,0.04)] backdrop-blur-md"
               >
                 {item}
               </span>
@@ -237,9 +228,9 @@ function ServiceConstellation() {
         <motion.div
           key={node.label}
           initial={{ opacity: 0, scale: 0.75 }}
-          animate={{ opacity: 1, scale: 1, y: [0, -5, 0] }}
-          transition={{ opacity: { duration: 0.55, delay: 0.75 + index * 0.12 }, scale: { duration: 0.55, delay: 0.75 + index * 0.12 }, y: { duration: 3.2, delay: index * 0.4, repeat: Infinity, ease: "easeInOut" } }}
-          className={`absolute flex h-20 min-w-24 max-w-36 items-center justify-center rounded-2xl border border-[#00e5ff]/40 bg-[#00e5ff]/8 px-4 text-center text-xs font-bold text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3)] backdrop-blur-md md:h-24 md:min-w-32 md:max-w-40 md:text-sm ${node.className}`}
+          animate={{ opacity: 1, scale: 1, y: [0, -9, 0, 6, 0] }}
+          transition={{ opacity: { duration: 0.55, delay: 0.75 + index * 0.12 }, scale: { duration: 0.55, delay: 0.75 + index * 0.12 }, y: { duration: 7.2, delay: index * 0.55, repeat: Infinity, ease: [0.45, 0, 0.55, 1] } }}
+          className={`absolute flex h-20 min-w-24 max-w-36 transform-gpu will-change-transform items-center justify-center rounded-2xl border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 text-center text-xs font-bold text-[#EDF2F7] shadow-[0_14px_40px_rgba(0,0,0,0.3),inset_0_0_24px_rgba(0,229,255,0.07)] backdrop-blur-md md:h-24 md:min-w-32 md:max-w-40 md:text-sm ${node.className}`}
         >
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
           {node.label}
@@ -276,7 +267,6 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
   const glow = useMotionTemplate`radial-gradient(440px circle at ${mouseX}px ${mouseY}px, rgba(0,229,255,0.13), transparent 68%)`;
-  const Icon = service.icon;
 
   function handlePointerMove(event: MouseEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -301,14 +291,8 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
       <motion.div aria-hidden className="pointer-events-none absolute inset-0 z-0" style={{ background: glow }} />
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#00e5ff]/10 transition-transform duration-1000 group-hover:scale-110" />
       <div className="relative z-10 grid items-stretch lg:grid-cols-2">
-        <div className={`flex flex-col p-7 sm:p-9 md:p-12 lg:p-14 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
-          <div className="flex items-center justify-between gap-5">
-            <span className="text-sm font-medium text-[#00e5ff]">{service.number}</span>
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#00e5ff]/25 bg-[#00e5ff]/8 text-[#00e5ff] transition-transform duration-500 group-hover:scale-110">
-              <Icon size={23} strokeWidth={1.6} />
-            </span>
-          </div>
-          <h2 className="mt-8 text-[34px] font-medium leading-[1.02] tracking-[-0.04em] text-[#EDF2F7] md:text-[48px]">
+        <div className={`flex flex-col p-7 sm:p-9 md:p-12 lg:p-14 lg:pt-11 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
+          <h2 className="text-[34px] font-medium leading-[1.02] tracking-[-0.04em] text-[#EDF2F7] md:text-[48px]">
             {service.headline}
           </h2>
           <p className="mt-6 text-[15px] leading-relaxed text-[#dddddd] md:text-base">
@@ -316,7 +300,7 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
           </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {service.audiences.map((audience) => (
-              <span key={audience} className="rounded-full border border-[#00e5ff]/20 bg-[#00e5ff]/5 px-3.5 py-2 text-xs text-[#DDE5EF]">
+              <span key={audience} className="rounded-full border border-[#00e5ff]/52 bg-[#00e5ff]/13 px-3.5 py-2 text-xs text-[#EDF2F7] shadow-[inset_0_0_20px_rgba(0,229,255,0.06)]">
                 {audience}
               </span>
             ))}
@@ -353,7 +337,7 @@ function ServicePanel({ service, index }: { service: (typeof services)[number]; 
 function ConsultingVisual() {
   return (
     <div className="relative h-full min-h-[300px] overflow-hidden p-6">
-      <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:38px_38px]" />
+      <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(0,229,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,255,0.12)_1px,transparent_1px)] [background-size:38px_38px]" />
       <div className="relative flex items-center justify-between">
         <span className="text-xs uppercase tracking-[0.13em] text-[#77C0CF]">Scenario operativo</span>
         <span className="flex items-center gap-2 text-[11px] text-[#dddddd]">
@@ -362,7 +346,7 @@ function ConsultingVisual() {
         </span>
       </div>
       <svg aria-hidden className="absolute inset-x-5 bottom-8 h-[72%] w-[calc(100%-2.5rem)]" viewBox="0 0 520 250" preserveAspectRatio="none">
-        <path d="M12 220 C90 205, 100 185, 155 190 S235 145, 285 158 S365 92, 415 112 S470 56, 508 42" fill="none" stroke="rgba(255,255,255,0.11)" strokeWidth="2" />
+        <path d="M12 220 C90 205, 100 185, 155 190 S235 145, 285 158 S365 92, 415 112 S470 56, 508 42" fill="none" stroke="rgba(0,229,255,0.18)" strokeWidth="2" />
         <motion.path
           d="M12 220 C90 205, 100 185, 155 190 S235 145, 285 158 S365 92, 415 112 S470 56, 508 42"
           fill="none"
@@ -394,7 +378,7 @@ function ConsultingVisual() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.8 }}
-        className="absolute bottom-7 right-6 rounded-xl border border-[#00e5ff]/25 bg-[#17222F]/90 px-4 py-3 backdrop-blur-md"
+        className="absolute bottom-7 right-6 rounded-xl border border-[#00e5ff]/55 bg-[#00e5ff]/13 px-4 py-3 shadow-[inset_0_0_24px_rgba(0,229,255,0.07)] backdrop-blur-md"
       >
         <span className="block text-2xl font-medium text-[#00e5ff]">Priorità</span>
         <span className="mt-1 block text-[11px] text-[#dddddd]">prima degli strumenti</span>
@@ -405,23 +389,23 @@ function ConsultingVisual() {
 
 function TrainingVisual() {
   const topics = [
-    { label: "Strategia", className: "left-[7%] top-[13%]" },
-    { label: "Dati", className: "right-[8%] top-[17%]" },
-    { label: "Marketing", className: "bottom-[13%] left-[6%]" },
-    { label: "Processi", className: "bottom-[11%] right-[7%]" },
+    { label: "Strategia", className: "left-[7%] top-[13%]", delay: 0 },
+    { label: "Dati", className: "right-[8%] top-[17%]", delay: 0.7 },
+    { label: "Marketing", className: "bottom-[13%] left-[6%]", delay: 1.35 },
+    { label: "Processi", className: "bottom-[11%] right-[7%]", delay: 2 },
   ];
 
   return (
     <div className="relative h-full min-h-[300px] overflow-hidden bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.12),transparent_46%)]">
       <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        {["M50 50 L20 22", "M50 50 L80 25", "M50 50 L19 77", "M50 50 L81 78"].map((path, index) => (
+        {["M50 50 L17 19", "M50 50 L82 20", "M50 50 L17 84", "M50 50 L82 85"].map((path, index) => (
           <motion.path
             key={path}
             d={path}
             fill="none"
             stroke="#00e5ff"
-            strokeOpacity="0.32"
-            strokeWidth="0.5"
+            strokeOpacity="0.68"
+            strokeWidth="0.65"
             strokeDasharray="2 2"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1, strokeDashoffset: [0, -8] }}
@@ -430,7 +414,7 @@ function TrainingVisual() {
           />
         ))}
       </svg>
-      <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/40 bg-[#17222F] p-4 text-center text-sm font-medium text-[#EDF2F7] shadow-[0_0_40px_rgba(0,229,255,0.15)]">
+      <div className="absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#00e5ff]/62 bg-[#00e5ff]/12 p-4 text-center text-sm font-medium text-[#EDF2F7] shadow-[0_0_54px_rgba(0,229,255,0.2),inset_0_0_28px_rgba(0,229,255,0.07)]">
         Competenze
         <br />
         che restano
@@ -438,13 +422,19 @@ function TrainingVisual() {
       {topics.map((topic, index) => (
         <motion.span
           key={topic.label}
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1, y: [0, -4, 0] }}
+          initial={{ opacity: 0, scale: 0.86, y: 10 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ opacity: { delay: 0.25 + index * 0.12 }, scale: { delay: 0.25 + index * 0.12 }, y: { duration: 3, repeat: Infinity, delay: index * 0.35 } }}
-          className={`absolute rounded-xl border border-[#00e5ff]/25 bg-[#00e5ff]/6 px-4 py-3 text-xs font-medium text-[#DDE5EF] ${topic.className}`}
+          transition={{ duration: 0.7, delay: 0.25 + index * 0.12, ease: [0.19, 1, 0.22, 1] }}
+          className={`absolute transform-gpu will-change-transform ${topic.className}`}
         >
-          {topic.label}
+          <motion.span
+            animate={{ y: [-7, 7, -7] }}
+            transition={{ duration: 6.4, delay: topic.delay, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
+            className="block transform-gpu will-change-transform rounded-xl border border-[#00e5ff]/55 bg-[#00e5ff]/14 px-4 py-3 text-xs font-medium text-[#EDF2F7] shadow-[inset_0_0_22px_rgba(0,229,255,0.07)]"
+          >
+            {topic.label}
+          </motion.span>
         </motion.span>
       ))}
     </div>
