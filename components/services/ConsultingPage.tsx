@@ -149,177 +149,71 @@ export function ConsultingPage({
 
 function ConsultingHero({ imageUrl }: { imageUrl?: string | null }) {
   const image = imageUrl ?? FALLBACK_HERO_IMAGE;
-  const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, -54]);
-  const visualY = useTransform(scrollYProgress, [0, 1], [0, 70]);
-  const visualScale = useTransform(scrollYProgress, [0, 1], [1, 0.975]);
 
   return (
-    <section
-      ref={heroRef}
-      className="relative overflow-hidden border-b border-[#00e5ff]/25 px-4 pb-16 pt-14 md:px-5 md:pb-24 md:pt-20 lg:min-h-[calc(100vh-6rem)]"
-    >
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage:
-            "linear-gradient(90deg, rgba(0,229,255,0.075) 1px, transparent 1px)",
-          backgroundSize: "72px 100%",
-          maskImage: "linear-gradient(to bottom, black, transparent 70%)",
-        }}
-      />
+    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-4 pb-16 pt-14 md:px-5 md:pb-24 md:pt-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse 70% 54% at 50% 100%, rgba(0,229,255,0.18), rgba(0,229,255,0.045) 48%, transparent 78%)",
+          background: "linear-gradient(115deg, rgba(0,229,255,0.07), transparent 38%)",
         }}
       />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -right-[12vw] top-10 h-[34vw] w-[34vw] min-h-[320px] min-w-[320px] rounded-full border border-[#00e5ff]/12"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
-      >
-        <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00e5ff] shadow-[0_0_22px_rgba(0,229,255,0.85)]" />
-      </motion.div>
 
       <div className="relative mx-auto max-w-[1240px]">
-        <motion.div style={{ y: copyY }} className="mx-auto max-w-[1080px] text-center">
+        <div className="max-w-[980px]">
           <AnimatedHeadline
             as="h1"
             delay={0.06}
-            className="text-[42px] font-medium leading-[0.98] tracking-[-0.052em] text-[#EDF2F7] sm:text-[58px] md:text-[76px] lg:text-[88px]"
+            className="text-[42px] font-medium leading-[1] tracking-[-0.048em] text-[#EDF2F7] sm:text-[56px] md:text-[72px] lg:text-[82px]"
           >
-            <>
-              Il tuo e-commerce non ha bisogno di più strumenti.{" "}
-              <span className="block text-[#00e5ff]">Ha bisogno di una direzione.</span>
-            </>
+            Consulenza e-commerce per fare scelte più chiare.
           </AnimatedHeadline>
-          <AnimatedText
-            delay={0.2}
-            className="mx-auto mt-7 max-w-[790px] text-base leading-relaxed text-[#dddddd] md:text-xl"
-          >
-            Affianco aziende, imprenditori e team per capire cosa sta frenando il progetto, stabilire le priorità e trasformarle in azioni misurabili. Da Rimini seguo e-commerce in tutta Italia, mettendo in relazione strategia, tecnologia, marketing, dati e organizzazione.
-          </AnimatedText>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.52, duration: 0.7 }}
-            className="mt-8 flex justify-center"
-          >
-            <Link
-              href="#metodo-consulenza"
-              className="group inline-flex items-center gap-2 border-b border-[#00e5ff]/70 pb-1 text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
-            >
-              Come prende forma la consulenza
-              <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <ConsultingStage imageUrl={image} y={visualY} scale={visualScale} />
-      </div>
-    </section>
-  );
-}
-
-function ConsultingStage({
-  imageUrl,
-  y,
-  scale,
-}: {
-  imageUrl: string;
-  y: ReturnType<typeof useTransform<number, number>>;
-  scale: ReturnType<typeof useTransform<number, number>>;
-}) {
-  const phases = [
-    { title: "Leggere", text: "ciò che accade" },
-    { title: "Scegliere", text: "cosa conta" },
-    { title: "Agire", text: "con una priorità" },
-    { title: "Misurare", text: "ciò che cambia" },
-  ];
-
-  return (
-    <motion.div
-      style={{ y, scale }}
-      initial={{ opacity: 0, scale: 0.94, y: 30 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.18, ease: [0.19, 1, 0.22, 1] }}
-      className="relative mt-12 w-full transform-gpu md:mt-16"
-    >
-      <div className="relative min-h-[360px] overflow-hidden rounded-[28px] border border-[#00e5ff]/42 bg-[#17222F] md:min-h-[430px] md:rounded-[36px]">
-        <Image
-          src={imageUrl}
-          alt="Analisi di dati e performance per una consulenza e-commerce"
-          fill
-          priority
-          loading="eager"
-          unoptimized={imageUrl.startsWith("http")}
-          className="object-cover object-center"
-          sizes="(max-width: 1280px) 96vw, 1240px"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,18,24,0.92)_0%,rgba(13,18,24,0.64)_34%,rgba(13,18,24,0.12)_68%,rgba(13,18,24,0.4)_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-transparent to-[#0D1218]/18" />
-
-        <motion.div
-          aria-hidden
-          className="absolute inset-y-0 w-px bg-gradient-to-b from-transparent via-[#00e5ff] to-transparent opacity-70 shadow-[0_0_22px_rgba(0,229,255,0.75)]"
-          animate={{ left: ["-2%", "102%"] }}
-          transition={{ duration: 7.5, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
-        />
-
-        <div className="absolute left-6 top-6 max-w-[280px] md:left-10 md:top-10 md:max-w-[390px]">
-          <motion.p
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.7, duration: 0.75, ease: [0.19, 1, 0.22, 1] }}
-            className="text-[26px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[38px]"
-          >
-            Prima capire. Poi decidere. Quindi crescere.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9, duration: 0.65 }}
-            className="mt-4 max-w-[330px] text-sm leading-relaxed text-[#dddddd] md:text-base"
-          >
-            Nessun pacchetto predefinito: il lavoro parte dal contesto reale del tuo e-commerce.
-          </motion.p>
-        </div>
-
-        <div className="absolute inset-x-4 bottom-4 rounded-[20px] border border-white/10 bg-[#0D1218]/88 p-4 backdrop-blur-md md:inset-x-7 md:bottom-7 md:rounded-[24px] md:px-6 md:py-5">
-          <div className="relative grid grid-cols-2 gap-x-5 gap-y-4 md:grid-cols-4 md:gap-6">
+          <div className="mt-7 grid gap-6 border-l border-[#00e5ff] pl-5 md:grid-cols-[minmax(0,720px)_auto] md:items-end md:gap-12 md:pl-7">
+            <AnimatedText delay={0.18} className="text-base leading-relaxed text-[#dddddd] md:text-xl">
+              Da oltre vent&apos;anni affianco aziende, imprenditori e team nella progettazione e nella crescita del commercio elettronico. Analizzo strategia, piattaforma, marketing, dati e processi per costruire un ordine di priorità concreto.
+            </AnimatedText>
             <motion.div
-              aria-hidden
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1.4, delay: 0.7, ease: [0.19, 1, 0.22, 1] }}
-              className="absolute left-3 right-3 top-[7px] hidden h-px origin-left bg-gradient-to-r from-[#00e5ff] via-[#00e5ff]/80 to-[#00e5ff]/20 md:block"
-            />
-            {phases.map((phase, index) => (
-              <motion.div
-                key={phase.title}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.88 + index * 0.1 }}
-                className="relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.42, duration: 0.7 }}
+            >
+              <Link
+                href="#metodo-consulenza"
+                className="group inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#00e5ff] transition-colors hover:text-[#7af2ff]"
               >
-                <span className="mb-2 block h-3 w-3 rounded-full border-2 border-[#0D1218] bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.75)] md:mb-4" />
-                <p className="text-sm font-semibold text-[#EDF2F7] md:text-base">{phase.title}</p>
-                <p className="mt-0.5 text-xs text-[#dddddd]/80 md:text-sm">{phase.text}</p>
-              </motion.div>
-            ))}
+                Come lavoro
+                <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </motion.div>
           </div>
         </div>
+
+        <motion.figure
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+          className="relative mt-12 overflow-hidden rounded-[22px] border border-[#00e5ff]/36 bg-[#17222F] md:mt-16 md:rounded-[28px]"
+        >
+          <div className="relative h-[280px] md:h-[410px]">
+            <Image
+              src={image}
+              alt="Analisi di dati e performance per una consulenza e-commerce"
+              fill
+              priority
+              loading="eager"
+              unoptimized={image.startsWith("http")}
+              className="object-cover object-center"
+              sizes="(max-width: 1280px) 96vw, 1240px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/65 via-transparent to-transparent" />
+          </div>
+          <figcaption className="absolute bottom-5 left-5 right-5 text-sm font-medium text-[#EDF2F7] md:bottom-7 md:left-8 md:text-base">
+            Base a Rimini, consulenze e affiancamenti in tutta Italia.
+          </figcaption>
+        </motion.figure>
       </div>
-    </motion.div>
+    </section>
   );
 }
 
