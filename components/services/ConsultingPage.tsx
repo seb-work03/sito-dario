@@ -15,8 +15,6 @@ import { useRef, useState, type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 
-const FALLBACK_HERO_IMAGE =
-  "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/consulente-tVSDOF2MGGwhU8DTQnWS46G17r4vJt.jpg";
 const FALLBACK_PORTRAIT_IMAGE =
   "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/dario%20tana%20con%20sfondo-DWIijOtVTabGdnuHQn3QGWEgHZvDi2.jpg";
 
@@ -128,15 +126,13 @@ const faqItems = [
 ];
 
 export function ConsultingPage({
-  heroImageUrl,
   portraitImageUrl,
 }: {
-  heroImageUrl?: string | null;
   portraitImageUrl?: string | null;
 }) {
   return (
     <>
-      <ConsultingHero imageUrl={heroImageUrl} />
+      <ConsultingHero />
       <DiagnosticSection />
       <ScopeSection />
       <ConsultingProcess />
@@ -147,36 +143,46 @@ export function ConsultingPage({
   );
 }
 
-function ConsultingHero({ imageUrl }: { imageUrl?: string | null }) {
-  const image = imageUrl ?? FALLBACK_HERO_IMAGE;
-
+function ConsultingHero() {
   return (
-    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-4 pb-16 pt-14 md:px-5 md:pb-24 md:pt-20">
+    <section className="relative flex min-h-[650px] items-center overflow-hidden border-b border-[#00e5ff]/25 px-5 py-20 md:min-h-[720px] md:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "linear-gradient(115deg, rgba(0,229,255,0.07), transparent 38%)",
+          background:
+            "radial-gradient(ellipse 55% 72% at 0% 100%, rgba(0,229,255,0.09), transparent 72%)",
         }}
       />
 
-      <div className="relative mx-auto max-w-[1240px]">
-        <div className="max-w-[980px]">
+      <div className="relative mx-auto w-full max-w-[1240px]">
+        <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end lg:gap-24">
           <AnimatedHeadline
             as="h1"
             delay={0.06}
-            className="text-[42px] font-medium leading-[1] tracking-[-0.048em] text-[#EDF2F7] sm:text-[56px] md:text-[72px] lg:text-[82px]"
+            className="text-[clamp(48px,15vw,124px)] font-light leading-[0.84] tracking-[-0.065em] text-[#EDF2F7]"
           >
-            Consulenza e-commerce per fare scelte più chiare.
+            <>
+              <span className="block">Consulenza</span>
+                <span className="block whitespace-nowrap font-semibold text-[#00e5ff]">e-commerce</span>
+            </>
           </AnimatedHeadline>
-          <div className="mt-7 grid gap-6 border-l border-[#00e5ff] pl-5 md:grid-cols-[minmax(0,720px)_auto] md:items-end md:gap-12 md:pl-7">
-            <AnimatedText delay={0.18} className="text-base leading-relaxed text-[#dddddd] md:text-xl">
-              Da oltre vent&apos;anni affianco aziende, imprenditori e team nella progettazione e nella crescita del commercio elettronico. Analizzo strategia, piattaforma, marketing, dati e processi per costruire un ordine di priorità concreto.
+
+          <div className="border-l border-[#00e5ff] pl-6 md:pl-8 lg:mb-2 lg:pl-10">
+            <AnimatedText
+              delay={0.18}
+              className="max-w-[520px] text-[24px] font-medium leading-[1.25] tracking-[-0.025em] text-[#EDF2F7] md:text-[30px]"
+            >
+              Analisi, strategia e affiancamento per aziende che vogliono avviare o far crescere il proprio commercio elettronico.
+            </AnimatedText>
+            <AnimatedText delay={0.28} className="mt-6 max-w-[500px] text-base leading-relaxed text-[#dddddd] md:text-lg">
+              Da oltre vent&apos;anni lavoro accanto a imprenditori e team. Ho base a Rimini e seguo progetti in tutta Italia.
             </AnimatedText>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.42, duration: 0.7 }}
+              transition={{ delay: 0.46, duration: 0.7 }}
+              className="mt-8"
             >
               <Link
                 href="#metodo-consulenza"
@@ -189,29 +195,13 @@ function ConsultingHero({ imageUrl }: { imageUrl?: string | null }) {
           </div>
         </div>
 
-        <motion.figure
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
-          className="relative mt-12 overflow-hidden rounded-[22px] border border-[#00e5ff]/36 bg-[#17222F] md:mt-16 md:rounded-[28px]"
-        >
-          <div className="relative h-[280px] md:h-[410px]">
-            <Image
-              src={image}
-              alt="Analisi di dati e performance per una consulenza e-commerce"
-              fill
-              priority
-              loading="eager"
-              unoptimized={image.startsWith("http")}
-              className="object-cover object-center"
-              sizes="(max-width: 1280px) 96vw, 1240px"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/65 via-transparent to-transparent" />
-          </div>
-          <figcaption className="absolute bottom-5 left-5 right-5 text-sm font-medium text-[#EDF2F7] md:bottom-7 md:left-8 md:text-base">
-            Base a Rimini, consulenze e affiancamenti in tutta Italia.
-          </figcaption>
-        </motion.figure>
+        <motion.div
+          aria-hidden
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1.1, delay: 0.32, ease: [0.19, 1, 0.22, 1] }}
+          className="mt-16 h-px origin-left bg-gradient-to-r from-[#00e5ff] via-[#00e5ff]/35 to-transparent md:mt-24"
+        />
       </div>
     </section>
   );

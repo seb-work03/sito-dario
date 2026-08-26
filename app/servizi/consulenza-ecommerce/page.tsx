@@ -63,20 +63,6 @@ async function getLogoUrl(): Promise<string | null> {
   }
 }
 
-async function getConsultingImageUrl(): Promise<string | null> {
-  try {
-    const rows = await db
-      .select({ url: media.url })
-      .from(media)
-      .where(ilike(media.filename, "%consulente%"))
-      .orderBy(desc(media.createdAt))
-      .limit(1);
-    return rows[0]?.url ?? null;
-  } catch {
-    return null;
-  }
-}
-
 async function getPortraitImageUrl(): Promise<string | null> {
   try {
     const rows = await db
@@ -187,9 +173,8 @@ const structuredData = {
 };
 
 export default async function ConsulenzaEcommercePage() {
-  const [logoUrl, consultingImageUrl, portraitImageUrl, partnerLogos] = await Promise.all([
+  const [logoUrl, portraitImageUrl, partnerLogos] = await Promise.all([
     getLogoUrl(),
-    getConsultingImageUrl(),
     getPortraitImageUrl(),
     getPartnerLogos(),
   ]);
@@ -198,7 +183,7 @@ export default async function ConsulenzaEcommercePage() {
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
-        <ConsultingPage heroImageUrl={consultingImageUrl} portraitImageUrl={portraitImageUrl} />
+        <ConsultingPage portraitImageUrl={portraitImageUrl} />
         <TrustBar logos={partnerLogos} />
       </main>
       <Footer logoUrl={logoUrl} />
