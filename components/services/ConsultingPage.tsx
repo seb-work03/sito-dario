@@ -200,13 +200,6 @@ function ConsultingHero() {
           </div>
         </div>
 
-        <motion.div
-          aria-hidden
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1.1, delay: 0.32, ease: [0.19, 1, 0.22, 1] }}
-          className="mt-16 h-px origin-left bg-gradient-to-r from-[#00e5ff]/45 to-transparent md:mt-20"
-        />
       </div>
     </section>
   );
