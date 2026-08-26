@@ -514,13 +514,13 @@ function SharedMethod() {
   return (
     <section className="border-t border-[#00e5ff]/25 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
-        <div className="mb-14 grid gap-7 md:mb-20 lg:grid-cols-[0.86fr_1.14fr] lg:items-end lg:gap-20">
+        <div className="mx-auto mb-14 max-w-4xl text-center md:mb-20">
           <AnimatedHeadline className="text-[38px] font-medium leading-[1.02] tracking-tight text-[#EDF2F7] md:text-[58px]">
             3 forme.
             <br />
             Un solo modo di lavorare.
           </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
+          <AnimatedText delay={0.1} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             Che si tratti di un progetto, di un’aula o di un palco, il valore nasce quando l’esperienza diventa comprensione e la comprensione diventa autonomia.
           </AnimatedText>
         </div>
