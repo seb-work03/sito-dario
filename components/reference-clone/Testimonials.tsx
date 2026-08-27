@@ -29,6 +29,9 @@ const testimonials = [
   },
 ];
 
+const GOOGLE_REVIEWS_URL =
+  "https://www.google.com/search?sca_esv=b5ea7be7985888f6&sxsrf=APpeQnuZOBg6W83dh4Pr_JRXkSvYWzFltQ:1785222127405&q=dario+tana&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_3pHcsvFS4IWC5hYX6m_ITQk8Tm5EKySRRmWkSOeb_tZMF753J2ho2K246GedOCCfqH2clQ%3D&uds=AJ5uw1-kGPOPznuu41q62UN0LLmJuzDY5atCBfaa0VK_OTe29jjPw2wQJJbPHFNzFVxdOu29sFM_r_kw0fmHfgVvwC8ksDWVf2cSpUWFgwyd4Zqk19KkFGY&sa=X&ved=2ahUKEwiE2P7V5vSVAxUxxQIHHYZGBKsQ3PALegQIMBAF";
+
 function Stars() {
   return (
     <div className="flex items-center gap-1">
@@ -91,23 +94,34 @@ export function Testimonials() {
               </AnimatedText>
             </div>
             {/* Arrows — desktop only */}
-            <div className="hidden md:flex items-center gap-2 shrink-0">
-              <button
-                onClick={prev}
-                aria-label="Testimonianza precedente"
-                className="group w-12 h-12 rounded-full bg-white/85 hover:bg-[#0D1218] border border-[#0D1218]/15 hover:border-[#0D1218] text-[#0D1218] hover:text-[#00e5ff] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
+            <div className="hidden md:flex items-center gap-5 shrink-0">
+              <a
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-[#0D1218] underline decoration-[#0D1218]/30 underline-offset-4 transition-colors hover:decoration-[#0D1218]"
               >
-                <ArrowLeft size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-x-8" />
-                <ArrowLeft size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] translate-x-8 group-hover:translate-x-0" />
-              </button>
-              <button
-                onClick={next}
-                aria-label="Testimonianza successiva"
-                className="group w-12 h-12 rounded-full bg-white/85 hover:bg-[#0D1218] border border-[#0D1218]/15 hover:border-[#0D1218] text-[#0D1218] hover:text-[#00e5ff] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
-              >
-                <ArrowRight size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8" />
-                <ArrowRight size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 group-hover:translate-x-0" />
-              </button>
+                Guarda le recensioni
+                <ArrowRight size={15} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
+              </a>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={prev}
+                  aria-label="Testimonianza precedente"
+                  className="group w-12 h-12 rounded-full bg-white/85 hover:bg-[#0D1218] border border-[#0D1218]/15 hover:border-[#0D1218] text-[#0D1218] hover:text-[#00e5ff] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
+                >
+                  <ArrowLeft size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-x-8" />
+                  <ArrowLeft size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] translate-x-8 group-hover:translate-x-0" />
+                </button>
+                <button
+                  onClick={next}
+                  aria-label="Testimonianza successiva"
+                  className="group w-12 h-12 rounded-full bg-white/85 hover:bg-[#0D1218] border border-[#0D1218]/15 hover:border-[#0D1218] text-[#0D1218] hover:text-[#00e5ff] flex items-center justify-center transition-all duration-500 overflow-hidden relative cursor-pointer"
+                >
+                  <ArrowRight size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:translate-x-8" />
+                  <ArrowRight size={16} className="absolute transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -translate-x-8 group-hover:translate-x-0" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -193,6 +207,16 @@ export function Testimonials() {
               />
             ))}
           </div>
+
+          <a
+            href={GOOGLE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mx-auto mt-6 flex w-fit items-center gap-2 text-sm font-medium text-[#0D1218] underline decoration-[#0D1218]/30 underline-offset-4 md:hidden"
+          >
+            Guarda le recensioni
+            <ArrowRight size={15} />
+          </a>
         </div>
       </div>
     </section>

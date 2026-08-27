@@ -3,6 +3,7 @@ import { desc, ilike, or } from "drizzle-orm";
 import "@/components/reference-clone/reference-clone.css";
 import { Footer } from "@/components/reference-clone/Footer";
 import { Header } from "@/components/reference-clone/Header";
+import { LatestArticles } from "@/components/reference-clone/LatestArticles";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { SpeechEventsPage } from "@/components/services/SpeechEventsPage";
 import { db } from "@/lib/db";
@@ -129,6 +130,7 @@ export default async function SpeechEventiPage() {
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
         <SpeechEventsPage />
+        <LatestArticles />
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />

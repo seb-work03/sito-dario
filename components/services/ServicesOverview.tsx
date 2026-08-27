@@ -10,6 +10,7 @@ import { ArrowUpRight } from "lucide-react";
 import { type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
+import { Testimonials } from "@/components/reference-clone/Testimonials";
 
 const services = [
   {
@@ -88,6 +89,7 @@ export function ServicesOverview() {
     <>
       <ServicesHero />
       <ServicesPanels />
+      <Testimonials />
       <ServiceChooser />
       <SharedMethod />
     </>

@@ -4,6 +4,7 @@ import "@/components/reference-clone/reference-clone.css";
 import { ConsultingPage } from "@/components/services/ConsultingPage";
 import { Footer } from "@/components/reference-clone/Footer";
 import { Header } from "@/components/reference-clone/Header";
+import { LatestArticles } from "@/components/reference-clone/LatestArticles";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
@@ -151,6 +152,7 @@ export default async function ConsulenzaEcommercePage() {
       <Header logoUrl={logoUrl} />
       <main className="pt-20 md:pt-24">
         <ConsultingPage portraitImageUrl={portraitImageUrl} />
+        <LatestArticles />
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />

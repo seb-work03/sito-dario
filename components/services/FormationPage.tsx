@@ -21,6 +21,7 @@ import { useRef, useState } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
+import { Testimonials } from "@/components/reference-clone/Testimonials";
 
 const audiences = [
   {
@@ -140,6 +141,7 @@ export function FormationPage({
       <FormationHero />
       <AudiencePaths />
       <ClassroomSection imageUrl={lessonImageUrl} secondImageUrl={lessonSecondImageUrl} />
+      <Testimonials />
       <TopicsSection />
       <TrainingMethod />
       <FormationFaq />

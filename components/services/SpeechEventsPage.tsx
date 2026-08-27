@@ -6,6 +6,7 @@ import { ArrowUpRight, Mail, Plus } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
+import { Testimonials } from "@/components/reference-clone/Testimonials";
 
 const formats = [
   {
@@ -138,6 +139,7 @@ export function SpeechEventsPage() {
       <FormatsSection />
       <AudienceSection />
       <ThemesSection />
+      <Testimonials />
       <StageQuestions />
       <DirectionSection />
       <ClosingThought />

@@ -25,6 +25,7 @@ import { useRef, useState, type MouseEvent } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { Reveal } from "@/components/reference-clone/Reveal";
+import { Testimonials } from "@/components/reference-clone/Testimonials";
 
 const FALLBACK_PORTRAIT_IMAGE =
   "https://aukjtr1jp7weckhs.public.blob.vercel-storage.com/media/dario%20tana%20con%20sfondo-DWIijOtVTabGdnuHQn3QGWEgHZvDi2.jpg";
@@ -153,6 +154,7 @@ export function ConsultingPage({
       <DiagnosticSection />
       <ScopeSection />
       <ConsultingProcess />
+      <Testimonials />
       <PartnershipSection imageUrl={portraitImageUrl} />
       <OutcomesSection />
       <ConsultingFaq />
