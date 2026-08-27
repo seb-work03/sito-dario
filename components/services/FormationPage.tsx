@@ -149,7 +149,7 @@ export function FormationPage({
 
 function FormationHero() {
   return (
-    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-5 py-20 md:py-28">
+    <section className="relative overflow-hidden border-b border-[#00e5ff]/25 px-5 py-14 md:py-16">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -159,7 +159,7 @@ function FormationHero() {
         }}
       />
 
-      <div className="relative mx-auto grid min-h-[590px] max-w-[1240px] gap-12 lg:grid-cols-[1.13fr_0.87fr] lg:items-end lg:gap-20">
+      <div className="relative mx-auto grid max-w-[1240px] gap-12 md:min-h-[500px] lg:grid-cols-[1.13fr_0.87fr] lg:items-center lg:gap-20">
         <div>
           <AnimatedHeadline
             as="h1"
@@ -183,10 +183,10 @@ function FormationHero() {
             delay={0.16}
             className="text-[25px] font-medium leading-[1.23] tracking-[-0.025em] text-[#EDF2F7] md:text-[31px]"
           >
-            La formazione è utile quando ciò che si impara torna al lavoro insieme alle persone.
+            La formazione è utile quando ciò che si impara torna al lavoro insieme <span className="whitespace-nowrap">alle persone.</span>
           </AnimatedText>
           <AnimatedText delay={0.28} className="mt-6 text-base leading-relaxed text-[#dddddd] md:text-lg">
-            Parto dalle basi, porto in aula casi reali e condivido strumenti già sperimentati sul campo. Nessuna formula magica: metodo, confronto e applicazione.
+            Parto dalle basi, porto in aula casi reali e condivido strumenti già sperimentati sul campo. Nessuna formula magica: metodo, <span className="whitespace-nowrap">confronto e applicazione.</span>
           </AnimatedText>
           <motion.div
             initial={{ opacity: 0 }}
@@ -213,8 +213,8 @@ function AudiencePaths() {
     <section id="percorsi-formativi" className="border-b border-[#00e5ff]/18 bg-[#0D1218] px-5 py-20 md:py-32">
       <div className="mx-auto max-w-[1240px]">
         <div className="mx-auto mb-14 max-w-4xl text-center md:mb-20">
-          <AnimatedHeadline className="text-[36px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[56px]">
-            Stessa materia. Percorsi diversi per chi deve usarla.
+          <AnimatedHeadline className="text-balance text-[36px] font-medium leading-[1.04] tracking-tight text-[#EDF2F7] md:text-[56px]">
+            Stessa materia. Percorsi diversi per chi <span className="whitespace-nowrap">deve usarla.</span>
           </AnimatedHeadline>
           <AnimatedText delay={0.12} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#dddddd] md:text-lg">
             Un programma efficace cambia con il pubblico, il contesto e il risultato atteso. Per questo non parto mai da un calendario di lezioni già confezionato.
@@ -310,14 +310,14 @@ function ClassroomSection({
 
         <div className="relative min-h-[480px] md:min-h-[620px]">
           <TrainingPhoto
-            imageUrl={imageUrl}
-            alt="Dario Tana durante una lezione di e-commerce"
+            imageUrl={secondImageUrl}
+            alt="Formazione e-commerce in aula con Dario Tana"
             className="absolute left-0 top-0 h-[72%] w-[72%]"
             delay={0.08}
           />
           <TrainingPhoto
-            imageUrl={secondImageUrl}
-            alt="Formazione e-commerce in aula con Dario Tana"
+            imageUrl={imageUrl}
+            alt="Dario Tana durante una lezione di e-commerce"
             className="absolute bottom-0 right-0 h-[64%] w-[66%]"
             delay={0.22}
           />
