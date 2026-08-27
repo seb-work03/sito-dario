@@ -139,7 +139,7 @@ export function SpeechEventsPage() {
       <FormatsSection />
       <AudienceSection />
       <ThemesSection />
-      <Testimonials />
+      <Testimonials title="Un intervento riuscito continua dopo il palco." />
       <StageQuestions />
       <DirectionSection />
       <ClosingThought />

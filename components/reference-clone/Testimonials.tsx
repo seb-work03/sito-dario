@@ -58,7 +58,11 @@ function GoogleBadge() {
   );
 }
 
-export function Testimonials() {
+export function Testimonials({
+  title = "La competenza si riconosce da ciò che lascia agli altri.",
+}: {
+  title?: string;
+} = {}) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -87,7 +91,7 @@ export function Testimonials() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-12">
             <div>
               <AnimatedHeadline className="text-[#0D1218] font-medium text-[32px] md:text-[52px] leading-[1.05] max-w-2xl tracking-tight">
-                La competenza si riconosce da ciò che lascia agli altri.
+                {title}
               </AnimatedHeadline>
               <AnimatedText className="text-[#0D1218]/70 text-sm md:text-base mt-4 max-w-md leading-relaxed" delay={0.1}>
                 Media 4.9 su oltre 200 recensioni Google.

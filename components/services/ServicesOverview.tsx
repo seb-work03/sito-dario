@@ -89,9 +89,9 @@ export function ServicesOverview() {
     <>
       <ServicesHero />
       <ServicesPanels />
-      <Testimonials />
       <ServiceChooser />
       <SharedMethod />
+      <Testimonials title="3 modi di lavorare. Risultati che parlano." />
     </>
   );
 }

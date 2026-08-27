@@ -3,7 +3,6 @@ import { desc, ilike, or } from "drizzle-orm";
 import "@/components/reference-clone/reference-clone.css";
 import { Footer } from "@/components/reference-clone/Footer";
 import { Header } from "@/components/reference-clone/Header";
-import { LatestArticles } from "@/components/reference-clone/LatestArticles";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { TrustBar } from "@/components/reference-clone/TrustBar";
 import { ServicesOverview } from "@/components/services/ServicesOverview";
@@ -131,7 +130,6 @@ export default async function ServiziPage() {
       <main className="pt-20 md:pt-24">
         <ServicesOverview />
         <TrustBar logos={partnerLogos} />
-        <LatestArticles />
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />

@@ -141,7 +141,7 @@ export function FormationPage({
       <FormationHero />
       <AudiencePaths />
       <ClassroomSection imageUrl={lessonImageUrl} secondImageUrl={lessonSecondImageUrl} />
-      <Testimonials />
+      <Testimonials title="Una lezione funziona quando resta." />
       <TopicsSection />
       <TrainingMethod />
       <FormationFaq />

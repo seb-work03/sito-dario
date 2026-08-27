@@ -154,7 +154,7 @@ export function ConsultingPage({
       <DiagnosticSection />
       <ScopeSection />
       <ConsultingProcess />
-      <Testimonials />
+      <Testimonials title="La consulenza conta quando porta chiarezza." />
       <PartnershipSection imageUrl={portraitImageUrl} />
       <OutcomesSection />
       <ConsultingFaq />
