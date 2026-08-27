@@ -252,19 +252,6 @@ function AudienceSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto mt-16 max-w-[1480px] overflow-hidden border-t border-[#0D1218]/25 pt-5 md:mt-24 md:pt-8">
-        <motion.p
-          aria-hidden
-          initial={{ scale: 0.96 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.95, ease: [0.19, 1, 0.22, 1] }}
-          className="whitespace-nowrap text-center text-[clamp(66px,18vw,260px)] font-semibold leading-[0.78] tracking-[-0.075em]"
-          style={{ color: "rgba(13,18,24,0.13)", WebkitTextStroke: "1px rgba(13,18,24,0.68)" }}
-        >
-          ASCOLTO
-        </motion.p>
-      </div>
     </section>
   );
 }
@@ -305,7 +292,7 @@ function ThemesSection() {
           </div>
 
           <div className="relative flex min-h-[390px] items-center overflow-hidden px-1 py-12 md:px-12 md:py-16 lg:min-h-[470px] lg:px-16">
-            <p aria-hidden className="pointer-events-none absolute -right-4 top-1/2 -translate-y-1/2 text-[clamp(110px,17vw,230px)] font-semibold leading-none tracking-[-0.07em] text-[#00e5ff]/[0.035]">
+            <p aria-hidden className="pointer-events-none absolute inset-x-8 top-1/2 -translate-y-1/2 text-balance text-center text-[clamp(64px,10vw,138px)] font-semibold leading-[0.86] tracking-[-0.065em] text-[#00e5ff]/[0.045]">
               {activeTheme.label}
             </p>
             <AnimatePresence mode="wait">
@@ -388,7 +375,7 @@ function SpeechFaq() {
   return (
     <section className="border-t border-[#00e5ff]/16 bg-[#0D1218] px-5 py-20 md:py-28">
       <div className="mx-auto grid max-w-[1240px] gap-12 md:grid-cols-[0.72fr_1.28fr] md:gap-20">
-        <div>
+        <div className="md:sticky md:top-32 md:self-start">
           <AnimatedHeadline className="mb-6 text-balance text-[34px] font-medium leading-[1.05] tracking-tight text-[#EDF2F7] md:text-[48px]">
             Domande su speech ed eventi.
           </AnimatedHeadline>
