@@ -25,31 +25,24 @@ const formats = [
   },
 ];
 
-const themes = [
-  "E-commerce",
-  "Piattaforme",
-  "Analytics",
-  "Marketing",
-  "Advertising",
-  "CRO",
-  "Strategia",
-  "Organizzazione",
-];
-
 const themeDetails = [
   {
+    label: "E-commerce",
     title: "E-commerce senza scorciatoie",
     text: "Cosa succede davvero quando tecnologia, margini, marketing e processi devono funzionare insieme.",
   },
   {
+    label: "Dati e CRO",
     title: "Dati che aiutano a decidere",
     text: "Analytics e CRO raccontati per capire comportamenti, priorità e domande, non per riempire altre dashboard.",
   },
   {
+    label: "Piattaforme",
     title: "Tecnologia con un perché",
     text: "Piattaforme, strumenti e automazioni lette a partire dal lavoro che devono migliorare e dalle persone che le useranno.",
   },
   {
+    label: "Marketing e ADV",
     title: "Marketing legato al business",
     text: "Advertising, contenuti e acquisizione collegati a clienti, costi e sostenibilità invece che a metriche isolate.",
   },
@@ -62,8 +55,8 @@ const directionSteps = [
     text: "Parto dalle persone: ruolo, livello di conoscenza, aspettative e contesto. Lo stesso argomento cambia quando cambia chi lo ascolta.",
   },
   {
-    word: "Taglio",
-    title: "Trovare la domanda centrale",
+    word: "Messaggio",
+    title: "Trovare l’idea centrale",
     text: "Seleziono un punto di vista e costruisco una sequenza leggibile. Non provo a dire tutto: scelgo ciò che può davvero servire in quel momento.",
   },
   {
@@ -212,15 +205,6 @@ function FormatsSection() {
               transition={{ duration: 0.75, delay: index * 0.1, ease: [0.19, 1, 0.22, 1] }}
               className="group relative min-h-[330px] overflow-hidden border-b border-[#00e5ff]/18 py-10 md:border-b-0 md:border-r md:px-9 md:py-14 first:md:pl-0 last:md:border-r-0 last:md:pr-0"
             >
-              <motion.div
-                aria-hidden
-                className="absolute inset-x-0 bottom-0 h-1 bg-[#00e5ff]"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.85, delay: 0.18 + index * 0.12, ease: [0.19, 1, 0.22, 1] }}
-                style={{ transformOrigin: index === 1 ? "center" : index === 0 ? "left" : "right" }}
-              />
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#00e5ff]">{format.note}</p>
               <h2 className="mt-7 text-[34px] font-medium leading-none tracking-tight text-[#EDF2F7] md:text-[42px]">{format.title}</h2>
               <p className="mt-7 max-w-sm text-pretty text-base leading-relaxed text-[#dddddd]">{format.text}</p>
@@ -240,16 +224,7 @@ function AudienceSection() {
   ];
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#00e5ff] px-5 py-20 text-[#0D1218] md:py-32">
-      <motion.p
-        aria-hidden
-        className="pointer-events-none absolute -bottom-8 left-0 -z-10 whitespace-nowrap text-[clamp(130px,24vw,350px)] font-semibold leading-none tracking-[-0.08em] text-transparent opacity-20 [-webkit-text-stroke:1px_#0D1218]"
-        animate={{ x: ["-5%", "-28%"] }}
-        transition={{ duration: 24, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-      >
-        ASCOLTO ASCOLTO ASCOLTO
-      </motion.p>
-
+    <section className="relative overflow-hidden bg-[#00e5ff] px-5 py-20 text-[#0D1218] md:pb-16 md:pt-32">
       <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[1fr_0.92fr] lg:items-center lg:gap-24">
         <div>
           <AnimatedHeadline className="max-w-[680px] text-balance text-[42px] font-medium leading-[0.98] tracking-tight text-[#0D1218] md:text-[68px]">
@@ -276,65 +251,81 @@ function AudienceSection() {
           ))}
         </div>
       </div>
+
+      <div className="relative mx-auto mt-16 max-w-[1480px] overflow-hidden border-t border-[#0D1218]/25 pt-5 md:mt-24 md:pt-8">
+        <motion.p
+          aria-hidden
+          initial={{ scale: 0.96 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.95, ease: [0.19, 1, 0.22, 1] }}
+          className="whitespace-nowrap text-center text-[clamp(66px,18vw,260px)] font-semibold leading-[0.78] tracking-[-0.075em]"
+          style={{ color: "rgba(13,18,24,0.13)", WebkitTextStroke: "1px rgba(13,18,24,0.68)" }}
+        >
+          ASCOLTO
+        </motion.p>
+      </div>
     </section>
   );
 }
 
 function ThemesSection() {
-  return (
-    <section className="overflow-hidden border-b border-[#00e5ff]/18 bg-[#0D1218] py-20 md:py-32">
-      <ThemeMarquee reverse={false} />
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeTheme = themeDetails[activeIndex];
 
-      <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-20 md:py-28 lg:grid-cols-[0.76fr_1.24fr] lg:gap-24">
-        <div>
-          <AnimatedHeadline className="text-[40px] font-medium leading-[1.01] tracking-tight text-[#EDF2F7] md:text-[62px]">
-            <><span className="block">Temi solidi.</span><span className="block whitespace-nowrap">Taglio su misura.</span></>
+  return (
+    <section className="border-b border-[#00e5ff]/18 bg-[#0D1218] px-5 py-20 md:py-32">
+      <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto max-w-4xl text-center">
+          <AnimatedHeadline className="text-balance text-[40px] font-medium leading-[1.01] tracking-tight text-[#EDF2F7] md:text-[62px]">
+            Temi che conosco sul campo.
           </AnimatedHeadline>
-          <AnimatedText delay={0.1} className="mt-7 max-w-md text-pretty text-base leading-relaxed text-[#dddddd] md:text-lg">
-            Parlo di ciò che conosco dal lavoro quotidiano. Il tema viene poi selezionato, messo a fuoco e collegato al pubblico dell’evento.
+          <AnimatedText delay={0.1} className="mx-auto mt-7 max-w-2xl text-pretty text-base leading-relaxed text-[#dddddd] md:text-lg">
+            Il punto non è commentare ogni novità. È scegliere un tema solido, collegarlo al pubblico e renderlo comprensibile attraverso esperienza e casi concreti.
           </AnimatedText>
         </div>
 
-        <div className="grid gap-x-12 md:grid-cols-2">
-          {themeDetails.map((theme, index) => (
-            <motion.article
-              key={theme.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.45 }}
-              transition={{ duration: 0.72, delay: index * 0.08, ease: [0.19, 1, 0.22, 1] }}
-              className="border-t border-[#00e5ff]/25 py-7 md:py-9"
-            >
-              <h3 className="text-[24px] font-medium leading-tight tracking-tight text-[#EDF2F7] md:text-[28px]">{theme.title}</h3>
-              <p className="mt-4 text-pretty text-sm leading-relaxed text-[#dddddd] md:text-base">{theme.text}</p>
-            </motion.article>
-          ))}
+        <div className="mt-14 grid overflow-hidden border-y border-[#00e5ff]/26 md:mt-20 lg:grid-cols-[0.78fr_1.22fr]">
+          <div className="border-b border-[#00e5ff]/26 lg:border-b-0 lg:border-r">
+            {themeDetails.map((theme, index) => {
+              const isActive = activeIndex === index;
+              return (
+                <button
+                  key={theme.label}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`group flex w-full items-center justify-between gap-5 border-b border-[#00e5ff]/18 px-1 py-6 text-left last:border-b-0 md:px-7 md:py-7 ${isActive ? "text-[#00e5ff]" : "text-[#EDF2F7]"}`}
+                  aria-pressed={isActive}
+                >
+                  <span className="text-[24px] font-medium tracking-tight transition-transform duration-500 group-hover:translate-x-2 md:text-[30px]">{theme.label}</span>
+                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full transition-all duration-500 ${isActive ? "scale-100 bg-[#00e5ff] shadow-[0_0_18px_rgba(0,229,255,0.72)]" : "scale-75 border border-[#00e5ff]/45"}`} />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative flex min-h-[390px] items-center overflow-hidden px-1 py-12 md:px-12 md:py-16 lg:min-h-[470px] lg:px-16">
+            <p aria-hidden className="pointer-events-none absolute -right-4 top-1/2 -translate-y-1/2 text-[clamp(110px,17vw,230px)] font-semibold leading-none tracking-[-0.07em] text-[#00e5ff]/[0.035]">
+              {activeTheme.label}
+            </p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTheme.label}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                className="relative max-w-2xl"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#00e5ff]">Sul palco</p>
+                <h3 className="mt-6 text-balance text-[36px] font-medium leading-[1.02] tracking-tight text-[#EDF2F7] md:text-[52px]">{activeTheme.title}</h3>
+                <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-[#dddddd] md:text-lg">{activeTheme.text}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-
-      <ThemeMarquee reverse />
     </section>
-  );
-}
-
-function ThemeMarquee({ reverse }: { reverse: boolean }) {
-  const repeatedThemes = [...themes, ...themes];
-
-  return (
-    <div aria-hidden className="overflow-hidden border-y border-[#00e5ff]/30 bg-[#121A23] py-4">
-      <motion.div
-        className="flex w-max items-center"
-        animate={{ x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
-        {repeatedThemes.map((theme, index) => (
-          <div key={`${theme}-${index}`} className="flex items-center">
-            <span className="px-7 text-sm font-semibold uppercase tracking-[0.13em] text-[#EDF2F7] md:px-10 md:text-base">{theme}</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
-          </div>
-        ))}
-      </motion.div>
-    </div>
   );
 }
 
@@ -384,7 +375,8 @@ function ClosingThought() {
         transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
         className="relative mx-auto max-w-[1040px] text-balance text-center text-[34px] font-medium leading-[1.08] tracking-tight text-[#EDF2F7] md:text-[58px]"
       >
-        Le persone non devono uscire pensando che sia tutto semplice. Devono uscire sapendo <span className="text-[#00e5ff]">da dove cominciare.</span>
+        <span className="block">Le persone non devono uscire pensando che sia tutto semplice.</span>
+        <span className="mt-3 block">Devono uscire sapendo <span className="text-[#00e5ff]">da dove cominciare.</span></span>
       </motion.blockquote>
     </section>
   );
