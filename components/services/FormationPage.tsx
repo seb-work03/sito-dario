@@ -141,10 +141,10 @@ export function FormationPage({
       <FormationHero />
       <AudiencePaths />
       <ClassroomSection imageUrl={lessonImageUrl} secondImageUrl={lessonSecondImageUrl} />
-      <Testimonials title="Una lezione funziona quando resta." />
       <TopicsSection />
       <TrainingMethod />
       <FormationFaq />
+      <Testimonials title="Una lezione funziona quando resta." />
     </>
   );
 }

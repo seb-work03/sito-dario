@@ -4,13 +4,19 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Menu, X } from "lucide-react";
+import { ChevronDown, Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Servizi", href: "/servizi" },
   { label: "Chi sono", href: "/chi-sono" },
   { label: "Blog", href: "/blog" },
+];
+
+const serviceLinks = [
+  { label: "Consulenza e-commerce", href: "/servizi/consulenza-ecommerce" },
+  { label: "Formazione", href: "/servizi/formazione" },
+  { label: "Speech ed eventi", href: "/servizi/speech-eventi" },
 ];
 
 const FALLBACK_LOGO_URL =
@@ -69,16 +75,57 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="relative text-[15px] text-[#EDF2F7] transition-colors duration-300 hover:text-[#00e5ff] group"
-              >
-                {l.label}
-                <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
-              </a>
-            ))}
+            {navLinks.map((l) =>
+              l.href === "/servizi" ? (
+                <div key={l.href} className="group/services relative py-4">
+                  <a
+                    href={l.href}
+                    aria-haspopup="menu"
+                    className="relative flex items-center gap-1.5 text-[15px] text-[#EDF2F7] transition-colors duration-300 hover:text-[#00e5ff] group"
+                  >
+                    {l.label}
+                    <ChevronDown
+                      size={14}
+                      strokeWidth={1.8}
+                      className="text-[#00e5ff] transition-transform duration-500 group-hover/services:rotate-180 group-focus-within/services:rotate-180"
+                    />
+                    <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/services:w-full group-focus-within/services:w-full" />
+                  </a>
+
+                  <div className="pointer-events-none absolute left-1/2 top-full w-[290px] -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-400 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/services:pointer-events-auto group-hover/services:translate-y-0 group-hover/services:opacity-100 group-focus-within/services:pointer-events-auto group-focus-within/services:translate-y-0 group-focus-within/services:opacity-100">
+                    <div className="overflow-hidden rounded-2xl border border-[#00e5ff]/25 bg-[#121A23]/98 p-2 shadow-[0_24px_65px_rgba(0,0,0,0.42)] backdrop-blur-xl">
+                      <a
+                        href="/servizi"
+                        className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-[#EDF2F7] transition-colors hover:bg-[#00e5ff]/10 hover:text-[#00e5ff]"
+                      >
+                        Tutti i servizi
+                        <span className="text-[10px] uppercase tracking-[0.18em] text-[#00e5ff]">Overview</span>
+                      </a>
+                      <div className="mx-4 h-px bg-[#00e5ff]/18" />
+                      {serviceLinks.map((service) => (
+                        <a
+                          key={service.href}
+                          href={service.href}
+                          className="group/item flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-[#dddddd] transition-colors hover:bg-[#00e5ff]/10 hover:text-[#EDF2F7]"
+                        >
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#00e5ff]/45 transition-all duration-300 group-hover/item:bg-[#00e5ff] group-hover/item:shadow-[0_0_10px_rgba(0,229,255,0.8)]" />
+                          {service.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className="relative text-[15px] text-[#EDF2F7] transition-colors duration-300 hover:text-[#00e5ff] group"
+                >
+                  {l.label}
+                  <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#00e5ff] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:w-full" />
+                </a>
+              ),
+            )}
           </nav>
 
           <PillCta href="/contatti" label="Contatti" />
@@ -116,19 +163,51 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
               </div>
               <div className="flex flex-1 items-center justify-center px-7 pb-20 pt-10">
                 <nav className="flex w-full max-w-[440px] flex-col">
-                {navLinks.map((l, i) => (
-                  <motion.a
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setMenuOpen(false)}
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
-                    className="border-b border-[#00e5ff]/20 py-4 text-center text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
-                  >
-                    {l.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((l, i) =>
+                  l.href === "/servizi" ? (
+                    <motion.div
+                      key={l.href}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
+                      className="border-b border-[#00e5ff]/20 py-3"
+                    >
+                      <a
+                        href={l.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center justify-center gap-2 py-1 text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
+                      >
+                        {l.label}
+                        <ChevronDown size={17} strokeWidth={1.8} className="text-[#00e5ff]" />
+                      </a>
+                      <div className="mx-auto mt-3 grid max-w-[330px] gap-1 rounded-2xl border border-[#00e5ff]/18 bg-[#121A23] p-2">
+                        {serviceLinks.map((service) => (
+                          <a
+                            key={service.href}
+                            href={service.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[15px] text-[#dddddd] transition-colors hover:bg-[#00e5ff]/10 hover:text-[#00e5ff]"
+                          >
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#00e5ff]" />
+                            {service.label}
+                          </a>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.a
+                      key={l.href}
+                      href={l.href}
+                      onClick={() => setMenuOpen(false)}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
+                      className="border-b border-[#00e5ff]/20 py-3 text-center text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
+                    >
+                      {l.label}
+                    </motion.a>
+                  ),
+                )}
                 <motion.a
                   href="/contatti"
                   onClick={() => setMenuOpen(false)}
