@@ -46,7 +46,7 @@ const engagements: {
   {
     title: "Intervengo in eventi e conferenze",
     description:
-      "Keynote, talk e panel per eventi, associazioni di categoria e community verticali. Contenuti pratici, non teoria astratta.",
+      "Keynote, talk e confronti per eventi, associazioni di categoria e community verticali. Contenuti pratici, non teoria astratta.",
     icon: Mic,
   },
 ];

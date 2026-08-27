@@ -22,7 +22,7 @@ type Values = {
 const intentOptions: { id: Intent; letter: string; title: string; sub: string; value: string }[] = [
   { id: "ecommerce", letter: "A", title: "Scalare un e-commerce", sub: "Strategia, tecnologia, CRO e processi.", value: "Scalare un E-commerce esistente" },
   { id: "formazione", letter: "B", title: "Formazione o docenza", sub: "Corporate, academy, ITS e workshop.", value: "Formazione aziendale o docenza" },
-  { id: "speech", letter: "C", title: "Speech per evento", sub: "Keynote, panel e format su misura.", value: "Richiesta speech per evento" },
+  { id: "speech", letter: "C", title: "Speech per evento", sub: "Keynote, speech e format su misura.", value: "Richiesta speech per evento" },
 ];
 
 const dimensionEcommerce = [

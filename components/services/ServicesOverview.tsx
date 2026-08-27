@@ -39,10 +39,10 @@ const services = [
     id: "speech",
     headline: "Portare sul palco contenuti che restano.",
     description:
-      "Keynote, panel e interventi dedicati a e-commerce, piattaforme, analytics, marketing e advertising. Contenuti costruiti sul pubblico e raccontati con esempi leggibili, senza semplificazioni vuote.",
+      "Keynote, speech e interventi dedicati a e-commerce, piattaforme, analytics, marketing e advertising. Contenuti costruiti sul pubblico e raccontati con esempi leggibili, senza semplificazioni vuote.",
     href: "/servizi/speech-eventi",
     linkLabel: "Scopri speech ed eventi",
-    audiences: ["Eventi e fiere", "Panel e keynote", "Format aziendali"],
+    audiences: ["Eventi e fiere", "Dialoghi e keynote", "Format aziendali"],
     areas: ["E-commerce e piattaforme", "Analytics e dati", "Marketing e ADV"],
     visual: "speech" as const,
   },

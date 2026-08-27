@@ -15,7 +15,7 @@ const formats = [
     note: "Visione, casi concreti, ritmo",
   },
   {
-    title: "Panel e tavole rotonde",
+    title: "Dialoghi e confronti",
     text: "Un confronto in cui esperienza e punti di vista diversi diventano valore. Entro nel dialogo senza risposte preparate e senza sottrarmi alle domande.",
     note: "Confronto, lettura, esperienza",
   },
@@ -108,7 +108,7 @@ const faqItems = [
   {
     question: "Per quali eventi è possibile richiedere uno speech?",
     answer:
-      "Keynote, conferenze, fiere, convention aziendali, eventi per clienti e partner, tavole rotonde, panel e appuntamenti organizzati da associazioni o community. Il formato viene definito in base alla sala, al pubblico e al ruolo dell’intervento nel programma.",
+      "Keynote, conferenze, fiere, convention aziendali, eventi per clienti e partner, dialoghi e appuntamenti organizzati da associazioni o community. Il formato viene definito in base alla sala, al pubblico e al ruolo dell’intervento nel programma.",
   },
   {
     question: "Lo speech viene personalizzato per l’evento?",
@@ -121,7 +121,7 @@ const faqItems = [
       "E-commerce, piattaforme, analytics, CRO, marketing, advertising, organizzazione e trasformazione digitale. Il punto di partenza è sempre una domanda precisa, così l’intervento mantiene un filo chiaro e non diventa un elenco di tendenze.",
   },
   {
-    question: "Puoi partecipare anche a panel e tavole rotonde?",
+    question: "Puoi partecipare anche a dialoghi e confronti?",
     answer:
       "Sì. Partecipo volentieri a confronti con imprenditori, professionisti e figure del settore, sia come ospite sia contribuendo alla costruzione delle domande e del taglio editoriale.",
   },
@@ -150,7 +150,7 @@ export function SpeechEventsPage() {
 
 function SpeechHero() {
   return (
-    <section className="relative isolate flex min-h-[600px] items-center overflow-hidden border-b border-[#00e5ff]/22 px-5 py-16 md:min-h-[620px] md:py-20">
+    <section className="relative isolate flex min-h-[530px] items-start overflow-hidden border-b border-[#00e5ff]/22 px-5 pb-10 pt-12 md:min-h-[620px] md:items-center md:py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-20"
@@ -177,7 +177,7 @@ function SpeechHero() {
           delay={0.22}
           className="mx-auto mt-9 max-w-[740px] text-pretty text-base leading-relaxed text-[#dddddd] md:text-xl"
         >
-          Keynote, panel e interventi per eventi, fiere, associazioni e aziende. Contenuti costruiti sul pubblico, con casi concreti e un linguaggio comprensibile.
+          Keynote, speech e interventi per eventi, fiere, associazioni e aziende. Contenuti costruiti sul pubblico, con casi concreti e un linguaggio comprensibile.
         </AnimatedText>
 
         <motion.div

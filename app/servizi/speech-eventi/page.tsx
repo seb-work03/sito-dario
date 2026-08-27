@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Speech e conferenze su e-commerce e digital | Dario Tana",
   description:
-    "Keynote, panel e speech su e-commerce, piattaforme, analytics, marketing e advertising per eventi e aziende. Dario Tana, da Rimini in tutta Italia.",
+    "Keynote, speech e confronti su e-commerce, piattaforme, analytics, marketing e advertising per eventi e aziende. Dario Tana, da Rimini in tutta Italia.",
   keywords: [
     "speech e-commerce",
     "speaker e-commerce",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "conferenze e-commerce",
     "keynote digital marketing",
     "speaker eventi Rimini",
-    "panel e-commerce",
+    "eventi e-commerce",
   ],
   alternates: {
     canonical: "https://dariotana.it/servizi/speech-eventi",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Speech ed eventi su e-commerce e digital | Dario Tana",
     description:
-      "Interventi costruiti sul pubblico: esperienza, casi concreti e un linguaggio comprensibile per eventi, panel e convention aziendali.",
+      "Interventi costruiti sul pubblico: esperienza, casi concreti e un linguaggio comprensibile per eventi, confronti e convention aziendali.",
     url: "https://dariotana.it/servizi/speech-eventi",
     siteName: "Dario Tana",
     locale: "it_IT",
@@ -55,7 +55,7 @@ const faqEntities = [
   {
     question: "Per quali eventi è possibile richiedere uno speech?",
     answer:
-      "Keynote, conferenze, fiere, convention aziendali, panel, tavole rotonde ed eventi organizzati da associazioni o community.",
+      "Keynote, conferenze, fiere, convention aziendali, dialoghi ed eventi organizzati da associazioni o community.",
   },
   {
     question: "Lo speech viene personalizzato per l’evento?",
@@ -93,7 +93,7 @@ const structuredData = {
     {
       "@type": "Service",
       name: "Speech e interventi per eventi su e-commerce e digital",
-      serviceType: "Keynote, speech, panel e interventi per eventi",
+      serviceType: "Keynote, speech, dialoghi e interventi per eventi",
       description:
         "Interventi per eventi, conferenze e convention su e-commerce, piattaforme, analytics, CRO, marketing e advertising.",
       areaServed: { "@type": "Country", name: "Italia" },

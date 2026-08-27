@@ -49,7 +49,7 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
       photo: speechUrl ?? "/reference-assets/adviest/2HY57myX3y7mgS1UFfrGVyN2yPw.jpg",
       bullets: [
         "Keynote e interventi verticali",
-        "Panel e moderazioni",
+        "Dialoghi e moderazioni",
         "Format custom per eventi corporate",
         "Interventi in fiere di settore",
       ],
