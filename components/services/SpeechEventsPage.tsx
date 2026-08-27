@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, Mail, Plus } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline";
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 
@@ -66,6 +66,43 @@ const directionSteps = [
   },
 ];
 
+const stageQuestions: Array<{
+  id: string;
+  plain: string;
+  before: ReactNode;
+  accent: string;
+  after: string;
+}> = [
+  {
+    id: "priorita",
+    plain: "Stiamo scegliendo strumenti o priorità?",
+    before: "Stiamo scegliendo ",
+    accent: "strumenti",
+    after: " o priorità?",
+  },
+  {
+    id: "dati",
+    plain: "Cosa raccontano davvero i dati?",
+    before: "Cosa raccontano ",
+    accent: "davvero",
+    after: " i dati?",
+  },
+  {
+    id: "crescita",
+    plain: "Un e-commerce che vende di più sta sempre crescendo?",
+    before: <span>Un <span className="whitespace-nowrap">e-commerce</span> che vende di più </span>,
+    accent: "sta sempre",
+    after: " crescendo?",
+  },
+  {
+    id: "contesto",
+    plain: "Quanto costa una decisione presa senza contesto?",
+    before: "Quanto costa una decisione ",
+    accent: "presa senza",
+    after: " contesto?",
+  },
+];
+
 const faqItems = [
   {
     question: "Per quali eventi è possibile richiedere uno speech?",
@@ -101,6 +138,7 @@ export function SpeechEventsPage() {
       <FormatsSection />
       <AudienceSection />
       <ThemesSection />
+      <StageQuestions />
       <DirectionSection />
       <ClosingThought />
       <SpeechFaq />
@@ -313,6 +351,124 @@ function ThemesSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function StageQuestions() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  return (
+    <section ref={sectionRef} className="relative h-[320vh] border-b border-[#00e5ff]/18 bg-[#0D1218]">
+      <div className="sticky top-20 flex h-[calc(100vh-5rem)] items-center overflow-hidden px-5 md:top-24 md:h-[calc(100vh-6rem)]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(0,229,255,0.085), transparent 34%), linear-gradient(90deg, transparent 49.94%, rgba(0,229,255,0.08) 50%, transparent 50.06%)",
+          }}
+        />
+
+        <div className="relative mx-auto h-full w-full max-w-[1240px]">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+            className="absolute inset-x-0 top-10 text-center text-[24px] font-medium tracking-tight text-[#EDF2F7] md:top-14 md:text-[32px]"
+          >
+            Le domande che porto sul palco.
+          </motion.h2>
+
+          <ul className="sr-only">
+            {stageQuestions.map((question) => <li key={question.id}>{question.plain}</li>)}
+          </ul>
+
+          <div aria-hidden className="absolute inset-x-0 bottom-20 top-24 md:bottom-24 md:top-32">
+            {stageQuestions.map((question, index) => (
+              <StageQuestion
+                key={question.id}
+                question={question}
+                index={index}
+                total={stageQuestions.length}
+                progress={scrollYProgress}
+              />
+            ))}
+          </div>
+
+          <QuestionProgress progress={scrollYProgress} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StageQuestion({
+  question,
+  index,
+  total,
+  progress,
+}: {
+  question: (typeof stageQuestions)[number];
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}) {
+  const start = index / total;
+  const settle = start + 0.045;
+  const end = (index + 1) / total;
+  const release = end - 0.045;
+
+  const inputRange = index === 0
+    ? [0, release, end, 1]
+    : index === total - 1
+      ? [0, start, settle, 1]
+      : [0, start, settle, release, end, 1];
+  const opacityRange = index === 0
+    ? [1, 1, 0, 0]
+    : index === total - 1
+      ? [0, 0, 1, 1]
+      : [0, 0, 1, 1, 0, 0];
+  const yRange = index === 0
+    ? [0, 0, -42, -42]
+    : index === total - 1
+      ? [42, 42, 0, 0]
+      : [42, 42, 0, 0, -42, -42];
+  const scaleRange = index === 0
+    ? [1, 1, 0.97, 0.97]
+    : index === total - 1
+      ? [0.97, 0.97, 1, 1]
+      : [0.97, 0.97, 1, 1, 0.97, 0.97];
+
+  const opacity = useTransform(progress, inputRange, opacityRange);
+  const y = useTransform(progress, inputRange, yRange);
+  const scale = useTransform(progress, inputRange, scaleRange);
+
+  return (
+    <motion.p
+      style={{ opacity, y, scale }}
+      className="absolute inset-0 flex items-center justify-center text-balance text-center text-[clamp(42px,6.4vw,88px)] font-medium leading-[1.02] tracking-[-0.045em] text-[#EDF2F7]"
+    >
+      <span className="max-w-[1120px]">
+        {question.before}
+        <span className="text-[#00e5ff]">{question.accent}</span>
+        {question.after}
+      </span>
+    </motion.p>
+  );
+}
+
+function QuestionProgress({ progress }: { progress: MotionValue<number> }) {
+  const scaleX = useTransform(progress, [0, 1], [0, 1]);
+
+  return (
+    <div aria-hidden className="absolute inset-x-0 bottom-10 mx-auto h-px max-w-[520px] overflow-hidden bg-white/12 md:bottom-14">
+      <motion.div className="h-full origin-left bg-[#00e5ff]" style={{ scaleX }} />
+    </div>
   );
 }
 
