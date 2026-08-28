@@ -189,3 +189,80 @@
   color: #00e5ff;
   font-weight: 700;
 }
+
+/*
+ * Block-editor articles need contextual rhythm: a section title, a FAQ
+ * question and a paragraph should not all receive the same vertical gap.
+ */
+.article-rich-text-root .article-content-block + .article-content-block {
+  margin-top: 1.5rem;
+}
+
+.article-rich-text-root .article-content-block[data-block-type="heading-2"] {
+  padding-top: clamp(3.5rem, 6vw, 5rem);
+}
+
+.article-rich-text-root .article-content-block[data-block-type="heading-2"] > .rich-text > h2,
+.article-rich-text-root .article-content-block[data-block-type="heading-3"] > .rich-text > h3,
+.article-rich-text-root .article-content-block[data-block-type="image-text"] .rich-text > h3 {
+  margin-top: 0;
+}
+
+.article-rich-text-root .article-content-block[data-block-type="heading-2"] + .article-content-block[data-block-type="paragraph"],
+.article-rich-text-root .article-content-block[data-block-type="heading-2"] + .article-content-block[data-block-type="list"] {
+  margin-top: 1.75rem;
+}
+
+.article-rich-text-root .article-content-block[data-block-type="heading-2"] + .article-content-block[data-block-type="heading-3"] {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+}
+
+.article-rich-text-root .article-content-block[data-block-type="heading-3"] + .article-content-block[data-block-type="paragraph"],
+.article-rich-text-root .article-content-block[data-block-type="heading-3"] + .article-content-block[data-block-type="list"] {
+  margin-top: 0.65rem;
+}
+
+.article-rich-text-root .article-content-block[data-block-type="paragraph"] + .article-content-block[data-block-type="heading-3"],
+.article-rich-text-root .article-content-block[data-block-type="list"] + .article-content-block[data-block-type="heading-3"] {
+  margin-top: clamp(2.25rem, 4vw, 3rem);
+}
+
+.article-rich-text-root .article-content-block[data-block-type="image-text"] {
+  margin-top: clamp(2.75rem, 5vw, 4rem);
+}
+
+.article-rich-text-root .article-content-block[data-block-type="image-text"] + .article-content-block[data-block-type="image-text"] {
+  margin-top: clamp(3rem, 6vw, 4.75rem);
+}
+
+.article-rich-text-root .article-content-block[data-block-type="image-text"] .rich-text > * + * {
+  margin-top: 0.8rem;
+}
+
+/* Keep the same hierarchy for legacy Markdown and HTML articles. */
+.article-rich-text h2:first-child,
+.article-rich-text h3:first-child {
+  margin-top: 0;
+}
+
+.article-rich-text h2 + p,
+.article-rich-text h2 + ul,
+.article-rich-text h2 + ol {
+  margin-top: 1.75rem;
+}
+
+.article-rich-text h2 + h3 {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+}
+
+.article-rich-text h3 + p,
+.article-rich-text h3 + ul,
+.article-rich-text h3 + ol {
+  margin-top: 0.65rem;
+}
+
+.article-rich-text p + h3,
+.article-rich-text ul + h3,
+.article-rich-text ol + h3 {
+  margin-top: clamp(2.25rem, 4vw, 3rem);
+}

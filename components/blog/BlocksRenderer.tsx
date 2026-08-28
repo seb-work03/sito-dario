@@ -9,10 +9,21 @@ import { slugify } from "@/lib/utils";
  */
 export function BlocksRenderer({ blocks }: { blocks: Block[] }) {
   return (
-    <div className="article-rich-text-root flex flex-col gap-10">
-      {blocks.map((block) => (
-        <BlockView key={block.id} block={block} />
-      ))}
+    <div className="article-rich-text-root">
+      {blocks.map((block) => {
+        const blockType =
+          block.type === "heading" ? `heading-${block.level}` : block.type;
+
+        return (
+          <div
+            key={block.id}
+            className="article-content-block"
+            data-block-type={blockType}
+          >
+            <BlockView block={block} />
+          </div>
+        );
+      })}
     </div>
   );
 }
