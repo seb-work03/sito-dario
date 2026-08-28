@@ -14,7 +14,6 @@ import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
-import { migratePlatformLogoGridToImageText } from "@/lib/blog/article-block-migrations";
 import { slugify } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -441,18 +440,6 @@ async function getArticle(slug: string) {
         articleCategories: { with: { category: true } },
       },
     });
-
-    if (article) {
-      const migratedContent = migratePlatformLogoGridToImageText(article.content);
-      if (migratedContent) {
-        const updatedAt = new Date();
-        await db
-          .update(articles)
-          .set({ content: migratedContent, updatedAt })
-          .where(eq(articles.id, article.id));
-        return { ...article, content: migratedContent, updatedAt };
-      }
-    }
 
     return article;
   } catch {
