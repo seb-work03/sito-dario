@@ -671,7 +671,7 @@ export default async function ArticlePage({
         {/* Article cover — part of the editorial flow, immediately before the index. */}
         {article.coverMedia && (
           <figure className="mx-auto max-w-[1120px] px-5 pb-12 md:pb-16">
-            <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-[#101923] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+            <div className="relative aspect-[2/1] overflow-hidden rounded-2xl border border-white/10 bg-[#101923] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
               <Image
                 src={article.coverMedia.url}
                 alt={article.coverMedia.altText ?? article.title}
