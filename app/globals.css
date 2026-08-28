@@ -266,3 +266,31 @@
 .article-rich-text ol + h3 {
   margin-top: clamp(2.25rem, 4vw, 3rem);
 }
+
+@media (min-width: 768px) {
+  .article-rich-text-root .article-content-block[data-block-type="heading-2"] {
+    max-width: 58rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .article-rich-text-root .article-content-block[data-block-type="heading-2"] + .article-content-block[data-block-type="paragraph"] {
+    max-width: 54rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .article-rich-text h2 {
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .article-rich-text h2 + p {
+    max-width: 54rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
