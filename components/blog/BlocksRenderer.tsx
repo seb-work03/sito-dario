@@ -137,5 +137,32 @@ function BlockView({ block }: { block: Block }) {
       return (
         <hr className="border-t border-white/8 my-2" />
       );
+
+    case "logo-grid":
+      return (
+        <figure aria-label="Loghi delle piattaforme e-commerce">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+            {block.items.map((item, index) => (
+              <div
+                key={`${item.name}-${index}`}
+                className="flex aspect-[3/2] items-center justify-center overflow-hidden rounded-xl border border-dashed border-[#00e5ff]/55 bg-[#00e5ff]/[0.045] p-4 transition-colors duration-300 hover:bg-[#00e5ff]/10"
+              >
+                {item.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.url}
+                    alt={item.alt || `Logo ${item.name}`}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <span className="text-center text-xs font-semibold uppercase tracking-[0.1em] text-[#00e5ff]">
+                    Logo {item.name}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </figure>
+      );
   }
 }

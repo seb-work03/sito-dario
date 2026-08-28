@@ -7,7 +7,6 @@ import { Header } from "@/components/reference-clone/Header";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { BlogIndex } from "@/components/blog/BlogIndex";
-import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { db } from "@/lib/db";
 import { articleCategories, articles, categories, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
@@ -63,8 +62,7 @@ export default async function CategoryArchivePage({
       })
     : [];
 
-  const items = raw.map((row) => {
-    const a = applyCuratedArticleOverride(row);
+  const items = raw.map((a) => {
     return {
       slug: a.slug,
       title: a.title,

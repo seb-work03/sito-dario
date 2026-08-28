@@ -33,6 +33,11 @@ export type ImageTextBlock = {
 };
 export type QuoteBlock = { id: string; type: "quote"; text: string; cite?: string };
 export type SeparatorBlock = { id: string; type: "separator" };
+export type LogoGridBlock = {
+  id: string;
+  type: "logo-grid";
+  items: Array<{ name: string; url: string; alt: string }>;
+};
 
 export type Block =
   | ParagraphBlock
@@ -41,7 +46,8 @@ export type Block =
   | ImageBlock
   | ImageTextBlock
   | QuoteBlock
-  | SeparatorBlock;
+  | SeparatorBlock
+  | LogoGridBlock;
 
 export type BlockType = Block["type"];
 
@@ -97,6 +103,16 @@ export function newBlock(type: BlockType): Block {
       return { id, type, text: "" };
     case "separator":
       return { id, type };
+    case "logo-grid":
+      return {
+        id,
+        type,
+        items: ["Shopify", "WooCommerce", "PrestaShop", "Magento"].map((name) => ({
+          name,
+          url: "",
+          alt: `Logo ${name}`,
+        })),
+      };
   }
 }
 
@@ -122,6 +138,9 @@ export function blocksToPlainText(blocks: Block[]): string {
       case "image-text":
         parts.push(b.text);
         break;
+      case "logo-grid":
+        parts.push(b.items.map((item) => item.name).join(" "));
+        break;
     }
   }
   return parts.join(" ");
@@ -141,6 +160,12 @@ export function markdownToBlocks(markdown: string): Block[] {
   let i = 0;
   while (i < chunks.length) {
     const chunk = chunks[i];
+
+    if (/^<!--\s*piattaforme-loghi\s*-->$/.test(chunk)) {
+      blocks.push(newBlock("logo-grid"));
+      i += 1;
+      continue;
+    }
 
     // Shortcode: foto | foto-sinistra | foto-destra
     const scMatch = SHORTCODE_RE.exec(chunk);

@@ -1,3 +1,5 @@
+import { markdownToBlocks, serializeBlocks } from "@/lib/blocks";
+
 export const PLATFORM_ARTICLE_SLUG = "come-scegliere-piattaforma-ecommerce-2025";
 
 const platformArticleContent = `## La piattaforma giusta parte dal progetto
@@ -107,113 +109,14 @@ Sì, pianificando URL, redirect, contenuti, dati strutturati, performance e moni
 
 Scegliere una piattaforma significa decidere **come l'azienda venderà e lavorerà nei prossimi anni**. Se stai progettando un nuovo e-commerce o una migrazione, puoi [raccontarmi il progetto](/contatti): il primo passo è capire il contesto, non scegliere il software.`;
 
-const platformArticleFaqs = [
-  {
-    question: "Qual è la migliore piattaforma e-commerce?",
-    answer:
-      "Non esiste una piattaforma migliore in assoluto. La scelta dipende da catalogo, processi, budget, competenze, integrazioni e piano di crescita.",
-  },
-  {
-    question: "Shopify va bene anche per aziende strutturate?",
-    answer:
-      "Sì, se processi, integrazioni e necessità di personalizzazione sono compatibili con il suo ecosistema. La valutazione deve partire dagli scenari reali.",
-  },
-  {
-    question: "Quando conviene Magento?",
-    answer:
-      "Magento può essere indicato per cataloghi articolati, logiche B2B, più store e integrazioni profonde, a condizione di avere una governance adeguata.",
-  },
-  {
-    question: "Si può cambiare piattaforma senza perdere la SEO?",
-    answer:
-      "Sì, pianificando URL, redirect, contenuti, dati strutturati, performance e monitoraggio dopo il rilascio.",
-  },
-];
-
-const curatedArticles = {
-  [PLATFORM_ARTICLE_SLUG]: {
-    title: "Come scegliere la piattaforma e-commerce giusta nel 2026",
-    excerpt:
-      "Shopify, WooCommerce, PrestaShop o Magento? Una guida pratica per confrontare costi, integrazioni, competenze e crescita prima di scegliere la piattaforma e-commerce.",
-    content: platformArticleContent,
-    seoTitle: "Piattaforma e-commerce: come scegliere quella giusta",
-    seoDescription:
-      "Come scegliere la piattaforma e-commerce giusta tra Shopify, WooCommerce, PrestaShop e Magento valutando costi, integrazioni e crescita.",
-    updatedAt: new Date("2026-08-28T08:00:00.000Z"),
-    faqs: platformArticleFaqs,
-  },
+export const PLATFORM_ARTICLE_DATABASE_MIGRATION = {
+  slug: PLATFORM_ARTICLE_SLUG,
+  previousTitle: "Come scegliere la piattaforma e-commerce giusta nel 2025",
+  title: "Come scegliere la piattaforma e-commerce giusta nel 2026",
+  excerpt:
+    "Shopify, WooCommerce, PrestaShop o Magento? Una guida pratica per confrontare costi, integrazioni, competenze e crescita prima di scegliere la piattaforma e-commerce.",
+  content: serializeBlocks(markdownToBlocks(platformArticleContent)),
+  seoTitle: "Piattaforma e-commerce: come scegliere quella giusta",
+  seoDescription:
+    "Come scegliere la piattaforma e-commerce giusta tra Shopify, WooCommerce, PrestaShop e Magento valutando costi, integrazioni e crescita.",
 } as const;
-
-export function applyCuratedArticleOverride<
-  T extends {
-    slug: string;
-    title: string;
-    excerpt: string | null;
-    content: string;
-    updatedAt: Date;
-    seoTitle?: string | null;
-    seoDescription?: string | null;
-  },
->(article: T): T {
-  const override = curatedArticles[article.slug as keyof typeof curatedArticles];
-  if (!override) return article;
-
-  return {
-    ...article,
-    title: override.title,
-    excerpt: override.excerpt,
-    content: override.content,
-    updatedAt: override.updatedAt,
-    seoTitle: override.seoTitle,
-    seoDescription: override.seoDescription,
-  } as T;
-}
-
-export function getCuratedArticleFaqs(slug: string) {
-  return curatedArticles[slug as keyof typeof curatedArticles]?.faqs ?? [];
-}
-
-export function getCuratedArticleFallback(slug: string) {
-  const override = curatedArticles[slug as keyof typeof curatedArticles];
-  if (!override) return undefined;
-
-  const publishedAt = new Date("2026-08-07T08:00:00.000Z");
-  return {
-    id: -1,
-    slug,
-    title: override.title,
-    excerpt: override.excerpt,
-    content: override.content,
-    coverMediaId: null,
-    authorId: -1,
-    status: "published" as const,
-    publishedAt,
-    seoTitle: override.seoTitle,
-    seoDescription: override.seoDescription,
-    createdAt: publishedAt,
-    updatedAt: override.updatedAt,
-    coverMedia: null,
-    author: {
-      id: -1,
-      name: "Dario Tana",
-      slug: "dario-tana",
-      bio: "Consulente e docente e-commerce con oltre vent'anni di esperienza diretta.",
-      avatarMediaId: null,
-      createdAt: publishedAt,
-      avatar: null,
-    },
-    articleCategories: [
-      {
-        articleId: -1,
-        categoryId: -1,
-        category: {
-          id: -1,
-          name: "Strategia",
-          slug: "strategia",
-          description: "Riflessioni e metodo per decisioni di canale.",
-          parentId: null,
-        },
-      },
-    ],
-  };
-}

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
-import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
@@ -28,8 +27,7 @@ async function getLatestArticles() {
 export async function LatestArticles() {
   const latest = await getLatestArticles();
 
-  const items = latest.map((row) => {
-    const a = applyCuratedArticleOverride(row);
+  const items = latest.map((a) => {
     return {
       slug: a.slug,
       title: a.title,

@@ -14,11 +14,7 @@ import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
-import {
-  applyCuratedArticleOverride,
-  getCuratedArticleFallback,
-  getCuratedArticleFaqs,
-} from "@/lib/blog/curated-articles";
+import { PLATFORM_ARTICLE_DATABASE_MIGRATION } from "@/lib/blog/curated-articles";
 import { slugify } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -136,6 +132,46 @@ function TableOfContents({ entries }: { entries: TocEntry[] }) {
       </nav>
     </div>
   );
+}
+
+interface FaqEntry { question: string; answer: string }
+
+function extractFaqs(content: string): FaqEntry[] {
+  const blocks = tryParseBlocks(content);
+  if (blocks) {
+    const faqs: FaqEntry[] = [];
+    let inFaqSection = false;
+    let currentQuestion = "";
+
+    for (const block of blocks) {
+      if (block.type === "heading" && block.level === 2) {
+        if (inFaqSection) break;
+        inFaqSection = stripHtml(block.text).toLowerCase().includes("domande frequenti");
+        continue;
+      }
+      if (!inFaqSection) continue;
+      if (block.type === "heading" && block.level === 3) {
+        currentQuestion = stripHtml(block.text);
+        continue;
+      }
+      if (currentQuestion && block.type === "paragraph") {
+        faqs.push({ question: currentQuestion, answer: firstSentence(block.text) });
+        currentQuestion = "";
+      }
+    }
+    return faqs;
+  }
+
+  const faqSection = content.match(/(?:^|\n)##\s+Domande frequenti[^\n]*\n([\s\S]*?)(?=\n##\s|$)/i)?.[1];
+  if (!faqSection) return [];
+
+  const faqs: FaqEntry[] = [];
+  const questionPattern = /^###\s+(.+)\n+([\s\S]*?)(?=^###\s+|$)/gm;
+  let match: RegExpExecArray | null;
+  while ((match = questionPattern.exec(faqSection)) !== null) {
+    faqs.push({ question: stripHtml(match[1]), answer: firstSentence(match[2]) });
+  }
+  return faqs;
 }
 
 // ---------------------------------------------------------------------------
@@ -406,11 +442,43 @@ async function getArticle(slug: string) {
       },
     });
 
-    return article
-      ? applyCuratedArticleOverride(article)
-      : getCuratedArticleFallback(slug);
+    if (
+      article &&
+      article.slug === PLATFORM_ARTICLE_DATABASE_MIGRATION.slug &&
+      article.title === PLATFORM_ARTICLE_DATABASE_MIGRATION.previousTitle
+    ) {
+      const updatedAt = new Date();
+      await db
+        .update(articles)
+        .set({
+          title: PLATFORM_ARTICLE_DATABASE_MIGRATION.title,
+          excerpt: PLATFORM_ARTICLE_DATABASE_MIGRATION.excerpt,
+          content: PLATFORM_ARTICLE_DATABASE_MIGRATION.content,
+          seoTitle: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoTitle,
+          seoDescription: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoDescription,
+          updatedAt,
+        })
+        .where(
+          and(
+            eq(articles.id, article.id),
+            eq(articles.title, PLATFORM_ARTICLE_DATABASE_MIGRATION.previousTitle),
+          ),
+        );
+
+      return {
+        ...article,
+        title: PLATFORM_ARTICLE_DATABASE_MIGRATION.title,
+        excerpt: PLATFORM_ARTICLE_DATABASE_MIGRATION.excerpt,
+        content: PLATFORM_ARTICLE_DATABASE_MIGRATION.content,
+        seoTitle: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoTitle,
+        seoDescription: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoDescription,
+        updatedAt,
+      };
+    }
+
+    return article;
   } catch {
-    return getCuratedArticleFallback(slug);
+    return undefined;
   }
 }
 
@@ -426,7 +494,7 @@ async function getRelatedArticles(currentSlug: string) {
       },
     });
 
-    return related.map(applyCuratedArticleOverride);
+    return related;
   } catch {
     return [];
   }
@@ -495,7 +563,7 @@ export default async function ArticlePage({
   const categories = article.articleCategories.map((ac) => ac.category);
   const articleUrl = `https://dariotana.it/blog/${article.slug}`;
   const articleDescription = article.seoDescription ?? article.excerpt ?? "";
-  const curatedFaqs = getCuratedArticleFaqs(article.slug);
+  const articleFaqs = extractFaqs(article.content);
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -529,11 +597,11 @@ export default async function ArticlePage({
           { "@type": "ListItem", position: 3, name: article.title, item: articleUrl },
         ],
       },
-      ...(curatedFaqs.length > 0
+      ...(articleFaqs.length > 0
         ? [
             {
               "@type": "FAQPage",
-              mainEntity: curatedFaqs.map((faq) => ({
+              mainEntity: articleFaqs.map((faq) => ({
                 "@type": "Question",
                 name: faq.question,
                 acceptedAnswer: { "@type": "Answer", text: faq.answer },

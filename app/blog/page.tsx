@@ -7,7 +7,6 @@ import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline"
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { BlogIndex } from "@/components/blog/BlogIndex";
-import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
@@ -47,8 +46,7 @@ export default async function BlogPage() {
     }),
   ]);
 
-  const items = published.map((row) => {
-    const a = applyCuratedArticleOverride(row);
+  const items = published.map((a) => {
     return {
       slug: a.slug,
       title: a.title,

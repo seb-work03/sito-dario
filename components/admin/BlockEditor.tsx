@@ -167,6 +167,7 @@ const BLOCK_TYPE_LABELS: { type: BlockType; label: string; desc: string }[] = [
   { type: "list", label: "Elenco", desc: "Puntato o numerato" },
   { type: "image", label: "Immagine", desc: "Larghezza piena" },
   { type: "image-text", label: "Immagine + testo", desc: "Affiancate" },
+  { type: "logo-grid", label: "Griglia loghi", desc: "Quattro loghi affiancati" },
   { type: "quote", label: "Citazione", desc: "Frase in evidenza" },
   { type: "separator", label: "Separatore", desc: "Linea orizzontale" },
 ];
@@ -431,6 +432,44 @@ function BlockBody({ block, onChange }: { block: Block; onChange: (patch: Partia
                 className="text-sm leading-relaxed text-gray-900"
               />
             </div>
+          </div>
+        </div>
+      );
+
+    case "logo-grid":
+      return (
+        <div className="flex flex-col gap-3">
+          <BlockLabel>Griglia loghi</BlockLabel>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {block.items.map((item, index) => (
+              <div key={`${item.name}-${index}`} className="rounded border border-gray-200 p-3">
+                <input
+                  type="text"
+                  value={item.name}
+                  onChange={(e) => {
+                    const items = [...block.items];
+                    items[index] = { ...item, name: e.target.value };
+                    onChange({ items });
+                  }}
+                  aria-label={`Nome logo ${index + 1}`}
+                  className={`${inputCls} mb-2 font-medium`}
+                />
+                <ImagePickerInline
+                  url={item.url}
+                  alt={item.alt}
+                  onSelect={(url, alt) => {
+                    const items = [...block.items];
+                    items[index] = { ...item, url, alt };
+                    onChange({ items });
+                  }}
+                  onAltChange={(alt) => {
+                    const items = [...block.items];
+                    items[index] = { ...item, alt };
+                    onChange({ items });
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       );
