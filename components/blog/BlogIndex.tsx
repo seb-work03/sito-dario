@@ -77,7 +77,7 @@ export function BlogIndex({ articles, categories, hideFilter = false }: Props) {
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               transition={{ layout: { duration: 0.5, ease: EASE } }}
             >
               <AnimatePresence mode="popLayout">
@@ -155,7 +155,7 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
               fill
               unoptimized
               className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />

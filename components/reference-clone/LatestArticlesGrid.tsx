@@ -20,8 +20,8 @@ type Item = {
 export function LatestArticlesGrid({ items }: { items: Item[] }) {
   return (
     <>
-      {/* Desktop / tablet: wider two-column cards */}
-      <div className="hidden md:grid md:grid-cols-2 gap-6">
+      {/* Desktop: three compact cards; tablet: two columns. */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item, i) => (
           <motion.article
             key={item.slug}
@@ -43,7 +43,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                     fill
                     unoptimized
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
-                    sizes="50vw"
+                    sizes="(max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
