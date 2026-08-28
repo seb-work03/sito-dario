@@ -101,37 +101,34 @@ function TableOfContents({ entries }: { entries: TocEntry[] }) {
     <div className="mx-auto max-w-[1120px] px-5">
       <nav
         aria-label="Indice dell'articolo"
-        className="overflow-hidden rounded-2xl border border-[#00e5ff]/55 bg-[#00e5ff]/[0.055] shadow-[0_0_42px_rgba(0,229,255,0.08)]"
+        className="overflow-hidden rounded-2xl border border-[#00e5ff]/50 bg-[#101923] shadow-[0_0_32px_rgba(0,229,255,0.07)]"
       >
-        <div className="flex items-center justify-between gap-4 bg-[#00e5ff] px-5 py-4 text-[#0D1218] md:px-7">
-          <p className="text-sm font-bold uppercase tracking-[0.13em]">Indice dell&apos;articolo</p>
-          <span className="hidden text-xs font-semibold uppercase tracking-[0.1em] opacity-65 sm:block">
-            Vai alla sezione
-          </span>
+        <div className="border-b border-[#00e5ff]/45 bg-[#00e5ff]/14 px-5 py-4 md:px-7">
+          <p className="text-sm font-bold uppercase tracking-[0.13em] text-[#00e5ff]">
+            Indice dell&apos;articolo
+          </p>
         </div>
-        <ol className="grid md:grid-cols-2">
+        <ol>
           {entries.map((entry, i) => (
             <li
               key={entry.id}
-              className="group border-b border-[#00e5ff]/18 last:border-b-0 md:[&:nth-last-child(-n+2)]:border-b-0 md:[&:nth-child(odd)]:border-r md:[&:nth-child(odd)]:border-[#00e5ff]/18"
+              className="group border-b border-[#00e5ff]/24 last:border-b-0"
             >
               <a
                 href={`#${entry.id}`}
-                className="flex h-full gap-4 px-5 py-5 transition-colors duration-300 hover:bg-[#00e5ff]/10 md:px-7"
+                className="grid gap-2 px-5 py-4 transition-colors duration-300 hover:bg-[#00e5ff]/10 sm:grid-cols-[44px_minmax(220px,0.8fr)_1.2fr] sm:items-center sm:gap-4 md:px-7"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#00e5ff] text-xs font-bold text-[#0D1218] shadow-[0_0_18px_rgba(0,229,255,0.34)]">
+                <span className="text-xs font-bold tracking-[0.12em] text-[#00e5ff]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="min-w-0">
-                  <span className="block text-[15px] font-semibold leading-snug text-[#EDF2F7] transition-colors group-hover:text-[#00e5ff]">
-                    {entry.text}
-                  </span>
-                  {entry.description && (
-                    <span className="mt-1.5 hidden text-sm leading-relaxed text-[#dddddd] sm:block">
-                      {entry.description}
-                    </span>
-                  )}
+                <span className="text-[15px] font-semibold leading-snug text-[#EDF2F7] transition-colors group-hover:text-[#00e5ff]">
+                  {entry.text}
                 </span>
+                {entry.description && (
+                  <span className="hidden text-sm leading-relaxed text-[#dddddd] sm:block">
+                    {entry.description}
+                  </span>
+                )}
               </a>
             </li>
           ))}

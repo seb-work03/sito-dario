@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import ReactMarkdown from "react-markdown";
 import { tryParseBlocks } from "@/lib/blocks";
 import { slugify } from "@/lib/utils";
@@ -138,6 +139,44 @@ function LegacyRenderer({ content }: { content: string }) {
   );
 }
 
+const PLATFORM_LOGOS_TOKEN = "<!-- piattaforme-loghi -->";
+
+function PlatformLogoPlaceholders() {
+  return (
+    <figure aria-label="Spazi riservati ai loghi delle piattaforme e-commerce">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+        {["Shopify", "WooCommerce", "PrestaShop", "Magento"].map((platform) => (
+          <div
+            key={platform}
+            className="flex aspect-[3/2] items-center justify-center rounded-xl border border-dashed border-[#00e5ff]/55 bg-[#00e5ff]/[0.045] px-4 text-center transition-colors duration-300 hover:bg-[#00e5ff]/10"
+          >
+            <span className="text-xs font-semibold uppercase tracking-[0.1em] text-[#00e5ff]">
+              Logo {platform}
+            </span>
+          </div>
+        ))}
+      </div>
+      <figcaption className="mt-3 text-center text-xs text-[#93A6BB]">
+        Spazi predisposti per i loghi ufficiali delle piattaforme.
+      </figcaption>
+    </figure>
+  );
+}
+
+function LegacyArticleWithPlatformLogos({ content }: { content: string }) {
+  const parts = content.split(PLATFORM_LOGOS_TOKEN);
+  return (
+    <div className="flex flex-col gap-10">
+      {parts.map((part, index) => (
+        <Fragment key={index}>
+          {part.trim() && <LegacyRenderer content={part} />}
+          {index < parts.length - 1 && <PlatformLogoPlaceholders />}
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // HTML renderer (Tiptap output)
 // ---------------------------------------------------------------------------
@@ -172,5 +211,8 @@ export function ArticleContent({ content }: { content: string }) {
   const blocks = tryParseBlocks(content);
   if (blocks) return <BlocksRenderer blocks={blocks} />;
   // Legacy markdown
+  if (content.includes(PLATFORM_LOGOS_TOKEN)) {
+    return <LegacyArticleWithPlatformLogos content={content} />;
+  }
   return <LegacyRenderer content={content} />;
 }
