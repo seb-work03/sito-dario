@@ -14,7 +14,6 @@ import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
-import { PLATFORM_ARTICLE_DATABASE_MIGRATION } from "@/lib/blog/curated-articles";
 import { slugify } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -441,40 +440,6 @@ async function getArticle(slug: string) {
         articleCategories: { with: { category: true } },
       },
     });
-
-    if (
-      article &&
-      article.slug === PLATFORM_ARTICLE_DATABASE_MIGRATION.slug &&
-      article.title === PLATFORM_ARTICLE_DATABASE_MIGRATION.previousTitle
-    ) {
-      const updatedAt = new Date();
-      await db
-        .update(articles)
-        .set({
-          title: PLATFORM_ARTICLE_DATABASE_MIGRATION.title,
-          excerpt: PLATFORM_ARTICLE_DATABASE_MIGRATION.excerpt,
-          content: PLATFORM_ARTICLE_DATABASE_MIGRATION.content,
-          seoTitle: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoTitle,
-          seoDescription: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoDescription,
-          updatedAt,
-        })
-        .where(
-          and(
-            eq(articles.id, article.id),
-            eq(articles.title, PLATFORM_ARTICLE_DATABASE_MIGRATION.previousTitle),
-          ),
-        );
-
-      return {
-        ...article,
-        title: PLATFORM_ARTICLE_DATABASE_MIGRATION.title,
-        excerpt: PLATFORM_ARTICLE_DATABASE_MIGRATION.excerpt,
-        content: PLATFORM_ARTICLE_DATABASE_MIGRATION.content,
-        seoTitle: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoTitle,
-        seoDescription: PLATFORM_ARTICLE_DATABASE_MIGRATION.seoDescription,
-        updatedAt,
-      };
-    }
 
     return article;
   } catch {
