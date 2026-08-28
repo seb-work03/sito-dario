@@ -154,7 +154,7 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
               alt={item.coverAlt}
               fill
               unoptimized
-              className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
+              className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (

@@ -361,7 +361,7 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
             alt={article.coverMedia.altText ?? article.title}
             fill
             unoptimized
-            className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
+            className="object-cover"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
