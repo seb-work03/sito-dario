@@ -7,6 +7,7 @@ import { Header } from "@/components/reference-clone/Header";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { BlogIndex } from "@/components/blog/BlogIndex";
+import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { db } from "@/lib/db";
 import { articleCategories, articles, categories, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
@@ -62,18 +63,21 @@ export default async function CategoryArchivePage({
       })
     : [];
 
-  const items = raw.map((a) => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt ?? "",
-    coverUrl: a.coverMedia?.url ?? null,
-    coverAlt: a.coverMedia?.altText ?? a.title,
-    publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
-    readingTime: readingTimeMinutes(a.content),
-    categories: a.articleCategories
-      .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
-      .sort((x, y) => x.name.localeCompare(y.name, "it")),
-  }));
+  const items = raw.map((row) => {
+    const a = applyCuratedArticleOverride(row);
+    return {
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt ?? "",
+      coverUrl: a.coverMedia?.url ?? null,
+      coverAlt: a.coverMedia?.altText ?? a.title,
+      publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
+      readingTime: readingTimeMinutes(a.content),
+      categories: a.articleCategories
+        .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
+        .sort((x, y) => x.name.localeCompare(y.name, "it")),
+    };
+  });
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">

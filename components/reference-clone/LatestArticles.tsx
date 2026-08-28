@@ -2,6 +2,7 @@ import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { articles } from "@/lib/db/schema";
+import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
@@ -27,16 +28,19 @@ async function getLatestArticles() {
 export async function LatestArticles() {
   const latest = await getLatestArticles();
 
-  const items = latest.map((a) => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt ?? "",
-    coverUrl: a.coverMedia?.url ?? null,
-    coverAlt: a.coverMedia?.altText ?? a.title,
-    publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
-    readingTime: readingTimeMinutes(a.content),
-    categoryName: a.articleCategories[0]?.category.name ?? null,
-  }));
+  const items = latest.map((row) => {
+    const a = applyCuratedArticleOverride(row);
+    return {
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt ?? "",
+      coverUrl: a.coverMedia?.url ?? null,
+      coverAlt: a.coverMedia?.altText ?? a.title,
+      publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
+      readingTime: readingTimeMinutes(a.content),
+      categoryName: a.articleCategories[0]?.category.name ?? null,
+    };
+  });
 
   return (
     <section

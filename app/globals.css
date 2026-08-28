@@ -157,3 +157,35 @@
 .rich-text table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; overflow-x: auto; display: block; }
 .rich-text th, .rich-text td { padding: 0.6em 0.75em; border: 1px solid rgba(255, 255, 255, 0.1); }
 .rich-text th { background: rgba(255, 255, 255, 0.05); color: #EDF2F7; font-weight: 500; text-align: left; }
+
+/* Long-form article typography: wider layouts stay readable with a larger measure. */
+.article-rich-text,
+.article-rich-text-root .rich-text {
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+.article-rich-text h2,
+.article-rich-text-root .rich-text h2 {
+  font-size: clamp(1.9rem, 3vw, 2.55rem);
+  margin-top: 1.65em;
+  scroll-margin-top: 8rem;
+}
+
+.article-rich-text h3,
+.article-rich-text-root .rich-text h3 {
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+  margin-top: 1.5em;
+}
+
+.article-rich-text strong,
+.article-rich-text-root .rich-text strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.article-rich-text li::marker,
+.article-rich-text-root .rich-text li::marker {
+  color: #00e5ff;
+  font-weight: 700;
+}

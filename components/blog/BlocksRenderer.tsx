@@ -9,7 +9,7 @@ import { slugify } from "@/lib/utils";
  */
 export function BlocksRenderer({ blocks }: { blocks: Block[] }) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="article-rich-text-root flex flex-col gap-10">
       {blocks.map((block) => (
         <BlockView key={block.id} block={block} />
       ))}

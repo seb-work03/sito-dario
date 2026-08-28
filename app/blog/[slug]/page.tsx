@@ -14,6 +14,11 @@ import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
+import {
+  applyCuratedArticleOverride,
+  getCuratedArticleFallback,
+  getCuratedArticleFaqs,
+} from "@/lib/blog/curated-articles";
 import { slugify } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -27,7 +32,12 @@ function stripHtml(html: string): string {
 }
 
 function firstSentence(text: string): string {
-  const clean = stripHtml(text).replace(/\s+/g, " ").trim();
+  const clean = stripHtml(text)
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[*_~`>#]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   const m = clean.match(/^.{0,120}?[.!?]/);
   return m ? m[0].trim() : clean.slice(0, 100);
 }
@@ -88,41 +98,45 @@ function extractToc(content: string): TocEntry[] {
 function TableOfContents({ entries }: { entries: TocEntry[] }) {
   if (entries.length === 0) return null;
   return (
-    <div className="mx-auto max-w-[896px] px-5">
-      <div className="rounded-xl border border-[#77C0CF]/30 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-[#17222F] border-b border-[#77C0CF]/20">
-              <th className="text-left px-5 py-3 text-[#EDF2F7] font-medium text-xs uppercase tracking-wider">
-                Sezione
-              </th>
-              <th className="text-left px-5 py-3 text-[#EDF2F7] font-medium text-xs uppercase tracking-wider hidden sm:table-cell">
-                Argomento
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((entry, i) => (
-              <tr
-                key={entry.id}
-                className="border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors"
+    <div className="mx-auto max-w-[1120px] px-5">
+      <nav
+        aria-label="Indice dell'articolo"
+        className="overflow-hidden rounded-2xl border border-[#00e5ff]/55 bg-[#00e5ff]/[0.055] shadow-[0_0_42px_rgba(0,229,255,0.08)]"
+      >
+        <div className="flex items-center justify-between gap-4 bg-[#00e5ff] px-5 py-4 text-[#0D1218] md:px-7">
+          <p className="text-sm font-bold uppercase tracking-[0.13em]">Indice dell&apos;articolo</p>
+          <span className="hidden text-xs font-semibold uppercase tracking-[0.1em] opacity-65 sm:block">
+            Vai alla sezione
+          </span>
+        </div>
+        <ol className="grid md:grid-cols-2">
+          {entries.map((entry, i) => (
+            <li
+              key={entry.id}
+              className="group border-b border-[#00e5ff]/18 last:border-b-0 md:[&:nth-last-child(-n+2)]:border-b-0 md:[&:nth-child(odd)]:border-r md:[&:nth-child(odd)]:border-[#00e5ff]/18"
+            >
+              <a
+                href={`#${entry.id}`}
+                className="flex h-full gap-4 px-5 py-5 transition-colors duration-300 hover:bg-[#00e5ff]/10 md:px-7"
               >
-                <td className="px-5 py-3">
-                  <a
-                    href={`#${entry.id}`}
-                    className="text-[#77C0CF] hover:text-[#8fd3e1] transition-colors"
-                  >
-                    {i + 1}. {entry.text}
-                  </a>
-                </td>
-                <td className="px-5 py-3 text-[#ddd] leading-snug hidden sm:table-cell">
-                  {entry.description}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#00e5ff] text-xs font-bold text-[#0D1218] shadow-[0_0_18px_rgba(0,229,255,0.34)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[15px] font-semibold leading-snug text-[#EDF2F7] transition-colors group-hover:text-[#00e5ff]">
+                    {entry.text}
+                  </span>
+                  {entry.description && (
+                    <span className="mt-1.5 hidden text-sm leading-relaxed text-[#dddddd] sm:block">
+                      {entry.description}
+                    </span>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
     </div>
   );
 }
@@ -238,7 +252,7 @@ interface ArticleCtaProps {
 
 function ArticleCta({ question, paragraph, buttonLabel, avatarUrl }: ArticleCtaProps) {
   return (
-    <div className="my-16 mx-auto max-w-[896px] px-5">
+    <div className="my-16 mx-auto max-w-[1120px] px-5">
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#00e5ff]/20 via-[#00e5ff]/10 to-[#00e5ff]/5 border border-[#00e5ff]/40 px-7 py-8 md:px-12 md:py-10">
         {/* Cyan glow */}
         <div
@@ -385,40 +399,83 @@ async function getCtaAvatarUrl(): Promise<string> {
 }
 
 async function getArticle(slug: string) {
-  return db.query.articles.findFirst({
-    where: and(eq(articles.slug, slug), eq(articles.status, "published")),
-    with: {
-      coverMedia: true,
-      author: { with: { avatar: true } },
-      articleCategories: { with: { category: true } },
-    },
-  });
+  try {
+    const article = await db.query.articles.findFirst({
+      where: and(eq(articles.slug, slug), eq(articles.status, "published")),
+      with: {
+        coverMedia: true,
+        author: { with: { avatar: true } },
+        articleCategories: { with: { category: true } },
+      },
+    });
+
+    return article
+      ? applyCuratedArticleOverride(article)
+      : getCuratedArticleFallback(slug);
+  } catch {
+    return getCuratedArticleFallback(slug);
+  }
 }
 
 async function getRelatedArticles(currentSlug: string) {
-  return db.query.articles.findMany({
-    where: and(eq(articles.status, "published"), ne(articles.slug, currentSlug)),
-    orderBy: desc(articles.publishedAt),
-    limit: 3,
-    with: {
-      coverMedia: true,
-      articleCategories: { with: { category: true } },
-    },
-  });
+  try {
+    const related = await db.query.articles.findMany({
+      where: and(eq(articles.status, "published"), ne(articles.slug, currentSlug)),
+      orderBy: desc(articles.publishedAt),
+      limit: 3,
+      with: {
+        coverMedia: true,
+        articleCategories: { with: { category: true } },
+      },
+    });
+
+    return related.map(applyCuratedArticleOverride);
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
+  const canonicalUrl = `https://dariotana.it/blog/${slug}`;
+  const title = article
+    ? (article.seoTitle ?? `${article.title} — Dario Tana`)
+    : "Articolo non trovato";
+  const description = article?.seoDescription ?? article?.excerpt ?? undefined;
+
   return {
-    title: article
-      ? (article.seoTitle ?? `${article.title} — Dario Tana`)
-      : "Articolo non trovato",
-    description: article?.seoDescription ?? article?.excerpt ?? undefined,
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: article
+      ? {
+          type: "article",
+          locale: "it_IT",
+          siteName: "Dario Tana",
+          url: canonicalUrl,
+          title,
+          description,
+          publishedTime: article.publishedAt?.toISOString(),
+          modifiedTime: article.updatedAt.toISOString(),
+          authors: article.author ? [article.author.name] : ["Dario Tana"],
+          images: article.coverMedia
+            ? [{ url: article.coverMedia.url, alt: article.coverMedia.altText ?? article.title }]
+            : undefined,
+        }
+      : undefined,
+    twitter: article
+      ? {
+          card: "summary_large_image",
+          title,
+          description,
+          images: article.coverMedia ? [article.coverMedia.url] : undefined,
+        }
+      : undefined,
   };
 }
 
@@ -439,6 +496,56 @@ export default async function ArticlePage({
 
   const readingTime = readingTimeMinutes(article.content);
   const categories = article.articleCategories.map((ac) => ac.category);
+  const articleUrl = `https://dariotana.it/blog/${article.slug}`;
+  const articleDescription = article.seoDescription ?? article.excerpt ?? "";
+  const curatedFaqs = getCuratedArticleFaqs(article.slug);
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        headline: article.title,
+        description: articleDescription,
+        mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
+        url: articleUrl,
+        image: article.coverMedia?.url,
+        datePublished: article.publishedAt?.toISOString(),
+        dateModified: article.updatedAt.toISOString(),
+        inLanguage: "it-IT",
+        articleSection: categories.map((category) => category.name),
+        author: {
+          "@type": "Person",
+          name: article.author?.name ?? "Dario Tana",
+          url: "https://dariotana.it/chi-sono",
+        },
+        publisher: {
+          "@type": "Person",
+          name: "Dario Tana",
+          url: "https://dariotana.it/",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://dariotana.it/" },
+          { "@type": "ListItem", position: 2, name: "Blog", item: "https://dariotana.it/blog" },
+          { "@type": "ListItem", position: 3, name: article.title, item: articleUrl },
+        ],
+      },
+      ...(curatedFaqs.length > 0
+        ? [
+            {
+              "@type": "FAQPage",
+              mainEntity: curatedFaqs.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: { "@type": "Answer", text: faq.answer },
+              })),
+            },
+          ]
+        : []),
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
@@ -464,7 +571,7 @@ export default async function ArticlePage({
         )}
 
         {/* Article header */}
-        <div className="mx-auto max-w-[896px] px-5 pt-10 pb-8">
+        <div className="mx-auto max-w-[1120px] px-5 pt-10 pb-8">
           {/* Back link */}
           <Link
             href="/blog"
@@ -541,7 +648,7 @@ export default async function ArticlePage({
 
         {/* Excerpt / lead */}
         {article.excerpt && (
-          <div className="mx-auto max-w-[896px] px-5 pb-8">
+          <div className="mx-auto max-w-[1120px] px-5 pb-10">
             <p className="text-[#dddddd] text-lg md:text-xl leading-relaxed border-l-[3px] border-[#00e5ff]/50 pl-5 italic">
               {article.excerpt}
             </p>
@@ -551,7 +658,7 @@ export default async function ArticlePage({
         {/* Table of contents */}
         <TableOfContents entries={extractToc(article.content)} />
 
-        {/* Article body — CTA banner injected before each H2 section */}
+        {/* Article body — at most two contextual CTA banners across the reading flow */}
         {(() => {
           const chunks = splitAtH2s(article.content);
           const ctas = [
@@ -568,15 +675,22 @@ export default async function ArticlePage({
               avatarUrl: ctaAvatarUrl,
             },
           ];
+          const ctaIndexes = new Set(
+            [Math.floor(chunks.length / 3), Math.floor((chunks.length * 2) / 3)].filter(
+              (index, position, indexes) =>
+                index > 0 && index < chunks.length && indexes.indexOf(index) === position,
+            ),
+          );
+
           return (
             <>
               {chunks.map((chunk, i) => (
                 <div key={i}>
-                  {/* Inject CTA before every H2 section (i > 0), alternating between the 2 */}
-                  {i > 0 && (
-                    <ArticleCta {...ctas[(i - 1) % ctas.length]} />
+                  {/* Keep long-form articles readable with at most two contextual CTAs. */}
+                  {ctaIndexes.has(i) && (
+                    <ArticleCta {...ctas[i < chunks.length / 2 ? 0 : 1]} />
                   )}
-                  <div className={`mx-auto max-w-[896px] px-5 ${i === chunks.length - 1 ? "pb-16" : "pb-2"}`}>
+                  <div className={`mx-auto max-w-[1120px] px-5 ${i === chunks.length - 1 ? "pb-16" : "pb-2"}`}>
                     <ArticleContent content={chunk} />
                   </div>
                 </div>
@@ -588,7 +702,7 @@ export default async function ArticlePage({
 
         {/* Author card */}
         {article.author && (
-          <div className="mx-auto max-w-[896px] px-5 pb-24">
+          <div className="mx-auto max-w-[1120px] px-5 pb-24">
             <Link
               href={`/blog/autore/${article.author.slug}`}
               className="group flex items-center gap-5 rounded-2xl border border-white/8 bg-[#17222F] p-6 hover:border-[#00e5ff]/30 transition-all duration-300"
@@ -648,6 +762,10 @@ export default async function ArticlePage({
 
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </div>
   );
 }

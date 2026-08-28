@@ -7,6 +7,7 @@ import { AnimatedHeadline } from "@/components/reference-clone/AnimatedHeadline"
 import { AnimatedText } from "@/components/reference-clone/AnimatedText";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { BlogIndex } from "@/components/blog/BlogIndex";
+import { applyCuratedArticleOverride } from "@/lib/blog/curated-articles";
 import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
@@ -46,18 +47,21 @@ export default async function BlogPage() {
     }),
   ]);
 
-  const items = published.map((a) => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt ?? "",
-    coverUrl: a.coverMedia?.url ?? null,
-    coverAlt: a.coverMedia?.altText ?? a.title,
-    publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
-    readingTime: readingTimeMinutes(a.content),
-    categories: a.articleCategories
-      .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
-      .sort((x, y) => x.name.localeCompare(y.name, "it")),
-  }));
+  const items = published.map((row) => {
+    const a = applyCuratedArticleOverride(row);
+    return {
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt ?? "",
+      coverUrl: a.coverMedia?.url ?? null,
+      coverAlt: a.coverMedia?.altText ?? a.title,
+      publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
+      readingTime: readingTimeMinutes(a.content),
+      categories: a.articleCategories
+        .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
+        .sort((x, y) => x.name.localeCompare(y.name, "it")),
+    };
+  });
 
   // Build category list from published articles, with counts, sorted alpha.
   const categoryMap = new Map<string, { name: string; slug: string; count: number }>();
