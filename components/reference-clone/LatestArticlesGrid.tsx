@@ -20,8 +20,8 @@ type Item = {
 export function LatestArticlesGrid({ items }: { items: Item[] }) {
   return (
     <>
-      {/* Desktop / tablet: 3-column grid */}
-      <div className="hidden md:grid md:grid-cols-3 gap-6">
+      {/* Desktop / tablet: wider two-column cards */}
+      <div className="hidden md:grid md:grid-cols-2 gap-6">
         {items.map((item, i) => (
           <motion.article
             key={item.slug}
@@ -43,17 +43,12 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                     fill
                     unoptimized
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
-                    sizes="33vw"
+                    sizes="50vw"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
-                {item.categoryName && (
-                  <span className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
-                    {item.categoryName}
-                  </span>
-                )}
               </div>
 
               <div className="flex flex-col flex-1 p-7 gap-4">
@@ -69,6 +64,12 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                     </>
                   )}
                 </div>
+
+                {item.categoryName && (
+                  <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+                    {item.categoryName}
+                  </span>
+                )}
 
                 <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
                   {item.title}
@@ -112,11 +113,6 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
-                  {item.categoryName && (
-                    <span className="absolute top-3 left-3 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
-                      {item.categoryName}
-                    </span>
-                  )}
                 </div>
                 <div className="flex flex-col gap-3 p-5">
                   <div className="flex items-center gap-3 text-[#dddddd] text-xs">
@@ -131,6 +127,11 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                       </>
                     )}
                   </div>
+                  {item.categoryName && (
+                    <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+                      {item.categoryName}
+                    </span>
+                  )}
                   <h3 className="text-[#EDF2F7] text-lg font-medium tracking-tight leading-[1.25]">
                     {item.title}
                   </h3>

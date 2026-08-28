@@ -77,7 +77,7 @@ export function BlogIndex({ articles, categories, hideFilter = false }: Props) {
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
               transition={{ layout: { duration: 0.5, ease: EASE } }}
             >
               <AnimatePresence mode="popLayout">
@@ -155,17 +155,12 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
               fill
               unoptimized
               className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.05]"
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
-          {item.categories[0] && (
-            <span className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
-              {item.categories[0].name}
-            </span>
-          )}
         </div>
 
         <div className="flex flex-col flex-1 p-7 gap-4">
@@ -181,6 +176,12 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
               </>
             )}
           </div>
+
+          {item.categories[0] && (
+            <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+              {item.categories[0].name}
+            </span>
+          )}
 
           <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
             {item.title}

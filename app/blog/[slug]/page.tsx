@@ -367,11 +367,6 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
           <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218]/70 via-transparent to-transparent pointer-events-none" />
-        {cats[0] && (
-          <span className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
-            {cats[0].name}
-          </span>
-        )}
       </div>
       <div className="flex flex-col flex-1 p-7 gap-4">
         <div className="flex items-center gap-3 text-[#ddd] text-xs">
@@ -386,6 +381,11 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
             </>
           )}
         </div>
+        {cats[0] && (
+          <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+            {cats[0].name}
+          </span>
+        )}
         <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
           {article.title}
         </h3>
@@ -582,24 +582,7 @@ export default async function ArticlePage({
       <Header logoUrl={logoUrl} />
       <ReadingProgress />
 
-      <main>
-        {/* Hero image */}
-        {article.coverMedia ? (
-          <div className="relative w-full h-72 md:h-[480px] overflow-hidden bg-[#0D1218] mt-20 md:mt-24">
-            <Image
-              src={article.coverMedia.url}
-              alt={article.coverMedia.altText ?? article.title}
-              fill
-              unoptimized
-              priority
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/30 to-transparent" />
-          </div>
-        ) : (
-          <div className="h-20 md:h-24" />
-        )}
-
+      <main className="pt-20 md:pt-24">
         {/* Article header */}
         <div className="mx-auto max-w-[1120px] px-5 pt-10 pb-8">
           {/* Back link */}
@@ -683,6 +666,23 @@ export default async function ArticlePage({
               {article.excerpt}
             </p>
           </div>
+        )}
+
+        {/* Article cover — part of the editorial flow, immediately before the index. */}
+        {article.coverMedia && (
+          <figure className="mx-auto max-w-[1120px] px-5 pb-12 md:pb-16">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-[#101923] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+              <Image
+                src={article.coverMedia.url}
+                alt={article.coverMedia.altText ?? article.title}
+                fill
+                unoptimized
+                priority
+                className="object-cover"
+                sizes="(max-width: 1159px) calc(100vw - 40px), 1080px"
+              />
+            </div>
+          </figure>
         )}
 
         {/* Table of contents */}
@@ -780,7 +780,7 @@ export default async function ArticlePage({
                   Vedi tutti <ArrowRight size={14} />
                 </Link>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedArticles.map((rel) => (
                   <RelatedArticleCard key={rel.slug} article={rel} />
                 ))}
