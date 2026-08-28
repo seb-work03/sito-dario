@@ -414,6 +414,11 @@ function BlockBody({ block, onChange }: { block: Block; onChange: (patch: Partia
               value={block.align}
               onChange={(v) => onChange({ align: v as "left" | "right" })}
             />
+            <ToggleGroup
+              options={[{ value: "cover", label: "Foto" }, { value: "contain", label: "Logo" }]}
+              value={block.imageFit ?? "cover"}
+              onChange={(v) => onChange({ imageFit: v as "cover" | "contain" })}
+            />
           </div>
           <div className={`flex flex-col gap-3 md:flex-row${block.align === "right" ? " md:flex-row-reverse" : ""}`}>
             <div className="w-full md:w-2/5 shrink-0">
@@ -424,7 +429,14 @@ function BlockBody({ block, onChange }: { block: Block; onChange: (patch: Partia
                 onAltChange={(alt) => onChange({ alt })}
               />
             </div>
-            <div className="flex-1">
+            <div className="flex flex-1 flex-col gap-2">
+              <input
+                type="text"
+                value={block.title ?? ""}
+                onChange={(e) => onChange({ title: e.target.value })}
+                placeholder="Titolo del blocco (opzionale)"
+                className={`${inputCls} font-medium`}
+              />
               <AutoTextarea
                 value={block.text}
                 onChange={(text) => onChange({ text })}

@@ -92,22 +92,34 @@ function BlockView({ block }: { block: Block }) {
       );
 
     case "image-text":
-      if (!block.url) return null;
       return (
         <div
-          className={`flex flex-col gap-6 items-start md:flex-row${
+          className={`flex flex-col gap-7 items-center md:flex-row md:gap-10${
             block.align === "left" ? "" : " md:flex-row-reverse"
           }`}
         >
           <div className="w-full md:w-[42%] shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={block.url}
-              alt={block.alt}
-              className="w-full rounded-xl object-cover"
-            />
+            {block.url ? (
+              <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-[#00e5ff]/35 bg-[#101923]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={block.url}
+                  alt={block.alt}
+                  className={`h-full w-full ${
+                    block.imageFit === "contain" ? "object-contain p-8 md:p-10" : "object-cover"
+                  }`}
+                />
+              </div>
+            ) : (
+              <div className="flex aspect-[4/3] items-center justify-center rounded-xl border border-dashed border-[#00e5ff]/55 bg-[#00e5ff]/[0.045] p-6">
+                <span className="text-center text-xs font-semibold uppercase tracking-[0.12em] text-[#00e5ff]">
+                  Logo {block.title || "piattaforma"}
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex-1 rich-text">
+            {block.title && <h3>{block.title}</h3>}
             <p>
               <InlineMarkdown>{block.text}</InlineMarkdown>
             </p>

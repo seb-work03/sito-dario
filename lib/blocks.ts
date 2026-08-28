@@ -27,6 +27,8 @@ export type ImageTextBlock = {
   id: string;
   type: "image-text";
   align: "left" | "right";
+  title?: string;
+  imageFit?: "cover" | "contain";
   url: string;
   alt: string;
   text: string;
@@ -98,7 +100,16 @@ export function newBlock(type: BlockType): Block {
     case "image":
       return { id, type, url: "", alt: "", caption: "" };
     case "image-text":
-      return { id, type, align: "left", url: "", alt: "", text: "" };
+      return {
+        id,
+        type,
+        align: "left",
+        title: "",
+        imageFit: "cover",
+        url: "",
+        alt: "",
+        text: "",
+      };
     case "quote":
       return { id, type, text: "" };
     case "separator":
