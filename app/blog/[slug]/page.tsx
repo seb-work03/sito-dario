@@ -352,7 +352,7 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
   return (
     <Link
       href={`/blog/${article.slug}`}
-      className="group flex flex-col rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
+      className="group flex flex-col rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-[#00e5ff]/55 hover:shadow-[0_0_32px_rgba(0,229,255,0.14)]"
     >
       <div className="relative aspect-[2/1] overflow-hidden bg-[#0D1218]">
         {article.coverMedia ? (
