@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { inArray, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { securityRateLimits } from "@/lib/db/schema";
@@ -36,6 +36,19 @@ export function getClientIp(headers: Headers): string {
   const forwarded = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   return (headers.get("cf-connecting-ip") || forwarded || headers.get("x-real-ip") || "unknown")
     .slice(0, 128);
+}
+
+export function signClientIp(ip: string): string {
+  const secret = process.env.AUTH_SECRET ?? "";
+  return createHmac("sha256", secret).update(ip).digest("hex");
+}
+
+export function verifySignedClientIp(ip: string, signature: string): boolean {
+  if (!process.env.AUTH_SECRET || !signature) return false;
+  const expected = signClientIp(ip);
+  const providedBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  return providedBuffer.length === expectedBuffer.length && timingSafeEqual(providedBuffer, expectedBuffer);
 }
 
 export function loginRateLimitKeys(username: string, ip: string): string[] {

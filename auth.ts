@@ -8,10 +8,12 @@ import { authConfig } from "@/auth.config";
 import { ensureSecuritySchema } from "@/lib/security-schema";
 import {
   clearRateLimits,
+  getClientIp,
   getRateLimitStatus,
   LOGIN_RATE_LIMIT,
   loginRateLimitKeys,
   recordRateLimitFailure,
+  verifySignedClientIp,
 } from "@/lib/security-rate-limit";
 
 const DUMMY_PASSWORD_HASH = "$2b$10$TFfdDulQXupAziU6Lm.sh.geiR.SLzYMYTNi6fX76KUcwKTs6g/Y6";
@@ -25,11 +27,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
         ipAddress: { label: "IP", type: "hidden" },
+        ipSignature: { label: "IP signature", type: "hidden" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const username = String(credentials?.username ?? "").trim().toLowerCase();
         const password = String(credentials?.password ?? "");
-        const ipAddress = String(credentials?.ipAddress ?? "unknown");
+        const claimedIp = String(credentials?.ipAddress ?? "");
+        const ipSignature = String(credentials?.ipSignature ?? "");
+        const ipAddress = verifySignedClientIp(claimedIp, ipSignature)
+          ? claimedIp
+          : getClientIp(request.headers);
         if (!username || !password) return null;
 
         const rateLimitKeys = loginRateLimitKeys(username, ipAddress);

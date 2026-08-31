@@ -8,6 +8,7 @@ import {
   getClientIp,
   getRateLimitStatus,
   loginRateLimitKeys,
+  signClientIp,
 } from "@/lib/security-rate-limit";
 
 export async function loginAction(_prev: { error?: string } | undefined, formData: FormData) {
@@ -29,6 +30,7 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
       username,
       password,
       ipAddress,
+      ipSignature: signClientIp(ipAddress),
       redirectTo: "/admin",
     });
     return { error: undefined };
