@@ -13,6 +13,7 @@ import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   DEFAULT_SOCIAL_IMAGE,
+  PERSON_ID,
   SITE_NAME,
   SITE_URL,
   WEBSITE_ID,
@@ -23,16 +24,15 @@ import {
 export const dynamic = "force-dynamic";
 
 const blogDescription =
-  "Analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Aggiornato periodicamente.";
+  "Analisi, casi reali e guide su consulenza e-commerce, strategia digitale, piattaforme e formazione per aziende e professionisti, curate da Dario Tana.";
 
 export const metadata: Metadata = {
-  title: "Blog — Dario Tana",
+  title: "Blog e-commerce: strategie e formazione | Dario Tana",
   description: blogDescription,
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
     title: "Blog — Dario Tana",
-    description:
-      "Analisi, casi reali e riflessioni su e-commerce, strategia digitale e formazione.",
+    description: blogDescription,
     url: `${SITE_URL}/blog`,
     siteName: SITE_NAME,
     locale: "it_IT",
@@ -42,8 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Blog — Dario Tana",
-    description:
-      "Analisi, casi reali e riflessioni su e-commerce, strategia digitale e formazione.",
+    description: blogDescription,
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };
@@ -70,6 +69,7 @@ export default async function BlogPage() {
       orderBy: desc(articles.publishedAt),
       with: {
         coverMedia: true,
+        author: true,
         articleCategories: { with: { category: true } },
       },
     }),
@@ -85,6 +85,8 @@ export default async function BlogPage() {
       publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
       publishedAtIso: a.publishedAt?.toISOString() ?? null,
       readingTime: readingTimeMinutes(a.content),
+      authorName: a.author?.name ?? "Dario Tana",
+      authorSlug: a.author?.slug ?? null,
       categories: a.articleCategories
         .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
         .sort((x, y) => x.name.localeCompare(y.name, "it")),
@@ -135,6 +137,17 @@ export default async function BlogPage() {
             url: absoluteUrl(`/blog/${article.slug}`),
             datePublished: article.publishedAt?.toISOString(),
             image: article.coverMedia?.url,
+            author: article.author
+              ? {
+                  "@type": "Person",
+                  "@id":
+                    article.author.name === "Dario Tana"
+                      ? PERSON_ID
+                      : `${SITE_URL}/blog/autore/${article.author.slug}#author`,
+                  name: article.author.name,
+                  url: `${SITE_URL}/blog/autore/${article.author.slug}`,
+                }
+              : { "@id": PERSON_ID },
           },
         })),
       },

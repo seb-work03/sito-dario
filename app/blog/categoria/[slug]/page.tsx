@@ -19,6 +19,8 @@ import {
   WEBSITE_ID,
   absoluteUrl,
   breadcrumbJsonLd,
+  fitMetaDescription,
+  fitMetaTitle,
 } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -32,9 +34,10 @@ export async function generateMetadata({
   const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
   if (!category) return { title: "Categoria non trovata", robots: { index: false } };
 
-  const title = `${category.name} — Blog di Dario Tana`;
-  const description =
-    category.description ?? `Articoli di Dario Tana dedicati a ${category.name}.`;
+  const title = fitMetaTitle(`${category.name} — Blog`, "Dario Tana");
+  const description = fitMetaDescription(
+    category.description ?? `Articoli di Dario Tana dedicati a ${category.name}.`,
+  );
   const url = `${SITE_URL}/blog/categoria/${category.slug}`;
 
   return {
@@ -101,9 +104,10 @@ export default async function CategoryArchivePage({
     ? await db.query.articles.findMany({
         where: inArray(articles.id, articleIds),
         orderBy: desc(articles.publishedAt),
-        with: {
-          coverMedia: true,
-          articleCategories: { with: { category: true } },
+      with: {
+        coverMedia: true,
+        author: true,
+        articleCategories: { with: { category: true } },
         },
       })
     : [];
@@ -118,6 +122,8 @@ export default async function CategoryArchivePage({
       publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
       publishedAtIso: a.publishedAt?.toISOString() ?? null,
       readingTime: readingTimeMinutes(a.content),
+      authorName: a.author?.name ?? "Dario Tana",
+      authorSlug: a.author?.slug ?? null,
       categories: a.articleCategories
         .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
         .sort((x, y) => x.name.localeCompare(y.name, "it")),
@@ -137,7 +143,9 @@ export default async function CategoryArchivePage({
         "@id": `${archiveUrl}#collection`,
         url: archiveUrl,
         name: `${category.name} — Blog di Dario Tana`,
-        description: category.description ?? `Articoli dedicati a ${category.name}.`,
+        description: fitMetaDescription(
+          category.description ?? `Articoli dedicati a ${category.name}.`,
+        ),
         inLanguage: "it-IT",
         isPartOf: { "@id": WEBSITE_ID },
         mainEntity: {

@@ -12,10 +12,12 @@ import { DEFAULT_SOCIAL_IMAGE, PERSON_ID } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const speechDescription =
+  "Keynote, speech e confronti su e-commerce, piattaforme, analytics, marketing e advertising per eventi e aziende. Dario Tana, da Rimini in tutta Italia.";
+
 export const metadata: Metadata = {
   title: "Speech e conferenze su e-commerce e digital | Dario Tana",
-  description:
-    "Keynote, speech e confronti su e-commerce, piattaforme, analytics, marketing e advertising per eventi e aziende. Dario Tana, da Rimini in tutta Italia.",
+  description: speechDescription,
   keywords: [
     "speech e-commerce",
     "speaker e-commerce",
@@ -30,8 +32,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Speech ed eventi su e-commerce e digital | Dario Tana",
-    description:
-      "Interventi costruiti sul pubblico: esperienza, casi concreti e un linguaggio comprensibile per eventi, confronti e convention aziendali.",
+    description: speechDescription,
     url: "https://dariotana.it/servizi/speech-eventi",
     siteName: "Dario Tana",
     locale: "it_IT",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Speech ed eventi su e-commerce e digital | Dario Tana",
-    description: "Keynote e interventi su e-commerce, dati, piattaforme e marketing.",
+    description: speechDescription,
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };

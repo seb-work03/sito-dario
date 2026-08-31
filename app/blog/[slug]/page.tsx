@@ -9,6 +9,7 @@ import { Header } from "@/components/reference-clone/Header";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { ArticleContent } from "@/components/blog/ArticleContent";
+import { ArticleAuthorMeta } from "@/components/blog/ArticleAuthorMeta";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { db } from "@/lib/db";
@@ -23,6 +24,8 @@ import {
   SITE_URL,
   WEBSITE_ID,
   breadcrumbJsonLd,
+  fitMetaDescription,
+  fitMetaTitle,
 } from "@/lib/seo";
 
 // ---------------------------------------------------------------------------
@@ -352,6 +355,7 @@ type RelatedArticle = {
   content: string;
   publishedAt: Date | null;
   coverMedia: { url: string; altText: string | null } | null;
+  author: { name: string; slug: string } | null;
   articleCategories: { category: { name: string; slug: string } }[];
 };
 
@@ -360,6 +364,7 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
   const cats = article.articleCategories.map((ac) => ac.category);
   return (
     <article className="h-entry" itemScope itemType="https://schema.org/BlogPosting">
+      <ArticleAuthorMeta name={article.author?.name} slug={article.author?.slug} />
       <Link
         href={`/blog/${article.slug}`}
         itemProp="url"
@@ -471,6 +476,7 @@ async function getRelatedArticles(currentSlug: string) {
       limit: 3,
       with: {
         coverMedia: true,
+        author: true,
         articleCategories: { with: { category: true } },
       },
     });
@@ -496,8 +502,8 @@ export async function generateMetadata({
   }
 
   const canonicalUrl = `${SITE_URL}/blog/${slug}`;
-  const title = article.seoTitle ?? `${article.title} — Dario Tana`;
-  const description = article.seoDescription ?? article.excerpt ?? undefined;
+  const title = fitMetaTitle(article.seoTitle ?? article.title, "Dario Tana");
+  const description = fitMetaDescription(article.seoDescription ?? article.excerpt);
   const socialImage = article.coverMedia?.url ?? DEFAULT_SOCIAL_IMAGE;
   const socialImageAlt = article.coverMedia?.altText ?? article.title;
 
@@ -551,7 +557,7 @@ export default async function ArticlePage({
   const readingTime = readingTimeMinutes(article.content);
   const categories = article.articleCategories.map((ac) => ac.category);
   const articleUrl = `${SITE_URL}/blog/${article.slug}`;
-  const articleDescription = article.seoDescription ?? article.excerpt ?? "";
+  const articleDescription = fitMetaDescription(article.seoDescription ?? article.excerpt);
   const articleFaqs = extractFaqs(article.content);
   const structuredData = {
     "@context": "https://schema.org",
@@ -622,6 +628,7 @@ export default async function ArticlePage({
       >
         <meta itemProp="mainEntityOfPage" content={articleUrl} />
         <meta itemProp="dateModified" content={article.updatedAt.toISOString()} />
+        <ArticleAuthorMeta name={article.author?.name} slug={article.author?.slug} />
         {/* Article header */}
         <div className="mx-auto max-w-[1120px] px-5 pt-10 pb-8">
           {/* Back link */}
@@ -643,13 +650,13 @@ export default async function ArticlePage({
             </h1>
             {/* Author — desktop only, right of title */}
             {article.author && (
-              <div className="p-author h-card hidden md:flex flex-col items-center gap-2 shrink-0 mt-1" itemProp="author" itemScope itemType="https://schema.org/Person">
+              <div className="p-author h-card hidden md:flex flex-col items-center gap-2 shrink-0 mt-1">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
                   size="lg"
                 />
-                <span itemProp="name" className="p-name text-[#EDF2F7] font-semibold text-base">{article.author.name}</span>
+                <span className="p-name text-[#EDF2F7] font-semibold text-base">{article.author.name}</span>
               </div>
             )}
           </div>
@@ -691,13 +698,13 @@ export default async function ArticlePage({
             </div>
             {/* Author — mobile only, smaller */}
             {article.author && (
-              <div className="p-author h-card md:hidden flex flex-col items-center gap-1.5 shrink-0" itemProp="author" itemScope itemType="https://schema.org/Person">
+              <div className="p-author h-card md:hidden flex flex-col items-center gap-1.5 shrink-0">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
                   size="sm"
                 />
-                <span itemProp="name" className="p-name text-[#EDF2F7] font-semibold text-xs">{article.author.name}</span>
+                <span className="p-name text-[#EDF2F7] font-semibold text-xs">{article.author.name}</span>
               </div>
             )}
           </div>
@@ -781,9 +788,6 @@ export default async function ArticlePage({
             <Link
               href={`/blog/autore/${article.author.slug}`}
               className="p-author h-card group flex items-center gap-5 rounded-2xl border border-white/8 bg-[#17222F] p-6 hover:border-[#00e5ff]/30 transition-all duration-300"
-              itemProp="author"
-              itemScope
-              itemType="https://schema.org/Person"
             >
               <AuthorAvatar
                 name={article.author.name}
@@ -794,7 +798,7 @@ export default async function ArticlePage({
                 <span className="text-[11px] text-[#ddd] uppercase tracking-[0.12em]">
                   Scritto da
                 </span>
-                <span itemProp="name" className="p-name text-[#EDF2F7] font-medium text-lg group-hover:text-[#00e5ff] transition-colors duration-300">
+                <span className="p-name text-[#EDF2F7] font-medium text-lg group-hover:text-[#00e5ff] transition-colors duration-300">
                   {article.author.name}
                 </span>
                 {article.author.bio && (

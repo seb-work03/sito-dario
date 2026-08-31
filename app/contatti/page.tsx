@@ -17,14 +17,16 @@ import {
   breadcrumbJsonLd,
 } from "@/lib/seo";
 
+const contactDescription =
+  "Contatta Dario Tana per consulenza e-commerce, formazione aziendale o speech. Compila il briefing: riceverai una risposta entro uno o due giorni lavorativi.";
+
 export const metadata: Metadata = {
   title: "Contatti — Dario Tana",
-  description: "Raccontami il tuo progetto: e-commerce, formazione o speech. Compila il briefing e ti ricontatto in 1-2 giorni lavorativi.",
+  description: contactDescription,
   alternates: { canonical: `${SITE_URL}/contatti` },
   openGraph: {
     title: "Contatti — Dario Tana",
-    description:
-      "Raccontami il tuo progetto e-commerce, formativo o il tuo prossimo evento.",
+    description: contactDescription,
     url: `${SITE_URL}/contatti`,
     siteName: SITE_NAME,
     locale: "it_IT",
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Contatti — Dario Tana",
-    description: "Raccontami il tuo progetto e-commerce, formativo o il tuo prossimo evento.",
+    description: contactDescription,
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };

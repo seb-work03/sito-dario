@@ -21,6 +21,8 @@ import {
   WEBSITE_ID,
   absoluteUrl,
   breadcrumbJsonLd,
+  fitMetaDescription,
+  fitMetaTitle,
 } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -38,9 +40,10 @@ export async function generateMetadata({
 
   if (!author) return { title: "Autore non trovato", robots: { index: false } };
 
-  const title = `${author.name} — Autore del blog`;
-  const description =
-    author.bio ?? `Articoli, analisi e approfondimenti pubblicati da ${author.name}.`;
+  const title = fitMetaTitle(`${author.name} — Autore del blog`);
+  const description = fitMetaDescription(
+    author.bio ?? `Articoli, analisi e approfondimenti pubblicati da ${author.name}.`,
+  );
   const url = `${SITE_URL}/blog/autore/${author.slug}`;
   const image = author.avatar?.url ?? DEFAULT_SOCIAL_IMAGE;
 
@@ -118,6 +121,8 @@ export default async function AuthorArchivePage({
         publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
         publishedAtIso: a.publishedAt?.toISOString() ?? null,
         readingTime: readingTimeMinutes(a.content),
+        authorName: author.name,
+        authorSlug: author.slug,
         categories: a.articleCategories
           .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
           .sort((x, y) => x.name.localeCompare(y.name, "it")),

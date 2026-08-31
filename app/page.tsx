@@ -30,9 +30,9 @@ import {
 export const dynamic = "force-dynamic";
 
 const homeTitle =
-  "Dario Tana — Consulenza e-commerce a Rimini | Consulente e docente e-commerce";
+  "Dario Tana | Consulente e-commerce a Rimini";
 const homeDescription =
-  "Consulenza e-commerce indipendente a Rimini per aziende, imprenditori e e-commerce manager. Oltre vent'anni di esperienza diretta in strategia, piattaforme e formazione.";
+  "Consulenza e-commerce indipendente a Rimini per aziende, imprenditori e manager: strategia, piattaforme e formazione con oltre vent'anni di esperienza.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const portraitUrl = (await getHeroPortraitUrl()) ?? DEFAULT_SOCIAL_IMAGE;

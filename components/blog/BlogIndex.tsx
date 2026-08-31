@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { HoverArrow } from "@/components/reference-clone/HoverArrow";
+import { ArticleAuthorMeta } from "@/components/blog/ArticleAuthorMeta";
 
 type ArticleItem = {
   slug: string;
@@ -17,6 +18,8 @@ type ArticleItem = {
   publishedAtIso: string | null;
   readingTime: number;
   categories: { name: string; slug: string }[];
+  authorName?: string | null;
+  authorSlug?: string | null;
 };
 
 type Category = { name: string; slug: string; count: number };
@@ -146,6 +149,7 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
       itemScope
       itemType="https://schema.org/BlogPosting"
     >
+      <ArticleAuthorMeta name={item.authorName} slug={item.authorSlug} />
       <Link
         href={`/blog/${item.slug}`}
         itemProp="url"

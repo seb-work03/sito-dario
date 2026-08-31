@@ -9,6 +9,56 @@ export const DEFAULT_SOCIAL_IMAGE =
 export const PERSON_ID = `${SITE_URL}/#dario-tana`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 
+export const META_TITLE_MAX_LENGTH = 60;
+export const META_DESCRIPTION_MIN_LENGTH = 140;
+export const META_DESCRIPTION_MAX_LENGTH = 160;
+
+const META_DESCRIPTION_SUPPLEMENT =
+  "Approfondimenti concreti, casi reali e indicazioni utili per aziende, professionisti e team che lavorano nel commercio elettronico.";
+
+function normalizeMetaText(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function truncateAtWord(value: string, maxLength: number, suffix = ""): string {
+  if (value.length <= maxLength) return value;
+  const available = maxLength - suffix.length;
+  const slice = value.slice(0, available + 1);
+  const wordBoundary = slice.lastIndexOf(" ");
+  const cutAt = wordBoundary >= Math.max(1, available - 20) ? wordBoundary : available;
+  return `${slice.slice(0, cutAt).replace(/[\s,;:–—-]+$/g, "")}${suffix}`;
+}
+
+/** Keeps dynamic and editorial titles within the search-result limit. */
+export function fitMetaTitle(value: string, brand = ""): string {
+  const title = normalizeMetaText(value);
+  const branded = brand && !title.toLowerCase().includes(brand.toLowerCase())
+    ? `${title} | ${brand}`
+    : title;
+
+  if (branded.length <= META_TITLE_MAX_LENGTH) return branded;
+  if (title.length <= META_TITLE_MAX_LENGTH) return title;
+  return truncateAtWord(title, META_TITLE_MAX_LENGTH, "…");
+}
+
+/** Produces a readable 140–160 character description for dynamic archives and articles. */
+export function fitMetaDescription(value?: string | null): string {
+  let description = normalizeMetaText(value ?? "");
+
+  if (description.length < META_DESCRIPTION_MIN_LENGTH) {
+    description = normalizeMetaText(
+      `${description}${description && !/[.!?]$/.test(description) ? "." : ""} ${META_DESCRIPTION_SUPPLEMENT}`,
+    );
+  }
+  if (description.length < META_DESCRIPTION_MIN_LENGTH) {
+    description = normalizeMetaText(`${description} ${DEFAULT_DESCRIPTION}`);
+  }
+  if (description.length <= META_DESCRIPTION_MAX_LENGTH) return description;
+
+  const shortened = truncateAtWord(description, META_DESCRIPTION_MAX_LENGTH - 1);
+  return `${shortened.replace(/[.!?]+$/g, "")}.`;
+}
+
 export const SOCIAL_PROFILES = [
   "https://www.linkedin.com/in/dario-tana-959062101/",
   "https://www.facebook.com/dariotanaconsulenteecommerce",

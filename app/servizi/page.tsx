@@ -13,17 +13,18 @@ import { DEFAULT_SOCIAL_IMAGE } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const servicesDescription =
+  "Consulenza, formazione e speech e-commerce per aziende, professionisti ed enti in tutta Italia. Dario Tana opera da Rimini con oltre vent'anni di esperienza.";
+
 export const metadata: Metadata = {
   title: "Servizi e-commerce per aziende e professionisti | Dario Tana",
-  description:
-    "Consulenza, formazione e speech e-commerce per aziende, professionisti ed enti in tutta Italia. Dario Tana opera da Rimini con oltre vent'anni di esperienza.",
+  description: servicesDescription,
   alternates: {
     canonical: "https://dariotana.it/servizi",
   },
   openGraph: {
     title: "Servizi e-commerce | Dario Tana",
-    description:
-      "Consulenza, formazione e speech costruiti su progetti reali, per aziende, professionisti ed enti in tutta Italia.",
+    description: servicesDescription,
     url: "https://dariotana.it/servizi",
     siteName: "Dario Tana",
     locale: "it_IT",
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Servizi e-commerce | Dario Tana",
-    description: "Consulenza, formazione e speech e-commerce per aziende e professionisti.",
+    description: servicesDescription,
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };

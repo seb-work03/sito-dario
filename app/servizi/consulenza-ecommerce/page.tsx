@@ -12,10 +12,12 @@ import { DEFAULT_SOCIAL_IMAGE, PERSON_ID } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const consultingDescription =
+  "Consulenza e-commerce indipendente per aziende, imprenditori e team. Strategia, piattaforme, dati, CRO, marketing e processi, da Rimini in tutta Italia.";
+
 export const metadata: Metadata = {
-  title: "Consulenza e-commerce a Rimini e in tutta Italia | Dario Tana",
-  description:
-    "Consulenza e-commerce indipendente per aziende, imprenditori e team. Strategia, piattaforme, dati, CRO, marketing e processi, da Rimini in tutta Italia.",
+  title: "Consulenza e-commerce a Rimini e in Italia | Dario Tana",
+  description: consultingDescription,
   keywords: [
     "consulenza e-commerce",
     "consulente e-commerce",
@@ -29,8 +31,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Consulenza e-commerce | Dario Tana",
-    description:
-      "Un affiancamento indipendente per trasformare tecnologia, marketing, dati e organizzazione in decisioni più chiare.",
+    description: consultingDescription,
     url: "https://dariotana.it/servizi/consulenza-ecommerce",
     siteName: "Dario Tana",
     locale: "it_IT",
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Consulenza e-commerce | Dario Tana",
-    description: "Consulenza indipendente su strategia, piattaforme, dati, marketing e processi.",
+    description: consultingDescription,
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };

@@ -14,9 +14,9 @@ import { DEFAULT_SOCIAL_IMAGE, PERSON_ID } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Formazione e corsi e-commerce a Rimini e in Italia | Dario Tana",
+  title: "Corsi e formazione e-commerce | Dario Tana",
   description:
-    "Corsi e formazione e-commerce per aziende, professionisti, ITS ed enti. Percorsi su misura su strategia, piattaforme, analytics, marketing e gestione, da Rimini in tutta Italia.",
+    "Corsi e formazione e-commerce per aziende e professionisti: percorsi su misura su strategia, piattaforme, analytics e marketing, da Rimini in tutta Italia.",
   keywords: [
     "formazione e-commerce",
     "corsi e-commerce",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Formazione e corsi e-commerce | Dario Tana",
     description:
-      "Formazione concreta e su misura per aziende, professionisti, team ed enti: dalle basi dell’e-commerce ai problemi reali del lavoro.",
+      "Corsi e formazione e-commerce per aziende e professionisti: percorsi su misura su strategia, piattaforme, analytics e marketing, da Rimini in tutta Italia.",
     url: "https://dariotana.it/servizi/formazione",
     siteName: "Dario Tana",
     locale: "it_IT",
@@ -42,7 +42,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Formazione e corsi e-commerce | Dario Tana",
-    description: "Corsi e percorsi e-commerce su misura per aziende, professionisti ed enti.",
+    description:
+      "Corsi e formazione e-commerce per aziende e professionisti: percorsi su misura su strategia, piattaforme, analytics e marketing, da Rimini in tutta Italia.",
     images: [DEFAULT_SOCIAL_IMAGE],
   },
 };

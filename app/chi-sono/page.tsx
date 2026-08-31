@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
 
 const aboutTitle = "Chi sono — Dario Tana | Formatore e consulente e-commerce";
 const aboutDescription =
-  "Dario Tana è formatore, consulente e divulgatore e-commerce. Oltre vent'anni di esperienza sul campo, più di 150 corsi e percorsi costruiti per aziende e imprenditori.";
+  "Scopri il percorso di Dario Tana, formatore e consulente e-commerce: oltre vent'anni sul campo, più di 150 corsi e progetti seguiti con aziende e imprenditori.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const heroImageUrl = (await getAboutHeroUrl()) ?? DEFAULT_SOCIAL_IMAGE;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { HoverArrow } from "./HoverArrow";
+import { ArticleAuthorMeta } from "@/components/blog/ArticleAuthorMeta";
 
 type Item = {
   slug: string;
@@ -16,6 +17,8 @@ type Item = {
   publishedAtIso: string | null;
   readingTime: number;
   categoryName: string | null;
+  authorName?: string | null;
+  authorSlug?: string | null;
 };
 
 export function LatestArticlesGrid({ items }: { items: Item[] }) {
@@ -34,6 +37,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
             itemScope
             itemType="https://schema.org/BlogPosting"
           >
+            <ArticleAuthorMeta name={item.authorName} slug={item.authorSlug} />
             <Link
               href={`/blog/${item.slug}`}
               itemProp="url"
@@ -109,6 +113,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
               itemScope
               itemType="https://schema.org/BlogPosting"
             >
+              <ArticleAuthorMeta name={item.authorName} slug={item.authorSlug} />
               <Link
                 href={`/blog/${item.slug}`}
                 itemProp="url"

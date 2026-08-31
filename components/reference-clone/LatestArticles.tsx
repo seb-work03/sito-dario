@@ -16,6 +16,7 @@ async function getLatestArticles() {
       limit: 3,
       with: {
         coverMedia: true,
+        author: true,
         articleCategories: { with: { category: true } },
       },
     });
@@ -38,6 +39,8 @@ export async function LatestArticles() {
       publishedAtIso: a.publishedAt?.toISOString() ?? null,
       readingTime: readingTimeMinutes(a.content),
       categoryName: a.articleCategories[0]?.category.name ?? null,
+      authorName: a.author?.name ?? "Dario Tana",
+      authorSlug: a.author?.slug ?? null,
     };
   });
 
@@ -86,4 +89,3 @@ export async function LatestArticles() {
     </section>
   );
 }
-
