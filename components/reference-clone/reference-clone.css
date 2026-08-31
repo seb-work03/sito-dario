@@ -65,8 +65,35 @@
   will-change: opacity, transform, filter;
 }
 
-.view-reveal-heading { --reveal-y: 34px; }
-.view-reveal-copy { --reveal-y: 22px; }
+.view-reveal-heading { --reveal-y: -18px; }
+.view-reveal-copy { --reveal-y: -14px; }
+
+/* Headings keep the original word-by-word Framer feel, but the stagger is
+   driven entirely by CSS after the shared observer reveals the heading. */
+.view-reveal-heading.view-reveal-words {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: none;
+  will-change: auto;
+}
+
+.view-reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, -18px, 0);
+  filter: blur(10px);
+  transition:
+    opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1) calc(var(--view-reveal-delay, 0s) + var(--word-index, 0) * 55ms),
+    transform 0.7s cubic-bezier(0.19, 1, 0.22, 1) calc(var(--view-reveal-delay, 0s) + var(--word-index, 0) * 55ms),
+    filter 0.7s cubic-bezier(0.19, 1, 0.22, 1) calc(var(--view-reveal-delay, 0s) + var(--word-index, 0) * 55ms);
+}
+
+.view-reveal-heading.view-reveal-words.is-revealed .view-reveal-word {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
 .view-reveal-label {
   --reveal-y: 10px;
   clip-path: inset(0 100% 0 0);
@@ -237,6 +264,13 @@
     transform: none;
     filter: none;
     clip-path: inset(0);
+    transition: none;
+  }
+
+  .view-reveal-word {
+    opacity: 1;
+    transform: none;
+    filter: none;
     transition: none;
   }
 
