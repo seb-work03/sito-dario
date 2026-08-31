@@ -14,6 +14,7 @@ type ArticleItem = {
   coverUrl: string | null;
   coverAlt: string;
   publishedAt: string | null;
+  publishedAtIso: string | null;
   readingTime: number;
   categories: { name: string; slug: string }[];
 };
@@ -141,11 +142,14 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
         scale: { duration: 0.35, ease: EASE },
         layout: { duration: 0.5, ease: EASE },
       }}
-      className="group"
+      className="group h-entry"
+      itemScope
+      itemType="https://schema.org/BlogPosting"
     >
       <Link
         href={`/blog/${item.slug}`}
-        className="flex flex-col h-full rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-[#00e5ff]/55 hover:shadow-[0_0_32px_rgba(0,229,255,0.14)]"
+        itemProp="url"
+        className="u-url flex flex-col h-full rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-[#00e5ff]/55 hover:shadow-[0_0_32px_rgba(0,229,255,0.14)]"
       >
         <div className="relative aspect-[2/1] overflow-hidden bg-[#0D1218]">
           {item.coverUrl ? (
@@ -154,7 +158,8 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
               alt={item.coverAlt}
               fill
               unoptimized
-              className="object-cover"
+              itemProp="image"
+              className="u-photo object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
@@ -168,22 +173,35 @@ function ArticleCard({ item, index }: { item: ArticleItem; index: number }) {
             <span className="inline-flex items-center gap-1.5">
               <Clock size={12} />
               {item.readingTime} min di lettura
+              <meta itemProp="timeRequired" content={`PT${item.readingTime}M`} />
             </span>
             {item.publishedAt && (
               <>
                 <span className="w-1 h-1 rounded-full bg-[#93A6BB]" />
-                <span>{item.publishedAt}</span>
+                <time
+                  className="dt-published"
+                  itemProp="datePublished"
+                  dateTime={item.publishedAtIso ?? undefined}
+                >
+                  {item.publishedAt}
+                </time>
               </>
             )}
           </div>
 
           {item.categories[0] && (
-            <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+            <span
+              itemProp="articleSection"
+              className="p-category w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full"
+            >
               {item.categories[0].name}
             </span>
           )}
 
-          <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
+          <h3
+            itemProp="headline"
+            className="p-name text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300"
+          >
             {item.title}
           </h3>
 

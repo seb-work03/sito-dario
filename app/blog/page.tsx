@@ -10,13 +10,42 @@ import { BlogIndex } from "@/components/blog/BlogIndex";
 import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  WEBSITE_ID,
+  absoluteUrl,
+  breadcrumbJsonLd,
+} from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const blogDescription =
+  "Analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Aggiornato periodicamente.";
+
 export const metadata: Metadata = {
   title: "Blog — Dario Tana",
-  description:
-    "Analisi, casi reali e riflessioni sulla consulenza e-commerce, la strategia digitale e la formazione. Aggiornato periodicamente.",
+  description: blogDescription,
+  alternates: { canonical: `${SITE_URL}/blog` },
+  openGraph: {
+    title: "Blog — Dario Tana",
+    description:
+      "Analisi, casi reali e riflessioni su e-commerce, strategia digitale e formazione.",
+    url: `${SITE_URL}/blog`,
+    siteName: SITE_NAME,
+    locale: "it_IT",
+    type: "website",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE, alt: "Dario Tana" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog — Dario Tana",
+    description:
+      "Analisi, casi reali e riflessioni su e-commerce, strategia digitale e formazione.",
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
 };
 
 async function getLogoUrl(): Promise<string | null> {
@@ -54,6 +83,7 @@ export default async function BlogPage() {
       coverUrl: a.coverMedia?.url ?? null,
       coverAlt: a.coverMedia?.altText ?? a.title,
       publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
+      publishedAtIso: a.publishedAt?.toISOString() ?? null,
       readingTime: readingTimeMinutes(a.content),
       categories: a.articleCategories
         .map((ac) => ({ name: ac.category.name, slug: ac.category.slug }))
@@ -73,6 +103,43 @@ export default async function BlogPage() {
   const categories = Array.from(categoryMap.values()).sort((a, b) =>
     a.name.localeCompare(b.name, "it"),
   );
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      breadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Blog", path: "/blog" },
+      ]),
+      {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/blog#collection`,
+        url: `${SITE_URL}/blog`,
+        name: "Blog — Dario Tana",
+        description: blogDescription,
+        inLanguage: "it-IT",
+        isPartOf: { "@id": WEBSITE_ID },
+        mainEntity: { "@id": `${SITE_URL}/blog#articles` },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${SITE_URL}/blog#articles`,
+        name: "Articoli di Dario Tana",
+        numberOfItems: published.length,
+        itemListElement: published.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: absoluteUrl(`/blog/${article.slug}`),
+          item: {
+            "@type": "BlogPosting",
+            headline: article.title,
+            url: absoluteUrl(`/blog/${article.slug}`),
+            datePublished: article.publishedAt?.toISOString(),
+            image: article.coverMedia?.url,
+          },
+        })),
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased">
@@ -127,6 +194,7 @@ export default async function BlogPage() {
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
+      <JsonLd data={structuredData} />
     </div>
   );
 }

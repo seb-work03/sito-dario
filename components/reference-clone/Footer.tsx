@@ -68,7 +68,7 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
   const logo = logoUrl ?? FALLBACK_LOGO_URL;
 
   return (
-    <footer className="overflow-hidden">
+    <footer className="h-card overflow-hidden">
       {/* Cyan CTA band */}
       {!hideCta && (
       <section
@@ -103,14 +103,15 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
         <div className="mx-auto max-w-[1240px]">
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 mb-14">
             <div className="flex flex-col gap-8">
-              <Link href="/" aria-label="Dario Tana — home" className="inline-flex transition-opacity hover:opacity-80">
+              <Link href="/" aria-label="Dario Tana — home" className="u-url inline-flex transition-opacity hover:opacity-80">
+                <span className="p-name sr-only">Dario Tana</span>
                 <Image
                   src={logo}
                   alt="Dario Tana"
                   width={199}
                   height={106}
                   unoptimized
-                  className="h-14 md:h-16 w-auto"
+                  className="u-logo h-14 md:h-16 w-auto"
                 />
               </Link>
 
@@ -122,7 +123,7 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#dddddd] hover:text-[#00e5ff] transition-all duration-300"
+                    className="u-url w-11 h-11 rounded-full bg-white/5 hover:bg-[#00e5ff]/15 border border-white/10 hover:border-[#00e5ff]/40 flex items-center justify-center text-[#dddddd] hover:text-[#00e5ff] transition-all duration-300"
                   >
                     {s.icon}
                   </a>
@@ -149,12 +150,20 @@ export function Footer({ logoUrl, hideCta = false }: { logoUrl?: string | null; 
                       href={c.href}
                       target={c.href.startsWith("http") ? "_blank" : undefined}
                       rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="group flex items-start gap-2.5 text-sm"
+                      className={`group flex items-start gap-2.5 text-sm ${c.label === "Email" ? "u-email" : ""}`}
                     >
                       <span className="text-[#00e5ff] mt-0.5 shrink-0">{c.icon}</span>
                       <span className="flex flex-col leading-tight">
                         <span className="text-[#dddddd] text-[11px] uppercase tracking-[0.12em]">{c.label}</span>
-                        <span className="text-white group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5">
+                        <span
+                          className={`text-white group-hover:text-[#00e5ff] transition-colors duration-300 mt-0.5 ${
+                            c.label === "Telefono"
+                              ? "p-tel"
+                              : c.label === "Indirizzo"
+                                ? "p-adr"
+                                : ""
+                          }`}
+                        >
                           {c.value}
                         </span>
                       </span>

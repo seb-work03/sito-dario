@@ -18,35 +18,57 @@ import { Faq } from "@/components/reference-clone/Faq";
 import { StrategicBriefing } from "@/components/reference-clone/StrategicBriefing";
 import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  DEFAULT_SOCIAL_IMAGE,
+  PERSON_ID,
+  SITE_NAME,
+  SITE_URL,
+  WEBSITE_ID,
+} from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Dario Tana — Consulenza e-commerce a Rimini | Consulente e docente e-commerce",
-  description:
-    "Consulenza e-commerce indipendente a Rimini per aziende, imprenditori e e-commerce manager. Oltre vent'anni di esperienza diretta in strategia, piattaforme e formazione. Consulenza e-commerce Rimini, docenza e formazione su misura.",
-  keywords: [
-    "consulenza e-commerce",
-    "consulenza e-commerce Rimini",
-    "consulente e-commerce Rimini",
-    "e-commerce manager",
-    "e-commerce Rimini",
-    "formazione e-commerce",
-    "docente e-commerce",
-    "Dario Tana",
-  ],
-  authors: [{ name: "Dario Tana", url: "https://dariotana.it" }],
-  openGraph: {
-    title: "Dario Tana — Consulenza e-commerce a Rimini",
-    description:
-      "Consulenza e-commerce indipendente per imprenditori e e-commerce manager. Rimini. Oltre vent'anni di esperienza sul campo.",
-    url: "https://dariotana.it",
-    siteName: "Dario Tana",
-    locale: "it_IT",
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+const homeTitle =
+  "Dario Tana — Consulenza e-commerce a Rimini | Consulente e docente e-commerce";
+const homeDescription =
+  "Consulenza e-commerce indipendente a Rimini per aziende, imprenditori e e-commerce manager. Oltre vent'anni di esperienza diretta in strategia, piattaforme e formazione.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const portraitUrl = (await getHeroPortraitUrl()) ?? DEFAULT_SOCIAL_IMAGE;
+
+  return {
+    title: homeTitle,
+    description: homeDescription,
+    keywords: [
+      "consulenza e-commerce",
+      "consulenza e-commerce Rimini",
+      "consulente e-commerce Rimini",
+      "e-commerce manager",
+      "e-commerce Rimini",
+      "formazione e-commerce",
+      "docente e-commerce",
+      "Dario Tana",
+    ],
+    alternates: { canonical: SITE_URL },
+    authors: [{ name: "Dario Tana", url: `${SITE_URL}/chi-sono` }],
+    openGraph: {
+      title: "Dario Tana — Consulenza e-commerce a Rimini",
+      description: homeDescription,
+      url: SITE_URL,
+      siteName: SITE_NAME,
+      locale: "it_IT",
+      type: "website",
+      images: [{ url: portraitUrl, alt: "Dario Tana, consulente e formatore e-commerce" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Dario Tana — Consulenza e-commerce a Rimini",
+      description: homeDescription,
+      images: [portraitUrl],
+    },
+  };
+}
 
 async function getHeroPortraitUrl(): Promise<string | null> {
   try {
@@ -155,6 +177,24 @@ export default async function HomePage() {
     getMediaByPattern("%formazione%"),
     getMediaByPattern("%speech%"),
   ]);
+  const socialPortraitUrl = portraitUrl ?? DEFAULT_SOCIAL_IMAGE;
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/#home`,
+    url: SITE_URL,
+    name: homeTitle,
+    description: homeDescription,
+    inLanguage: "it-IT",
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@id": PERSON_ID },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: socialPortraitUrl,
+      caption: "Dario Tana, consulente e formatore e-commerce",
+    },
+  };
+
   return (
     <div
       className="min-h-screen bg-[#0D1218] text-[#EDF2F7] antialiased"
@@ -181,6 +221,7 @@ export default async function HomePage() {
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
+      <JsonLd data={homeStructuredData} />
     </div>
   );
 }

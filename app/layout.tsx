@@ -3,6 +3,14 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollToTopOnNav } from "@/components/ScrollToTopOnNav";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  siteStructuredData,
+} from "@/lib/seo";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,9 +26,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Dario Tana — Consulente e Docente E-commerce",
-  description:
-    "Consulenza e formazione e-commerce indipendenti per prendere decisioni migliori. Oltre 20 anni di esperienza diretta nel commercio elettronico.",
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: "Dario Tana", url: `${SITE_URL}/chi-sono` }],
+  creator: "Dario Tana",
+  publisher: "Dario Tana",
+  category: "E-commerce",
+  openGraph: {
+    type: "website",
+    locale: "it_IT",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Dario Tana — Consulente e Docente E-commerce",
+    description: DEFAULT_DESCRIPTION,
+    images: [{ url: DEFAULT_SOCIAL_IMAGE, alt: "Dario Tana" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dario Tana — Consulente e Docente E-commerce",
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +77,7 @@ export default function RootLayout({
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       <body>
+        <JsonLd data={siteStructuredData} />
         <SmoothScroll />
         <ScrollToTopOnNav />
         {children}

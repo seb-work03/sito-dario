@@ -7,6 +7,8 @@ import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { SpeechEventsPage } from "@/components/services/SpeechEventsPage";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { DEFAULT_SOCIAL_IMAGE, PERSON_ID } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +36,13 @@ export const metadata: Metadata = {
     siteName: "Dario Tana",
     locale: "it_IT",
     type: "website",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE, alt: "Dario Tana durante uno speech" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Speech ed eventi su e-commerce e digital | Dario Tana",
+    description: "Keynote e interventi su e-commerce, dati, piattaforme e marketing.",
+    images: [DEFAULT_SOCIAL_IMAGE],
   },
 };
 
@@ -99,6 +108,7 @@ const structuredData = {
       areaServed: { "@type": "Country", name: "Italia" },
       provider: {
         "@type": "Person",
+        "@id": PERSON_ID,
         name: "Dario Tana",
         url: "https://dariotana.it/chi-sono",
         address: {
@@ -132,10 +142,7 @@ export default async function SpeechEventiPage() {
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
     </div>
   );
 }

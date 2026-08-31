@@ -8,6 +8,8 @@ import { TrustBar } from "@/components/reference-clone/TrustBar";
 import { FormationPage } from "@/components/services/FormationPage";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { DEFAULT_SOCIAL_IMAGE, PERSON_ID } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +37,13 @@ export const metadata: Metadata = {
     siteName: "Dario Tana",
     locale: "it_IT",
     type: "website",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE, alt: "Dario Tana" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Formazione e corsi e-commerce | Dario Tana",
+    description: "Corsi e percorsi e-commerce su misura per aziende, professionisti ed enti.",
+    images: [DEFAULT_SOCIAL_IMAGE],
   },
 };
 
@@ -122,6 +131,7 @@ const structuredData = {
       areaServed: { "@type": "Country", name: "Italia" },
       provider: {
         "@type": "Person",
+        "@id": PERSON_ID,
         name: "Dario Tana",
         url: "https://dariotana.it/chi-sono",
         address: {
@@ -190,10 +200,7 @@ export default async function FormazionePage() {
       </main>
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
     </div>
   );
 }

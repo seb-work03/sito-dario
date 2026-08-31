@@ -35,6 +35,7 @@ export async function LatestArticles() {
       coverUrl: a.coverMedia?.url ?? null,
       coverAlt: a.coverMedia?.altText ?? a.title,
       publishedAt: a.publishedAt ? formatDate(a.publishedAt) : null,
+      publishedAtIso: a.publishedAt?.toISOString() ?? null,
       readingTime: readingTimeMinutes(a.content),
       categoryName: a.articleCategories[0]?.category.name ?? null,
     };

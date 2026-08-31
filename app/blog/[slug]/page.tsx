@@ -10,11 +10,20 @@ import { Footer } from "@/components/reference-clone/Footer";
 import { ScrollToTop } from "@/components/reference-clone/ScrollToTop";
 import { ArticleContent } from "@/components/blog/ArticleContent";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { db } from "@/lib/db";
 import { articles, media } from "@/lib/db/schema";
 import { formatDate, readingTimeMinutes } from "@/lib/utils";
 import { tryParseBlocks, serializeBlocks } from "@/lib/blocks";
 import { slugify } from "@/lib/utils";
+import {
+  DEFAULT_SOCIAL_IMAGE,
+  PERSON_ID,
+  SITE_NAME,
+  SITE_URL,
+  WEBSITE_ID,
+  breadcrumbJsonLd,
+} from "@/lib/seo";
 
 // ---------------------------------------------------------------------------
 // Table of Contents extraction
@@ -206,7 +215,7 @@ function AuthorAvatar({
   if (!url) {
     return (
       <div
-        className={`${dim} rounded-full bg-[#17222F] border-2 border-[#77C0CF]/40 flex items-center justify-center text-[#77C0CF] font-semibold shrink-0`}
+        className={`${dim} u-photo rounded-full bg-[#17222F] border-2 border-[#77C0CF]/40 flex items-center justify-center text-[#77C0CF] font-semibold shrink-0`}
       >
         {getInitials(name)}
       </div>
@@ -220,7 +229,7 @@ function AuthorAvatar({
         alt={name}
         fill
         unoptimized
-        className="object-cover object-top"
+        className="u-photo object-cover object-top"
       />
     </div>
   );
@@ -350,10 +359,12 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
   const rt = readingTimeMinutes(article.content);
   const cats = article.articleCategories.map((ac) => ac.category);
   return (
-    <Link
-      href={`/blog/${article.slug}`}
-      className="group flex flex-col rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-[#00e5ff]/55 hover:shadow-[0_0_32px_rgba(0,229,255,0.14)]"
-    >
+    <article className="h-entry" itemScope itemType="https://schema.org/BlogPosting">
+      <Link
+        href={`/blog/${article.slug}`}
+        itemProp="url"
+        className="u-url group flex h-full flex-col rounded-2xl border border-white/8 bg-[#17222F] overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-[#00e5ff]/55 hover:shadow-[0_0_32px_rgba(0,229,255,0.14)]"
+      >
       <div className="relative aspect-[2/1] overflow-hidden bg-[#0D1218]">
         {article.coverMedia ? (
           <Image
@@ -361,7 +372,8 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
             alt={article.coverMedia.altText ?? article.title}
             fill
             unoptimized
-            className="object-cover"
+            itemProp="image"
+            className="u-photo object-cover"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#17222F] via-[#0D1218] to-[#005c66]/40" />
@@ -373,20 +385,23 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
           <span className="inline-flex items-center gap-1.5">
             <Clock size={12} />
             {rt} min di lettura
+            <meta itemProp="timeRequired" content={`PT${rt}M`} />
           </span>
           {article.publishedAt && (
             <>
               <span className="w-1 h-1 rounded-full bg-[#93A6BB]" />
-              <span>{formatDate(article.publishedAt)}</span>
+              <time className="dt-published" itemProp="datePublished" dateTime={article.publishedAt.toISOString()}>
+                {formatDate(article.publishedAt)}
+              </time>
             </>
           )}
         </div>
         {cats[0] && (
-          <span className="w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
+          <span itemProp="articleSection" className="p-category w-fit text-[10px] uppercase tracking-[0.14em] font-medium text-[#0D1218] bg-[#00e5ff] px-2.5 py-1 rounded-full">
             {cats[0].name}
           </span>
         )}
-        <h3 className="text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
+        <h3 itemProp="headline" className="p-name text-[#EDF2F7] text-[22px] font-medium tracking-tight leading-[1.2] group-hover:text-white transition-colors duration-300">
           {article.title}
         </h3>
         <div className="flex items-center justify-between pt-2 mt-auto border-t border-white/6">
@@ -396,7 +411,8 @@ function RelatedArticleCard({ article }: { article: RelatedArticle }) {
           </span>
         </div>
       </div>
-    </Link>
+      </Link>
+    </article>
   );
 }
 
@@ -472,40 +488,48 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
-  const canonicalUrl = `https://dariotana.it/blog/${slug}`;
-  const title = article
-    ? (article.seoTitle ?? `${article.title} — Dario Tana`)
-    : "Articolo non trovato";
-  const description = article?.seoDescription ?? article?.excerpt ?? undefined;
+  if (!article) {
+    return {
+      title: "Articolo non trovato",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const canonicalUrl = `${SITE_URL}/blog/${slug}`;
+  const title = article.seoTitle ?? `${article.title} — Dario Tana`;
+  const description = article.seoDescription ?? article.excerpt ?? undefined;
+  const socialImage = article.coverMedia?.url ?? DEFAULT_SOCIAL_IMAGE;
+  const socialImageAlt = article.coverMedia?.altText ?? article.title;
 
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    openGraph: article
-      ? {
-          type: "article",
-          locale: "it_IT",
-          siteName: "Dario Tana",
-          url: canonicalUrl,
-          title,
-          description,
-          publishedTime: article.publishedAt?.toISOString(),
-          modifiedTime: article.updatedAt.toISOString(),
-          authors: article.author ? [article.author.name] : ["Dario Tana"],
-          images: article.coverMedia
-            ? [{ url: article.coverMedia.url, alt: article.coverMedia.altText ?? article.title }]
-            : undefined,
-        }
-      : undefined,
-    twitter: article
-      ? {
-          card: "summary_large_image",
-          title,
-          description,
-          images: article.coverMedia ? [article.coverMedia.url] : undefined,
-        }
-      : undefined,
+    openGraph: {
+      type: "article",
+      locale: "it_IT",
+      siteName: SITE_NAME,
+      url: canonicalUrl,
+      title,
+      description,
+      publishedTime: article.publishedAt?.toISOString(),
+      modifiedTime: article.updatedAt.toISOString(),
+      authors: article.author ? [article.author.name] : ["Dario Tana"],
+      images: [
+        {
+          url: socialImage,
+          width: article.coverMedia?.width ?? 1200,
+          height: article.coverMedia?.height ?? 630,
+          alt: socialImageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [{ url: socialImage, alt: socialImageAlt }],
+    },
   };
 }
 
@@ -526,7 +550,7 @@ export default async function ArticlePage({
 
   const readingTime = readingTimeMinutes(article.content);
   const categories = article.articleCategories.map((ac) => ac.category);
-  const articleUrl = `https://dariotana.it/blog/${article.slug}`;
+  const articleUrl = `${SITE_URL}/blog/${article.slug}`;
   const articleDescription = article.seoDescription ?? article.excerpt ?? "";
   const articleFaqs = extractFaqs(article.content);
   const structuredData = {
@@ -534,34 +558,43 @@ export default async function ArticlePage({
     "@graph": [
       {
         "@type": "BlogPosting",
+        "@id": `${articleUrl}#article`,
         headline: article.title,
         description: articleDescription,
         mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
         url: articleUrl,
-        image: article.coverMedia?.url,
+        image: article.coverMedia
+          ? {
+              "@type": "ImageObject",
+              url: article.coverMedia.url,
+              width: article.coverMedia.width ?? undefined,
+              height: article.coverMedia.height ?? undefined,
+              caption: article.coverMedia.altText ?? article.title,
+            }
+          : DEFAULT_SOCIAL_IMAGE,
         datePublished: article.publishedAt?.toISOString(),
         dateModified: article.updatedAt.toISOString(),
         inLanguage: "it-IT",
         articleSection: categories.map((category) => category.name),
-        author: {
-          "@type": "Person",
-          name: article.author?.name ?? "Dario Tana",
-          url: "https://dariotana.it/chi-sono",
-        },
-        publisher: {
-          "@type": "Person",
-          name: "Dario Tana",
-          url: "https://dariotana.it/",
-        },
+        author: article.author
+          ? {
+              "@type": "Person",
+              "@id":
+                article.author.name === "Dario Tana"
+                  ? PERSON_ID
+                  : `${SITE_URL}/blog/autore/${article.author.slug}#author`,
+              name: article.author.name,
+              url: `${SITE_URL}/blog/autore/${article.author.slug}`,
+            }
+          : { "@id": PERSON_ID },
+        publisher: { "@id": PERSON_ID },
+        isPartOf: { "@id": WEBSITE_ID },
       },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://dariotana.it/" },
-          { "@type": "ListItem", position: 2, name: "Blog", item: "https://dariotana.it/blog" },
-          { "@type": "ListItem", position: 3, name: article.title, item: articleUrl },
-        ],
-      },
+      breadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Blog", path: "/blog" },
+        { name: article.title, path: `/blog/${article.slug}` },
+      ]),
       ...(articleFaqs.length > 0
         ? [
             {
@@ -582,7 +615,13 @@ export default async function ArticlePage({
       <Header logoUrl={logoUrl} />
       <ReadingProgress />
 
-      <main className="pt-20 md:pt-24">
+      <main
+        className="h-entry pt-20 md:pt-24"
+        itemScope
+        itemType="https://schema.org/BlogPosting"
+      >
+        <meta itemProp="mainEntityOfPage" content={articleUrl} />
+        <meta itemProp="dateModified" content={article.updatedAt.toISOString()} />
         {/* Article header */}
         <div className="mx-auto max-w-[1120px] px-5 pt-10 pb-8">
           {/* Back link */}
@@ -599,18 +638,18 @@ export default async function ArticlePage({
 
           {/* Title row — author to the right on desktop */}
           <div className="flex items-start gap-6 mb-6">
-            <h1 className="flex-1 text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] tracking-tight">
+            <h1 itemProp="headline" className="p-name flex-1 text-[#EDF2F7] font-medium text-[28px] md:text-[48px] leading-[1.1] tracking-tight">
               {article.title}
             </h1>
             {/* Author — desktop only, right of title */}
             {article.author && (
-              <div className="hidden md:flex flex-col items-center gap-2 shrink-0 mt-1">
+              <div className="p-author h-card hidden md:flex flex-col items-center gap-2 shrink-0 mt-1" itemProp="author" itemScope itemType="https://schema.org/Person">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
                   size="lg"
                 />
-                <span className="text-[#EDF2F7] font-semibold text-base">{article.author.name}</span>
+                <span itemProp="name" className="p-name text-[#EDF2F7] font-semibold text-base">{article.author.name}</span>
               </div>
             )}
           </div>
@@ -621,10 +660,14 @@ export default async function ArticlePage({
             <div className="flex-1 flex flex-col gap-3 text-sm text-[#ddd]">
               <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-5 sm:gap-y-2">
                 {article.publishedAt && (
-                  <span className="inline-flex items-center gap-1.5">
+                  <time
+                    className="dt-published inline-flex items-center gap-1.5"
+                    itemProp="datePublished"
+                    dateTime={article.publishedAt.toISOString()}
+                  >
                     <Calendar size={13} />
                     {formatDate(article.publishedAt)}
-                  </span>
+                  </time>
                 )}
                 <span className="inline-flex items-center gap-1.5">
                   <Clock size={13} />
@@ -637,7 +680,8 @@ export default async function ArticlePage({
                     <Link
                       key={c.slug}
                       href={`/blog/categoria/${c.slug}`}
-                      className="inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
+                      itemProp="articleSection"
+                      className="p-category inline-flex items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 px-3 py-1 text-[11px] uppercase tracking-[0.12em] font-medium text-[#00e5ff] hover:bg-[#00e5ff]/20 transition-colors"
                     >
                       {c.name}
                     </Link>
@@ -647,13 +691,13 @@ export default async function ArticlePage({
             </div>
             {/* Author — mobile only, smaller */}
             {article.author && (
-              <div className="md:hidden flex flex-col items-center gap-1.5 shrink-0">
+              <div className="p-author h-card md:hidden flex flex-col items-center gap-1.5 shrink-0" itemProp="author" itemScope itemType="https://schema.org/Person">
                 <AuthorAvatar
                   name={article.author.name}
                   url={article.author.avatar?.url ?? DARIO_PORTRAIT_URL}
                   size="sm"
                 />
-                <span className="text-[#EDF2F7] font-semibold text-xs">{article.author.name}</span>
+                <span itemProp="name" className="p-name text-[#EDF2F7] font-semibold text-xs">{article.author.name}</span>
               </div>
             )}
           </div>
@@ -662,7 +706,7 @@ export default async function ArticlePage({
         {/* Excerpt / lead */}
         {article.excerpt && (
           <div className="mx-auto max-w-[1120px] px-5 pb-10">
-            <p className="text-[#dddddd] text-lg md:text-xl leading-relaxed border-l-[3px] border-[#00e5ff]/50 pl-5 italic">
+            <p className="p-summary text-[#dddddd] text-lg md:text-xl leading-relaxed border-l-[3px] border-[#00e5ff]/50 pl-5 italic">
               {article.excerpt}
             </p>
           </div>
@@ -678,7 +722,8 @@ export default async function ArticlePage({
                 fill
                 unoptimized
                 priority
-                className="object-cover"
+                itemProp="image"
+                className="u-photo object-cover"
                 sizes="(max-width: 1159px) calc(100vw - 40px), 1080px"
               />
             </div>
@@ -713,7 +758,7 @@ export default async function ArticlePage({
           );
 
           return (
-            <>
+            <div className="e-content" itemProp="articleBody">
               {chunks.map((chunk, i) => (
                 <div key={i}>
                   {/* Keep long-form articles readable with at most two contextual CTAs. */}
@@ -725,7 +770,7 @@ export default async function ArticlePage({
                   </div>
                 </div>
               ))}
-            </>
+            </div>
           );
         })()}
 
@@ -735,7 +780,10 @@ export default async function ArticlePage({
           <div className="mx-auto max-w-[1120px] px-5 pb-24">
             <Link
               href={`/blog/autore/${article.author.slug}`}
-              className="group flex items-center gap-5 rounded-2xl border border-white/8 bg-[#17222F] p-6 hover:border-[#00e5ff]/30 transition-all duration-300"
+              className="p-author h-card group flex items-center gap-5 rounded-2xl border border-white/8 bg-[#17222F] p-6 hover:border-[#00e5ff]/30 transition-all duration-300"
+              itemProp="author"
+              itemScope
+              itemType="https://schema.org/Person"
             >
               <AuthorAvatar
                 name={article.author.name}
@@ -746,7 +794,7 @@ export default async function ArticlePage({
                 <span className="text-[11px] text-[#ddd] uppercase tracking-[0.12em]">
                   Scritto da
                 </span>
-                <span className="text-[#EDF2F7] font-medium text-lg group-hover:text-[#00e5ff] transition-colors duration-300">
+                <span itemProp="name" className="p-name text-[#EDF2F7] font-medium text-lg group-hover:text-[#00e5ff] transition-colors duration-300">
                   {article.author.name}
                 </span>
                 {article.author.bio && (
@@ -792,10 +840,7 @@ export default async function ArticlePage({
 
       <Footer logoUrl={logoUrl} />
       <ScrollToTop />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
     </div>
   );
 }
