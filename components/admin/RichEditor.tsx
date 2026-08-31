@@ -6,7 +6,7 @@ import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import NextImage from "next/image";
 
 // ---------------------------------------------------------------------------
@@ -339,7 +339,7 @@ export function RichEditor({
 
         {/* Block elements */}
         <Btn title="Citazione" active={e.isActive("blockquote")} onClick={() => e.chain().focus().toggleBlockquote().run()}>
-          "
+          &quot;
         </Btn>
         <Btn title="Blocco codice" active={e.isActive("codeBlock")} onClick={() => e.chain().focus().toggleCodeBlock().run()}>
           {"{ }"}

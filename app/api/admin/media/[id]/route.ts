@@ -1,7 +1,7 @@
 import { del } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { requireAdmin } from "@/lib/admin";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
 
@@ -9,8 +9,9 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session) {
+  try {
+    await requireAdmin();
+  } catch {
     return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
   }
 

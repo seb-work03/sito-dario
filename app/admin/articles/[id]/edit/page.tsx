@@ -4,12 +4,14 @@ import { updateArticle } from "@/app/admin/actions/articles";
 import { ArticleForm } from "@/components/admin/ArticleForm";
 import { db } from "@/lib/db";
 import { authors, categories, articles } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function EditArticlePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
   const { id } = await params;
 
   const [article, allCategories, allAuthors] = await Promise.all([

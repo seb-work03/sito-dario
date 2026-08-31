@@ -6,6 +6,7 @@ import { deleteMedia } from "@/app/admin/actions/media";
 import { MediaUploadWidget } from "@/components/admin/MediaUploadWidget";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { MediaAltEditor } from "@/components/admin/MediaAltEditor";
+import { requireAdminPage } from "@/lib/admin";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -14,6 +15,7 @@ function formatBytes(bytes: number): string {
 }
 
 export default async function MediaLibraryPage() {
+  await requireAdminPage();
   const allMedia = await db.select().from(media).orderBy(desc(media.createdAt));
 
   return (

@@ -2,8 +2,10 @@ import { createArticle } from "@/app/admin/actions/articles";
 import { ArticleForm } from "@/components/admin/ArticleForm";
 import { db } from "@/lib/db";
 import { authors, categories } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function NewArticlePage() {
+  await requireAdminPage();
   const [allCategories, allAuthors] = await Promise.all([
     db.select().from(categories),
     db.select().from(authors),

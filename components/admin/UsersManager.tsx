@@ -7,15 +7,18 @@ type AdminUserRow = { id: number; username: string; createdAt: Date };
 
 export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]; currentUsername: string }) {
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ message: string; warning: boolean } | null>(null);
   const [pending, startTransition] = useTransition();
   const [editingId, setEditingId] = useState<number | null>(null);
 
   function handleCreate(formData: FormData) {
     setError(null);
+    setNotice(null);
     startTransition(async () => {
       try {
-        await createAdminUser(formData);
+        const result = await createAdminUser(formData);
         (document.getElementById("new-user-form") as HTMLFormElement | null)?.reset();
+        setNotice({ message: result.message, warning: !result.emailSent });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Errore imprevisto");
       }
@@ -24,6 +27,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
 
   function handleUpdate(id: number, formData: FormData) {
     setError(null);
+    setNotice(null);
     startTransition(async () => {
       try {
         await updateAdminPassword(id, formData);
@@ -37,6 +41,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
   function handleDelete(id: number, username: string) {
     if (!confirm(`Eliminare l'utente "${username}"?`)) return;
     setError(null);
+    setNotice(null);
     startTransition(async () => {
       try {
         await deleteAdminUser(id);
@@ -53,6 +58,11 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
           {error}
         </div>
       )}
+      {notice && (
+        <div className={`rounded-md border px-4 py-3 text-sm ${notice.warning ? "border-amber-200 bg-amber-50 text-amber-800" : "border-emerald-200 bg-emerald-50 text-emerald-800"}`}>
+          {notice.message}
+        </div>
+      )}
 
       {/* New user */}
       <div className="rounded-lg border border-gray-200 bg-white p-5">
@@ -63,7 +73,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
         <form
           id="new-user-form"
           action={handleCreate}
-          className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
         >
           <input
             type="text"
@@ -71,6 +81,14 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
             required
             placeholder="Username"
             autoComplete="off"
+            className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none"
+          />
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Email destinatario"
+            autoComplete="email"
             className="rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none"
           />
           <input
@@ -85,7 +103,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
           <button
             type="submit"
             disabled={pending}
-            className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+            className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50 sm:col-span-2"
           >
             Aggiungi
           </button>

@@ -73,9 +73,12 @@ export function AnalyticsDashboard() {
   }, []);
 
   useEffect(() => {
-    load(preset);
+    const initialLoad = window.setTimeout(() => load(preset), 0);
     const interval = setInterval(() => load(preset), 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(initialLoad);
+      clearInterval(interval);
+    };
   }, [preset, load]);
 
   const ov = overview.data;

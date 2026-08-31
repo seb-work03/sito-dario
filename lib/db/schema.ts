@@ -126,8 +126,21 @@ export const adminUsers = pgTable("admin_user", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  sessionVersion: integer("session_version").notNull().default(0),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const securityRateLimits = pgTable("security_rate_limit", {
+  key: text("key").primaryKey(),
+  attemptCount: integer("attempt_count").notNull().default(0),
+  windowStartedAt: timestamp("window_started_at", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  blockedUntil: timestamp("blocked_until", { mode: "date", withTimezone: true }),
+  updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 // --- Auth (Auth.js / Drizzle adapter) --------------------------------------

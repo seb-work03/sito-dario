@@ -6,7 +6,10 @@ import type { NextAuthConfig } from "next-auth";
  * (which does both) lives in `auth.ts` and is used by the Node runtime.
  */
 export const authConfig: NextAuthConfig = {
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 12 * 60 * 60,
+  },
   pages: {
     signIn: "/admin/login",
   },
@@ -16,6 +19,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.uid = user.id;
         token.name = user.name;
+        token.sessionVersion = user.sessionVersion ?? 0;
       }
       return token;
     },
@@ -23,6 +27,7 @@ export const authConfig: NextAuthConfig = {
       if (session.user && token.uid) {
         session.user.id = String(token.uid);
         session.user.name = String(token.name ?? "");
+        session.user.sessionVersion = Number(token.sessionVersion ?? 0);
       }
       return session;
     },

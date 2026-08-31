@@ -1,5 +1,7 @@
 import { AnalyticsDashboard } from "@/components/admin/analytics/AnalyticsDashboard";
+import { requireAdminPage } from "@/lib/admin";
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage() {
+  await requireAdminPage();
   return <AnalyticsDashboard />;
 }

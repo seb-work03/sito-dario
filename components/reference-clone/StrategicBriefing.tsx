@@ -17,6 +17,7 @@ type Values = {
   role: string;
   message: string;
   privacy: boolean;
+  website: string;
 };
 
 const intentOptions: { id: Intent; letter: string; title: string; sub: string; value: string }[] = [
@@ -45,6 +46,7 @@ export function StrategicBriefing() {
   const [step, setStep] = useState(1);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [values, setValues] = useState<Values>({
     intent: null,
     dimension: "",
@@ -54,6 +56,7 @@ export function StrategicBriefing() {
     role: "",
     message: "",
     privacy: false,
+    website: "",
   });
 
   const dimensionOptions = useMemo(
@@ -66,10 +69,18 @@ export function StrategicBriefing() {
     setStep((s) => Math.max(s - 1, 1));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!values.name || !values.email || !values.company || !values.role || !values.message) {
+    if (
+      !values.intent ||
+      !values.dimension ||
+      !values.name ||
+      !values.email ||
+      !values.company ||
+      !values.role ||
+      !values.message
+    ) {
       setError("Compila tutti i campi obbligatori.");
       return;
     }
@@ -77,7 +88,25 @@ export function StrategicBriefing() {
       setError("Autorizza il trattamento dei dati per proseguire.");
       return;
     }
-    setDone(true);
+
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const result = (await response.json().catch(() => null)) as { error?: string } | null;
+      if (!response.ok) {
+        setError(result?.error ?? "Invio non riuscito. Riprova tra poco.");
+        return;
+      }
+      setDone(true);
+    } catch {
+      setError("Connessione non disponibile. Scrivi a info@dariotana.it.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function reset() {
@@ -90,6 +119,7 @@ export function StrategicBriefing() {
       role: "",
       message: "",
       privacy: false,
+      website: "",
     });
     setStep(1);
     setDone(false);
@@ -218,6 +248,17 @@ export function StrategicBriefing() {
           {/* Form body */}
           {!done ? (
             <form onSubmit={handleSubmit} className="flex flex-col">
+              <label className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                Non compilare questo campo
+                <input
+                  type="text"
+                  name="website"
+                  value={values.website}
+                  onChange={(e) => setValues((s) => ({ ...s, website: e.target.value }))}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
               <AnimatePresence mode="wait">
                 {step === 1 && (
                   <motion.fieldset
@@ -396,11 +437,12 @@ export function StrategicBriefing() {
                   </button>
 
                   {step === TOTAL_STEPS && (
-                    <button
-                      type="submit"
-                      className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)] cursor-pointer"
-                    >
-                      Invia il briefing
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-sm transition-all duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_28px_rgba(0,229,255,0.55)] cursor-pointer"
+                  >
+                      {submitting ? "Invio in corso…" : "Invia il briefing"}
                       <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-8 h-8 shrink-0">
                         <ArrowRight size={13} className="transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-rotate-45" />
                       </span>

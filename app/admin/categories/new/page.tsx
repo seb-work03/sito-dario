@@ -2,8 +2,10 @@ import { createCategory } from "@/app/admin/actions/categories";
 import { CategoryForm } from "@/components/admin/CategoryForm";
 import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function NewCategoryPage() {
+  await requireAdminPage();
   const allCategories = await db.select().from(categories);
 
   return (

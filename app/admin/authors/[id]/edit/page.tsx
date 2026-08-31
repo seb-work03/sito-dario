@@ -4,12 +4,14 @@ import { updateAuthor } from "@/app/admin/actions/authors";
 import { AuthorForm } from "@/components/admin/AuthorForm";
 import { db } from "@/lib/db";
 import { authors } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function EditAuthorPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
   const { id } = await params;
 
   const author = await db.query.authors.findFirst({

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { adminUsers } from "@/lib/db/schema";
+import { ensureSecuritySchema } from "@/lib/security-schema";
 
 const BCRYPT_ROUNDS = 10;
 
@@ -24,12 +24,13 @@ export function normalizeUsername(raw: string): string {
  * touches the DB when the table is empty.
  */
 export async function ensureBootstrapAdmin(): Promise<{ created: boolean; username?: string }> {
+  await ensureSecuritySchema();
   const [existing] = await db.select({ id: adminUsers.id }).from(adminUsers).limit(1);
   if (existing) return { created: false };
 
   const username = normalizeUsername(process.env.ADMIN_BOOTSTRAP_USERNAME ?? "");
   const password = process.env.ADMIN_BOOTSTRAP_PASSWORD ?? "";
-  if (!username || !password) return { created: false };
+  if (!username || password.length < 8) return { created: false };
 
   const passwordHash = await hashPassword(password);
   await db.insert(adminUsers).values({ username, passwordHash });

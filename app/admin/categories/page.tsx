@@ -3,8 +3,10 @@ import { deleteCategory } from "@/app/admin/actions/categories";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function CategoriesPage() {
+  await requireAdminPage();
   const allCategories = await db.select().from(categories);
   const byId = new Map(allCategories.map((c) => [c.id, c]));
 

@@ -1,8 +1,8 @@
-import { requireAdmin } from "@/lib/admin";
+import { requireAdminPage } from "@/lib/admin";
 import { AutoGenerateClient } from "./AutoGenerateClient";
 
 export default async function AutoGeneratePage() {
-  await requireAdmin();
+  await requireAdminPage();
 
   return (
     <div className="flex flex-col gap-6">

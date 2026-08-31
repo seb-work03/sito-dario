@@ -1,17 +1,15 @@
 import { desc } from "drizzle-orm";
-import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { adminUsers } from "@/lib/db/schema";
 import { UsersManager } from "@/components/admin/UsersManager";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function UsersPage() {
-  const [session, rows] = await Promise.all([
-    auth(),
-    db
-      .select({ id: adminUsers.id, username: adminUsers.username, createdAt: adminUsers.createdAt })
-      .from(adminUsers)
-      .orderBy(desc(adminUsers.createdAt)),
-  ]);
+  const session = await requireAdminPage();
+  const rows = await db
+    .select({ id: adminUsers.id, username: adminUsers.username, createdAt: adminUsers.createdAt })
+    .from(adminUsers)
+    .orderBy(desc(adminUsers.createdAt));
 
   const currentUsername = session?.user?.name ?? "";
 

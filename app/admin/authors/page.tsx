@@ -2,8 +2,10 @@ import Link from "next/link";
 import { deleteAuthor } from "@/app/admin/actions/authors";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { db } from "@/lib/db";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function AuthorsPage() {
+  await requireAdminPage();
   const allAuthors = await db.query.authors.findMany({ with: { avatar: true } });
 
   return (

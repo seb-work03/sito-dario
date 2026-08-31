@@ -5,8 +5,10 @@ import { articles } from "@/lib/db/schema";
 import { formatDate } from "@/lib/utils";
 import { deleteArticle } from "@/app/admin/actions/articles";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function AdminDashboardPage() {
+  await requireAdminPage();
   const allArticles = await db.query.articles.findMany({
     orderBy: desc(articles.updatedAt),
     with: { author: true },

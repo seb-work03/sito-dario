@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Image, FolderOpen, Users, Sparkles, Tag, LayoutDashboard, BarChart3, KeyRound } from "lucide-react";
+import { FileText, Image, FolderOpen, Users, Sparkles, LayoutDashboard, BarChart3, KeyRound } from "lucide-react";
 import { SignOutButton } from "./SignOutButton";
 
 const navItems = [

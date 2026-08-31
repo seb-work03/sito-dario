@@ -4,12 +4,14 @@ import { updateCategory } from "@/app/admin/actions/categories";
 import { CategoryForm } from "@/components/admin/CategoryForm";
 import { db } from "@/lib/db";
 import { categories } from "@/lib/db/schema";
+import { requireAdminPage } from "@/lib/admin";
 
 export default async function EditCategoryPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
   const { id } = await params;
   const categoryId = Number(id);
 
