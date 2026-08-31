@@ -20,12 +20,15 @@ Applicazione Next.js con CMS amministrativo, database Neon, media su Vercel Blob
    - `CONTACT_NOTIFICATION_EMAIL` (es. `info@dariotana.it`)
 4. Eseguire un nuovo deploy.
 
-Il briefing contatti invia una notifica a Dario e una conferma al richiedente. La creazione di un admin invia al nuovo utente username e link di accesso, ma non comunica mai la password via email.
+Il briefing contatti invia una notifica a Dario e una conferma al richiedente. La creazione di un admin invia al nuovo utente username e link di accesso, ma non comunica mai la password via email. Resend viene usato anche per il recupero password degli account admin.
 
 ## Sicurezza amministrativa
 
 - massimo 5 tentativi di login in 15 minuti per IP e username;
+- recupero password con risposta anti-enumerazione, massimo 5 richieste all’ora per IP e account, token casuale salvato solo come hash, monouso e valido 30 minuti;
 - sessioni JWT di 12 ore, revocate quando cambia la password o viene eliminato l'utente;
 - protezione sia nel Proxy sia nelle pagine, API e Server Actions;
 - upload limitati a 8 MB e normalizzati tramite Sharp;
 - schema di sicurezza Neon creato automaticamente e in modo idempotente al primo utilizzo.
+
+Per gli account già esistenti, aprire **Admin → Utenti → Email recupero** e associare un indirizzo. In alternativa, per il solo account creato al primo avvio, valorizzare `ADMIN_BOOTSTRAP_EMAIL` prima della creazione.

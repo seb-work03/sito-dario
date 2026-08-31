@@ -1,15 +1,21 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createAdminUser, updateAdminPassword, deleteAdminUser } from "@/app/admin/actions/users";
+import {
+  createAdminUser,
+  deleteAdminUser,
+  updateAdminEmail,
+  updateAdminPassword,
+} from "@/app/admin/actions/users";
 
-type AdminUserRow = { id: number; username: string; createdAt: Date };
+type AdminUserRow = { id: number; username: string; email: string | null; createdAt: Date };
 
 export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]; currentUsername: string }) {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<{ message: string; warning: boolean } | null>(null);
   const [pending, startTransition] = useTransition();
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingEmailId, setEditingEmailId] = useState<number | null>(null);
 
   function handleCreate(formData: FormData) {
     setError(null);
@@ -19,6 +25,20 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
         const result = await createAdminUser(formData);
         (document.getElementById("new-user-form") as HTMLFormElement | null)?.reset();
         setNotice({ message: result.message, warning: !result.emailSent });
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Errore imprevisto");
+      }
+    });
+  }
+
+  function handleEmailUpdate(id: number, formData: FormData) {
+    setError(null);
+    setNotice(null);
+    startTransition(async () => {
+      try {
+        await updateAdminEmail(id, formData);
+        setEditingEmailId(null);
+        setNotice({ message: "Email di recupero aggiornata.", warning: false });
       } catch (e) {
         setError(e instanceof Error ? e.message : "Errore imprevisto");
       }
@@ -68,7 +88,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
       <div className="rounded-lg border border-gray-200 bg-white p-5">
         <h2 className="text-sm font-semibold text-gray-900 mb-1">Nuovo utente</h2>
         <p className="text-xs text-gray-500 mb-4">
-          Crea un nuovo account amministratore. La password deve essere di almeno 8 caratteri.
+          Crea un nuovo account amministratore. L’email viene usata per recuperare la password.
         </p>
         <form
           id="new-user-form"
@@ -116,6 +136,7 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="text-left px-5 py-3 font-medium text-gray-600 text-xs uppercase tracking-wider">Username</th>
+              <th className="text-left px-5 py-3 font-medium text-gray-600 text-xs uppercase tracking-wider">Email recupero</th>
               <th className="text-left px-5 py-3 font-medium text-gray-600 text-xs uppercase tracking-wider">Creato</th>
               <th className="text-right px-5 py-3 font-medium text-gray-600 text-xs uppercase tracking-wider">Azioni</th>
             </tr>
@@ -129,11 +150,43 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
                     <span className="ml-2 text-[10px] uppercase tracking-wider text-gray-400">(tu)</span>
                   )}
                 </td>
+                <td className="px-5 py-3 text-xs text-gray-500">
+                  {u.email ?? <span className="font-medium text-amber-600">Da impostare</span>}
+                </td>
                 <td className="px-5 py-3 text-gray-500 text-xs">
                   {new Date(u.createdAt).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "numeric" })}
                 </td>
                 <td className="px-5 py-3">
-                  {editingId === u.id ? (
+                  {editingEmailId === u.id ? (
+                    <form
+                      action={(fd) => handleEmailUpdate(u.id, fd)}
+                      className="flex items-center justify-end gap-2"
+                    >
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        autoFocus
+                        defaultValue={u.email ?? ""}
+                        placeholder="Email di recupero"
+                        className="w-48 rounded border border-gray-300 px-2 py-1 text-xs text-gray-900 focus:border-gray-500 focus:outline-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={pending}
+                        className="rounded bg-gray-900 px-3 py-1 text-xs font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+                      >
+                        Salva
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingEmailId(null)}
+                        className="text-xs text-gray-400 hover:text-gray-700"
+                      >
+                        Annulla
+                      </button>
+                    </form>
+                  ) : editingId === u.id ? (
                     <form
                       action={(fd) => handleUpdate(u.id, fd)}
                       className="flex items-center gap-2 justify-end"
@@ -166,7 +219,20 @@ export function UsersManager({ users, currentUsername }: { users: AdminUserRow[]
                     <div className="flex items-center gap-3 justify-end">
                       <button
                         type="button"
-                        onClick={() => setEditingId(u.id)}
+                        onClick={() => {
+                          setEditingEmailId(u.id);
+                          setEditingId(null);
+                        }}
+                        className="text-xs text-gray-500 hover:text-gray-900"
+                      >
+                        Email recupero
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingId(u.id);
+                          setEditingEmailId(null);
+                        }}
                         className="text-xs text-gray-500 hover:text-gray-900"
                       >
                         Cambia password

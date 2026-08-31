@@ -7,7 +7,12 @@ import { requireAdminPage } from "@/lib/admin";
 export default async function UsersPage() {
   const session = await requireAdminPage();
   const rows = await db
-    .select({ id: adminUsers.id, username: adminUsers.username, createdAt: adminUsers.createdAt })
+    .select({
+      id: adminUsers.id,
+      username: adminUsers.username,
+      email: adminUsers.email,
+      createdAt: adminUsers.createdAt,
+    })
     .from(adminUsers)
     .orderBy(desc(adminUsers.createdAt));
 

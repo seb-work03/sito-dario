@@ -31,8 +31,15 @@ export async function createAdminUser(formData: FormData) {
     throw new Error("Username già esistente.");
   }
 
+  const existingEmail = await db
+    .select({ id: adminUsers.id })
+    .from(adminUsers)
+    .where(eq(adminUsers.email, email))
+    .limit(1);
+  if (existingEmail.length > 0) throw new Error("Email già associata a un altro account.");
+
   const passwordHash = await hashPassword(password);
-  await db.insert(adminUsers).values({ username, passwordHash });
+  await db.insert(adminUsers).values({ username, email, passwordHash });
   revalidatePath("/admin/users");
 
   const emailResult = await sendAdminAccountEmail({ email, username });
@@ -42,6 +49,27 @@ export async function createAdminUser(formData: FormData) {
       ? `Utente creato. Email inviata a ${email}.`
       : `Utente creato, ma l'email non è stata inviata: ${emailResult.message}`,
   };
+}
+
+export async function updateAdminEmail(id: number, formData: FormData) {
+  await requireAdmin();
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!EMAIL_PATTERN.test(email)) throw new Error("Inserisci un indirizzo email valido.");
+
+  const existing = await db
+    .select({ id: adminUsers.id })
+    .from(adminUsers)
+    .where(eq(adminUsers.email, email))
+    .limit(1);
+  if (existing.some((row) => row.id !== id)) {
+    throw new Error("Email già associata a un altro account.");
+  }
+
+  await db
+    .update(adminUsers)
+    .set({ email, updatedAt: new Date() })
+    .where(eq(adminUsers.id, id));
+  revalidatePath("/admin/users");
 }
 
 export async function updateAdminPassword(id: number, formData: FormData) {

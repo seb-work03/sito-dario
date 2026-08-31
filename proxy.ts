@@ -7,7 +7,14 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/admin/login")) return NextResponse.next();
+  const publicAdminPaths = [
+    "/admin/login",
+    "/admin/password-dimenticata",
+    "/admin/reimposta-password",
+  ];
+  if (publicAdminPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
+    return NextResponse.next();
+  }
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
     if (!req.auth) {

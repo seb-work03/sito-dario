@@ -121,6 +121,35 @@ export async function sendAdminAccountEmail(input: {
   });
 }
 
+export async function sendPasswordResetEmail(input: {
+  email: string;
+  username: string;
+  token: string;
+}): Promise<EmailResult> {
+  const username = escapeHtml(input.username);
+  const resetUrl = `${SITE_URL}/admin/reimposta-password?token=${encodeURIComponent(input.token)}`;
+
+  return deliver({
+    to: input.email,
+    subject: "Reimposta la password del sito di Dario Tana",
+    text: [
+      `È stata richiesta una nuova password per l'account ${input.username}.`,
+      `Apri questo link entro 30 minuti: ${resetUrl}`,
+      "Il link può essere usato una sola volta.",
+      "Se non hai fatto tu la richiesta, ignora questa email: la password non verrà modificata.",
+    ].join("\n\n"),
+    html: `
+      <div style="font-family:Arial,sans-serif;line-height:1.6;color:#17222f;max-width:620px;margin:auto">
+        <h1 style="font-size:24px">Reimposta la password</h1>
+        <p>È stata richiesta una nuova password per l’account <strong>${username}</strong>.</p>
+        <p><a href="${resetUrl}" style="display:inline-block;background:#00d7ee;color:#0d1218;text-decoration:none;padding:12px 20px;border-radius:999px">Scegli una nuova password</a></p>
+        <p style="color:#536273;font-size:14px">Il link è valido per 30 minuti e può essere utilizzato una sola volta.</p>
+        <p style="color:#536273;font-size:14px">Se non hai fatto tu la richiesta, puoi ignorare questa email: la password attuale resterà invariata.</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendContactEmails(submission: ContactSubmission): Promise<EmailResult> {
   const destination = process.env.CONTACT_NOTIFICATION_EMAIL?.trim() || "info@dariotana.it";
   const labels = {

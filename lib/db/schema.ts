@@ -125,10 +125,23 @@ export const articleCategoriesRelations = relations(articleCategories, ({ one })
 export const adminUsers = pgTable("admin_user", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
+  email: text("email").unique(),
   passwordHash: text("password_hash").notNull(),
   sessionVersion: integer("session_version").notNull().default(0),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const adminPasswordResetTokens = pgTable("admin_password_reset_token", {
+  tokenHash: text("token_hash").primaryKey(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => adminUsers.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+  usedAt: timestamp("used_at", { mode: "date", withTimezone: true }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const securityRateLimits = pgTable("security_rate_limit", {

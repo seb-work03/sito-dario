@@ -30,9 +30,10 @@ export async function ensureBootstrapAdmin(): Promise<{ created: boolean; userna
 
   const username = normalizeUsername(process.env.ADMIN_BOOTSTRAP_USERNAME ?? "");
   const password = process.env.ADMIN_BOOTSTRAP_PASSWORD ?? "";
+  const email = normalizeUsername(process.env.ADMIN_BOOTSTRAP_EMAIL ?? "") || null;
   if (!username || password.length < 8) return { created: false };
 
   const passwordHash = await hashPassword(password);
-  await db.insert(adminUsers).values({ username, passwordHash });
+  await db.insert(adminUsers).values({ username, email, passwordHash });
   return { created: true, username };
 }

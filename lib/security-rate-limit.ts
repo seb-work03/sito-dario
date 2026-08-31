@@ -27,6 +27,12 @@ export const CONTACT_RATE_LIMIT: RateLimitPolicy = {
   blockSeconds: 60 * 60,
 };
 
+export const PASSWORD_RESET_RATE_LIMIT: RateLimitPolicy = {
+  maxAttempts: 5,
+  windowSeconds: 60 * 60,
+  blockSeconds: 60 * 60,
+};
+
 function bucket(namespace: string, value: string): string {
   const digest = createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
   return `${namespace}:${digest}`;
@@ -57,6 +63,10 @@ export function loginRateLimitKeys(username: string, ip: string): string[] {
 
 export function contactRateLimitKeys(email: string, ip: string): string[] {
   return [bucket("contact-ip", ip), bucket("contact-email", email || "empty")];
+}
+
+export function passwordResetRateLimitKeys(identifier: string, ip: string): string[] {
+  return [bucket("password-reset-ip", ip), bucket("password-reset-user", identifier || "empty")];
 }
 
 export async function getRateLimitStatus(keys: string[]): Promise<RateLimitStatus> {
