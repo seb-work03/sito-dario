@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ScrollToTopOnNav } from "@/components/ScrollToTopOnNav";
+import { RevealObserver } from "@/components/RevealObserver";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   DEFAULT_DESCRIPTION,
@@ -81,6 +82,7 @@ export default function RootLayout({
       <body>
         <JsonLd data={siteStructuredData} />
         <ScrollToTopOnNav />
+        <RevealObserver />
         {children}
       </body>
     </html>
