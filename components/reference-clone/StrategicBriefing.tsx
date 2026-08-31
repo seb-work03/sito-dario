@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, type FormEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Mail, Phone } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
@@ -97,7 +96,7 @@ export function StrategicBriefing() {
   }
 
   return (
-    <section id="briefing" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
+    <section id="briefing" className="defer-render bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-16 items-start">
         {/* Left: intro */}
         <div className="md:sticky md:top-[130px] self-start">
@@ -115,42 +114,30 @@ export function StrategicBriefing() {
             <span className="text-white text-[11px] uppercase tracking-[0.12em] font-medium">
               Preferisci un contatto diretto?
             </span>
-            <motion.a
+            <a
               href="mailto:info@dariotana.it"
-              initial={{ opacity: 0, x: -18 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.65, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
-              className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
+              className="view-reveal group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
             >
               <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
                 <Mail size={14} strokeWidth={1.75} />
               </span>
               info@dariotana.it
-            </motion.a>
-            <motion.a
+            </a>
+            <a
               href="tel:+393487830571"
-              initial={{ opacity: 0, x: -18 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.65, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
-              className="group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
+              className="view-reveal group inline-flex items-center gap-2.5 text-white hover:text-[#00e5ff] transition-colors"
             >
               <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#00e5ff]/15 border border-white/10 group-hover:border-[#00e5ff]/40 flex items-center justify-center text-[#00e5ff] transition-all duration-300">
                 <Phone size={14} strokeWidth={1.75} />
               </span>
               +39 348 783 0571
-            </motion.a>
+            </a>
           </div>
         </div>
 
         {/* Right: form panel with animated rotating cyan border */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-          className="relative rounded-2xl p-[1.5px] overflow-hidden isolate"
+        <div
+          className="view-reveal relative rounded-2xl p-[1.5px] overflow-hidden isolate"
         >
           {/* Rotating cyan sweep — sits behind the inner card, its edge
               shows through the 1.5px padding as an animated border. */}
@@ -218,15 +205,10 @@ export function StrategicBriefing() {
           {/* Form body */}
           {!done ? (
             <form onSubmit={handleSubmit} className="flex flex-col">
-              <AnimatePresence mode="wait">
                 {step === 1 && (
-                  <motion.fieldset
+                  <fieldset
                     key="step1"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-                    className="border-0 p-0 m-0"
+                    className="briefing-step-enter border-0 p-0 m-0"
                   >
                     <legend className="sr-only">
                       Qual è il tuo obiettivo principale?
@@ -249,17 +231,13 @@ export function StrategicBriefing() {
                         />
                       ))}
                     </div>
-                  </motion.fieldset>
+                  </fieldset>
                 )}
 
                 {step === 2 && (
-                  <motion.fieldset
+                  <fieldset
                     key="step2"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-                    className="border-0 p-0 m-0"
+                    className="briefing-step-enter border-0 p-0 m-0"
                   >
                     <legend className="sr-only">
                       {values.intent === "ecommerce"
@@ -287,17 +265,13 @@ export function StrategicBriefing() {
                         />
                       ))}
                     </div>
-                  </motion.fieldset>
+                  </fieldset>
                 )}
 
                 {step === 3 && (
-                  <motion.fieldset
+                  <fieldset
                     key="step3"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-                    className="border-0 p-0 m-0"
+                    className="briefing-step-enter border-0 p-0 m-0"
                   >
                     <legend className="sr-only">
                       Chi guiderà questo progetto?
@@ -372,9 +346,8 @@ export function StrategicBriefing() {
                         Ho letto l&apos;informativa privacy e autorizzo il trattamento dei dati per essere ricontattato.
                       </span>
                     </label>
-                  </motion.fieldset>
+                  </fieldset>
                 )}
-              </AnimatePresence>
 
               {/* Error message */}
               {error && (
@@ -410,11 +383,8 @@ export function StrategicBriefing() {
               )}
             </form>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-              className="flex flex-col items-start gap-4 py-6"
+            <div
+              className="briefing-step-enter flex flex-col items-start gap-4 py-6"
             >
               <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#00e5ff] text-[#0D1218]">
                 <Check size={26} strokeWidth={3} />
@@ -429,11 +399,11 @@ export function StrategicBriefing() {
               >
                 Compila una nuova richiesta ↗
               </button>
-            </motion.div>
+            </div>
           )}
 
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

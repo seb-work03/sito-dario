@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Plus } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
@@ -38,7 +37,7 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
+    <section id="faq" className="defer-render bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] grid md:grid-cols-[380px_1fr] gap-12 md:gap-24">
         <div className="md:sticky md:top-[130px] self-start">
           <AnimatedHeadline className="text-[#EDF2F7] font-medium text-[32px] md:text-[48px] leading-[1.05] mb-6 tracking-tight">
@@ -67,12 +66,10 @@ export function Faq() {
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <motion.div
+              <div
                 key={f.q}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: i * 0.05 }}
+                className="view-reveal"
+                style={{ "--view-reveal-delay": `${i * 0.05}s` } as React.CSSProperties}
               >
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
@@ -81,34 +78,24 @@ export function Faq() {
                   <span className="text-[#EDF2F7] text-lg md:text-xl font-medium leading-snug tracking-tight pr-4 transition-colors duration-300 group-hover:text-[#00e5ff]">
                     {f.q}
                   </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                    className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-500 ${
+                  <span
+                    className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-all duration-500 ${
                       isOpen
-                        ? "bg-[#00e5ff] border-[#00e5ff] text-[#0D1218]"
+                        ? "rotate-45 bg-[#00e5ff] border-[#00e5ff] text-[#0D1218]"
                         : "border-white/15 text-[#EDF2F7] group-hover:border-[#00e5ff]/40"
                     }`}
                   >
                     <Plus size={16} />
-                  </motion.span>
+                  </span>
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                      className="overflow-hidden"
-                    >
+                <div className={`faq-answer-grid ${isOpen ? "is-open" : ""}`}>
+                  <div className="overflow-hidden">
                       <p className="pb-6 pr-12 text-[#dddddd] leading-relaxed">
                         {f.a}
                       </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>

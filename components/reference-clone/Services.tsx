@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatedHeadline } from "./AnimatedHeadline";
@@ -105,32 +104,26 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
                 )}
               >
                 <span className="tracking-tight">{s.label}</span>
-                <motion.span
-                  animate={{ rotate: active === i ? 45 : 0 }}
-                  transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                <span
                   className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
+                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]",
+                    active === i && "rotate-45",
                     active === i ? "bg-[#0D1218] text-[#00e5ff]" : "bg-[#1D2B3A] text-[#dddddd]",
                   )}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path d="M3 6h6M6 3v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
-                </motion.span>
+                </span>
               </button>
             ))}
           </div>
 
           {/* Right column: image + bullet card overlay */}
           <div className="relative rounded-2xl overflow-hidden bg-[#17222F] border border-[#253444] min-h-[480px] md:min-h-[440px]">
-            <AnimatePresence mode="wait">
-              <motion.div
+              <div
                 key={active}
-                initial={{ opacity: 0, scale: 1.03 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-                className="absolute inset-0"
+                className="service-content-enter absolute inset-0"
               >
                 <Image
                   src={current.photo}
@@ -141,31 +134,22 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
                   sizes="(max-width: 768px) 100vw, 60vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0D1218] via-[#0D1218]/40 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
+              </div>
 
             {/* Bullet card */}
-            <AnimatePresence mode="wait">
-              <motion.div
+              <div
                 key={`bullets-${active}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="absolute left-6 md:left-8 bottom-6 md:bottom-8 right-6 md:right-8 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 p-5 md:p-6"
+                className="service-copy-enter absolute left-6 md:left-8 bottom-6 md:bottom-8 right-6 md:right-8 rounded-2xl bg-[#0D1218]/85 backdrop-blur-md border border-white/8 p-5 md:p-6"
               >
                 <ul className="grid sm:grid-cols-2 gap-3 mb-4">
-                  {current.bullets.map((b, i) => (
-                    <motion.li
+                  {current.bullets.map((b) => (
+                    <li
                       key={b}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }}
                       className="flex items-start gap-2.5 text-[#DDE5EF] text-sm"
                     >
                       <ArrowUpRight size={14} className="text-[#00e5ff] mt-0.5 shrink-0" />
                       {b}
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
                 <Link
@@ -175,8 +159,7 @@ export function Services({ consulenteUrl, formazioneUrl, speechUrl }: ServicesPr
                   Scopri {current.label}
                   <HoverArrow size={14} />
                 </Link>
-              </motion.div>
-            </AnimatePresence>
+              </div>
           </div>
         </div>
       </div>

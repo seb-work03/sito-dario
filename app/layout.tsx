@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollToTopOnNav } from "@/components/ScrollToTopOnNav";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -81,7 +80,6 @@ export default function RootLayout({
       </head>
       <body>
         <JsonLd data={siteStructuredData} />
-        <SmoothScroll />
         <ScrollToTopOnNav />
         {children}
       </body>

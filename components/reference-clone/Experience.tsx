@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { Reveal } from "./Reveal";
 import {
   GraduationCap,
@@ -57,62 +56,15 @@ function TimelineRow({
   description,
   Icon,
   liRef,
-  fillPx,
-  threshold,
+  lit,
 }: {
   number: number;
   title: string;
   description: string;
   Icon: LucideIcon;
   liRef: (el: HTMLLIElement | null) => void;
-  fillPx: MotionValue<number>;
-  threshold: number;
+  lit: boolean;
 }) {
-  // Framer components have been removed from the row entirely (they were
-  // causing the mobile "flash" on entry). Instead, we subscribe to the
-  // scroll-driven `fillPx` motion value and imperatively update inline styles
-  // via refs when this row's threshold is crossed. No re-renders per scroll
-  // frame, no motion.* wrappers to hydrate.
-  const dotRef = useRef<HTMLSpanElement | null>(null);
-  const numberRef = useRef<HTMLSpanElement | null>(null);
-  const iconMobileRef = useRef<HTMLDivElement | null>(null);
-  const iconDesktopRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const apply = (lit: boolean) => {
-      const dot = dotRef.current;
-      if (dot) {
-        dot.style.background = lit ? "#00e5ff" : "#0D1218";
-        dot.style.boxShadow = lit
-          ? "0 0 20px rgba(0,229,255,0.6)"
-          : "0 0 0 rgba(0,229,255,0)";
-      }
-      if (numberRef.current) {
-        numberRef.current.style.color = lit ? "#0D1218" : "#00e5ff";
-      }
-      for (const el of [iconMobileRef.current, iconDesktopRef.current]) {
-        if (!el) continue;
-        el.style.color = lit ? "#00e5ff" : "#dddddd";
-        el.style.borderColor = lit
-          ? "rgba(0,229,255,0.4)"
-          : "rgba(255,255,255,0.1)";
-        el.style.background = lit
-          ? "rgba(0,229,255,0.06)"
-          : "rgba(255,255,255,0.02)";
-      }
-    };
-    let currentLit = fillPx.get() >= threshold;
-    apply(currentLit);
-    const unsub = fillPx.on("change", (v) => {
-      const lit = v >= threshold;
-      if (lit !== currentLit) {
-        currentLit = lit;
-        apply(lit);
-      }
-    });
-    return unsub;
-  }, [fillPx, threshold]);
-
   return (
     <Reveal
       as="li"
@@ -123,15 +75,11 @@ function TimelineRow({
     >
       <span className="absolute -left-16 md:-left-24 top-1 flex justify-center w-11 md:w-14">
         <span
-          ref={dotRef}
           data-timeline-dot
-          style={{ background: "#0D1218", boxShadow: "0 0 0 rgba(0,229,255,0)" }}
-          className="relative flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full border-2 border-[#00e5ff] transition-[background,box-shadow] duration-300"
+          className={`relative flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full border-2 border-[#00e5ff] transition-[background,box-shadow] duration-300 ${lit ? "bg-[#00e5ff] shadow-[0_0_20px_rgba(0,229,255,0.6)]" : "bg-[#0D1218]"}`}
         >
           <span
-            ref={numberRef}
-            style={{ color: "#00e5ff" }}
-            className="text-sm md:text-lg font-semibold tabular-nums transition-colors duration-300"
+            className={`text-sm md:text-lg font-semibold tabular-nums transition-colors duration-300 ${lit ? "text-[#0D1218]" : "text-[#00e5ff]"}`}
           >
             {number}
           </span>
@@ -145,13 +93,7 @@ function TimelineRow({
             {title}
           </h3>
           <div
-            ref={iconMobileRef}
-            style={{
-              color: "#dddddd",
-              borderColor: "rgba(255,255,255,0.1)",
-              background: "rgba(255,255,255,0.02)",
-            }}
-            className="md:hidden shrink-0 mt-0.5 flex items-center justify-center w-11 h-11 rounded-2xl border transition-colors duration-300"
+            className={`md:hidden shrink-0 mt-0.5 flex items-center justify-center w-11 h-11 rounded-2xl border transition-colors duration-300 ${lit ? "text-[#00e5ff] border-[#00e5ff]/40 bg-[#00e5ff]/[0.06]" : "text-[#dddddd] border-white/10 bg-white/[0.02]"}`}
           >
             <Icon size={22} strokeWidth={1.6} aria-hidden />
           </div>
@@ -164,13 +106,7 @@ function TimelineRow({
 
       {/* Desktop icon on the right side of the row */}
       <div
-        ref={iconDesktopRef}
-        style={{
-          color: "#dddddd",
-          borderColor: "rgba(255,255,255,0.1)",
-          background: "rgba(255,255,255,0.02)",
-        }}
-        className="hidden md:flex shrink-0 mt-1 items-center justify-center w-16 h-16 rounded-2xl border transition-colors duration-300"
+        className={`hidden md:flex shrink-0 mt-1 items-center justify-center w-16 h-16 rounded-2xl border transition-colors duration-300 ${lit ? "text-[#00e5ff] border-[#00e5ff]/40 bg-[#00e5ff]/[0.06]" : "text-[#dddddd] border-white/10 bg-white/[0.02]"}`}
       >
         <Icon size={30} strokeWidth={1.4} aria-hidden />
       </div>
@@ -180,21 +116,11 @@ function TimelineRow({
 
 export function Experience() {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
   const liRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [thresholds, setThresholds] = useState<number[]>([]);
   const [railTotalPx, setRailTotalPx] = useState(0);
-
-  // Scroll progress mapped so the fill grows from 0 to full as the wrapper
-  // travels from having its top at 60% of viewport to having its end at 40%.
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ["start 60%", "end 40%"],
-  });
-  // Fill height in pixels — grows linearly with scroll, bidirectional.
-  const fillPx = useTransform(scrollYProgress, (v) => {
-    const clamped = Math.max(0, Math.min(1, v));
-    return clamped * railTotalPx;
-  });
+  const [litRows, setLitRows] = useState<boolean[]>([]);
 
   // Measure each dot's top Y (relative to the wrapper) so a dot lights up
   // exactly when the fill line reaches the top of its circle.
@@ -220,6 +146,39 @@ export function Experience() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  useEffect(() => {
+    let frame = 0;
+    let lastLit = "";
+    const update = () => {
+      frame = 0;
+      const wrapper = wrapperRef.current;
+      const fill = fillRef.current;
+      if (!wrapper || !fill || railTotalPx <= 0) return;
+      const rect = wrapper.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      const progress = Math.max(0, Math.min(1, (viewport * 0.6 - rect.top) / Math.max(1, rect.height + viewport * 0.2)));
+      const px = progress * railTotalPx;
+      fill.style.height = `${px}px`;
+      const next = thresholds.map((threshold) => px >= threshold);
+      const signature = next.map(Number).join("");
+      if (signature !== lastLit) {
+        lastLit = signature;
+        setLitRows(next);
+      }
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      cancelAnimationFrame(frame);
+    };
+  }, [railTotalPx, thresholds]);
+
   return (
     <section className="bg-[#0D1218] px-5 py-16 md:py-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px] md:w-4/5">
@@ -242,9 +201,10 @@ export function Experience() {
             className="absolute top-0 bottom-0 left-[22px] md:left-[28px] w-px bg-white/10"
           />
           {/* Fill rail — height in px, driven by scroll (bidirectional) */}
-          <motion.div
+          <div
+            ref={fillRef}
             aria-hidden
-            style={{ height: fillPx }}
+            style={{ height: 0 }}
             className="absolute top-0 left-[22px] md:left-[28px] w-px bg-[#00e5ff] shadow-[0_0_16px_rgba(0,229,255,0.65)]"
           />
 
@@ -259,8 +219,7 @@ export function Experience() {
                 liRef={(el) => {
                   liRefs.current[i] = el;
                 }}
-                fillPx={fillPx}
-                threshold={thresholds[i] ?? Infinity}
+                lit={litRows[i] ?? false}
               />
             ))}
           </ul>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -140,15 +139,8 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
         </div>
       </header>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -18 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -18 }}
-            transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-            className="fixed inset-0 z-[60] flex min-h-[100dvh] flex-col bg-[#0D1218] lg:hidden"
-          >
+      {menuOpen && (
+          <div className="mobile-menu-enter fixed inset-0 z-[60] flex min-h-[100dvh] flex-col bg-[#0D1218] lg:hidden">
               <div className="flex h-20 shrink-0 items-center justify-between border-b border-white/10 px-5 md:h-24 md:px-8">
                 <Link href="/" onClick={() => setMenuOpen(false)}>
                   <DarioTanaLogo url={logo} />
@@ -165,12 +157,10 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
                 <nav className="flex w-full max-w-[440px] flex-col">
                 {navLinks.map((l, i) =>
                   l.href === "/servizi" ? (
-                    <motion.div
+                    <div
                       key={l.href}
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
-                      className="border-b border-[#00e5ff]/20 py-3"
+                      className="menu-item border-b border-[#00e5ff]/20 py-3"
+                      style={{ animationDelay: `${0.12 + i * 0.07}s` }}
                     >
                       <a
                         href={l.href}
@@ -193,39 +183,34 @@ export function Header({ logoUrl }: { logoUrl?: string | null }) {
                           </a>
                         ))}
                       </div>
-                    </motion.div>
+                    </div>
                   ) : (
-                    <motion.a
+                    <a
                       key={l.href}
                       href={l.href}
                       onClick={() => setMenuOpen(false)}
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.55, delay: 0.12 + i * 0.07, ease: [0.19, 1, 0.22, 1] }}
-                      className="border-b border-[#00e5ff]/20 py-3 text-center text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
+                      style={{ animationDelay: `${0.12 + i * 0.07}s` }}
+                      className="menu-item border-b border-[#00e5ff]/20 py-3 text-center text-[22px] font-medium text-[#EDF2F7] transition-colors hover:text-[#00e5ff]"
                     >
                       {l.label}
-                    </motion.a>
+                    </a>
                   ),
                 )}
-                <motion.a
+                <a
                   href="/contatti"
                   onClick={() => setMenuOpen(false)}
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.44, ease: [0.19, 1, 0.22, 1] }}
-                  className="group mt-8 inline-flex w-fit self-center items-center justify-center gap-2 rounded-full bg-[#00e5ff] py-2 pl-6 pr-2 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
+                  style={{ animationDelay: "0.44s" }}
+                  className="menu-item group mt-8 inline-flex w-fit self-center items-center justify-center gap-2 rounded-full bg-[#00e5ff] py-2 pl-6 pr-2 text-base font-medium text-[#0D1218] transition-[background-color,box-shadow] duration-500 hover:bg-[#33ecff] hover:shadow-[0_0_24px_rgba(0,229,255,0.5)]"
                 >
                   Contatti
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff]">
                     <Mail size={17} strokeWidth={2} className="transition-transform duration-500 group-hover:scale-110" />
                   </span>
-                </motion.a>
+                </a>
                 </nav>
               </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }

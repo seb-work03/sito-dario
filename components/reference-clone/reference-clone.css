@@ -10,6 +10,36 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes heroTitleIn {
+  from { opacity: 0; transform: translateY(38px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes heroCardIn {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes heroCopyIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes heroPortraitIn {
+  from { opacity: 0; transform: translate(-50%, 28px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes heroGlowPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.82; transform: scale(1.14); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title-enter { animation: heroTitleIn 0.8s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  .hero-card-enter { animation: heroCardIn 0.75s 0.08s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  .hero-copy-enter { animation: heroCopyIn 0.7s 0.28s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  .hero-copy-enter-late { animation-delay: 0.42s; }
+  .hero-portrait-enter { animation: heroPortraitIn 0.85s 0.16s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  .hero-ambient-glow { animation: heroGlowPulse 8s ease-in-out infinite; }
+}
+
 /* Hide native scrollbar on horizontal scroll snap lists (mobile). */
 .scrollbar-none {
   -ms-overflow-style: none;
@@ -19,32 +49,37 @@
   display: none;
 }
 
-/* ---------------------------------------------------------------------------
-   CSS-only scroll reveal.
-   The hidden state lives entirely in CSS, so it's applied from the very first
-   paint (SSR included) — there is no frame where the element shows up before
-   JS hides it, which is what caused the "flash then jump" with Framer's
-   whileInView. JS only adds `.is-visible` (via IntersectionObserver) to run
-   the transition.
---------------------------------------------------------------------------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(var(--reveal-y, 20px));
-  transition:
-    opacity var(--reveal-dur, 0.8s) cubic-bezier(0.19, 1, 0.22, 1) var(--reveal-delay, 0s),
-    transform var(--reveal-dur, 0.8s) cubic-bezier(0.19, 1, 0.22, 1) var(--reveal-delay, 0s);
-  will-change: transform, opacity;
+/* Progressive scroll reveals: CSS handles them without React state or one
+   IntersectionObserver per element. Browsers without view timelines simply
+   display the content, which is the correct accessible fallback. */
+@keyframes viewRevealUp {
+  from { opacity: 0.01; transform: translateY(var(--reveal-y, 20px)); filter: blur(7px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
 }
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .view-reveal,
+    .view-reveal-heading,
+    .view-reveal-copy {
+      animation-name: viewRevealUp;
+      animation-duration: var(--view-reveal-duration, 0.8s);
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+      animation-timeline: view();
+      animation-range: entry 4% cover 28%;
+    }
+
+    .view-reveal-heading { --reveal-y: -18px; }
+    .view-reveal-copy { --reveal-y: -12px; }
   }
+}
+
+/* Skip initial paint/layout for distant sections while preserving their
+   estimated space and normal document semantics. */
+.defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 820px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -55,11 +90,148 @@
   from { opacity: 0; transform: translateX(16px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+
+@keyframes mobileMenuIn {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes labelReveal {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+
+@keyframes serviceContentIn {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes serviceCopyIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes testimonialIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes briefingStepIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes chartAreaLoop {
+  0%, 100% { opacity: 0; }
+  25%, 88% { opacity: 1; }
+}
+
+@keyframes chartLineLoop {
+  0% { opacity: 0; stroke-dashoffset: 1; }
+  38%, 88% { opacity: 1; stroke-dashoffset: 0; }
+  100% { opacity: 0; stroke-dashoffset: 0; }
+}
+
+@keyframes chartPulseLoop {
+  0%, 32% { opacity: 0; transform: scale(0.5); }
+  45% { opacity: 0.5; transform: scale(1); }
+  88% { opacity: 0.12; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+@keyframes chartDotLoop {
+  0%, 32%, 100% { opacity: 0; }
+  45%, 88% { opacity: 1; }
+}
+
+@keyframes circuitDash {
+  to { stroke-dashoffset: -40; }
+}
+
+@keyframes circuitDotPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.mobile-menu-enter {
+  animation: mobileMenuIn 0.45s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.view-reveal-label {
+  animation: labelReveal 0.7s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.service-content-enter {
+  animation: serviceContentIn 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.service-copy-enter {
+  animation: serviceCopyIn 0.5s 0.08s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.testimonial-enter {
+  animation: testimonialIn 0.45s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.briefing-step-enter {
+  animation: briefingStepIn 0.4s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.experience-chart-area,
+.experience-chart-line,
+.experience-chart-pulse,
+.experience-chart-dot {
+  animation-duration: 4.4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.experience-chart-area { animation-name: chartAreaLoop; }
+.experience-chart-line { animation-name: chartLineLoop; }
+.experience-chart-pulse {
+  animation-name: chartPulseLoop;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.experience-chart-dot { animation-name: chartDotLoop; }
+
+.process-circuit-path {
+  animation: circuitDash 2s linear infinite;
+}
+
+.process-circuit-dot {
+  transform-box: fill-box;
+  animation: circuitDotPulse 2.4s ease-in-out infinite;
+}
+
+.faq-answer-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.45s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.3s ease;
+}
+
+.faq-answer-grid.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
 .menu-item {
   opacity: 0;
   animation: menuItemIn 0.35s cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
+  .mobile-menu-enter,
+  .view-reveal-label,
+  .service-content-enter,
+  .service-copy-enter,
+  .testimonial-enter,
+  .briefing-step-enter,
+  .experience-chart-area,
+  .experience-chart-line,
+  .experience-chart-pulse,
+  .experience-chart-dot,
+  .process-circuit-path,
+  .process-circuit-dot,
   .menu-item {
     animation: none;
     opacity: 1;

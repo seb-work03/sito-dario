@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
@@ -74,29 +73,23 @@ const layout = [
 function ProcessCard({
   step,
   index,
-  progress,
 }: {
   step: typeof steps[0];
   index: number;
-  progress: MotionValue<number>;
 }) {
-  const { from, to, z } = layout[index];
-  const x = useTransform(progress, [0, 1], [from.x, to.x]);
-  const y = useTransform(progress, [0, 1], [from.y, to.y]);
-  const rotate = useTransform(progress, [0, 1], [from.r, 0]);
+  const { from, z } = layout[index];
 
   return (
-    <motion.div
+    <div
+      data-process-card={index}
       style={{
-        x,
-        y,
-        rotate,
         zIndex: z,
         width: CARD_W,
         height: CARD_H,
         position: "absolute",
         left: `calc(50% - ${CARD_W / 2}px)`,
         top: `calc(50% - ${CARD_H / 2}px)`,
+        transform: `translate(${from.x}px, ${from.y}px) rotate(${from.r}deg)`,
       }}
       className="group bg-[#0D1218] border border-[#253444]/60 rounded-3xl p-7 flex flex-col gap-3 transition-[border-color,box-shadow] duration-500 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
     >
@@ -107,11 +100,11 @@ function ProcessCard({
         </div>
       </div>
       <p className="text-[#dddddd] text-sm leading-relaxed">{step.description}</p>
-    </motion.div>
+    </div>
   );
 }
 
-function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
+function ProcessCircuit() {
   // Card centres inside the play area (width = 2*CARD_W + GAP, height = 2*CARD_H + GAP).
   //  card 0 → (CARD_W/2,                     CARD_H/2)
   //  card 1 → (CARD_W + GAP + CARD_W/2,      CARD_H/2)
@@ -124,14 +117,15 @@ function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
   const perimeter = `M ${cx.l} ${cy.t} L ${cx.r} ${cy.t} L ${cx.r} ${cy.b} L ${cx.l} ${cy.b} Z`;
 
   return (
-    <motion.svg
+    <svg
+      data-process-circuit
       className="absolute inset-0 pointer-events-none"
       viewBox={`0 0 ${w} ${h}`}
-      style={{ opacity: progress }}
+      style={{ opacity: 0 }}
       aria-hidden
     >
       {/* Perimeter line */}
-      <motion.path
+      <path
         d={perimeter}
         fill="none"
         stroke="#0D1218"
@@ -139,8 +133,7 @@ function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeDasharray="8 12"
-        animate={{ strokeDashoffset: [0, -40] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        className="process-circuit-path"
       />
       {/* Corner glows at each card centre */}
       {[
@@ -149,65 +142,67 @@ function ProcessCircuit({ progress }: { progress: MotionValue<number> }) {
         [cx.l, cy.b],
         [cx.r, cy.b],
       ].map(([x, y], i) => (
-        <motion.circle
+        <circle
           key={i}
           cx={x}
           cy={y}
           r="6"
           fill="#0D1218"
-          animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.2, 1] }}
-          transition={{
-            duration: 2.4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.35,
-          }}
-          style={{ transformOrigin: `${x}px ${y}px` }}
+          className="process-circuit-dot"
+          style={{ transformOrigin: `${x}px ${y}px`, animationDelay: `${i * 0.35}s` }}
         />
       ))}
-    </motion.svg>
+    </svg>
   );
 }
 
 export function Process() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Sequential timeline, all with explicit clamping so the values are
-  // pinned at the endpoints (including when scrollYProgress overshoots 1
-  // after the pin releases):
-  //   0.00 to 0.08  title + subtitle visible (short hold)
-  //   0.08 to 0.38  title + subtitle fade out slowly (30% of scroll, ease-in-out)
-  //   0.42 to 0.52  cards fade in
-  //   0.52 to 0.82  cards fan out from stack to grid
-  //   0.82 to 1.00  linger before the pin releases
-  //
-  // Ease-in-out for the header fade so it's not a linear ramp — the fade
-  // is gentlest at start and end, steepest in the middle, which reads much
-  // softer than a straight linear opacity drop.
-  const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-  const headerOpacity = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.08) return 1;
-    if (v >= 0.38) return 0;
-    const t = (v - 0.08) / 0.30;
-    return 1 - easeInOut(t);
-  });
-  const headerVisibility = useTransform(scrollYProgress, (v) =>
-    v >= 0.40 ? "hidden" : "visible",
-  );
-  const cardsOpacity = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.42) return 0;
-    if (v >= 0.52) return 1;
-    return (v - 0.42) / 0.10;
-  });
-  const cardsProgress = useTransform(scrollYProgress, (v) => {
-    if (v <= 0.52) return 0;
-    if (v >= 0.70) return 1;
-    return (v - 0.52) / 0.18;
-  });
+  useEffect(() => {
+    let frame = 0;
+    const clamp = (value: number) => Math.max(0, Math.min(1, value));
+    const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+    const update = () => {
+      frame = 0;
+      const track = trackRef.current;
+      if (!track) return;
+      const rect = track.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const progress = clamp(-rect.top / Math.max(1, rect.height - window.innerHeight));
+      const header = track.querySelector<HTMLElement>("[data-process-header]");
+      const cards = track.querySelector<HTMLElement>("[data-process-cards]");
+      const circuit = track.querySelector<HTMLElement>("[data-process-circuit]");
+      const headerT = clamp((progress - 0.08) / 0.3);
+      const headerOpacity = 1 - easeInOut(headerT);
+      const cardsOpacity = clamp((progress - 0.42) / 0.1);
+      const fan = clamp((progress - 0.52) / 0.18);
+      if (header) {
+        header.style.opacity = String(headerOpacity);
+        header.style.visibility = progress >= 0.4 ? "hidden" : "visible";
+      }
+      if (cards) cards.style.opacity = String(cardsOpacity);
+      if (circuit) circuit.style.opacity = String(fan);
+      track.querySelectorAll<HTMLElement>("[data-process-card]").forEach((card, index) => {
+        const item = layout[index];
+        if (!item) return;
+        const x = item.from.x + (item.to.x - item.from.x) * fan;
+        const y = item.from.y + (item.to.y - item.from.y) * fan;
+        const rotate = item.from.r * (1 - fan);
+        card.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+      });
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <section id="process" className="relative bg-[#00e5ff]">
@@ -242,8 +237,9 @@ export function Process() {
       <div className="hidden md:block relative z-10" ref={trackRef} style={{ height: "300vh" }}>
         <div className="sticky top-0 h-screen">
           {/* Centered header — visible first, fades out when cards enter */}
-          <motion.div
-            style={{ opacity: headerOpacity, visibility: headerVisibility }}
+          <div
+            data-process-header
+            style={{ opacity: 1, visibility: "visible" }}
             className="absolute inset-0 flex items-center justify-center px-5 pointer-events-none"
           >
             <div className="text-center max-w-3xl">
@@ -262,12 +258,13 @@ export function Process() {
                 </>
               </AnimatedText>
             </div>
-          </motion.div>
+          </div>
 
           {/* Cards play area — absolutely centered, cross-fades in as the
               header fades out, then fans out from the centre. */}
-          <motion.div
-            style={{ opacity: cardsOpacity }}
+          <div
+            data-process-cards
+            style={{ opacity: 0 }}
             className="absolute inset-0 flex items-center justify-center"
           >
             <div
@@ -277,13 +274,13 @@ export function Process() {
               {/* Circuit line connecting the four card centres — sits behind
                   the cards and shows through the gaps between them. Loops
                   a moving dash pattern around the perimeter. */}
-              <ProcessCircuit progress={cardsProgress} />
+              <ProcessCircuit />
 
               {steps.map((step, i) => (
-                <ProcessCard key={step.number} step={step} index={i} progress={cardsProgress} />
+                <ProcessCard key={step.number} step={step} index={i} />
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -307,13 +304,10 @@ export function Process() {
         </div>
         <div className="flex flex-col gap-4">
           {steps.map((s, i) => (
-            <motion.div
+            <div
               key={s.number}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: i * 0.09, ease: [0.19, 1, 0.22, 1] }}
-              className="bg-[#0D1218] border border-[#253444]/60 rounded-2xl p-6 flex flex-col gap-3"
+              style={{ "--view-reveal-delay": `${i * 0.09}s` } as React.CSSProperties}
+              className="view-reveal bg-[#0D1218] border border-[#253444]/60 rounded-2xl p-6 flex flex-col gap-3"
             >
               <div className="flex items-center justify-between gap-3">
                 <h3 className="text-[#EDF2F7] text-xl font-medium tracking-tight">{s.title}</h3>
@@ -322,7 +316,7 @@ export function Process() {
                 </div>
               </div>
               <p className="text-[#dddddd] text-sm leading-relaxed">{s.description}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
