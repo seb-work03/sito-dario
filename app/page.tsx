@@ -173,7 +173,7 @@ export default async function HomePage() {
     getPartnerLogos(),
     getMediaByPattern("%dario%tana%sfondo%"),
     getMediaByPattern("%dario%tana%selfie%"),
-    getMediaByPattern("%consulente%"),
+    getMediaByPattern("consulente (3).jpg"),
     getMediaByPattern("%formazione%"),
     getMediaByPattern("%speech%"),
   ]);
