@@ -1,13 +1,10 @@
-import {
-  forwardRef,
-  type CSSProperties,
-  type ElementType,
-  type ReactNode,
-  type Ref,
-} from "react";
+"use client";
+
+import { motion } from "framer-motion";
+import { forwardRef, type CSSProperties, type ReactNode, type Ref } from "react";
 
 type Props = {
-  as?: ElementType;
+  as?: "div" | "li";
   y?: number;
   delay?: number;
   duration?: number;
@@ -17,35 +14,41 @@ type Props = {
   children: ReactNode;
 };
 
-/** Lightweight CSS scroll reveal that keeps forwarded refs for timelines. */
+/** Shared Framer reveal for cards, rows and supporting interface elements. */
 export const Reveal = forwardRef<HTMLElement, Props>(function Reveal(
   {
-    as: Tag = "div",
+    as = "div",
     y = 20,
     delay = 0,
     duration = 0.8,
-    className = "",
+    amount = 0.15,
+    className,
     style,
     children,
   },
   forwardedRef,
 ) {
-  const TagAny = Tag as ElementType;
-  const mergedStyle = {
-    "--reveal-y": `${y}px`,
-    "--view-reveal-delay": `${delay}s`,
-    "--view-reveal-duration": `${duration}s`,
-    ...(style ?? {}),
-  } as CSSProperties;
+  const animation = {
+    initial: { opacity: 0, y, filter: "blur(8px)" },
+    whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+    viewport: { once: true, amount, margin: "0px 0px -8% 0px" },
+    transition: { duration, delay, ease: [0.19, 1, 0.22, 1] as const },
+    className,
+    style,
+  };
+
+  if (as === "li") {
+    return (
+      <motion.li ref={forwardedRef as Ref<HTMLLIElement>} {...animation}>
+        {children}
+      </motion.li>
+    );
+  }
 
   return (
-    <TagAny
-      ref={forwardedRef as Ref<HTMLElement>}
-      className={`view-reveal${className ? ` ${className}` : ""}`}
-      style={mergedStyle}
-    >
+    <motion.div ref={forwardedRef as Ref<HTMLDivElement>} {...animation}>
       {children}
-    </TagAny>
+    </motion.div>
   );
 });
 

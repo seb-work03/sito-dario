@@ -1,3 +1,5 @@
+"use client";
+
 import { X, Check } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";

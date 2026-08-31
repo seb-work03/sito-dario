@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { HoverArrow } from "./HoverArrow";
 
@@ -21,10 +24,13 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
       {/* Desktop: three compact cards; tablet: two columns. */}
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item, i) => (
-          <article
+          <motion.article
             key={item.slug}
-            style={{ "--view-reveal-delay": `${i * 0.1}s` } as React.CSSProperties}
-            className="view-reveal group h-entry"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, delay: i * 0.1, ease: [0.19, 1, 0.22, 1] }}
+            className="group h-entry"
             itemScope
             itemType="https://schema.org/BlogPosting"
           >
@@ -89,7 +95,7 @@ export function LatestArticlesGrid({ items }: { items: Item[] }) {
                 </div>
               </div>
             </Link>
-          </article>
+          </motion.article>
         ))}
       </div>
 

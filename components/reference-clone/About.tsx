@@ -1,92 +1,97 @@
 "use client";
 
 import Image from "next/image";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { Star } from "lucide-react";
-import { Fragment, useEffect, useRef, type RefObject } from "react";
+import { Fragment, useEffect, useRef } from "react";
 
 function AnimatedNumber({ value, suffix = "", duration = 1.6 }: { value: number; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.4 });
+  const mv = useMotionValue(0);
+  const spring = useSpring(mv, { duration: duration * 1000, bounce: 0 });
+  const rounded = useTransform(spring, (v) => Math.round(v).toString());
+
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let frame = 0;
-    let played = false;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || played) return;
-      played = true;
-      const startedAt = performance.now();
-      const tick = (now: number) => {
-        const progress = Math.min(1, (now - startedAt) / (duration * 1000));
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = `${Math.round(value * eased)}${suffix}`;
-        if (progress < 1) frame = requestAnimationFrame(tick);
-      };
-      frame = requestAnimationFrame(tick);
-      observer.disconnect();
-    }, { threshold: 0.4 });
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-    };
-  }, [duration, suffix, value]);
+    if (inView) mv.set(value);
+  }, [inView, mv, value]);
+
+  useEffect(() => {
+    return rounded.on("change", (v) => {
+      if (ref.current) ref.current.textContent = `${v}${suffix}`;
+    });
+  }, [rounded, suffix]);
 
   return <span ref={ref}>0{suffix}</span>;
 }
 
+// Empty color: rgb(79,101,119) = #4F6577 · Full color: rgb(237,242,247) = #EDF2F7
+const EMPTY_RGB = [79, 101, 119] as const;
+const FULL_RGB = [237, 242, 247] as const;
+
+function FillWord({
+  children,
+  progress,
+  range,
+}: {
+  children: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+}) {
+  // Fill amount for this word — clamped explicitly to [0, 1].
+  //   t = 0 → empty (dim)         opacity 0.18, color #4F6577
+  //   t = 1 → filled (bright)     opacity 1,    color #EDF2F7
+  //
+  // Because t is always clamped, going past the word's `end` cannot make it
+  // fade out — it stays filled while the user keeps scrolling down. When the
+  // user scrolls back up past `end` again, t drops below 1 and the word
+  // empties out. Simple, symmetric, and impossible to break at the edges.
+  const opacity = useTransform(progress, (v) => {
+    const t = Math.max(0, Math.min(1, (v - range[0]) / (range[1] - range[0])));
+    return 0.18 + 0.82 * t;
+  });
+  const color = useTransform(progress, (v) => {
+    const t = Math.max(0, Math.min(1, (v - range[0]) / (range[1] - range[0])));
+    const r = Math.round(EMPTY_RGB[0] + (FULL_RGB[0] - EMPTY_RGB[0]) * t);
+    const g = Math.round(EMPTY_RGB[1] + (FULL_RGB[1] - EMPTY_RGB[1]) * t);
+    const b = Math.round(EMPTY_RGB[2] + (FULL_RGB[2] - EMPTY_RGB[2]) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  });
+  return <motion.span style={{ opacity, color }}>{children}</motion.span>;
+}
+
 function FillHeadline({
   words,
-  targetRef,
+  progress,
   fillEnd = 1,
   className = "",
 }: {
   words: string[];
-  targetRef: RefObject<HTMLElement | null>;
+  progress: MotionValue<number>;
   fillEnd?: number;
   className?: string;
 }) {
-  const headlineRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const target = targetRef.current;
-      const headline = headlineRef.current;
-      if (!target || !headline) return;
-      const rect = target.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      const travel = Math.max(1, target.offsetHeight - window.innerHeight);
-      const progress = Math.max(0, Math.min(1, -rect.top / travel));
-      const spans = headline.querySelectorAll<HTMLElement>("[data-fill-word]");
-      spans.forEach((span, index) => {
-        const start = (index / spans.length) * fillEnd;
-        const end = ((index + 1) / spans.length) * fillEnd;
-        const t = Math.max(0, Math.min(1, (progress - start) / Math.max(0.001, end - start)));
-        const channel = (from: number, to: number) => Math.round(from + (to - from) * t);
-        span.style.opacity = String(0.18 + 0.82 * t);
-        span.style.color = `rgb(${channel(79, 237)}, ${channel(101, 242)}, ${channel(119, 247)})`;
-      });
-    };
-    const requestUpdate = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    requestUpdate();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    return () => {
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      cancelAnimationFrame(frame);
-    };
-  }, [fillEnd, targetRef]);
-
   return (
-    <h2 ref={headlineRef} className={`text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(20px,5.5vw,30px)] max-w-[560px] ${className}`}>
+    <h2 className={`text-left leading-[1.2] tracking-[-0.02em] font-medium text-[clamp(20px,5.5vw,30px)] max-w-[560px] ${className}`}>
       {words.map((word, i) => {
+        // Words finish filling by `fillEnd` of the scroll; the rest of the
+        // scroll (fillEnd → 1) is a hold, so the headline lingers before
+        // the pin releases.
+        const start = (i / words.length) * fillEnd;
+        const end = ((i + 1) / words.length) * fillEnd;
         return (
           <Fragment key={i}>
-            <span data-fill-word style={{ opacity: 0.18, color: "#4F6577" }}>{word}</span>
+            <FillWord progress={progress} range={[start, end]}>
+              {word}
+            </FillWord>
             {i < words.length - 1 ? " " : ""}
           </Fragment>
         );
@@ -103,10 +108,14 @@ function FillHeadline({
  */
 function MobileFillHeadline({ words }: { words: string[] }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
   return (
     <div ref={ref} className="relative h-[170vh]">
       <div className="sticky top-[32vh]">
-        <FillHeadline words={words} targetRef={ref} fillEnd={0.62} />
+        <FillHeadline words={words} progress={scrollYProgress} fillEnd={0.62} />
       </div>
     </div>
   );
@@ -132,6 +141,10 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
   const heroImage = backgroundUrl ?? "/reference-assets/adviest/lWBGvORq26aRQEptEZJQdspijzk.jpg";
   const selfieImage = selfieUrl ?? "/reference-assets/adviest/Frr87XRtMwvMp0tFB6pIPmdE.jpg";
   const pinRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: pinRef,
+    offset: ["start start", "end end"],
+  });
   const introText =
     "Lavoro nell'e-commerce da oltre vent'anni. Aiuto aziende e professionisti a scegliere con metodo.";
   const words = introText.split(" ");
@@ -144,8 +157,12 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
             <div className="grid grid-cols-1 md:grid-cols-[0.95fr_2.05fr] gap-y-8 md:gap-x-10">
               {/* Left column: portrait + rating */}
               <div className="md:col-start-1 flex flex-col">
-                <div
-                  className="view-reveal group relative overflow-hidden rounded-[18px] bg-[#17222F]"
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+                  className="group relative overflow-hidden rounded-[18px] bg-[#17222F]"
                   style={{ aspectRatio: "0.72" }}
                 >
                   <Image
@@ -162,7 +179,7 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
                     È un modello di business da governare attraverso dati e
                     competenze.&rdquo;
                   </p>
-                </div>
+                </motion.div>
 
                 <GoogleReviewsCard />
               </div>
@@ -173,7 +190,7 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
                 <div className="hidden md:block">
                   <FillHeadline
                     words={words}
-                    targetRef={pinRef}
+                    progress={scrollYProgress}
                     fillEnd={0.62}
                     className="mb-[70px]"
                   />
@@ -185,8 +202,12 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
 
                 <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-6 md:gap-8 md:items-end">
                   {/* Buildings photo — desktop only */}
-                  <div
-                    className="view-reveal hidden md:block relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.9, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
+                    className="hidden md:block relative overflow-hidden rounded-[18px] bg-[#17222F] w-full"
                     style={{ aspectRatio: "0.85" }}
                   >
                     <Image
@@ -197,15 +218,19 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
                       className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.06]"
                       sizes="33vw"
                     />
-                  </div>
+                  </motion.div>
 
                   {/* CTA + chart card */}
                   <div className="flex flex-col gap-[18px]">
                     {/* CTA — desktop only */}
                     <div className="hidden md:flex md:justify-end mb-[40px]">
-                      <a
+                      <motion.a
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
                         href="/chi-sono"
-                        className="view-reveal group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#33ecff] transition-all duration-300 hover:shadow-[0_0_24px_2px_rgba(0,229,255,0.45)]"
+                        className="group inline-flex items-center gap-2 rounded-full bg-[#00e5ff] text-[#0D1218] font-medium pl-5 pr-1.5 py-1.5 text-[15px] hover:bg-[#33ecff] transition-all duration-300 hover:shadow-[0_0_24px_2px_rgba(0,229,255,0.45)]"
                       >
                         <span>Chi sono</span>
                         <span className="flex items-center justify-center rounded-full bg-[#0D1218] text-[#00e5ff] w-9 h-9 shrink-0">
@@ -213,7 +238,7 @@ export function About({ backgroundUrl, selfieUrl }: AboutProps = {}) {
                             <path d="M5 12h14M13 5l7 7-7 7" />
                           </svg>
                         </span>
-                      </a>
+                      </motion.a>
                     </div>
 
                     <ChartCard />
@@ -236,8 +261,12 @@ function GoogleReviewsCard() {
     { bg: "radial-gradient(circle at 35% 30%, #d8e2ec 0%, #7d95ab 45%, #35485e 100%)", initials: "AT" },
   ];
   return (
-    <div
-      className="view-reveal mt-6 rounded-2xl bg-[#17222F] border border-white/8 px-4 py-4 flex items-center gap-4"
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+      className="mt-6 rounded-2xl bg-[#17222F] border border-white/8 px-4 py-4 flex items-center gap-4"
     >
       {/* Overlapping avatars */}
       <div className="flex -space-x-3 shrink-0">
@@ -278,7 +307,7 @@ function GoogleReviewsCard() {
           </svg>
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -295,8 +324,12 @@ function GoogleGLogo() {
 
 function ChartCard() {
   return (
-    <div
-      className="view-reveal group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+      className="group rounded-[18px] border border-white/8 bg-[#17222F] px-[22px] pt-[22px] pb-[20px] flex flex-col gap-4 transition-colors duration-500 hover:border-[#00e5ff]/40"
       style={{
         minHeight: 270,
         backgroundImage: "linear-gradient(rgba(37,52,68,0.45) 1px, transparent 1px), linear-gradient(90deg, rgba(37,52,68,0.45) 1px, transparent 1px)",
@@ -316,7 +349,7 @@ function ChartCard() {
         <StatBlock value={30} suffix="+" label="e-commerce seguiti" />
         <StatBlock value={200} suffix="+" label="recensioni" />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -348,6 +381,10 @@ function ExperienceChart() {
   const areaPath = `${path} L 290,100 L 0,100 Z`;
   const endPoint = points[points.length - 1];
 
+  // Continuous "growth" loop: the line draws upward, holds, then gently fades
+  // and redraws. Same timeline (4.4s) shared across every element.
+  const loop = { duration: 4.4, repeat: Infinity, ease: [0.19, 1, 0.22, 1] as const };
+
   return (
     <svg
       viewBox="0 0 320 100"
@@ -367,42 +404,49 @@ function ExperienceChart() {
       ))}
 
       {/* Area fill */}
-      <path
+      <motion.path
         d={areaPath}
         fill="url(#expArea)"
-        className="experience-chart-area"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.25, 0.88, 1] }}
       />
 
       {/* Line draws upward */}
-      <path
+      <motion.path
         d={path}
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1.6"
         strokeLinecap="round"
-        pathLength="1"
-        strokeDasharray="1"
-        className="experience-chart-line"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.38, 0.88, 1] }}
       />
 
       {/* Pulse ring at the peak */}
-      <circle
+      <motion.circle
         cx={endPoint.x}
         cy={endPoint.y}
         r="6"
         fill="none"
         stroke="#00e5ff"
         strokeWidth="1"
-        className="experience-chart-pulse"
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: [0, 0, 0.5, 0.12, 0], scale: [0.5, 0.5, 1, 1.5, 1.6] }}
+        transition={{ ...loop, times: [0, 0.32, 0.45, 0.88, 1] }}
       />
 
       {/* Leading dot at the peak */}
-      <circle
+      <motion.circle
         cx={endPoint.x}
         cy={endPoint.y}
         r="3.5"
         fill="#00e5ff"
-        className="experience-chart-dot"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0, 1, 1, 0] }}
+        transition={{ ...loop, times: [0, 0.32, 0.45, 0.88, 1] }}
       />
     </svg>
   );

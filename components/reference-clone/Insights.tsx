@@ -1,3 +1,7 @@
+"use client";
+
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
 
@@ -35,8 +39,13 @@ const audiences = [
 ];
 
 export function Insights() {
+  // A ref on the grid triggers the sequential card animation only once the
+  // grid enters view, so all three cards enter one at a time with a stagger.
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridInView = useInView(gridRef, { once: true, amount: 0.2 });
+
   return (
-    <section id="insights" className="defer-render bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-[#00e5ff]/25">
+    <section id="insights" className="bg-[#0D1218] px-5 pt-20 md:pt-32 pb-16 md:pb-28 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1240px]">
         {/* Centered header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
@@ -52,12 +61,22 @@ export function Insights() {
         </div>
 
         {/* 3 vertical persona cards — enter one at a time */}
-        <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-5 md:gap-6">
           {audiences.map((a, i) => (
-            <article
+            <motion.article
               key={a.label}
-              style={{ "--view-reveal-delay": `${i * 0.1}s` } as React.CSSProperties}
-              className="view-reveal group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
+              initial={{ opacity: 0, y: 24 }}
+              animate={
+                gridInView
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 24 }
+              }
+              transition={{
+                duration: 0.7,
+                delay: i * 0.18,
+                ease: [0.19, 1, 0.22, 1],
+              }}
+              className="group relative rounded-2xl border border-[#253444] bg-[#17222F] p-7 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:border-[#00e5ff]/40 hover:-translate-y-1"
             >
               <div>
                 <h3 className="text-[#EDF2F7] text-2xl font-medium tracking-tight leading-[1.15] mb-2">
@@ -79,7 +98,7 @@ export function Insights() {
                   </li>
                 ))}
               </ul>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>

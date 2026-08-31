@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatedHeadline } from "./AnimatedHeadline";
 import { AnimatedText } from "./AnimatedText";
@@ -63,11 +64,12 @@ export function Testimonials({
   title?: string;
 } = {}) {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const current = testimonials[index];
-  const prev = () => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
-  const next = () => setIndex((i) => (i + 1) % testimonials.length);
+  const prev = () => { setDirection(-1); setIndex((i) => (i - 1 + testimonials.length) % testimonials.length); };
+  const next = () => { setDirection(1); setIndex((i) => (i + 1) % testimonials.length); };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -82,7 +84,7 @@ export function Testimonials({
   }, []);
 
   return (
-    <section id="testimon" className="defer-render bg-[#0D1218] px-4 md:px-5 py-16 md:py-24 border-t border-[#00e5ff]/25">
+    <section id="testimon" className="bg-[#0D1218] px-4 md:px-5 py-16 md:py-24 border-t border-[#00e5ff]/25">
       <div className="mx-auto max-w-[1360px]">
         <div className="relative rounded-[28px] md:rounded-[36px] bg-[#00e5ff] px-6 md:px-14 py-12 md:py-16 overflow-hidden">
           {/* Header row */}
@@ -134,9 +136,15 @@ export function Testimonials({
               <GoogleBadge />
             </div>
 
-              <div
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
                 key={index}
-                className="testimonial-enter flex-1 flex flex-col justify-between gap-8"
+                custom={direction}
+                initial={{ opacity: 0, y: 20 * (direction || 1) }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 * (direction || 1) }}
+                transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                className="flex-1 flex flex-col justify-between gap-8"
               >
                 <p className="text-[#EDF2F7] text-xl md:text-2xl font-medium leading-snug tracking-tight">
                   &ldquo;{current.text}&rdquo;
@@ -145,13 +153,14 @@ export function Testimonials({
                   <p className="text-[#EDF2F7] font-medium">{current.author}</p>
                   <p className="text-[#93A6BB] text-sm mt-1">{current.role}</p>
                 </div>
-              </div>
+              </motion.div>
+            </AnimatePresence>
 
             <div className="absolute bottom-6 right-8 flex gap-1.5">
               {testimonials.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setIndex(i)}
+                  onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
                   aria-label={`Vai a testimonianza ${i + 1}`}
                   className="h-1 rounded-full transition-all duration-500 cursor-pointer"
                   style={{
