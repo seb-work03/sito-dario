@@ -76,6 +76,9 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable}`}
       style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
+      <head>
+        <link rel="describedby" href="/llms.txt" type="text/plain" />
+      </head>
       <body>
         <JsonLd data={siteStructuredData} />
         <SmoothScroll />
