@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
 
-const FAVICON_FILENAME = "favicon-dario-tana-ok.png";
-
 export const dynamic = "force-dynamic";
 
 export async function GET() {
@@ -12,7 +10,7 @@ export async function GET() {
     const [favicon] = await db
       .select({ url: media.url })
       .from(media)
-      .where(ilike(media.filename, FAVICON_FILENAME))
+      .where(ilike(media.filename, "%favicon-dario-tana-ok%"))
       .orderBy(desc(media.id))
       .limit(1);
 
