@@ -33,6 +33,11 @@ export const metadata: Metadata = {
   creator: "Dario Tana",
   publisher: "Dario Tana",
   category: "E-commerce",
+  icons: {
+    icon: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
+    shortcut: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
+    apple: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "it_IT",
