@@ -10,7 +10,7 @@ export async function GET() {
     const [favicon] = await db
       .select({ url: media.url })
       .from(media)
-      .where(ilike(media.filename, "%favicon-dario-tana-ok%"))
+      .where(ilike(media.filename, "%favicon-dario-tana-ok-1%"))
       .orderBy(desc(media.id))
       .limit(1);
 
