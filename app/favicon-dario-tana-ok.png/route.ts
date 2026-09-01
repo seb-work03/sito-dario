@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
 
-const FAVICON_FILENAME = "favicon-dario-tana.png";
+const FAVICON_FILENAME = "favicon-dario-tana-ok.png";
 
 export const dynamic = "force-dynamic";
 

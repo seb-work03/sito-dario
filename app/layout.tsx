@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   publisher: "Dario Tana",
   category: "E-commerce",
   icons: {
-    icon: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
-    shortcut: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
-    apple: [{ url: "/favicon-dario-tana.png", type: "image/png" }],
+    icon: [{ url: "/favicon-dario-tana-ok.png", type: "image/png" }],
+    shortcut: [{ url: "/favicon-dario-tana-ok.png", type: "image/png" }],
+    apple: [{ url: "/favicon-dario-tana-ok.png", type: "image/png" }],
   },
   openGraph: {
     type: "website",
